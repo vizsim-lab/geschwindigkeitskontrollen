@@ -107,8 +107,9 @@ def lies_alle(dateien: list[Path]) -> tuple[pd.DataFrame, dict]:
     df = df.drop_duplicates(["datum", "ort", "messungen", "ueberschreitungen"])
     df["stelle"] = df["ort"].map(_ohne_richtung)
     zeilen_out = []
-    for (datum, stelle, n), g in df.groupby(["datum", "stelle", "messungen"], dropna=False):
-        if len(g) > 1 and g["ort"].nunique() > 1:  # beide Richtungen in einer Zählung
+    for (datum, stelle, _), g in df.groupby(["datum", "stelle", "messungen"], dropna=False):
+        beide = len(g) > 1 and g["ort"].nunique() > 1  # beide Richtungen in einer Zählung
+        if beide:
             bericht["beide_richtungen"] += 1
             teile = [
                 g.iloc[0].to_dict()
@@ -118,7 +119,7 @@ def lies_alle(dateien: list[Path]) -> tuple[pd.DataFrame, dict]:
             teile = [r.to_dict() for _, r in g.iterrows()]
         for r in teile:
             ms = messstelle(r["ort"])
-            if r["ort"] == stelle and len(g) > 1:
+            if beide:
                 ms["richtung_roh"] = "beide"
             kurz = hashlib.sha1(r["ort"].encode("utf-8")).hexdigest()[:6]
             zeilen_out.append(

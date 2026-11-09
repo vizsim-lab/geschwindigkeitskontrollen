@@ -42,7 +42,8 @@ _LAT = r"(?:Laterne|Lat\.?(?![a-zäöüß])|Lichtmast|Strommast|Mast|L\.?\s?(?=\
 _ENDE = re.compile(
     r"\s*[,:]"
     r"|(?:\s+|(?<=\.))(?:(?:in\s+)?[Hh](?:ö|oe)he|i\.\s*H\.|" + _GG + r"\.?|vor|v\.|hinter|"
-    r"nach|unter|neben|neb\.|bis|zwischen|zw\.|Haus(?:nr|Nr|nummer|r)?|Hs\.?|HS|Nr|NR|Kreuzung|Ecke|"
+    r"nach|unter|unterhalb|oberhalb|neben|neb\.|bis|zwischen|zw\.|Haus(?:nr|Nr|nummer|r)?|Hs\.?|HS|Nr|NR|"
+    r"Kreuzung|Ecke|"
     r"Einm(?:ü|ue)ndung|Einm\.|Einf\.|Ausf\.|Einfahrt|Ausfahrt|Km|km)" + _FREI + r"|"
     r"(?:\s+|(?<=\.)|(?<=[a-zäöüß]))" + _LAT + r"|"
     r"(?<=[a-zäöüß])(?=Höhe\b)"  # „AgrippinauferHöhe“
@@ -65,9 +66,10 @@ _ZUSATZ = re.compile(
     + r"\s*"
 )
 _NUMMER = r"(\d{1,4})(?!\d|[.,]\d)\s*([a-zA-Z](?![a-zA-Z.]))?"  # nicht „0,24“ (Kilometer)
-_HAUS = re.compile(r"\b(?:Haus|Hs)\b\.?\s*-?\s*(?:(?:Nr|Nummer)\b\.?)?\s*" + _NUMMER, re.I)
-_HAUSNR = re.compile(r"\bHaus(?:nr|nummer|r)\b\.?\s*" + _NUMMER, re.I)
-_NR = re.compile(r"\bNr\b\.?\s*" + _NUMMER, re.I)
+# „Haus Nr.: 179“, „Nr.:23“ (Bonn)
+_HAUS = re.compile(r"\b(?:Haus|Hs)\b\.?\s*-?\s*(?:(?:Nr|Nummer)\b\.?:?)?\s*" + _NUMMER, re.I)
+_HAUSNR = re.compile(r"\bHaus(?:nr|nummer|r)\b\.?:?\s*" + _NUMMER, re.I)
+_NR = re.compile(r"\bNr\b\.?:?\s*" + _NUMMER, re.I)
 _VORN = re.compile(r"^" + _NUMMER)
 _GGUE = re.compile(r"(?<![a-zäöüß])" + _GG + _FREI, re.I)
 _QUER = re.compile(

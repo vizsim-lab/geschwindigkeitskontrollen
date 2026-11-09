@@ -38,6 +38,33 @@ FEST = "Bonn, B9 Mainzer Straße Bahnüberführung FR Mehlem"
         ("Bonn, BAB 555; KM 018,000; Bonn", None, None, None, "A 555", None, "Bonn", None),
         ("Bonn, BAB565 / AS Poppelsdorf, Fahrtrichtung Reuterstraße",
          None, None, None, "A 565", "AS Poppelsdorf", "Reuterstraße", None),
+        ("Bonn, BAB A 562 / August-Bebel-Allee",
+         None, None, None, "A 562", "August-Bebel-Allee", None, None),
+        ("Bonn, August-Bebel-Allee / A562",
+         "August-Bebel-Allee", None, "A 562", None, None, None, None),
+        # Postleitzahl vorn, Ortsteil ohne Bindestrich, „Nr.:“, „unterhalb“, Klammern
+        ("53179, Bonn, Mainzer Straße, gegenüber Nr. 336",
+         "Mainzer Straße", "336", None, None, None, None, None),
+        ("Bonn Beuel, Maarstr. gegenüber Nr.: 100", "Maarstr.", "100", None, None, None, None,
+         "Beuel"),
+        ("Bonn Bad Godesberg, Koblenzer Str. Höhe, Aral Tankstelle",
+         "Koblenzer Str.", None, None, None, None, None, "Bad Godesberg"),
+        ("Bonn, Röckumstraße unterhalb der BAB-Unterführung, FR An der Ohligsmühle",
+         "Röckumstraße", None, None, None, None, "An der Ohligsmühle", None),
+        ("Bonn, Niederkasseler Straße (L 16) Höhe Vilicher Straße,",
+         "Niederkasseler Straße", None, "Vilicher Straße", None, None, None, None),
+        ("Bonn, Kennedybrücke, (Höhe Brückenforum, FR Beuel)",
+         "Kennedybrücke", None, "Brückenforum", None, None, "Beuel", None),
+        ("Bonn, Willy-Brandt-Allee / Adenauerallee / Unterführung",
+         "Willy-Brandt-Allee", None, "Adenauerallee", None, None, None, None),
+        # Straßennummer vor dem Namen weg; ohne Namen bleibt sie (nicht verortbar)
+        ("Bonn, L261 Reichsstraße Höhe Hubertusstraße FR Röttgen",
+         "Reichsstraße", None, "Hubertusstraße", None, None, "Röttgen", None),
+        ("Bonn, L 16 Höhe Auf der Rötschen", "L 16", None, "Auf der Rötschen", None, None, None,
+         None),
+        # kein Querstraßen-Paar: „oberhalb …“ ist keine Straße
+        ("Bonn, Fußweg, oberhalb BAB / Zufahrt Reuterstraße", "Fußweg", None, None, None, None,
+         None, None),
     ],
 )  # fmt: skip
 def test_tatort(text, strasse, nr, quer, autobahn, ort, richtung, ortsteil):

@@ -63,32 +63,51 @@ def feste_anlagen(v: pd.DataFrame, grenze: int | None = None) -> set[str]:
 
 # --- Tatort lesen --------------------------------------------------------------------------
 
+_PLZ = re.compile(r"^\d{5}\s*,?\s*")  # „53179, Bonn, Mainzer Straße …“
 _BONN = re.compile(r"^Bonn\b(?:\s*-\s*(?P<ortsteil>[^,;]+?)\s*(?=[,;]))?\s*[,;]?\s*")
+# „Bonn Beuel, Maarstr. …“, „Bonn Bad Godesberg, …“: Ortsteil ohne Bindestrich
+_BONN_TEIL = re.compile(
+    r"^Bonn\s+(?P<ortsteil>(?:Bad\s+)?[A-ZÄÖÜ][a-zäöüß]+(?:-[A-ZÄÖÜ][a-zäöüß]+)?)\s*,\s*"
+)
 _RICHTUNG = re.compile(
     r"(?:[,;]\s*|\s+)(?:\(?\s*)?(?:[Ii]n\s+|[Aa]us\s+)?(?:Fahrtrichtung|Fahrtr\.|i\.\s*Fr\.|Fr\.|"
     r"FR\b\.?|RF\b\.?|Rtg\.|Richtung\b)\s*(?P<ziel>.*)$"
 )
-_AUTOBAHN = re.compile(r"^(?:BAB|A)\s?(?P<nr>\d{1,3})\b[\s,;/]*(?P<rest>.*)$")
+_AB = r"(?:BAB\s?(?:A\s?)?|A\s?)(?P<nr>\d{1,3})\b"  # „A 555“, „A555“, „BAB 565“, „BAB A 562“
+_AUTOBAHN = re.compile(r"^" + _AB + r"[\s,;/]*(?P<rest>.*)$")
 _KM = re.compile(r"\bkm\b\.?\s*[\d.,]+(?:\s*-\s*(?:km\b\.?\s*)?[\d.,]+)?", re.I)
-_BAB = re.compile(r"\bBAB\s?(\d{2,3})\b")  # „BAB 565“ -> „A 565“ (so kennt die Verortung sie)
-_STRASSE = re.compile(
-    r"^[A-ZÄÖÜ][^\d,;]*(?:straße|strasse|str\.|weg|allee|platz|ring|gasse|ufer|damm|wall|"
-    r"pfad|chaussee|brücke)$",
-    re.I,
+# „August-Bebel-Allee / BAB 562“, „… / A562“: Kreuzung mit der Autobahn
+_MIT_AUTOBAHN = re.compile(r"^(?P<strasse>[^/]+?)\s*/\s*" + _AB + r"\s*$")
+_BAB = re.compile(r"\b(?:BAB\s?(?:A\s?)?|A\s?)(\d{2,3})\b")  # Querangabe -> „A 565“
+_ENDUNG = r"(?i:straße|strasse|str\.|weg|allee|platz|ring|gasse|ufer|damm|wall|pfad|chaussee)"
+_STRASSE = re.compile(r"^[A-ZÄÖÜ][^\d,;/]*(?:" + _ENDUNG + r"|(?i:brücke))$")
+# Straßennummer vor dem Namen: „L261 Reichsstraße …“ (nicht „L 16 Höhe Auf der Rötschen“)
+_REF_VORN = re.compile(
+    r"^[BLK]\s?\d{1,4}[a-z]?\s+(?!(?:Höhe|Hoehe|Ecke|Einm|Kreuzung|gg|geg|ggü)\b)"
+    r"(?=[A-ZÄÖÜ][\wäöüß.-]*(?:\s+[A-ZÄÖÜ][\wäöüß.-]*)?" + _ENDUNG + r")"
 )
+_REF_KLAMMER = re.compile(r"\s*\(\s*(?:[BLK]|BAB|A)\s?\d{1,4}[a-z]?\s*\)")  # „Straße (L 16)“
 
 
 def tatort(text: str) -> dict:
     """Tatort -> Felder des Schemas (Straße, Hausnummer, Kreuzung, Autobahn, Richtung)."""
-    s = _text(text)
-    m = _BONN.match(s)
+    s = _PLZ.sub("", _text(text.replace("^", " ")))  # „Siebengebirgsstr.^Höhe“
+    m = _BONN_TEIL.match(s)
+    if m and _STRASSE.match(m.group("ortsteil")):
+        m = None  # „Bonn Kennedyallee, …“ wäre eine Straße, kein Ortsteil
+    m = m or _BONN.match(s)
     ortsteil = (m.group("ortsteil") or "").strip() or None if m else None
     rest = s[m.end() :] if m else s
     r = _RICHTUNG.search(rest)
     ziel = r.group("ziel").strip(" .,;)") if r else ""
     if r:
         rest = rest[: r.start()]
-    rest = rest.strip(" ,;")
+    rest = _REF_KLAMMER.sub("", rest)
+    rest = " ".join(re.sub(r"[()]", " ", rest).split()).strip(" ,;")  # „(Höhe Brückenforum“
+    rest = _REF_VORN.sub("", rest)
+    teile = re.split(r"\s*/\s*", rest)
+    if len(teile) > 2:  # „Willy-Brandt-Allee / Adenauerallee / Unterführung“: die ersten zwei
+        rest = " / ".join(teile[:2])
     out = {
         "strasse": None,
         "hausnummer": None,
@@ -103,9 +122,15 @@ def tatort(text: str) -> dict:
     ab = _AUTOBAHN.match(rest)
     if ab:
         ort = _KM.sub("", ab.group("rest")).strip(" ,;/-") or None
-        if ort and re.fullmatch(r"[A-ZÄÖÜ][\wäöüß-]*", ort) and not out["richtung_roh"]:
+        einzeln = ort and re.fullmatch(r"[A-ZÄÖÜ][\wäöüß-]*", ort) and not _STRASSE.match(ort)
+        if einzeln and not out["richtung_roh"]:
             out["richtung_roh"], ort = ort, None  # „BAB 555; KM 018,000; Bonn“: die Richtung
         out.update(autobahn=f"A {int(ab.group('nr'))}", ort=ort, lage_art="ort" if ort else "keine")
+        return out
+    mab = _MIT_AUTOBAHN.match(rest)
+    if mab:
+        q = f"A {int(mab.group('nr'))}"
+        out.update(strasse=mab.group("strasse").strip(" ,;"), lage_art="kreuzung", quer1=q)
         return out
     a = adresse(rest)
     quer = a.quer

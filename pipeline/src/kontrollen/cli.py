@@ -10,7 +10,16 @@ import pandas as pd
 import typer
 
 from kontrollen import (
-    aachen, berlin, bonn, fetch, geocode, koeln, oberderdingen, osm, schonungen, site,
+    aachen,
+    berlin,
+    bonn,
+    fetch,
+    geocode,
+    koeln,
+    oberderdingen,
+    osm,
+    schonungen,
+    site,
 )  # fmt: skip
 from kontrollen.config import get_paths, load_yaml, quellen
 

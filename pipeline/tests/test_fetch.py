@@ -152,3 +152,60 @@ def test_url_doppelt_kodiert():
     u = "https://x/Geschwindigkeit%25C3%25BCberwachung_Koeln.csv"
     assert fetch.url_varianten(u) == [u, "https://x/Geschwindigkeit%C3%BCberwachung_Koeln.csv"]
     assert fetch.url_varianten("https://x/a.csv") == ["https://x/a.csv"]
+
+
+class _Datei:
+    def __init__(self, code, inhalt=b"a;b\n1;2\n"):
+        self.status_code, self._inhalt = code, inhalt
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *a):
+        return False
+
+    def raise_for_status(self):
+        if self.status_code >= 400:
+            raise fetch.requests.HTTPError(f"{self.status_code}", response=self)
+
+    def iter_content(self, n):
+        yield self._inhalt
+
+
+def _netz(monkeypatch, folge):
+    """`requests.get` liefert der Reihe nach: Ausnahme (wird geworfen) oder Statuscode."""
+    aufrufe, pausen = [], []
+
+    def get(url, **kw):
+        aufrufe.append(url)
+        x = folge[len(aufrufe) - 1]
+        if isinstance(x, Exception):
+            raise x
+        return _Datei(x)
+
+    monkeypatch.setattr(fetch.requests, "get", get)
+    monkeypatch.setattr(fetch.time, "sleep", pausen.append)
+    return aufrufe, pausen
+
+
+def test_lade_wartet_bei_abgewiesener_verbindung(tmp_path, monkeypatch):
+    weg = fetch.requests.ConnectionError("Connection refused")
+    aufrufe, pausen = _netz(monkeypatch, [weg, weg, 200])
+    ziel = fetch.lade("https://opendata.example/a.csv", tmp_path / "a.csv")
+    assert ziel.read_bytes() == b"a;b\n1;2\n"
+    assert len(aufrufe) == 3 and pausen == list(fetch.WARTEN[:2])
+
+
+def test_lade_gibt_bei_404_gleich_auf(tmp_path, monkeypatch):
+    aufrufe, pausen = _netz(monkeypatch, [404, 200])
+    with pytest.raises(fetch.requests.HTTPError):
+        fetch.lade("https://opendata.example/fehlt.csv", tmp_path / "fehlt.csv")
+    assert len(aufrufe) == 1 and pausen == []
+
+
+def test_lade_gibt_nach_allen_versuchen_auf(tmp_path, monkeypatch):
+    weg = fetch.requests.ConnectionError("Connection refused")
+    aufrufe, pausen = _netz(monkeypatch, [weg] * (len(fetch.WARTEN) + 1))
+    with pytest.raises(fetch.requests.ConnectionError):
+        fetch.lade("https://opendata.example/a.csv", tmp_path / "a.csv")
+    assert len(aufrufe) == len(fetch.WARTEN) + 1 and pausen == list(fetch.WARTEN)

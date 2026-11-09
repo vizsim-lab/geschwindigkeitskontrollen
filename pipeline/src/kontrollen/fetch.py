@@ -34,12 +34,23 @@ def sha256(pfad: Path) -> str:
     return h.hexdigest()
 
 
+# Sekunden zwischen den Versuchen: opendata.bonn.de weist Verbindungen zeitweise ab
+# („Connection refused“) und nimmt sie eine Weile später wieder an
+WARTEN = (5, 30, 90)
+
+
+def _endgueltig(e: requests.RequestException) -> bool:
+    """Kein neuer Versuch bei 4xx außer 429 (fehlt, verboten – etwa die falsche URL-Variante)."""
+    r = getattr(e, "response", None)
+    return r is not None and 400 <= r.status_code < 500 and r.status_code != 429
+
+
 def lade(url: str, ziel: Path, pruefsumme: str | None = None, *, neu: bool = False) -> Path:
     if ziel.exists() and not neu and (pruefsumme is None or sha256(ziel) == pruefsumme):
         return ziel
     ziel.parent.mkdir(parents=True, exist_ok=True)
     tmp = ziel.with_suffix(ziel.suffix + ".part")
-    for versuch in range(3):
+    for versuch in range(len(WARTEN) + 1):
         try:
             with requests.get(url, stream=True, timeout=180, headers=UA) as r:
                 r.raise_for_status()
@@ -47,10 +58,10 @@ def lade(url: str, ziel: Path, pruefsumme: str | None = None, *, neu: bool = Fal
                     for block in r.iter_content(1 << 20):
                         f.write(block)
             break
-        except requests.RequestException:
-            if versuch == 2:
+        except requests.RequestException as e:
+            if versuch == len(WARTEN) or _endgueltig(e):
                 raise
-            time.sleep(5 * (versuch + 1))
+            time.sleep(WARTEN[versuch])
     if pruefsumme and sha256(tmp) != pruefsumme:
         tmp.unlink()
         raise ValueError(f"Prüfsumme stimmt nicht: {url}")
