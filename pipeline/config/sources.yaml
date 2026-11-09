@@ -171,3 +171,452 @@ osm:
 karte:
   hintergrund: "OpenFreeMap (Positron), © OpenMapTiles, © OpenStreetMap-Mitwirkende"
   suche: "Photon (Komoot), © OpenStreetMap-Mitwirkende"
+
+# --- Datenlage ------------------------------------------------------------------------------
+# Was es außerhalb der Karte gibt – je Stadt ein Punkt mit Stand und Belegen (Recherche
+# November 2026, unvollständig). Einträge mit `stadt:` liegen in der Karte; ihr Punkt kommt aus
+# den Messstellen. Stand: in_karte | offen | geliefert | kandidat | teilweise | abgelehnt (Texte:
+# STAND in src/kontrollen/site.py). Rechtliche Aussagen nur mit Beleg; Kontakte nur über die
+# Behördensuche von FragDenStaat (`kontakt.fds_suche`), keine Namen. Neue Hinweise über das
+# Issue-Formular „Daten melden“. Ausgabe: data/karte/datenlage.json und docs/DATENLAGE.md.
+
+# Rechtslage je Land (kurz; keine Rechtsberatung). Belege: Stuttgart (§ 4 Abs. 1 Nr. 2 LIFG)
+# und München (Satzung, übertragener Wirkungskreis) in den Anfragen unten; Rostock (§ 10 Abs. 1
+# IFG M-V, Schriftform); Sachsen: revosax.sachsen.de/vorschrift_gesamt/19699 (§ 1 Abs. 1, § 4
+# Abs. 1 und 2); HE, NI, BB wie in vizsim-lab/zaehlkarte.
+recht:
+  BB: Akteneinsichts- und Informationszugangsgesetz (AIG)
+  BE: Berliner Informationsfreiheitsgesetz (IFG)
+  BW: Landesinformationsfreiheitsgesetz (LIFG) – gilt auch für Städte und Landratsämter
+  BY: kein Landes-IFG – nur städtische Informationsfreiheitssatzungen, die die Verkehrsüberwachung (übertragener Wirkungskreis) oft nicht erfassen
+  HE: Hessisches Datenschutz- und Informationsfreiheitsgesetz (HDSIG) – für Kommunen nur, wenn sie es per Satzung einführen
+  HH: Hamburgisches Transparenzgesetz
+  MV: Informationsfreiheitsgesetz M-V – der Antrag muss schriftlich kommen (Brief oder Fax)
+  NI: kein Landes-IFG
+  NW: Informationsfreiheitsgesetz NRW
+  SN: Sächsisches Transparenzgesetz – gegenüber Landesstellen wie den Polizeidirektionen für jede Person; für Kommunen nur, wenn sie sich per Satzung verpflichten
+
+# Vorlage für Anfragen (Text für das Feld „Anfrage“ auf FragDenStaat – Anrede, Rechtsgrundlage
+# und Gebührenhinweis ergänzt FragDenStaat). {stelle}, {seit} und {zusatz} kommen aus dem
+# Eintrag (`stelle`, Vorgabe „die Stadt <Kommune>“; `seit`, Vorgabe „dem 1. Januar 2019“).
+anfrage_vorlage:
+  betreff: Geschwindigkeitskontrollen – Ort, Zeit und Ergebnis je Kontrolle
+  text: |-
+    Bitte übermitteln Sie mir eine Aufstellung aller Geschwindigkeitskontrollen (mobil und teilstationär), die {stelle} seit {seit} durchgeführt hat. Je Kontrolle bitte:
+
+    1. den Ort: Straße mit Hausnummer oder den Querstraßen, Fahrtrichtung,
+    2. Datum, Beginn und Ende der Messung,
+    3. die zulässige Höchstgeschwindigkeit,
+    4. die Zahl der gemessenen Fahrzeuge und der Überschreitungen (wenn vorhanden nach Stufen der Überschreitung) sowie die Zahl der Fahrverbote.
+
+    Es geht nur um abgeschlossene Kontrollen, nicht um künftige Messorte. Personenbezogene Daten (Kennzeichen, Namen) brauche ich nicht.
+
+    Bitte schicken Sie die Daten in dem maschinenlesbaren Format, in dem sie bei Ihnen vorliegen (z. B. CSV, XLSX oder Export der Messsoftware); eine Aufbereitung ist nicht nötig.
+    {zusatz}
+    Bitte nennen Sie mir außerdem, unter welchen Bedingungen ich die Daten weiterverwenden und veröffentlichen darf – am liebsten unter einer offenen Lizenz wie der Datenlizenz Deutschland – Namensnennung 2.0.
+
+datenlage:
+  # --- in der Karte ---
+  - kommune: Berlin
+    stadt: berlin
+    land: BE
+    stand: in_karte
+    was: >-
+      temporäre Kontrollen der Polizei 2017 bis August 2020 (IFG-Bescheid), je Kontrolle Ort,
+      Zeit, Messungen, Überschreitungen und Fahrverbote
+    situation: >-
+      Neuere Jahre gibt es nicht je Kontrolle: Eine Anfrage nach Auswertungen sollte 2021
+      87,68 € kosten und wurde zurückgezogen; das Abgeordnetenhaus nennt für 2025 je Bezirk die
+      zehn häufigsten Standorte.
+    empfehlung: >-
+      Für die Zeit ab September 2020 dieselbe Anfrage wie 2020 stellen – ein Auszug aus der
+      Geschwindigkeitsdatenbank, eine Zeile je Kontrolle.
+    weg: "FragDenStaat, IFG Berlin"
+    stelle: "die Polizei Berlin"
+    seit: "dem 1. September 2020"
+    kontakt: {fds_suche: "Polizei Berlin"}
+    anfrage: true
+    anfrage_zusatz: >-
+      Für 2017 bis August 2020 haben Sie einen solchen Auszug aus der Geschwindigkeitsdatenbank
+      bereits herausgegeben (Bescheid vom 09.12.2020); ich bitte um dieselbe Aufstellung für die
+      Zeit danach.
+    links:
+      - ["FragDenStaat 2020", "https://fragdenstaat.de/anfrage/geschwindigkeitskontrollen-von-kfz-in-berlin/"]
+      - ["FragDenStaat 2021", "https://fragdenstaat.de/anfrage/geschwindigkeitskontrollen-von-kfz-in-berlin-2/"]
+      - ["Abgeordnetenhaus 19/25572 (2025)", "https://pardok.parlament-berlin.de/starweb/adis/citat/VT/19/SchrAnfr/S19-25572.pdf"]
+  - kommune: Aachen
+    stadt: aachen
+    land: NW
+    stand: in_karte
+    was: >-
+      Kontrollen der Stadt als Open Data seit 2020 – im Portal je Jahr nur die letzten drei
+      Monate, ohne Uhrzeit, Dauer und Tempolimit
+    empfehlung: >-
+      Für die übrigen Monate seit 2020 und für Uhrzeit, Dauer und Tempolimit lohnt eine Anfrage
+      nach dem IFG NRW.
+    weg: "FragDenStaat, IFG NRW"
+    kontakt: {fds_suche: "Stadt Aachen"}
+    anfrage: true
+    seit: "dem 1. Januar 2020"
+    anfrage_zusatz: >-
+      Auf Ihrem Open-Data-Portal stehen je Jahr nur die Monate Oktober bis Dezember, ohne
+      Uhrzeit, Dauer und zulässige Höchstgeschwindigkeit. Ich bitte um alle Kontrollen mit diesen
+      Angaben.
+    links:
+      - ["Open Data Aachen", "https://offenedaten.aachen.de/"]
+
+  # --- offen, noch nicht in der Karte ---
+  - kommune: Konstanz
+    land: BW
+    lon: 9.1737
+    lat: 47.6603
+    stand: offen
+    was: >-
+      Jahresstatistik der Stadt 2018–2023 als Open Data (CC BY 4.0): je Messstandort und Monat
+      gemessene Fahrzeuge, Verstöße und Überschreitungsklassen
+    situation: >-
+      Einzelne Kontrollen mit Datum und Uhrzeit sind nicht veröffentlicht, nur Monatssummen je
+      Standort – daraus ließe sich der Anteil zu schneller Fahrzeuge rechnen, für die Karte
+      bräuchte es einen eigenen Leser.
+    empfehlung: >-
+      Für die Monatswerte keine Anfrage nötig; einzelne Kontrollen ließen sich nach dem LIFG
+      anfragen.
+    weg: "offen"
+    links:
+      - ["Offene Daten Konstanz", "https://offenedaten-konstanz.de/node/42541"]
+      - ["MobiData BW", "https://mobidata-bw.de/he/dataset/geschwindigkeits-berwachung-jahresstatistik"]
+  - kommune: Schonungen
+    land: BY
+    lon: 10.3122
+    lat: 50.0496
+    stand: offen
+    was: >-
+      Monatsberichte der kommunalen Verkehrsüberwachung mit jeder Messung (Messstelle,
+      Tempolimit, Zeitfenster, Fahrzeuge, Verstöße) als PDF
+    situation: >-
+      Der Bericht kommt vom Zweckverband, der für die Gemeinde misst. Vermutlich veröffentlichen
+      viele kleine Gemeinden solche Berichte – einzeln, als PDF.
+    weg: "offen"
+    links:
+      - ["Bericht Februar 2024 (PDF)", "https://schonungen.de/wp-content/uploads/2024/03/Verkehrsstatistik-KVUe-2024-02.pdf"]
+  - kommune: Oberderdingen
+    land: BW
+    lon: 8.8053
+    lat: 49.0656
+    stand: offen
+    was: >-
+      Tabellen mit jeder Messung (Datum, Messstelle, Tempolimit, gemessene Fahrzeuge,
+      Beanstandungen) als PDF
+    weg: "offen"
+    links:
+      - ["Messergebnisse (PDF)", "https://oberderdingen.de/resources/ecics_3985.pdf"]
+
+  # --- auf Anfrage herausgegeben ---
+  - kommune: Duisburg
+    land: NW
+    lon: 6.7623
+    lat: 51.4344
+    stand: geliefert
+    was: >-
+      Statistik je Standort der mobilen Kontrollen 10/2019–09/2020 auf Anfrage (PDF, mit
+      Tempolimit und Verstößen); die Messstellen kündigt die Stadt wöchentlich an
+    empfehlung: >-
+      Für die Karte bräuchte es Datum und Ort je Kontrolle – Anfrage nach dem IFG NRW.
+    weg: "FragDenStaat, IFG NRW"
+    kontakt: {fds_suche: "Stadt Duisburg"}
+    anfrage: true
+    anfrage_zusatz: >-
+      Auf eine frühere Anfrage (FragDenStaat) haben Sie eine Statistik je Standort für Oktober
+      2019 bis September 2020 herausgegeben; ich bitte um die Angaben je Kontrolle.
+    links:
+      - ["FragDenStaat", "https://fragdenstaat.de/anfrage/standorte-der-mobilen-blitzer-in-duisburg/"]
+  - kommune: Krefeld
+    land: NW
+    lon: 6.5623
+    lat: 51.3388
+    stand: geliefert
+    was: >-
+      Polizei: geschwärzte Messprotokolle aller Polizeikontrollen eines Tages (1. April 2021)
+    empfehlung: >-
+      Die Polizei gibt Messprotokolle heraus – Anfrage für alle Kontrollen eines Zeitraums. Die
+      Kontrollen der Stadt liegen bei der Stadt.
+    weg: "FragDenStaat, IFG NRW"
+    stelle: "das Polizeipräsidium Krefeld"
+    kontakt: {fds_suche: "Polizeipräsidium Krefeld"}
+    anfrage: true
+    links:
+      - ["FragDenStaat 2021", "https://fragdenstaat.de/anfrage/messstellen-der-stadt-und-polizei-am-01042021/"]
+  - kommune: Kreis Unna
+    land: NW
+    lon: 7.6896
+    lat: 51.5349
+    stand: geliefert
+    was: >-
+      Polizei: Messprotokolle der Kontrollen in Holzwickede gebührenfrei herausgegeben
+    empfehlung: >-
+      Anfrage für alle Kontrollen der Kreispolizeibehörde.
+    weg: "FragDenStaat, IFG NRW"
+    stelle: "die Kreispolizeibehörde Unna"
+    kontakt: {fds_suche: "Kreispolizeibehörde Unna"}
+    anfrage: true
+    links:
+      - ["FragDenStaat (Holzwickede)", "https://fragdenstaat.de/anfrage/geschwindigkeitsmessungen-im-gemeindegebiet-holzwickede-2020-2023/"]
+
+  # --- erhoben, Anfrage aussichtsreich ---
+  - kommune: Stuttgart
+    land: BW
+    lon: 9.1829
+    lat: 48.7758
+    stand: kandidat
+    was: >-
+      Polizei: Zahl der Messungen je Messstelle 2017–2020, ohne Orte; die Stadt misst selbst und
+      wurde noch nicht gefragt
+    situation: >-
+      Auf die Anfrage 2020 gab das Polizeipräsidium für 2017–2020 Messstellen-Nummern mit der
+      Zahl der Messungen und Jahressummen je Gerät heraus (2017 mit dem ESO-Gerät 257 Messungen,
+      650.151 Fahrzeuge, 12.403 Verstöße). Die Orte verweigerte es wegen der öffentlichen
+      Sicherheit (§ 4 Abs. 1 Nr. 2 LIFG). Die Landeshauptstadt hat eine eigene
+      Verkehrsüberwachung und veröffentlicht Jahresbilanzen.
+    empfehlung: >-
+      Anfrage an die Landeshauptstadt Stuttgart nach dem LIFG; die Vorlage fragt nur nach
+      abgeschlossenen Kontrollen.
+    weg: "FragDenStaat, LIFG"
+    stelle: "die Landeshauptstadt Stuttgart"
+    kontakt: {fds_suche: "Landeshauptstadt Stuttgart"}
+    anfrage: true
+    links:
+      - ["FragDenStaat 2020 (Polizei)", "https://fragdenstaat.de/anfrage/geschwindigkeitskontrollen-von-kfz-in-stuttgart/"]
+      - ["Messstellenhäufigkeit 2017 (PDF)", "https://media.frag-den-staat.de/files/foi/526903/MessstellenhufigkeitESO2017_konvertiert.pdf"]
+  - kommune: Hamburg
+    land: HH
+    lon: 9.9937
+    lat: 53.5511
+    stand: kandidat
+    was: >-
+      Polizei: Messprotokolle für einzelne Straßen auf Anfrage; die Anfrage für die ganze Stadt
+      (2020) ist eingeschlafen
+    empfehlung: >-
+      Neue Anfrage nach dem Hamburgischen Transparenzgesetz für alle Kontrollen.
+    weg: "FragDenStaat, HmbTG"
+    stelle: "die Polizei Hamburg"
+    kontakt: {fds_suche: "Polizei Hamburg"}
+    anfrage: true
+    links:
+      - ["FragDenStaat 2020", "https://fragdenstaat.de/anfrage/geschwindigkeitskontrollen-von-kfz-in-hamburg/"]
+      - ["FragDenStaat 2024 (eine Straße)", "https://fragdenstaat.de/anfrage/geschwindigkeitsmessung-bahrenfelder-steindamm-im-september-2024/"]
+  - kommune: Rhein-Erft-Kreis
+    land: NW
+    lon: 6.6390
+    lat: 50.9554
+    stand: kandidat
+    was: >-
+      Polizei: Liste der Messstellen 2025 mit Datum und Ort liegt vor; die Behörde bot sie gegen
+      Gebühr (bis 102 €) an – Anfrage offen
+    weg: "FragDenStaat, IFG NRW"
+    links:
+      - ["FragDenStaat 2026", "https://fragdenstaat.de/anfrage/anfrage-nach-dem-ifg-nrw-mobile-geschwindigkeitskontrollen-im-jahr-2025/"]
+  - kommune: Karlsruhe
+    land: BW
+    lon: 8.4037
+    lat: 49.0069
+    stand: kandidat
+    was: >-
+      Stellungnahme 2019 (Stadtamt Durlach) mit Messdaten je Standort; eine Liste der mobilen
+      Kontrollen lag als Anlage bei
+    empfehlung: >-
+      Anfrage nach dem LIFG für die ganze Stadt.
+    weg: "FragDenStaat, LIFG"
+    kontakt: {fds_suche: "Stadt Karlsruhe"}
+    anfrage: true
+    links:
+      - ["Gemeinderat 2019 (PDF)", "https://web1.karlsruhe.de/ris/oparl/bodies/0001/downloadfiles/00610398.pdf"]
+  - kommune: Wiesbaden
+    land: HE
+    lon: 8.2398
+    lat: 50.0782
+    stand: kandidat
+    was: >-
+      Bericht des Dezernats an den Mobilitätsausschuss (2023) zu Orten und Häufigkeit der
+      mobilen Kontrollen 2019–2021
+    situation: >-
+      Der Beschluss im Ratsinformationssystem kündigt den Bericht an; der Bericht selbst ist dort
+      nicht verlinkt.
+    empfehlung: >-
+      Den Bericht anfragen; ob die Stadt das HDSIG per Satzung eingeführt hat, ist zu prüfen.
+    links:
+      - ["Ratsinformationssystem", "https://piwi.wiesbaden.de/dokument/v/3118284"]
+
+  # --- nur Summen, Standorte oder Planungen ---
+  - kommune: Essen
+    land: NW
+    lon: 7.0116
+    lat: 51.4556
+    stand: teilweise
+    was: >-
+      geplante Messbereiche je Woche als Open Data (mindestens 2022–2025), keine Ergebnisse
+    situation: >-
+      Auf eine Anfrage 2021 schrieb die Stadt, Auswertungen in der gewünschten Form lägen nicht
+      vor (§ 5 Abs. 1 IFG NRW).
+    empfehlung: >-
+      Nicht nach Auswertungen fragen, sondern nach den vorhandenen Daten je Messung, etwa dem
+      Export der Messsoftware.
+    weg: "FragDenStaat, IFG NRW"
+    kontakt: {fds_suche: "Stadt Essen"}
+    anfrage: true
+    links:
+      - ["Open Data Essen", "https://opendata.essen.de/dataset/geschwindigkeits%C3%BCberwachungen-2025/resource/3a5a44ec-1218-4f02-9bef-d7ea6b57316f"]
+      - ["Antwort 2021 (PDF)", "https://media.frag-den-staat.de/files/foi/594803/Mail_Antwortschreiben_NAME_konvertiert_geschwaerzt.pdf"]
+  - kommune: Düsseldorf
+    land: NW
+    lon: 6.7735
+    lat: 51.2277
+    stand: teilweise
+    was: >-
+      nur die Standorte der festen Anlagen als Open Data
+    empfehlung: >-
+      Anfrage nach den mobilen Kontrollen.
+    weg: "FragDenStaat, IFG NRW"
+    stelle: "die Landeshauptstadt Düsseldorf"
+    kontakt: {fds_suche: "Landeshauptstadt Düsseldorf"}
+    anfrage: true
+    links:
+      - ["open.nrw", "https://ckan.open.nrw/pl/dataset/stationare-verkehrsuberwachung-in-dusseldorf-d"]
+  - kommune: Kreis Wesel
+    land: NW
+    lon: 6.6178
+    lat: 51.6582
+    stand: teilweise
+    was: >-
+      nur die Messstellen der mobilen Überwachung als Open Data
+    links:
+      - ["open.nrw", "https://ckan-open-nrw.nrw.de/km/dataset/mobile-geschwindigkeitsuberwachung-im-kreis-wesel-rvr"]
+  - kommune: Esslingen am Neckar
+    land: BW
+    lon: 9.3071
+    lat: 48.7406
+    stand: teilweise
+    was: >-
+      auf Anfrage Jahreswerte 2022/23 je Gerätetyp (Betriebsstunden, erfasste Fahrzeuge,
+      Verstöße)
+    empfehlung: >-
+      Die Geräte zählen je Einsatz – Anfrage nach den Einsätzen je Ort und Tag.
+    weg: "FragDenStaat, LIFG"
+    kontakt: {fds_suche: "Stadt Esslingen am Neckar"}
+    anfrage: true
+    links:
+      - ["FragDenStaat 2024", "https://fragdenstaat.de/anfrage/geschwindigkeitskontrollen-in-esslingen/"]
+  - kommune: Frankfurt am Main
+    land: HE
+    lon: 8.6821
+    lat: 50.1109
+    stand: teilweise
+    was: >-
+      auf Anfrage Summen und Einnahmen, keine Kontrollen je Ort
+    empfehlung: >-
+      Anfrage nach den Kontrollen je Ort und Tag.
+    weg: "FragDenStaat"
+    kontakt: {fds_suche: "Stadt Frankfurt am Main"}
+    anfrage: true
+    links:
+      - ["FragDenStaat", "https://fragdenstaat.de/anfrage/geschwindigkeitsmessungen-in-farankfurt-am-main/"]
+  - kommune: Braunschweig
+    land: NI
+    lon: 10.5268
+    lat: 52.2689
+    stand: teilweise
+    was: >-
+      Ergebnisse der mobilen Überwachung je Messstelle und Jahr in Mitteilungen an die
+      Stadtbezirksräte
+    empfehlung: >-
+      Ohne Landes-IFG bleiben die Mitteilungen der Bezirksräte; sie ließen sich sammeln.
+    links:
+      - ["Mitteilung Weststadt 2024 (PDF)", "https://ratsinfo.braunschweig.de/integration/wicket/resource/org.apache.wicket.Application/doc1776550.pdf"]
+  - kommune: Brandenburg an der Havel
+    land: BB
+    lon: 12.5508
+    lat: 52.4125
+    stand: teilweise
+    was: >-
+      Jahresbericht der Verkehrsüberwachung (2025/26) mit Quoten und einzelnen Straßen
+    empfehlung: >-
+      Anfrage nach den Kontrollen je Ort und Tag nach dem AIG.
+    weg: "FragDenStaat, AIG"
+    kontakt: {fds_suche: "Stadt Brandenburg an der Havel"}
+    anfrage: true
+    links:
+      - ["Jahresbericht (PDF)", "https://www.stadt-brandenburg.de/fileadmin/pdf/36/Verkehrsueberwachung_Rueckblick-Ausblick_2025-2026_1.pdf"]
+
+  # --- Anfrage gescheitert ---
+  - kommune: Dresden
+    land: SN
+    lon: 13.7373
+    lat: 51.0504
+    stand: abgelehnt
+    was: >-
+      2020 von Stadt und Polizeidirektion abgelehnt; die Stadt bestätigte rund 6.700 Kontrollen
+      2017–2020
+    situation: >-
+      Die Stadt schrieb, die Kontrollen seien nicht automatisiert abrufbar und der Aufwand
+      unverhältnismäßig; ihre Informationsfreiheitssatzung galt nur für Einwohner. Ein
+      Landesgesetz gab es damals nicht.
+    empfehlung: >-
+      Seit dem Sächsischen Transparenzgesetz hat jede Person einen Anspruch gegenüber
+      Landesstellen – eine neue Anfrage an die Polizeidirektion Dresden könnte gelingen. Für die
+      Stadt gilt es nur, wenn sie sich per Satzung verpflichtet.
+    weg: "FragDenStaat, SächsTranspG"
+    stelle: "die Polizeidirektion Dresden"
+    kontakt: {fds_suche: "Polizeidirektion Dresden"}
+    anfrage: true
+    links:
+      - ["FragDenStaat 2020 (Stadt)", "https://fragdenstaat.de/anfrage/geschwindigkeitskontrollen-von-kfz-in-dresden-stadt/"]
+      - ["FragDenStaat 2020 (Polizei)", "https://fragdenstaat.de/anfrage/geschwindigkeitskontrollen-von-kfz-in-dresden/"]
+      - ["Sächsisches Transparenzgesetz", "https://revosax.sachsen.de/vorschrift_gesamt/19699/49110.pdf"]
+  - kommune: Leipzig
+    land: SN
+    lon: 12.3731
+    lat: 51.3397
+    stand: abgelehnt
+    was: >-
+      2020 abgelehnt: Die Polizeidirektion verwies an die Stadt, die Stadt auf ihre Satzung
+    situation: >-
+      Laut Polizeidirektion ist die Stadt zuständig. Deren Informationsfreiheitssatzung galt nur
+      für Einwohner und nicht für Weisungsaufgaben wie die Verkehrsüberwachung.
+    empfehlung: >-
+      Erst wieder aussichtsreich, wenn die Stadt das Sächsische Transparenzgesetz per Satzung
+      übernimmt.
+    links:
+      - ["FragDenStaat 2020", "https://fragdenstaat.de/anfrage/geschwindigkeitskontrollen-von-kfz-in-leipzig/"]
+      - ["Sächsisches Transparenzgesetz", "https://revosax.sachsen.de/vorschrift_gesamt/19699/49110.pdf"]
+  - kommune: Rostock
+    land: MV
+    lon: 12.0991
+    lat: 54.0924
+    stand: abgelehnt
+    was: >-
+      2020 vom Polizeipräsidium abgewiesen – zunächst, weil die Anfrage per E-Mail kam
+    situation: >-
+      Das IFG M-V verlangt einen schriftlichen Antrag (§ 10 Abs. 1); den späteren Bescheid gibt es
+      nur als PDF auf FragDenStaat.
+    empfehlung: >-
+      Neu stellen, schriftlich (Brief oder Fax über FragDenStaat).
+    weg: "FragDenStaat, IFG M-V"
+    stelle: "das Polizeipräsidium Rostock"
+    kontakt: {fds_suche: "Polizeipräsidium Rostock"}
+    anfrage: true
+    links:
+      - ["FragDenStaat 2020", "https://fragdenstaat.de/anfrage/geschwindigkeitskontrollen-von-kfz-in-rostock/"]
+  - kommune: München
+    land: BY
+    lon: 11.5820
+    lat: 48.1351
+    stand: abgelehnt
+    was: >-
+      2018 abgelehnt: Die Informationsfreiheitssatzung gilt nicht für die Verkehrsüberwachung
+      (übertragener Wirkungskreis)
+    situation: >-
+      Die Stadt nannte rund 650 Straßen im Messprogramm und fünf mobile Anlagen. Spätere Anfragen
+      zu einzelnen Straßen beantwortete die Kommunale Verkehrsüberwachung zum Teil.
+    empfehlung: >-
+      Für die ganze Stadt kaum Aussicht; Anfragen zu einzelnen Straßen können gelingen.
+    links:
+      - ["FragDenStaat 2018", "https://fragdenstaat.de/anfrage/daten-zu-geschwindigkeitsmessanlagen/"]

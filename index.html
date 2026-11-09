@@ -40,10 +40,8 @@
 
     <div class="legend-section-divider"></div>
 
-    <div class="stadt-wahl" role="group" aria-label="Stadt">
-      <button type="button" class="stadt-btn" data-stadt="berlin">Berlin <span class="stadt-jahre"></span></button>
-      <button type="button" class="stadt-btn" data-stadt="aachen">Aachen <span class="stadt-jahre"></span></button>
-    </div>
+    <!-- Knöpfe je Stadt aus dem Manifest (js/main.js) -->
+    <div class="stadt-wahl" id="stadt-wahl" role="group" aria-label="Stadt"></div>
 
     <section class="legend-section" aria-labelledby="t-farbe">
       <div class="legend-section-title" id="t-farbe">Farbe nach</div>
@@ -76,6 +74,15 @@
         <div class="chips" id="f-verortung"></div>
       </div>
       <button type="button" class="link-btn" id="filter-zurueck" hidden>Alle Filter zurücksetzen</button>
+    </section>
+
+    <section class="legend-section" id="datenlage-abschnitt" aria-labelledby="t-datenlage" hidden>
+      <div class="legend-section-divider"></div>
+      <div class="legend-section-title dl-titel" id="t-datenlage">
+        <label class="dl-schalter"><input type="checkbox" id="toggle-datenlage" /> Datenlage je Stadt</label>
+        <span class="info-icon" data-tip="Wo es solche Daten außerhalb der Karte gibt – offen, auf Anfrage herausgegeben oder abgelehnt. Ein Klick auf eine Stadt zeigt Stand, Belege und einen Anfragetext für FragDenStaat.">i</span>
+      </div>
+      <ul class="klassen" id="datenlage-legende" aria-label="Datenlage"></ul>
     </section>
 
     <div id="feature-count-wrapper">
@@ -123,6 +130,8 @@
       </button>
     </div>
   </section>
+
+  <aside id="datenlage-detail" class="detail-panel" hidden aria-label="Datenlage einer Stadt"></aside>
 
   <dialog id="methode" class="info-dialog" aria-labelledby="methode-titel">
     <div class="info-body">

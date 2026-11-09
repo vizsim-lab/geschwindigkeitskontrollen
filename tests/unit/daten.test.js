@@ -118,3 +118,11 @@ test("Permalink: hin und zurück", () => {
   assert.deepEqual(P.lies("#quatsch&m=nix&t=999"), { tempo: new Set() });
   assert.equal(P.schreibe({ zoom: 10, lat: 52.5, lon: 13.4, metrik: "anteil", jahre: null, tempo: null, methoden: null }), "10.00/52.50000/13.40000");
 });
+
+test("Permalink: Datenlage an und aus", () => {
+  const a = P.schreibe({ zoom: 5.3, lat: 51.2, lon: 10.4, metrik: "anteil", datenlage: true });
+  assert.match(a, /&d=1$/);
+  assert.equal(P.lies(a).datenlage, true);
+  assert.equal(P.lies("5/51/10").datenlage, undefined);
+  assert.doesNotMatch(P.schreibe({ zoom: 5, lat: 51, lon: 10, datenlage: false }), /d=/);
+});

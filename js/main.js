@@ -10,11 +10,15 @@ import { esc, stelleHtml } from "./popup.js";
 import { erzeugeKarte, ersterSymbolLayer, hintergruendeAnlegen, kartenPanel } from "./karte.js";
 import { sucheAnlegen } from "./suche.js";
 import { methodeHtml } from "./methode.js";
+import * as DL from "./datenlage.js";
 
 const PFAD = "pipeline/data/karte/";
-const zustand = { metrik: "anteil", jahre: null, tempo: null, methoden: null, stelle: null };
+const zustand = { metrik: "anteil", jahre: null, tempo: null, methoden: null, stelle: null, datenlage: false };
+const LEER = { type: "FeatureCollection", features: [] };
+const DEUTSCHLAND = [[5.9, 47.3], [15.0, 55.0]];
 let daten;
 let manifest;
+let datenlage = LEER;
 let map;
 let agg = new Map();
 let stadtImBild = "berlin";
@@ -33,7 +37,7 @@ async function json(datei) {
 async function start() {
   manifest = await json("manifest.json");
   const anker = P.lies(location.hash);
-  for (const k of ["metrik", "jahre", "tempo", "methoden", "stelle"]) if (anker[k] !== undefined) zustand[k] = anker[k];
+  for (const k of ["metrik", "jahre", "tempo", "methoden", "stelle", "datenlage"]) if (anker[k] !== undefined) zustand[k] = anker[k];
   for (const k of ["jahre", "tempo", "methoden"]) if (zustand[k] && !zustand[k].size) zustand[k] = null;
   const b = manifest.staedte.berlin.start;
   const ansicht = anker.zoom != null ? { lon: anker.lon, lat: anker.lat, zoom: anker.zoom } : b;
@@ -44,11 +48,13 @@ async function start() {
     json(manifest.dateien.messstellen),
     json(manifest.dateien.kontrollen),
     json(manifest.dateien.abschnitte),
+    manifest.dateien.datenlage ? json(manifest.dateien.datenlage) : LEER,
   ]);
   const kartenLaden = new Promise((fertig) => (map.loaded() ? fertig() : map.once("load", fertig)));
-  const [[stellenJson, kontrollenJson, abschnitte]] = await Promise.all([datenLaden, kartenLaden]);
+  const [[stellenJson, kontrollenJson, abschnitte, dl]] = await Promise.all([datenLaden, kartenLaden]);
   daten = D.entpacke(stellenJson, kontrollenJson);
-  window.__app = { daten, zustand, manifest, zeichne };
+  datenlage = dl;
+  window.__app = { daten, zustand, manifest, datenlage, zeichne };
 
   legendeAufbauen();
   sucheAnlegen(map);
@@ -56,6 +62,7 @@ async function start() {
   tooltips();
   hintergruendeAnlegen(map);
   ebenenAnlegen(abschnitte);
+  datenlageAnlegen();
   interaktion();
   stadtBestimmen();
   zeichne();
@@ -176,10 +183,121 @@ function interaktion() {
     vorschau().remove();
   });
   map.on("click", (e) => {
+    const d = zustand.datenlage ? map.queryRenderedFeatures(e.point, { layers: ["datenlage-kreis"] })[0] : null;
+    if (d) return zeigeDatenlage(d.properties.kommune);
     const f = map.queryRenderedFeatures(e.point, { layers: ["punkte"] })[0];
-    if (f) zeigeStelle(f.id, false);
-    else if (fest.p?.isOpen()) fest.p.remove();
+    if (f) {
+      schliesseDatenlage();
+      zeigeStelle(f.id, false);
+    } else {
+      if (fest.p?.isOpen()) fest.p.remove();
+      schliesseDatenlage();
+    }
   });
+  map.on("mouseenter", "datenlage-kreis", () => (map.getCanvas().style.cursor = "pointer"));
+  map.on("mouseleave", "datenlage-kreis", () => (map.getCanvas().style.cursor = ""));
+}
+
+// --- Datenlage je Stadt (js/datenlage.js) --------------------------------------------------
+
+function datenlageAnlegen() {
+  const abschnitt = document.getElementById("datenlage-abschnitt");
+  if (!datenlage.features.length) return;
+  abschnitt.hidden = false;
+  const sicht = zustand.datenlage ? "visible" : "none";
+  // über den Messstellen; ab Zoom 10 weg, dort zeigen die Messstellen selbst, was es gibt
+  const blende = ["interpolate", ["linear"], ["zoom"], 8.5, 1, 10, 0];
+  map.addSource("datenlage", { type: "geojson", data: datenlage });
+  map.addLayer({
+    id: "datenlage-kreis",
+    type: "circle",
+    source: "datenlage",
+    maxzoom: 10,
+    layout: { visibility: sicht },
+    paint: {
+      "circle-color": DL.farbAusdruck(),
+      "circle-radius": ["interpolate", ["linear"], ["zoom"], 4, 5, 9, 9],
+      "circle-stroke-color": "#ffffff",
+      "circle-stroke-width": 1.5,
+      "circle-opacity": blende,
+      "circle-stroke-opacity": blende,
+    },
+  });
+  // Namen nur, wenn der Hintergrund Schriften mitbringt (ohne `glyphs` kein Text)
+  if (map.getStyle().glyphs) {
+    map.addLayer({
+      id: "datenlage-text",
+      type: "symbol",
+      source: "datenlage",
+      minzoom: 5,
+      maxzoom: 10,
+      layout: {
+        visibility: sicht,
+        "text-field": ["get", "kommune"],
+        "text-font": ["Noto Sans Regular"],
+        "text-size": 11,
+        "text-anchor": "top",
+        "text-offset": [0, 0.9],
+        "text-optional": true,
+      },
+      paint: { "text-color": "#374151", "text-halo-color": "#ffffff", "text-halo-width": 1.3 },
+    });
+  }
+  document.getElementById("datenlage-legende").innerHTML = DL.legendeHtml(datenlage);
+  const box = document.getElementById("toggle-datenlage");
+  box.checked = zustand.datenlage;
+  box.addEventListener("change", () => {
+    zustand.datenlage = box.checked;
+    datenlageSichtbar();
+    if (zustand.datenlage && map.getZoom() > 8) {
+      const breit = innerWidth > 640;
+      map.fitBounds(DEUTSCHLAND, { padding: { top: 60, bottom: 40, left: 40, right: breit ? 360 : 40 }, maxZoom: 7 });
+    }
+    if (!zustand.datenlage) schliesseDatenlage();
+    schreibeLink();
+  });
+}
+
+function datenlageSichtbar() {
+  for (const id of ["datenlage-kreis", "datenlage-text"]) {
+    if (map.getLayer(id)) map.setLayoutProperty(id, "visibility", zustand.datenlage ? "visible" : "none");
+  }
+}
+
+function zeigeDatenlage(kommune) {
+  const f = datenlage.features.find((x) => x.properties.kommune === kommune);
+  if (!f) return;
+  const p = f.properties;
+  const el = document.getElementById("datenlage-detail");
+  el.innerHTML = DL.detailHtml(p, manifest.datenlage_stand);
+  el.hidden = false;
+  el.scrollTop = 0;
+  vorschau().remove();
+  if (fest.p?.isOpen()) fest.p.remove();
+  document.body.classList.add("detail-offen");
+  el.querySelector("[data-schliessen]").onclick = schliesseDatenlage;
+  el.querySelector("[data-hinzoomen]")?.addEventListener("click", () => {
+    const s = manifest.staedte[p.stadt]?.start;
+    map.flyTo(s ? { center: [s.lon, s.lat], zoom: s.zoom, essential: true } : { center: f.geometry.coordinates, zoom: 11, essential: true });
+    schliesseDatenlage();
+  });
+  el.querySelector("[data-kopieren]")?.addEventListener("click", async (e) => {
+    const feld = el.querySelector(".anfrage-text");
+    try {
+      await navigator.clipboard.writeText(feld.value);
+    } catch {
+      feld.select();
+      document.execCommand("copy");
+    }
+    e.target.textContent = "Kopiert ✓";
+  });
+}
+
+function schliesseDatenlage() {
+  const el = document.getElementById("datenlage-detail");
+  if (el.hidden) return;
+  el.hidden = true;
+  document.body.classList.remove("detail-offen");
 }
 
 function html(i, voll) {
@@ -209,7 +327,7 @@ function stadtBestimmen() {
   const c = map.getCenter();
   let beste = stadtImBild;
   let d0 = Infinity;
-  for (const [code, s] of Object.entries(manifest.staedte)) {
+  for (const [code, s] of mitDaten()) {
     const d = Math.hypot((c.lng - s.start.lon) * 0.62, c.lat - s.start.lat);
     if (d < d0) [d0, beste] = [d, code];
   }
@@ -231,13 +349,18 @@ function schreibeLink() {
 
 function legendeAufbauen() {
   const st = manifest.staedte;
-  document.getElementById("untertitel").textContent = Object.values(st)
+  document.getElementById("untertitel").textContent = mitDaten()
+    .map(([, s]) => s)
     .map((s) => `${s.label} ${jahre(s.jahre)}`)
     .join(" · ");
-  document.getElementById("quelle-tip").dataset.tip = `Quellen: ${Object.values(st).map((s) => s.quelle.bereitsteller).join(", ")} · Verortung: OpenStreetMap (ODbL) · Stand ${manifest.stand}`;
-  for (const b of document.querySelectorAll(".stadt-btn")) {
+  document.getElementById("quelle-tip").dataset.tip = `Quellen: ${mitDaten().map(([, s]) => s.quelle.bereitsteller).join(", ")} · Verortung: OpenStreetMap (ODbL) · Stand ${manifest.stand}`;
+  const wahl = document.getElementById("stadt-wahl");
+  wahl.innerHTML = Object.entries(st)
+    .filter(([, s]) => s.kontrollen > 0)
+    .map(([code, s]) => `<button type="button" class="stadt-btn" data-stadt="${esc(code)}">${esc(s.label)} <span class="stadt-jahre">${esc(jahre(s.jahre))} · ${D.zahl(s.kontrollen)} Kontrollen</span></button>`)
+    .join("");
+  for (const b of wahl.querySelectorAll(".stadt-btn")) {
     const s = st[b.dataset.stadt];
-    b.querySelector(".stadt-jahre").textContent = `${jahre(s.jahre)} · ${D.zahl(s.kontrollen)} Kontrollen`;
     b.addEventListener("click", () => map.flyTo({ center: [s.start.lon, s.start.lat], zoom: s.start.zoom, essential: true }));
   }
   for (const r of document.querySelectorAll('input[name="metrik"]')) {
@@ -321,9 +444,14 @@ function jahre(liste) {
   return liste.length === 1 ? String(liste[0]) : `${liste[0]}–${liste[liste.length - 1]}`;
 }
 
+/** Städte mit Kontrollen in den Kartendaten (Einträge ohne Daten bleiben außen vor). */
+function mitDaten() {
+  return Object.entries(manifest.staedte).filter(([, s]) => s.kontrollen > 0);
+}
+
 function quellenText() {
-  return Object.values(manifest.staedte)
-    .map((s) => `<a href="${esc(s.quelle.herkunft_url)}" target="_blank" rel="noopener">${esc(s.quelle.kurz)}</a>`)
+  return mitDaten()
+    .map(([, s]) => `<a href="${esc(s.quelle.herkunft_url)}" target="_blank" rel="noopener">${esc(s.quelle.kurz)}</a>`)
     .join(" · ");
 }
 

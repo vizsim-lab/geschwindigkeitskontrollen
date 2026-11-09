@@ -101,7 +101,22 @@ def test_kette(daten):
     assert manifest["staedte"]["berlin"]["kontrollen"] == 7
     assert manifest["staedte"]["berlin"]["jahre"] == [2017, 2018, 2019, 2020]
     assert manifest["staedte"]["aachen"]["jahre"] == [2021]
-    assert set(manifest["dateien"]) == {"messstellen", "kontrollen", "abschnitte", "csv"}
+    assert set(manifest["dateien"]) == {
+        "messstellen",
+        "kontrollen",
+        "abschnitte",
+        "csv",
+        "datenlage",
+    }
+    dl = json.loads((p.karte / "datenlage.json").read_text())
+    je = {f["properties"]["kommune"]: f["properties"] for f in dl["features"]}
+    assert je["Berlin"]["stand"] == "in_karte" and je["Berlin"]["kontrollen"] == 7
+    assert je["Aachen"]["kontrollen"] == 1
+    assert "Köln" not in je  # in sources.yaml „in der Karte“, aber ohne Kontrollen im Test
+    assert je["Stuttgart"]["anfrage"]["text"].startswith("Bitte übermitteln Sie mir")
+    assert set(manifest["datenlage_stand"]) >= {f["properties"]["stand"] for f in dl["features"]}
+    doku = (p.docs / "DATENLAGE.md").read_text(encoding="utf-8")
+    assert "| Stuttgart | BW |" in doku
     abschn = json.loads((p.karte / "abschnitte.geojson").read_text())
     assert abschn["features"], "Abschnitt Querweg–Nebenstraße fehlt"
     csv = pd.read_csv(p.karte / "kontrollen.csv")
