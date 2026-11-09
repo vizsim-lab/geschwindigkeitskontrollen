@@ -1,0 +1,101 @@
+# VORÜBERGEHEND (vor dem PR wieder entfernen): lädt mögliche Quellen der „grünen“ Städte der
+# Datenlage (Konstanz, Schonungen, Oberderdingen, Duisburg, Krefeld, Kreis Unna) und legt sie
+# auf den Branch `dev/erkunden` (orphan), damit sie ohne Netz angesehen werden können.
+name: Quellen erkunden (vorübergehend)
+
+on:
+  push:
+    branches: ["gruene-staedte"]
+    paths: [".github/workflows/erkunden.yml"]
+
+permissions:
+  contents: write
+
+jobs:
+  erkunden:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v7
+      - name: Abfragen und Anhänge laden
+        shell: python
+        run: |
+          import json, re, time, urllib.parse, urllib.request
+          from pathlib import Path
+          aus = Path("erkunden"); aus.mkdir()
+          UA = {"User-Agent": "vizsim-geschwindigkeitskontrollen (+https://github.com/vizsim-lab/geschwindigkeitskontrollen)"}
+          log = []
+          def hole(url, name, max_bytes=40_000_000):
+              try:
+                  r = urllib.request.urlopen(urllib.request.Request(url, headers=UA), timeout=90)
+                  daten = r.read(max_bytes)
+                  (aus / name).write_bytes(daten)
+                  log.append(f"{r.status} {r.headers.get('content-type')} {len(daten)} {url} -> {name}")
+                  return daten
+              except Exception as e:
+                  log.append(f"FEHLER {url}: {e}")
+                  return b""
+          def slug(url):
+              return re.sub(r"[^A-Za-z0-9._-]+", "_", urllib.parse.unquote(url.split("://", 1)[-1]))[-120:]
+          q = urllib.parse.quote
+          # Konstanz
+          for i, u in enumerate([
+              "https://mobidata-bw.de/ckan/api/3/action/package_show?id=geschwindigkeits-berwachung-jahresstatistik",
+              "https://mobidata-bw.de/api/3/action/package_show?id=geschwindigkeits-berwachung-jahresstatistik",
+              "https://mobidata-bw.de/ckan/api/3/action/package_search?q=" + q("Geschwindigkeitsüberwachung") + "&rows=50",
+              "https://offenedaten-konstanz.de/api/3/action/package_search?q=" + q("Geschwindigkeit") + "&rows=50",
+              "https://offenedaten-konstanz.de/node/42541",
+              "https://www.govdata.de/ckan/api/3/action/package_search?q=" + q("Geschwindigkeitsüberwachung Konstanz") + "&rows=50",
+          ]):
+              d = hole(u, f"konstanz_{i}.txt")
+              for m in set(re.findall(rb'https?://[^"\s<>]+?\.(?:csv|xlsx?|json|zip)(?=["\s<>?])', d))[:20]:
+                  url = m.decode()
+                  if "konstanz" in url.lower() or "mobidata" in url.lower() or "geschwind" in url.lower():
+                      hole(url, "konstanz_datei_" + slug(url))
+          # Schonungen: WordPress-Medien
+          for i, s in enumerate(["Verkehrsstatistik", "KVUe", "Verkehrsüberwachung"]):
+              for seite in (1, 2, 3):
+                  d = hole(f"https://schonungen.de/wp-json/wp/v2/media?search={q(s)}&per_page=100&page={seite}", f"schonungen_media_{i}_{seite}.json")
+                  try:
+                      liste = json.loads(d or b"[]")
+                  except Exception:
+                      liste = []
+                  if not liste:
+                      break
+                  for x in liste:
+                      u = x.get("source_url", "")
+                      if u.lower().endswith(".pdf") and not (aus / ("schonungen_" + slug(u))).exists():
+                          hole(u, "schonungen_" + slug(u))
+                          time.sleep(0.3)
+          hole("https://schonungen.de/?s=Verkehrsstatistik", "schonungen_suche.html")
+          # Oberderdingen
+          hole("https://oberderdingen.de/resources/ecics_3985.pdf", "oberderdingen_ecics_3985.pdf")
+          d = hole("https://oberderdingen.de/suche?q=" + q("Geschwindigkeitsmessung"), "oberderdingen_suche.html")
+          # FragDenStaat: Seiten und Anhänge
+          for name, slug_fds in [("duisburg", "standorte-der-mobilen-blitzer-in-duisburg"),
+                                 ("krefeld", "messstellen-der-stadt-und-polizei-am-01042021"),
+                                 ("unna", "geschwindigkeitsmessungen-im-gemeindegebiet-holzwickede-2020-2023")]:
+              d = hole(f"https://fragdenstaat.de/anfrage/{slug_fds}/", f"fds_{name}.html")
+              links = sorted(set(re.findall(rb'href="(https://[^"]*?/files/foi/[^"]+|/anfrage/[^"]*?/anhang/[^"]+|https://fragdenstaat\.de/anfrage/[^"]*?/anhang/[^"]+)"', d)))
+              ids = sorted(set(re.findall(rb'/api/v1/request/(\d+)/', d)) | set(re.findall(rb'data-requestid="(\d+)"', d)) | set(re.findall(rb'"request_id":\s*(\d+)', d)))
+              log.append(f"{name}: {len(links)} Anhang-Links, Ids {ids[:5]}")
+              for l in links[:40]:
+                  u = l.decode()
+                  if u.startswith("/"):
+                      u = "https://fragdenstaat.de" + u
+                  hole(u, f"fds_{name}_" + slug(u))
+                  time.sleep(0.5)
+              for i in ids[:2]:
+                  hole(f"https://fragdenstaat.de/api/v1/request/{i.decode()}/", f"fds_{name}_api_{i.decode()}.json")
+          (aus / "uebersicht.txt").write_text("\n".join(log) + "\n")
+          print("\n".join(log))
+      - name: Auf dev/erkunden legen
+        run: |
+          ls -la erkunden | head -100
+          du -sh erkunden
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch --orphan dev/erkunden
+          git add -f erkunden
+          git commit -q -m "Quellen erkunden (Lauf ${{ github.run_number }})"
+          git push -f origin dev/erkunden
