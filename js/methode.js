@@ -6,6 +6,12 @@
 import * as D from "./daten.js";
 import { esc } from "./popup.js";
 
+const MONATE = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
+
+function monat(iso) {
+  return iso ? `${MONATE[Number(iso.slice(5, 7)) - 1]} ${iso.slice(0, 4)}` : "";
+}
+
 export function methodeHtml(m) {
   const b = m.staedte.berlin;
   const a = m.staedte.aachen;
@@ -16,8 +22,9 @@ export function methodeHtml(m) {
     const n = v.kontrollen;
     const pz = (x) => `${D.zahl((100 * x) / n, 1)} %`;
     return `<table>${m.methoden
+      .filter((k) => je[k] > 0)
       .map((k) => `<tr><td>${esc(D.METHODEN_TEXT[k])}</td><td>${D.zahl(je[k])}</td><td>${pz(je[k])}</td></tr>`)
-      .join("")}<tr><td>ohne Lage (nicht auf der Karte)</td><td>${D.zahl(v.ohne_lage)}</td><td>${pz(v.ohne_lage)}</td></tr></table>`;
+      .join("")}${v.ohne_lage ? `<tr><td>ohne Lage (nicht auf der Karte)</td><td>${D.zahl(v.ohne_lage)}</td><td>${pz(v.ohne_lage)}</td></tr>` : ""}</table>`;
   };
   const probe = b.verortung?.hausnummer_gegen_abschnitt;
   return `
@@ -38,7 +45,7 @@ export function methodeHtml(m) {
       Polizei erklärt die Spalten nicht. Die Karte zeigt sie, wie geliefert.</li>
     </ul>
 
-    <h3>Aachen ${esc(a.zeitraum?.[0]?.slice(0, 7) ?? "")} bis ${esc(a.zeitraum?.[1]?.slice(0, 7) ?? "")}</h3>
+    <h3>Aachen ${esc(monat(a.zeitraum?.[0]))} bis ${esc(monat(a.zeitraum?.[1]))}</h3>
     <p>${D.zahl(a.kontrollen)} Kontrollen der Stadt Aachen (Open Data, ${esc(a.quelle.lizenz || "")}).
     Das Portal hält je Jahr nur die <b>letzten drei Monate</b> bereit; darum fehlen Januar bis
     September der Jahre bis 2025. Der Juni 2020 stammt aus der früheren Karte. Aachen nennt je
@@ -53,7 +60,7 @@ export function methodeHtml(m) {
     gestrichelte Linie zeigt die ganze Straße.</p>
     <p><b>Berlin</b></p>${zeile(b)}
     ${probe ? `<p>Gegenprobe: Wo Hausnummer und Querstraßen vorliegen (${D.zahl(probe.n)} Kontrollen), liegt der
-    Hausnummer-Punkt bei ${D.zahl(100 * probe.unter_50m, 0)} % höchstens 50 m neben dem Abschnitt
+    Hausnummer-Punkt bei ${D.zahl(100 * probe.unter_50m, 1)} % höchstens 50 m neben dem Abschnitt
     (Median ${D.zahl(probe.median_m, 0)} m).</p>` : ""}
     <p><b>Aachen</b> – nur der Straßenname ist bekannt:</p>${zeile(a)}
 

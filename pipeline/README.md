@@ -93,7 +93,7 @@ und „nur Straße“ gelten erst, wenn keine Stufe Genaueres findet. Je Kontrol
    Bezirke in der Quelle): dort mit Hinweis.
 
 **Gegenprobe** (`validiere`): Wo Hausnummer und Querstraßen vorliegen, misst die Pipeline den
-Abstand des Hausnummer-Punkts zum Abschnitt – Stand Herbst 2026 (OSM vom 09.11.2026):
+Abstand des Hausnummer-Punkts zum Abschnitt – Stand 9. November 2026 (Geofabrik-Abzug dieses Tages):
 19.156 Kontrollen, 92,5 % höchstens 50 m, Median 0 m, 1,4 % über 250 m.
 
 **Was offen bleibt** (Berlin, 83 Kontrollen): vor allem der Tunnel unter der Schlangenbader

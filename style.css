@@ -773,6 +773,10 @@ body {
   color: var(--ui-text-strong);
 }
 
+.pop-tabelle {
+  overflow-x: auto;
+}
+
 .pop-liste table {
   width: 100%;
   border-collapse: collapse;
@@ -1029,5 +1033,34 @@ body {
 
   .maplibregl-ctrl-bottom-right {
     bottom: var(--legend-hoehe, 96px);
+  }
+
+  /* Angeheftetes Fenster: am Handy fest oben über der Karte statt am Punkt (sonst ragt es
+     seitlich aus dem Bild); MapLibre setzt die Lage per Inline-transform, darum !important */
+  .maplibregl-popup.pop-fest {
+    position: fixed !important;
+    transform: none !important;
+    top: 62px !important;
+    left: 8px !important;
+    right: 8px !important;
+    max-width: none !important;
+    z-index: 8;
+  }
+
+  .maplibregl-popup.pop-fest .maplibregl-popup-tip {
+    display: none;
+  }
+
+  .pop-liste td.richtung {
+    min-width: 70px;
+  }
+
+  /* schmal: die Uhrzeit weg, damit „zu schnell“ ins Bild passt (sie steht in der CSV) */
+  .pop-liste .zeit {
+    display: none;
+  }
+
+  .maplibregl-popup.pop-fest .maplibregl-popup-content {
+    max-height: calc(100dvh - 62px - 130px);
   }
 }

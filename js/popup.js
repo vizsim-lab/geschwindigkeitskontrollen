@@ -69,7 +69,7 @@ export function stelleHtml({ daten, stelle, agg, metrik, filter, manifest, voll 
   const mitFv = liste.some((x) => x.fahrverbote != null);
   const kopf = [
     "<th>Datum</th>",
-    mitZeit ? "<th>Zeit</th>" : "",
+    mitZeit ? '<th class="zeit">Zeit</th>' : "",
     "<th>Richtung</th>",
     mitTempo ? '<th class="rechts">km/h</th>' : "",
     '<th class="rechts">Fzg.</th>',
@@ -81,7 +81,7 @@ export function stelleHtml({ daten, stelle, agg, metrik, filter, manifest, voll 
     const zeit = x.beginn != null ? `${D.uhrzeit(x.beginn)}${x.dauer ? `–${D.uhrzeit(x.beginn + x.dauer)}` : ""}` : "";
     return `<tr class="${x.imFilter ? "" : "ausser-filter"}">
       <td>${D.datumText(x.datum)}</td>
-      ${mitZeit ? `<td>${zeit}</td>` : ""}
+      ${mitZeit ? `<td class="zeit">${zeit}</td>` : ""}
       <td class="richtung">${esc(daten.richtungen[x.richtung] || "–")}</td>
       ${mitTempo ? `<td class="rechts">${x.tempo ?? "–"}</td>` : ""}
       <td class="rechts">${D.zahl(x.messungen)}</td>
@@ -93,7 +93,7 @@ export function stelleHtml({ daten, stelle, agg, metrik, filter, manifest, voll 
   html += `
     <div class="pop-liste">
       <h3>${liste.length === 1 ? "Die Kontrolle" : `Alle ${D.zahl(liste.length)} Kontrollen`}${ausser ? ` <span class="pop-meta">(${ausser} außerhalb des Filters, grau)</span>` : ""}</h3>
-      <table><thead><tr>${kopf}</tr></thead><tbody>${reihen.join("")}</tbody></table>
+      <div class="pop-tabelle"><table><thead><tr>${kopf}</tr></thead><tbody>${reihen.join("")}</tbody></table></div>
       ${liste.length > MAX_ZEILEN ? `<div class="pop-mehr">… und ${D.zahl(liste.length - MAX_ZEILEN)} weitere (alle in der CSV)</div>` : ""}
     </div>
     <div class="pop-foot">

@@ -20,7 +20,7 @@ let agg = new Map();
 let stadtImBild = "berlin";
 let hoverId = null;
 const vorschau = () => (vorschau.p ??= new maplibregl.Popup({ closeButton: false, closeOnClick: false, maxWidth: "340px", className: "pop-vorschau", offset: 10 }));
-const fest = () => (fest.p ??= new maplibregl.Popup({ closeButton: true, closeOnClick: false, maxWidth: "440px", offset: 10 }));
+const fest = () => (fest.p ??= new maplibregl.Popup({ closeButton: true, closeOnClick: false, maxWidth: "440px", offset: 10, className: "pop-fest" }));
 
 start().catch(zeigeFehler);
 
@@ -96,7 +96,8 @@ function ebenenAnlegen(abschnitte) {
       paint: {
         "line-color": farbe(k),
         "line-width": ["interpolate", ["linear"], ["zoom"], 12, 2, 16, 6],
-        "line-opacity": ["case", an, 0.7, 0],
+        // „kein Wert“ (grau) tritt zurück, sonst dominieren die nur-zu-schnell-Kontrollen
+        "line-opacity": ["case", ["!", an], 0, ["==", k, -1], 0.3, 0.7],
       },
     },
     unter
@@ -113,7 +114,7 @@ function ebenenAnlegen(abschnitte) {
         "line-color": farbe(k),
         "line-width": ["interpolate", ["linear"], ["zoom"], 12, 1.5, 16, 4],
         "line-dasharray": [2, 1.5],
-        "line-opacity": ["case", an, 0.55, 0],
+        "line-opacity": ["case", ["!", an], 0, ["==", k, -1], 0.25, 0.55],
       },
     },
     unter
