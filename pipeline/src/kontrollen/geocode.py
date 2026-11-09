@@ -56,6 +56,7 @@ ADRESSE_MAX = 200  # m: Adresse weiter von der Straße weg -> andere Straße gle
 WIDERSPRUCH = 250  # m: Hausnummer so weit außerhalb des Abschnitts -> Abschnitt gilt
 MEHRDEUTIG = 400  # m: zwei gleich gute Kandidaten weiter auseinander -> keine Antwort
 ORT_MAX = 500  # m: Ort (Platz, Anschlussstelle, Brücke) so weit von der Straße -> passt nicht
+ORT_STRASSE_MAX = 150  # m: eine genannte Straße, die die Hauptstraße nicht trifft, nur so nah
 FREMD_MAX = 100  # m: Ort auf einer anderen Autobahn als genannt – nur so nah
 LUECKE = 250  # m: Teile einer Straße mit größerer Lücke liegen an verschiedenen Orten
 PRAEFIX_MIN = 12  # Zeichen: kürzere abgeschnittene Namen nicht über den Anfang suchen
@@ -66,6 +67,7 @@ HINWEIS_AUSSERHALB = "Hausnummer liegt außerhalb des Abschnitts"
 HINWEIS_EINE = "nur eine der Querstraßen gefunden"
 HINWEIS_ORT = "Ortsangabe statt Querstraße"
 HINWEIS_ZUORDNUNG = "Ortsangabe von Hand zugeordnet (config/orte.yaml)"
+HINWEIS_MEHRFACH = "Straße liegt an mehreren Stellen – Punkt auf dem längsten Stück"
 
 
 # --- Straßennetz ---------------------------------------------------------------------------
@@ -407,12 +409,13 @@ class Ergebnis:
 
     @property
     def rang(self) -> int:
-        """0 = genau; 1 = Kreuzung/Anschlussstelle; 2 = nur eine Querstraße; 3 = nur Straße."""
-        if self.methode in ("hausnummer", "abschnitt"):
-            return 0
+        """0 = genau; 1 = Kreuzung/Anschlussstelle; 2 = genähert (nur eine Querstraße, Ort statt
+        Querstraße) – dann sucht die nächste Stufe weiter; 3 = nur Straße."""
         if self.methode == "strasse":
             return 3
-        return 2 if self.hinweis == HINWEIS_EINE else 1
+        if self.hinweis in (HINWEIS_EINE, HINWEIS_ORT):
+            return 2
+        return 0 if self.methode in ("hausnummer", "abschnitt") else 1
 
 
 @dataclass(frozen=True)
@@ -451,7 +454,8 @@ def verorte(a: Anfrage, netz: Netz, gebiete: Gebiete) -> Ergebnis | None:
         if a.autobahn:
             e = _autobahn(a, netz, st, gebiete.grenze)
         else:
-            e = _strasse(a, netz, st, gebiete.grenze)
+            # ohne Bezirke in der Quelle (Aachen) gibt es nichts Genaueres als die Stadt
+            e = _strasse(a, netz, st, gebiete.grenze, mehrfach_ok=not gebiete.bezirke)
         if e is None:
             continue
         if e.rang <= 1:
@@ -461,11 +465,24 @@ def verorte(a: Anfrage, netz: Netz, gebiete: Gebiete) -> Ergebnis | None:
     return beste
 
 
-def _strasse(a: Anfrage, netz: Netz, st: Stufe, grenze) -> Ergebnis | None:
-    flaeche, art, weit = st.flaeche, st.art, st.weit
-    k = netz.finde(a.strasse, flaeche)
+def _strasse(
+    a: Anfrage, netz: Netz, st: Stufe, grenze, mehrfach_ok: bool = False
+) -> Ergebnis | None:
+    k = netz.finde(a.strasse, st.flaeche)
+    if k:
+        return _an_strasse(a, k, netz, st, grenze, mehrfach_ok)
+    zu = netz.ortsname(a.strasse) if a.strasse else None  # "Tiergartentunnel"
+    k = netz.finde(zu, st.flaeche) if zu else None
     if not k:
         return None
+    e = _an_strasse(a, k, netz, st, grenze, mehrfach_ok)
+    if e is not None and e.hinweis is None:
+        e.hinweis = HINWEIS_ZUORDNUNG
+    return e
+
+
+def _an_strasse(a: Anfrage, k: str, netz: Netz, st: Stufe, grenze, mehrfach_ok: bool):
+    flaeche, art, weit = st.flaeche, st.art, st.weit
     gx = netz.strasse(k, flaeche, nur_kfz=True)
     if gx.is_empty:
         return None
@@ -511,10 +528,14 @@ def _strasse(a: Anfrage, netz: Netz, st: Stufe, grenze) -> Ergebnis | None:
     # 3. Kreuzung
     if kreuz and (len(kreuz) == 1 or max(p.distance(kreuz[0]) for p in kreuz) <= MEHRDEUTIG):
         return Ergebnis(kreuz[0], "kreuzung", art, name, hinweis=hinweis, maxspeed=vmax)
-    # 5. nur die Straße – stadtweit nur, wenn sie nicht an mehreren Orten liegt
+    # 5. nur die Straße – stadtweit nur, wenn sie nicht an mehreren Orten liegt (Aachen nennt
+    # keine Bezirke: dort der Punkt auf dem längsten Stück, die Karte zeigt alle Stücke)
+    hinweis = None
     if art == "stadt" and mehrfach(gx):
-        return None
-    return Ergebnis(repraesentant(gx), "strasse", art, name, gx, maxspeed=vmax)
+        if not mehrfach_ok:
+            return None
+        hinweis = HINWEIS_MEHRFACH
+    return Ergebnis(repraesentant(gx), "strasse", art, name, gx, hinweis=hinweis, maxspeed=vmax)
 
 
 def _quer(
@@ -533,8 +554,10 @@ def _quer(
         if pts:
             return pts, hinweis
     ab = namen.autobahn(n)
-    if ab and ab[0] in netz.autobahn:
-        pts = treffpunkte(gx, netz.autobahn[ab[0]].intersection(weit))
+    ue = _UEBERLEITUNG.search(n)  # "Überleitung zur BAB 115" -> wo die A 115 anschließt
+    ref = ab[0] if ab else (f"A {int(ue.group(1))}" if ue else None)
+    if ref in netz.autobahn:
+        pts = treffpunkte(gx, netz.autobahn[ref].intersection(weit))
         if pts:
             return pts, hinweis
     if namen.schluessel(n) == "stadtgrenze":
@@ -545,7 +568,16 @@ def _quer(
     return pts, (hinweis or h or HINWEIS_ORT) if pts else None
 
 
-_VORSATZ = re.compile(r"^(?:Höhe|Hoehe|vor|hinter|nach|ehem\.?|Brücke|Tunnel|Zollamt)\s+", re.I)
+_VORSATZ = re.compile(
+    r"^(?:Höhe|Hoehe|vor|hinter|nach|ehem\.?|Brücke(?:\s+über(?:\s+die)?(?:\s+BAB)?)?|Tunnel|Zollamt)\s+",
+    re.I,
+)
+_UEBERLEITUNG = re.compile(r"Überleitung\s+(?:zur\s+)?(?:BAB\s*)?(?:A\s*)?(\d{2,3})\b", re.I)
+
+
+def _ist_bauwerk(name: str) -> bool:
+    k = namen.schluessel(name)
+    return "tunnel" in k or k.endswith("bruecke")
 
 
 def _ort_namen(text: str, netz: Netz) -> list[tuple[str, str | None]]:
@@ -558,6 +590,9 @@ def _ort_namen(text: str, netz: Netz) -> list[tuple[str, str | None]]:
     out.append((name, None))
     ohne = _VORSATZ.sub("", name)
     if ohne != name:
+        zu = netz.ortsname(ohne)  # "Höhe ICC" -> ICC
+        if zu:
+            out.append((zu, HINWEIS_ZUORDNUNG))
         out.append((ohne, None))
     if namen.schluessel(ohne).endswith("bruecke"):  # "Knobelsdorffbrücke" ~ Knobelsdorffstraße
         out.append((re.sub(r"(?i)brücke$", "straße", ohne), None))
@@ -577,7 +612,10 @@ def _ort(text: str, gx, netz: Netz, gebiet) -> tuple[list[Point], str | None]:
         if q:
             g = netz.strasse(q, gebiet, nur_kfz=False)
             pts = treffpunkte(gx, g)
-            if not pts and not g.is_empty and g.distance(gx) <= ORT_MAX:
+            # Tunnel und Brücken liegen auf der Hauptstraße selbst; andere Straßen nur, wenn
+            # sie fast anstoßen
+            weite = ORT_MAX if _ist_bauwerk(name) else ORT_STRASSE_MAX
+            if not pts and not g.is_empty and g.distance(gx) <= weite:
                 pts = [nearest_points(gx, g)[0]]
             if pts:
                 return pts, hinweis

@@ -37,7 +37,12 @@ def schluessel(name: str) -> str:
     s = bereinige(name).lower()
     s = s.replace("ß", "ss").replace("ä", "ae").replace("ö", "oe").replace("ü", "ue")
     s = unicodedata.normalize("NFKD", s)
-    return "".join(c for c in s if c.isalnum())
+    s = "".join(c for c in s if c.isalnum())
+    # Titel und Heilige schreiben Quellen mal aus, mal nicht ("Prof Pirlett Straße" ~
+    # "Professor-Pirlet-Straße"): in beiden Richtungen auf die Kurzform
+    for lang, kurz in (("professor", "prof"), ("doktor", "dr"), ("sankt", "st")):
+        s = s.replace(lang, kurz)
+    return s
 
 
 def schluessel_varianten(name: str) -> list[str]:

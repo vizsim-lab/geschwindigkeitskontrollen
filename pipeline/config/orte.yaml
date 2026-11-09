@@ -16,5 +16,9 @@ berlin:
   "Siegessäule": "Großer Stern"                   # die Säule steht im Kreisverkehr
   "Brandenburger Tor": "Platz des 18. März"       # westlich des Tors
   "Nachtigalplatz": "Manga-Bell-Platz"            # 2022 umbenannt
+  "Tiergartentunnel": "Tunnel Tiergarten Spreebogen"
 
-aachen: {}
+aachen:
+  "Aachen Münchener Allee": "Aachener-und-Münchener-Allee"
+  "Aachen Müncher Allee": "Aachener-und-Münchener-Allee"
+  "Aachener Münchener Str.": "Aachener-und-Münchener-Allee"

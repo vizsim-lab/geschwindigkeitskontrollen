@@ -55,7 +55,10 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # die Ressourcenliste ist auf main versioniert -> der Orphan-Branch entfernt sie
+          cp pipeline/config/aachen_ressourcen.json "$RUNNER_TEMP/"
           git switch --orphan dev/auszug
+          mkdir -p pipeline/config && cp "$RUNNER_TEMP/aachen_ressourcen.json" pipeline/config/
           git add -f pipeline/data/interim/osm pipeline/data/raw/aachen pipeline/config/aachen_ressourcen.json
           for f in pipeline/data/interim/build_bericht.json pipeline/data/interim/build_fehlgeschlagen.txt; do
             [ -f "$f" ] && git add -f "$f"

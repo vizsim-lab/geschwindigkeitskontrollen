@@ -237,8 +237,11 @@ def lies_alle(dateien: list[Path], alt: Path | None = None) -> tuple[pd.DataFram
 _HNR_AM_ENDE = re.compile(r"^(?P<s>.*?\D)\s+(?P<n>\d{1,4}\s*[a-zA-Z]?)$")
 
 
+_STRASSENNUMMER = re.compile(r"\s+[ABLK]\s?\d{1,3}[a-z]?$")  # "Himmelsleiter B258"
+
+
 def _strasse_und_nummer(platz: str, nr) -> tuple[str, str | None]:
-    s = re.sub(r"\s+", " ", platz).strip()
+    s = _STRASSENNUMMER.sub("", re.sub(r"\s+", " ", platz).strip())
     if nr not in (None, "") and str(nr).strip():
         return s, namen.nummer(str(nr)).hausnummer
     m = _HNR_AM_ENDE.match(s)
