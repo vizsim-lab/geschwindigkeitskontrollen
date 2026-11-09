@@ -170,6 +170,72 @@ staedte:
       stadtgrenze: { name: "Bonn", admin_level: ["6"] }
       bezirk_ebene: null              # die Bonner Daten nennen keinen Bezirk
 
+  schonungen:
+    label: "Schonungen"
+    crs_m: "EPSG:25832"            # metrisch (UTM 32N)
+    bbox: [10.22, 50.00, 10.44, 50.15]
+    start: { lon: 10.3122, lat: 50.0496, zoom: 12.2 }
+    kontrollen:
+      label: "Geschwindigkeitsmessungen in der Gemeinde Schonungen"
+      bereitsteller: "Gemeinde Schonungen (Zweckverband Kommunale Verkehrsüberwachung Südostbayern)"
+      kurz: "Gemeinde Schonungen"
+      titel: "Verkehrsstatistik – Geschwindigkeitsmessungen (Monatsberichte, PDF)"
+      herkunft_url: "https://schonungen.de/"
+      lizenz_hinweis: "Monatsberichte der Gemeinde, ohne Lizenzangabe"
+      # Die Gemeinde stellt die Berichte des Zweckverbands in ihre WordPress-Mediathek
+      # (`wp-json/wp/v2/media`); einige Monate nur als Word-Datei.
+      kataloge:
+        - { art: wordpress, url: "https://schonungen.de/wp-json/wp/v2/media" }
+      suche: ["Verkehrsstatistik", "KVUe"]
+      titel_muster: "(?i)verkehrsstatistik"
+      stadt_muster: "(?i)schonungen"
+      formate: ["PDF", "DOCX"]
+      ressourcen: "config/schonungen_ressourcen.json"
+      ordner: "raw/schonungen"
+    osm:
+      label: "Straßennetz und Adressen Schonungen (Verortung)"
+      url: "https://download.geofabrik.de/europe/germany/bayern/unterfranken-latest.osm.pbf"
+      datei: "raw/osm/unterfranken-latest.osm.pbf"
+      gebiete_admin_level: ["8", "9", "10"]
+      stadtgrenze: { name: "Schonungen", admin_level: ["8"] }
+      bezirk_ebene: null              # Gemeindeteile haben in OSM keine Grenzen
+
+  oberderdingen:
+    label: "Oberderdingen"
+    crs_m: "EPSG:25832"            # metrisch (UTM 32N)
+    bbox: [8.70, 49.01, 8.88, 49.12]
+    start: { lon: 8.8053, lat: 49.0656, zoom: 12.6 }
+    kontrollen:
+      label: "Kommunale Geschwindigkeitsmessungen in Oberderdingen"
+      bereitsteller: "Stadt Oberderdingen (Messungen: Landratsamt Karlsruhe)"
+      kurz: "Stadt Oberderdingen"
+      titel: "Kommunale Geschwindigkeitsmessungen durch das Landratsamt (Quartalstabellen, PDF)"
+      herkunft_url: "https://www.oberderdingen.de/"
+      lizenz_hinweis: "Tabellen der Stadt, ohne Lizenzangabe"
+      # Die Tabellen liegen als PDF im CMS der Stadt („resources/ecics_<Nr>.pdf“) ohne
+      # Übersichtsseite, die sich abfragen ließe – darum eine feste Liste (gefunden über eine
+      # Websuche, Stand 11/2026). Neue Quartale hier eintragen.
+      kataloge:
+        - art: liste
+          url: "https://www.oberderdingen.de/"
+          bereitsteller: "Stadt Oberderdingen"
+          dateien:
+            - { titel: "Geschwindigkeitsmessungen 1. Quartal 2024", url: "https://oberderdingen.de/resources/ecics_3985.pdf" }
+            - { titel: "Geschwindigkeitsmessungen 4. Quartal 2025", url: "https://www.oberderdingen.de/resources/ecics_4317.pdf" }
+            - { titel: "Geschwindigkeitsmessungen 1. Quartal 2026", url: "https://www.oberderdingen.de/resources/ecics_4342.pdf" }
+      titel_muster: "(?i)geschwindigkeitsmessung"
+      stadt_muster: "(?i)oberderdingen"
+      formate: ["PDF"]
+      ressourcen: "config/oberderdingen_ressourcen.json"
+      ordner: "raw/oberderdingen"
+    osm:
+      label: "Straßennetz und Adressen Oberderdingen (Verortung)"
+      url: "https://download.geofabrik.de/europe/germany/baden-wuerttemberg/karlsruhe-regbez-latest.osm.pbf"
+      datei: "raw/osm/karlsruhe-regbez-latest.osm.pbf"
+      gebiete_admin_level: ["8", "9", "10"]
+      stadtgrenze: { name: "Oberderdingen", admin_level: ["8"] }
+      bezirk_ebene: null              # Flehingen und Großvillars stehen nur im Text
+
 osm:
   bereitsteller: "© OpenStreetMap-Mitwirkende"
   lizenz: "ODbL"

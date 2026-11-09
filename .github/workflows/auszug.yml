@@ -54,7 +54,7 @@ jobs:
             echo '```json'
             cat data/interim/build_bericht.json 2>/dev/null || true
             echo '```'
-            for stadt in koeln bonn; do
+            for stadt in koeln bonn schonungen oberderdingen; do
               echo "### $stadt"
               echo '```'
               cat data/interim/fetch_fehlgeschlagen.txt 2>/dev/null || true
@@ -83,7 +83,7 @@ jobs:
           find pipeline/data/raw/koeln pipeline/data/raw/bonn -name '*.csv' -size +1M -exec gzip -9 {} \; 2>/dev/null || true
           git add -f pipeline/data/interim/osm pipeline/data/raw/aachen pipeline/config/*_ressourcen.json
           git add -f pipeline/data/raw/berlin/*.pdf 2>/dev/null || true
-          for d in pipeline/data/raw/koeln pipeline/data/raw/bonn; do
+          for d in pipeline/data/raw/koeln pipeline/data/raw/bonn pipeline/data/raw/schonungen pipeline/data/raw/oberderdingen; do
             [ -d "$d" ] && git add -f "$d"
           done
           for f in pipeline/data/interim/build_bericht.json pipeline/data/interim/build_fehlgeschlagen.txt pipeline/data/interim/fetch_fehlgeschlagen.txt; do

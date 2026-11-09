@@ -168,6 +168,69 @@ def _dkan_suche(basis: str, q: str) -> list[dict]:
         seite += 1
 
 
+def _wordpress_suche(basis: str, q: str) -> list[dict]:
+    """Suche in der Mediathek einer WordPress-Seite (`wp-json/wp/v2/media`, etwa schonungen.de):
+    jede Datei ein Datensatz mit einer Ressource, in der Form von CKAN."""
+    out, seite = [], 1
+    while True:
+        r = requests.get(
+            basis,
+            params={"search": q, "per_page": 100, "page": seite},
+            timeout=(20, 90),
+            headers=UA,
+        )
+        if r.status_code == 400 and seite > 1:  # hinter der letzten Seite
+            return out
+        r.raise_for_status()
+        eintraege = r.json()
+        for m in eintraege:
+            titel = (m.get("title") or {}).get("rendered") or m.get("slug")
+            url = m.get("source_url")
+            out.append(
+                {
+                    "id": m.get("id"),
+                    "name": _slug(titel) or str(m.get("id")),
+                    "title": titel,
+                    "seite": url,  # die Datei selbst – eine Datensatzseite gibt es nicht
+                    "organization": {"title": ""},
+                    "resources": [
+                        {
+                            "id": m.get("id"),
+                            "name": Path(unquote(urlparse(url or "").path)).stem,
+                            "format": Path(urlparse(url or "").path).suffix[1:].upper(),
+                            "url": url,
+                            "last_modified": m.get("modified"),
+                        }
+                    ],
+                }
+            )
+        if len(eintraege) < 100:
+            return out
+        seite += 1
+
+
+def _liste_als_katalog(k: dict) -> list[dict]:
+    """Feste Liste von Dateien (`art: liste`) – für Seiten ohne Katalog (Oberderdingen)."""
+    return [
+        {
+            "id": d["url"],
+            "name": _slug(d["titel"]),
+            "title": d["titel"],
+            "seite": d["url"],
+            "organization": {"title": k.get("bereitsteller") or ""},
+            "resources": [
+                {
+                    "id": d["url"],
+                    "name": _slug(d["titel"]),
+                    "format": d.get("format") or Path(urlparse(d["url"]).path).suffix[1:].upper(),
+                    "url": d["url"],
+                }
+            ],
+        }
+        for d in k["dateien"]
+    ]
+
+
 def _format(r: dict) -> str:
     """ "CSV", "csv", "text/csv" -> "CSV"; ohne Angabe die Dateiendung."""
     fmt = (r.get("format") or "").split("/")[-1].strip().upper()
@@ -209,7 +272,7 @@ def treffer(datensaetze: list[dict], cfg: dict, basis: str) -> list[dict]:
                 "lizenz": d.get("license_title") or d.get("license_id"),
                 "lizenz_id": d.get("license_id"),
                 "lizenz_url": d.get("license_url"),
-                "url": _datensatz_url(basis, d.get("name")),
+                "url": d.get("seite") or _datensatz_url(basis, d.get("name")),
                 "ressourcen": res,
             }
         )
@@ -231,10 +294,12 @@ def katalog(cfg: dict) -> dict:
     kataloge = cfg.get("kataloge") or [{"art": "ckan", "url": u} for u in cfg["ckan"]]
     for k in kataloge:
         basis = k["url"]
-        suche = _dkan_suche if k.get("art") == "dkan" else _suche
+        suche = {"dkan": _dkan_suche, "wordpress": _wordpress_suche}.get(k.get("art"), _suche)
         try:
             gefunden: dict[str, dict] = {}
-            for q in _liste(cfg["suche"]):
+            if k.get("art") == "liste":
+                gefunden = {d["id"]: d for d in _liste_als_katalog(k)}
+            for q in _liste(cfg.get("suche") or []) if k.get("art") != "liste" else []:
                 for d in suche(basis, q):
                     gefunden.setdefault(d.get("id") or d.get("name"), d)
         except (requests.RequestException, RuntimeError, ValueError) as e:
