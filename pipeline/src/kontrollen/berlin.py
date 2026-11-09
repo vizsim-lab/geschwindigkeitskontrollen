@@ -6,11 +6,9 @@ Zeile je Kontrolle. Was in den Zellen steht und wie es gelesen wird:
 
 - **„Nr.“**: Hausnummer ("423"), gegenüber ("g232"), vermutlich Lichtmast ("L2980"), an der
   Autobahn auch Kilometer ("k16,5" – bleibt ungenutzt).
-- **Abgeschnittene Straßennamen**, deren Rest in „Nr.“ steht ("Charlottenburger Chauss" +
-  "ee 43", in den CSV-Zeilen von 2018): der Rest wird angehängt; was dann noch fehlt
-  ("Platz der Vereinten Nation"), findet die Verortung über den Anfang des Namens.
 - **„zwischen“**: "A u. B" (Abschnitt zwischen zwei Querstraßen), "/C" (an der Kreuzung mit C)
-  oder ein Ort ("AS Kaiserdamm", "Knobelsdorffbrücke").
+  oder ein Ort ("AS Kaiserdamm", "Knobelsdorffbrücke"). Steht die Kreuzung in „Nr.“
+  ("gL2272/Überleitung A 115", „zwischen“ leer), wird sie dorthin geholt.
 - **„Verwaltungsbezirk“**: ein oder mehrere Bezirke, oft abgeschnitten
   ("Charlottenburg-Wilmersdorf, Mitt") – gelesen wird der Anfang.
 - **„erlaubte Geschwindigkeit“**: "50/30" oder "30/50" (wechselndes Limit, ohne Angabe wann)
@@ -34,22 +32,15 @@ import pandas as pd
 from kontrollen import berlin_pdf, namen
 from kontrollen.schema import in_schema
 
-# Rest eines abgeschnittenen Namens vor der Nummer: "-Str 31", "ee L47", "n g1"
-_UEBERLAUF = re.compile(r"^([A-Za-zÄÖÜäöüß.\-]+)\s+(\S.*)$")
-_CODE = re.compile(r"^g?L?\d|^[gG]$|^[kK]\d")
+_NR_KREUZUNG = re.compile(r"^([^/\s]+)\s*(/\s*\S.*)$")
 
 
-def repariere_ueberlauf(strasse: str, nr: str) -> tuple[str, str]:
-    """("Charlottenburger Chauss", "ee 43") -> ("Charlottenburger Chaussee", "43")."""
-    m = _UEBERLAUF.match(nr or "")
-    if not m or _CODE.match(m.group(1)):
-        return strasse, nr
-    return f"{strasse}{m.group(1)}", m.group(2).strip()
-
-
-def bezirke(roh: str | None) -> list[str]:
-    """ "Charlottenburg-Wilmersdorf, Mitt" -> ["Charlottenburg-Wilmersdorf", "Mitt"]."""
-    return [t.strip() for t in str(roh or "").split(",") if t.strip()]
+def trenne_kreuzung(nr: str, zwischen: str) -> tuple[str, str]:
+    """("gL2272/Überleitung A 115", "") -> ("gL2272", "/Überleitung A 115")."""
+    m = _NR_KREUZUNG.match(nr or "")
+    if not m or (zwischen or "").strip():
+        return nr, zwischen
+    return m.group(1), m.group(2)
 
 
 def tempo(roh: str | None) -> int | None:
@@ -96,9 +87,10 @@ def zeile(r: dict, id_: str, quelle: str, bericht: berlin_pdf.Bericht | None = N
             return None
 
     strasse_roh, nr_roh = r["Straßenname"], r["Nr."]
-    strasse, nr = repariere_ueberlauf(strasse_roh.strip(), nr_roh.strip())
+    strasse = strasse_roh.strip()
+    nr, zwischen = trenne_kreuzung(nr_roh.strip(), r["zwischen"])
     num = namen.nummer(nr)
-    lg = namen.lage(r["zwischen"])
+    lg = namen.lage(zwischen)
     ri = namen.richtung(r["Richtung"])
     ab = namen.autobahn(strasse)
     beginn, ende = berlin_pdf.zeitraum(r["Datum"], r["Beginn"], r["Ende"])

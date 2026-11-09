@@ -555,8 +555,8 @@ def _quer(
         if pts:
             return pts, hinweis
     ab = namen.autobahn(n)
-    ue = _UEBERLEITUNG.search(n)  # "Überleitung zur BAB 115" -> wo die A 115 anschließt
-    ref = ab[0] if ab else (f"A {int(ue.group(1))}" if ue else None)
+    ue = ueberleitung(n)  # "Überleitung zur BAB 115" -> wo die A 115 anschließt
+    ref = ab[0] if ab else ue
     if ref in netz.autobahn:
         andere = netz.autobahn[ref].intersection(weit)
         pts = treffpunkte(gx, andere)
@@ -578,7 +578,19 @@ _VORSATZ = re.compile(
     r"^(?:Höhe|Hoehe|vor|hinter|nach|ehem\.?|Brücke(?:\s+über(?:\s+die)?(?:\s+BAB)?)?|Tunnel|Zollamt)\s+",
     re.I,
 )
-_UEBERLEITUNG = re.compile(r"Überleitung\s+(?:zur\s+)?(?:BAB\s*)?(?:A\s*)?(\d{2,3})\b", re.I)
+_UEBERLEITUNG = re.compile(
+    r"Überl(?:eitung\w*|\.)\s*(?:(?:zur|von(?:\s+der)?)\s+)?(?:BAB\s*)?(?:A\s*)?(\d{2,3})\b"
+    r"|(?:BAB\s*)?\bA\s*(\d{2,3})\s+Überl(?:eitung|\.)",
+    re.I,
+)
+
+
+def ueberleitung(text: str) -> str | None:
+    """Autobahn, zu der eine Überleitung führt: "Überleitung zur BAB 115", "Überleitung von
+    BAB 115", "Überleitungsfahrbahn zur A115", "BAB A 115 Überleitung", "vor Überl. A 115"
+    -> "A 115"."""
+    m = _UEBERLEITUNG.search(text or "")
+    return f"A {int(m.group(1) or m.group(2))}" if m else None
 
 
 def _ist_bauwerk(name: str) -> bool:

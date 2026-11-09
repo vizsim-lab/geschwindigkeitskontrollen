@@ -6,7 +6,7 @@ Alle Befehle aus `pipeline/` heraus:
 ```bash
 uv sync
 uv run kontrollen info       # Pfade, Quellen, was fehlt
-uv run kontrollen fetch      # Berlin-CSV + Aachener Monatsdateien (mit Prüfsummen)
+uv run kontrollen fetch      # Berliner PDF-Anlagen + Aachener Monatsdateien (mit Prüfsummen)
                              #   --osm: OSM-Abzüge (Geofabrik)  --neu: Aachener Katalog neu fragen
 uv run kontrollen osm        # PBF -> data/interim/osm/*.parquet
 uv run kontrollen build      # Rohdaten -> data/interim/kontrollen.parquet (gemeinsames Schema)
@@ -21,12 +21,13 @@ uv run ruff check && uv run ruff format --check
 ## Ablauf
 
 ```text
-sources.yaml ─ fetch ─> data/raw/berlin/kontrollen_2017-2019_v01.csv   (fester Commit, sha256)
+sources.yaml ─ fetch ─> data/raw/berlin/anlage{1..4}_<jahr>.pdf         (FragDenStaat, sha256)
                         data/raw/aachen/*.xlsx|*.csv                     (Liste: config/aachen_ressourcen.json)
                         data/raw/aachen_alt/geschw_aachen_juni2020.html  (Juni 2020, alte Karte)
                         data/raw/osm/berlin-latest.osm.pbf, koeln-regbez-latest.osm.pbf
 osm      -> data/interim/osm/{strassen,adressen,knoten,gebiete}_<stadt>.parquet
-build    -> data/interim/kontrollen.parquet   berlin.py, aachen.py -> schema.py
+build    -> data/interim/kontrollen.parquet   berlin_pdf.py, berlin.py, aachen.py -> schema.py
+            data/interim/build_bericht.json   je Anlage: Zeilen, Übersprungenes, Nachträge
 geocode  -> data/geokodierung.csv             je Kontrolle: lon, lat, Methode, Suchgebiet,
             data/geokodierung_validierung.json OSM-Straße, Abschnitt (WKT), Abstände, Hinweis
 site     -> data/karte/messstellen.json       Messstellen (gebündelte Verortungen)
@@ -41,18 +42,37 @@ Im Git liegen `data/karte/`, `data/geokodierung*` und `config/aachen_ressourcen.
 
 ## Die Quellen
 
-**Berlin.** Die Polizei hat 2020 per IFG Tabellen für 2017–2019 (und Januar–August 2020) als
-PDF geliefert; `vizsim/geschwindigkeitskontrollen` hat 2017–2019 als CSV aufbereitet. Eine
-Zeile je Kontrolle. `berlin.py` repariert, was die Aufbereitung mitbringt:
+**Berlin.** Die Polizei hat 2020 per IFG je Zeitraum eine Tabelle als PDF geliefert (Anlagen
+1–4 zum Bescheid vom 09.12.2020: 2017, 2018, 2019, 01.01.–31.08.2020), eine Zeile je
+Kontrolle. `berlin_pdf.py` liest die Zeichen samt Lage (pdfplumber), ohne Tabellenerkennung:
 
-- Straßennamen sind nach ~22–26 Zeichen abgeschnitten, ihr Rest steht manchmal im Feld „Nr.“
-  (`Charlottenburger Chauss` + `ee 43`) – wird angehängt.
-- „Nr.“: Hausnummer (`423`), gegenüber (`g232`), vermutlich Lichtmast (`L2980`, nicht
-  verortbar), Sonstiges (`k5,5`).
-- „zwischen“: `A u. B`, `/C` (Kreuzung) oder ein Ort (`AS Kaiserdamm`, `Knobelsdorffbrücke`).
-- „Verwaltungsbezirk“: ein oder zwei Bezirke, nach 32 Zeichen abgeschnitten.
+- **Spalten** aus den senkrechten Linien im Tabellenkopf der ersten Seite; die Folgeseiten
+  haben keine Linien, aber dasselbe Raster.
+- **Zellen** = zusammenhängende Läufe im Inhaltsstrom; ein Lauf gehört zur Spalte, in der er
+  beginnt (lange Texte laufen in leere Nachbarzellen, Zahlen stehen rechtsbündig).
+- **Zeilen** nach der Unterkante der Zeichen – ein roter Nachtrag in größerer Schrift (Anlage
+  3, S. 1) steht so in seiner Zeile. Was kein Datum trägt (der rote „Stand: 05.10.2020“ unter
+  Anlage 4), wird übersprungen und im Build-Bericht genannt.
+
+**Gegenprobe:** Anlage 3 ergibt alle 9.150 Zeilen von 2019 der früheren CSV
+(`vizsim/geschwindigkeitskontrollen`, v01). Unterschiede gibt es nur, wo die CSV falsch gelesen
+hatte: „50/30“ als Tempo 0 mit „50/3“ in der Richtung, „-“ als 0, abgeschnittene Zellen. Für
+2017 und 2018 gilt dasselbe (9.540 und 9.255 Zeilen wie in der CSV); dort hatte die CSV vor
+allem lange Namen zerteilt (`Charlottenburger Chauss` + `ee 43`), die das PDF ganz enthält.
+`berlin.py` bringt die Zeilen ins gemeinsame Schema:
+
+- „Nr.“: Hausnummer (`423`, auch `44-46`), gegenüber (`g232`), vermutlich Lichtmast
+  (`L2980`, nicht verortbar), an der Autobahn Kilometer (`k16,5`, ungenutzt).
+- „zwischen“: `A u. B`, `/C` (Kreuzung) oder ein Ort (`AS Kaiserdamm`, `Knobelsdorffbrücke`);
+  steht `/C` in „Nr.“ (`gL2272/Überleitung A 115`), wird es geholt.
+- „Verwaltungsbezirk“: ein oder mehrere Bezirke, oft abgeschnitten – gelesen wird der Anfang.
+- „erlaubte Geschwindigkeit“ `50/30` bzw. `30/50` (wechselndes Limit, ohne Angabe wann): leer.
+- Datum, Beginn, Ende: endet eine Kontrolle vor ihrem Beginn, lief sie über Mitternacht;
+  mehrtägige tragen das Datum in Beginn und Ende.
+- `-` in Stufen und Fahrverboten: keine Angabe -> leer, nicht 0.
 - Messungen = Überschreitungen (ein Drittel): nur die zu schnellen erfasst ->
   `alle_gezaehlt = false`, kein Anteil.
+- Id = Jahr der Anlage und Zeile darin (`B2019-00001`).
 
 **Aachen.** Je Jahr ein CKAN-Datensatz mit Monatsdateien – das Portal hält nur die **letzten
 drei Monate** je Jahr. `fetch --neu` fragt den Katalog (sources.yaml: `ckan`, `suche`,
@@ -94,23 +114,25 @@ und „nur Straße“ gelten erst, wenn keine Stufe Genaueres findet. Je Kontrol
 
 **Gegenprobe** (`validiere`): Wo Hausnummer und Querstraßen vorliegen, misst die Pipeline den
 Abstand des Hausnummer-Punkts zum Abschnitt – Stand 9. November 2026 (Geofabrik-Abzug dieses Tages):
-19.156 Kontrollen, 92,5 % höchstens 50 m, Median 0 m, 1,4 % über 250 m.
+23.459 Kontrollen, 92,7 % höchstens 50 m, Median 0 m, 1,5 % über 250 m.
 
-**Was offen bleibt** (Berlin, 83 Kontrollen): vor allem der Tunnel unter der Schlangenbader
-Straße (ehemalige A 104, in OSM ohne Nummer und Namen), Verbindungsfahrbahnen und einzelne
-Abkürzungen.
+**Was offen bleibt** (Berlin, 106 Kontrollen): vor allem der Tunnel unter der Schlangenbader
+Straße (ehemalige A 104, in OSM ohne Nummer und Namen), „Gerosteig“ an der A 113 (2020; die
+Straße liegt 245 m neben der Autobahn, früher hieß es „TAG Gerosteig“), Verbindungsfahrbahnen
+und einzelne Abkürzungen.
 
 ## Entwickeln ohne Netz
 
-Wer keinen Zugang zu Geofabrik und dem Aachener Portal hat (etwa in einer Sandbox), startet
-den Workflow „Entwicklungsauszug“. Er legt die kompakten OSM-Tabellen (~20 MB) und die
-Aachener Rohdateien auf den Branch `dev/auszug`:
+Wer keinen Zugang zu Geofabrik, FragDenStaat und dem Aachener Portal hat (etwa in einer
+Sandbox), startet den Workflow „Entwicklungsauszug“ (oder pusht auf `dev/auszug-anfordern`). Er
+legt die kompakten OSM-Tabellen (~20 MB), die Berliner PDF-Anlagen und die Aachener Rohdateien
+auf den Branch `dev/auszug`:
 
 ```bash
 git fetch origin dev/auszug
 git archive origin/dev/auszug | tar -x -C /tmp/auszug
 cp /tmp/auszug/pipeline/data/interim/osm/*.parquet pipeline/data/interim/osm/
-cp -r /tmp/auszug/pipeline/data/raw/aachen pipeline/data/raw/
+cp -r /tmp/auszug/pipeline/data/raw/aachen /tmp/auszug/pipeline/data/raw/berlin pipeline/data/raw/
 ```
 
 ## Neue Daten

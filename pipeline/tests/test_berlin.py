@@ -57,6 +57,7 @@ def test_zeilen(pdf):
     assert z[49]["Straßenname"] == "Teststr. 45" and z[49]["seite"] == 2
     assert b.uebersprungen == ["S. 2: Stand: 05.10.2020"]
     assert b.farbig == ["S. 1, über 20 km/h: 1", "S. 2, Straßenname: Stand: 05.10.2020"]
+    assert b.farbige_zeilen == 2
     assert b.geteilte_zellen == 0 and b.fehler == []
 
 
@@ -143,15 +144,29 @@ def test_lies_meldet_andere_jahre(pdf):
     assert berichte[0]["andere_jahre"] == 50
 
 
-def test_zeile_ueberlauf_und_fehler():
+def test_zeile_kreuzung_in_nr_und_fehler():
     r = dict(zip(berlin_pdf.KOPF, ZEILEN[0], strict=True))
-    r |= {"Straßenname": "Charlottenburger Chauss", "Nr.": "ee 43", "Messungen": "5,1"}
+    r |= {"Nr.": "gL2272/Überleitung A 115", "zwischen": "", "Messungen": "5,1"}
     b = berlin_pdf.Bericht("x.pdf")
-    z = berlin.zeile(r, "B2018-00001", "anlage2_2018", b)
-    assert (z["strasse"], z["hausnummer"], z["strasse_roh"]) == (
-        "Charlottenburger Chaussee",
-        "43",
-        "Charlottenburger Chauss",
+    z = berlin.zeile(r, "B2017-00001", "anlage1_2017", b)
+    assert (z["mast"], z["gegenueber"], z["lage_art"], z["quer1"]) == (
+        "L2272",
+        True,
+        "kreuzung",
+        "Überleitung A 115",
     )
-    assert z["messungen"] is None and b.fehler == ["B2018-00001 Messungen: keine Zahl: '5,1'"]
-    assert z["datum"] == "2019-01-01"
+    assert z["nr_roh"] == "gL2272/Überleitung A 115" and z["lage_roh"] == ""
+    assert z["messungen"] is None and b.fehler == ["B2017-00001 Messungen: keine Zahl: '5,1'"]
+
+
+@pytest.mark.parametrize(
+    ("nr", "zwischen", "erwartet"),
+    [
+        ("gL2272/Überleitung A 115", "", ("gL2272", "/Überleitung A 115")),
+        ("12 / Querweg", "", ("12", "/ Querweg")),
+        ("gL2272/Überleitung A 115", "AS Spanische Allee", ("gL2272/Überleitung A 115", "AS Spanische Allee")),
+        ("44-46", "", ("44-46", "")),
+    ],
+)  # fmt: skip
+def test_kreuzung_in_nr(nr, zwischen, erwartet):
+    assert berlin.trenne_kreuzung(nr, zwischen) == erwartet

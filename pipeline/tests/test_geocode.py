@@ -137,6 +137,33 @@ def test_autobahn_als_querstrasse(netz, gebiete):
     nah(e, 13.418, 52.527)
 
 
+@pytest.mark.parametrize(
+    ("text", "ref"),
+    [
+        ("Überleitung zur BAB 115", "A 115"),
+        ("Überleitung von BAB 115", "A 115"),
+        ("Überleitungsfahrbahn zur A115", "A 115"),
+        ("BAB A 115 Überleitung", "A 115"),
+        ("vor Überl. A 115", "A 115"),
+        ("Vollsperrung Überleitung A103 Nachtbaustell", "A 103"),
+        ("Überleitungsstraße", None),
+        ("AS Kaiserdamm", None),
+    ],
+)
+def test_ueberleitung_erkennen(text, ref):
+    assert geocode.ueberleitung(text) == ref
+
+
+@pytest.mark.parametrize(
+    "ort", ["Überleitung zur A 115", "BAB A 115 Überleitung", "vor Überl. A 115"]
+)
+def test_ueberleitung_zur_anderen_autobahn(netz, gebiete, ort):
+    # die A 115 berührt die A 100 nicht (dazwischen nur Rampen): wo sie sich am nächsten kommen
+    e = geocode.verorte(frage("BAB A 100", ort=ort, autobahn="A 100"), netz, gebiete)
+    assert e.methode == "anschlussstelle"
+    nah(e, 13.3995, 52.527)
+
+
 def test_platz_statt_querstrasse(netz, gebiete):
     e = geocode.verorte(frage("Hauptstraße", quer=("Testplatz",)), netz, gebiete)
     assert e.methode == "kreuzung"

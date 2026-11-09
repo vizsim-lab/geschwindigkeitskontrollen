@@ -22,8 +22,8 @@ ANLAGEN = {
         # Hausnummer im Abschnitt
         zeile("1", "11", "Hauptstr.", "10", "Querweg u. Nebenstr.", "Mitte", "Osten/Eckallee",
               "50", "01.03.2018", "8:00", "12:00", "1.000", "100", "90", "10", "1"),
-        # abgeschnittener Name mit Überlauf ins Feld Nr.
-        zeile("1", "11", "Charlottenburger Chauss", "ee 43", "Am Rain u. Wiesendamm", "Mitte",
+        # Hausnummer an einer zweiten Straße
+        zeile("1", "11", "Charlottenburger Chaussee", "43", "Am Rain u. Wiesendamm", "Mitte",
               "Westen/Am Rain", "50", "01.01.2018", "10:00", "12:00", "300", "30", "25", "5", "0"),
         # Autobahn: nur zu schnelle erfasst (Messungen = Überschreitungen)
         zeile("2", "21", "BAB A 100", "L4700", "AS Kaiserdamm", "Mitte", "Westen/AD Funkturm",

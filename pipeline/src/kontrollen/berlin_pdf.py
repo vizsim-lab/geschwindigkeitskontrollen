@@ -38,7 +38,7 @@ ZAHLEN = KOPF[11:]
 _DATUM = re.compile(r"^(\d{2})\.(\d{2})\.(\d{2}|\d{4})$")
 _ZEIT = re.compile(r"^(\d{1,2}):(\d{2})$")
 _DATUM_ZEIT = re.compile(r"^(\d{2})\.(\d{2})\.(\d{2}|\d{4})\s+(\d{1,2}):(\d{2})$")
-_ZAHL = re.compile(r"^\d{1,3}(\.\d{3})*$")
+_ZAHL = re.compile(r"^(\d+|\d{1,3}(\.\d{3})+)$")
 
 
 @dataclass
@@ -50,7 +50,8 @@ class Bericht:
     zeilen: int = 0
     uebersprungen: list[str] = field(default_factory=list)  # Zeilen ohne Datum (Kopf, Rest)
     geteilte_zellen: int = 0  # mehr als ein Lauf in einer Zelle
-    farbig: list[str] = field(default_factory=list)  # nicht schwarze Einträge (Nachträge, Stand)
+    farbig: list[str] = field(default_factory=list)  # rote Einträge (Nachträge, Stand) ...
+    farbige_zeilen: int = 0  # ... und wie viele Zeilen welche tragen (Bedeutung unbekannt)
     fehler: list[str] = field(default_factory=list)  # Werte, die nicht zu lesen sind
 
     def als_dict(self) -> dict:
@@ -61,7 +62,8 @@ class Bericht:
             "uebersprungen": len(self.uebersprungen),
             "uebersprungen_beispiele": self.uebersprungen[:5],
             "geteilte_zellen": self.geteilte_zellen,
-            "farbig": self.farbig[:10],
+            "farbige_zeilen": self.farbige_zeilen,
+            "farbig_beispiele": self.farbig[:10],
             "fehler": len(self.fehler),
             "fehler_beispiele": self.fehler[:10],
         }
@@ -158,6 +160,7 @@ def zeilen(pfad: Path, bericht: Bericht | None = None) -> list[dict]:
                 laeufe = [lf for lf in laeufe if lf.top > kopf_unten]
             for gruppe in _zeilen_einer_seite(laeufe):
                 zellen: list[list[_Lauf]] = [[] for _ in KOPF]
+                bericht.farbige_zeilen += any(lf.farbig for lf in gruppe)
                 for lauf in gruppe:
                     i = _spalte(grenzen, lauf.x0)
                     if i is None:

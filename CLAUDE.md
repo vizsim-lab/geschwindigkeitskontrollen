@@ -1,7 +1,7 @@
 # CLAUDE.md — geschwindigkeitskontrollen
 
-Karte der Geschwindigkeitskontrollen in Berlin (Polizei Berlin, 2017–2019) und Aachen (Stadt
-Aachen, Open Data seit 2020), jede Kontrolle über OSM verortet. Überblick: `README.md`,
+Karte der Geschwindigkeitskontrollen in Berlin (Polizei Berlin, 2017 bis August 2020) und
+Aachen (Stadt Aachen, Open Data seit 2020), jede Kontrolle über OSM verortet. Überblick: `README.md`,
 Pipeline und Datenfluss: `pipeline/README.md`. Diese Datei = die Regeln, die in jeder Session
 gelten.
 
@@ -51,6 +51,7 @@ gelten.
 - **Tests:** `npm run test:unit`, `npm run test:web` (lokal ohne heruntergeladenen Browser:
   `PW_CHANNEL=chrome npm run test:web`). Die Browser-Tests suchen sich ihre Fälle aus den
   Kartendaten selbst – keine festen Messstellen oder Pixel.
-- **Ohne Netz entwickeln:** Workflow „Entwicklungsauszug“ legt OSM-Tabellen und Aachener
+- **Ohne Netz entwickeln:** Workflow „Entwicklungsauszug“ (auch per Push auf
+  `dev/auszug-anfordern`) legt OSM-Tabellen, die Berliner PDF-Anlagen und die Aachener
   Rohdateien auf `dev/auszug`; `git fetch origin dev/auszug` und nach `pipeline/data/` kopieren
   (siehe `pipeline/README.md`).

@@ -31,13 +31,16 @@ export function methodeHtml(m) {
     <p>Jeder Kreis ist eine <b>Messstelle</b>: Kontrollen, die an derselben Stelle derselben Straße
     liegen. Farbe und Größe rechnet die Karte aus den Kontrollen, die zum Filter passen.</p>
 
-    <h3>Berlin ${esc(b.zeitraum?.[0]?.slice(0, 4) ?? "")}–${esc(b.zeitraum?.[1]?.slice(0, 4) ?? "")}</h3>
+    <h3>Berlin ${esc(monat(b.zeitraum?.[0]))} bis ${esc(monat(b.zeitraum?.[1]))}</h3>
     <p>${D.zahl(b.kontrollen)} temporäre Kontrollen der ${esc(b.quelle.bereitsteller)}
     (${esc(b.quelle.titel)}, <a href="${esc(b.quelle.herkunft_url)}" target="_blank" rel="noopener">FragDenStaat</a>;
     ${esc(b.quelle.lizenz || b.quelle.lizenz_hinweis || "ohne Lizenzangabe")}). Je Kontrolle: Straße,
     Hausnummer, „zwischen A u. B“ oder Kreuzung, Bezirk, Fahrtrichtung, Tempolimit, Beginn und
     Ende, gemessene Fahrzeuge, Überschreitungen (bis/über 20 km/h), Fahrverbote.</p>
     <ul>
+      <li>Geliefert hat die Polizei je Jahr eine Tabelle als PDF; die Karte liest sie Zeile für
+      Zeile. „-“ heißt dort keine Angabe und bleibt leer; ein wechselndes Tempolimit („50/30“)
+      steht ohne Tempo.</li>
       <li>Bei ${D.zahl(100 - 100 * b.anteil_alle_gezaehlt, 0)} % der Kontrollen sind <b>Messungen und
       Überschreitungen gleich</b> – erfasst wurden dort nur die zu schnellen Fahrzeuge (vor allem
       Autobahn). Einen Anteil gibt es für diese Kontrollen nicht; „je Stunde“ geht immer.</li>

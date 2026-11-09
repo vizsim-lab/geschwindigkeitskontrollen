@@ -26,12 +26,12 @@ staedte:
         - jahr: 2017
           titel: "Anlage 1 (2017)"
           url: "https://media.frag-den-staat.de/files/foi/546222/202012094IFG102.20Anlage1GeschwindigkeitskontrollenBerlin2017.pdf"
-          sha256: null
+          sha256: "79d01ca129ca4718efa81222cae8022a6535ad347fa0ac3eb3ff2f5f5d558780"
           datei: "raw/berlin/anlage1_2017.pdf"
         - jahr: 2018
           titel: "Anlage 2 (2018)"
           url: "https://media.frag-den-staat.de/files/foi/546222/202012095IFG102.20Anlage2GeschwindigkeitskontrollenBerlin2018.pdf"
-          sha256: null
+          sha256: "0c05f54626e9b62ecbfbdf29012f712c6377371a5419133f8e4c19104eca97d2"
           datei: "raw/berlin/anlage2_2018.pdf"
         - jahr: 2019
           titel: "Anlage 3 (2019)"
