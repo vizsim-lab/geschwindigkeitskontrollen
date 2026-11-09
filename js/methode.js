@@ -12,21 +12,32 @@ function monat(iso) {
   return iso ? `${MONATE[Number(iso.slice(5, 7)) - 1]} ${iso.slice(0, 4)}` : "";
 }
 
-/** Abschnitt einer Stadt, die einzelne Verstöße veröffentlicht (Köln, Bonn). */
-function einzel(s, name) {
+/** Städte mit eigenem Text (Berlin, Aachen); alle anderen beschreibt `stadtAbschnitt` aus dem
+ * Manifest (Text in sources.yaml: `kontrollen.hinweis`). */
+const EIGEN = ["berlin", "aachen"];
+
+/** Abschnitt einer Stadt aus dem Manifest: Quelle, Lizenz, Hinweis – und bei Städten, die nur
+ * Verstöße nennen (Köln, Bonn), was dort eine „Kontrolle“ ist. */
+function stadtAbschnitt(s) {
   if (!s?.kontrollen) return "";
   const q = s.quelle;
+  const nurVerstoesse = s.anteil_alle_gezaehlt === 0;
+  const lizenz = q.lizenz || q.lizenz_hinweis;
   return `
-    <h3>${esc(name)} ${esc(monat(s.zeitraum?.[0]))} bis ${esc(monat(s.zeitraum?.[1]))}</h3>
-    <p>${D.zahl(s.kontrollen)} Kontrollen aus den einzelnen Verstößen der ${esc(q.bereitsteller)}
-    (<a href="${esc(q.herkunft_url)}" target="_blank" rel="noopener">Open Data</a>${q.lizenz ? `, ${esc(q.lizenz)}` : ""}).
+    <h3>${esc(s.label)} ${esc(monat(s.zeitraum?.[0]))} bis ${esc(monat(s.zeitraum?.[1]))}</h3>
+    <p>${D.zahl(s.kontrollen)} Kontrollen ${nurVerstoesse ? "aus den einzelnen Verstößen der" : "der"} ${esc(q.bereitsteller)}
+    (<a href="${esc(q.herkunft_url)}" target="_blank" rel="noopener">${esc(q.titel || "Quelle")}</a>${lizenz ? `, ${esc(lizenz)}` : ""}).
     ${q.hinweis ? esc(q.hinweis) : ""}</p>
-    <ul>
+    ${
+      nurVerstoesse
+        ? `<ul>
       <li>Eine <b>Kontrolle</b> ist hier: alle Verstöße eines Standorts an einem Tag. Wann und wie
       lange gemessen wurde, steht nicht in den Daten.</li>
       <li>Gezählt sind nur die <b>Verstöße</b>, nicht alle gemessenen Fahrzeuge – einen Anteil gibt
       es darum nicht; „je Kontrolle“ geht.</li>
-    </ul>`;
+    </ul>`
+        : ""
+    }`;
 }
 
 export function methodeHtml(m) {
@@ -72,8 +83,10 @@ export function methodeHtml(m) {
     Kontrolle Tag, Straße, Fahrtrichtung, Fahrzeuge und Verstöße – keine Uhrzeit, keine Dauer,
     kein Tempolimit und keine Stelle auf der Straße.</p>
 
-    ${einzel(m.staedte.koeln, "Köln")}
-    ${einzel(m.staedte.bonn, "Bonn")}
+    ${Object.entries(m.staedte)
+      .filter(([code]) => !EIGEN.includes(code))
+      .map(([, s]) => stadtAbschnitt(s))
+      .join("")}
 
     <h3>Verortung</h3>
     <p>Gesucht wird im Straßennetz von OpenStreetMap (Geofabrik-Abzug), für Berlin im genannten
@@ -86,7 +99,10 @@ export function methodeHtml(m) {
     Hausnummer-Punkt bei ${D.zahl(100 * probe.unter_50m, 1)} % höchstens 50 m neben dem Abschnitt
     (Median ${D.zahl(probe.median_m, 0)} m).</p>` : ""}
     <p><b>Aachen</b> – nur der Straßenname ist bekannt:</p>${zeile(a)}
-    ${["koeln", "bonn"].filter((c) => m.staedte[c]?.kontrollen).map((c) => `<p><b>${esc(m.staedte[c].label)}</b></p>${zeile(m.staedte[c])}`).join("")}
+    ${Object.entries(m.staedte)
+      .filter(([c, s]) => !EIGEN.includes(c) && s.kontrollen)
+      .map(([, s]) => `<p><b>${esc(s.label)}</b></p>${zeile(s)}`)
+      .join("")}
     ${m.staedte.koeln?.kontrollen ? `<p>Nennt Köln statt einer Hausnummer eine Laterne („Laterne 85-77“), bleibt es bei der
     Straße – Laternennummern stehen nicht in OpenStreetMap.</p>` : ""}
 

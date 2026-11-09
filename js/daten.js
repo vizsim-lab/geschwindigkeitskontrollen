@@ -188,6 +188,15 @@ export function metrikHinweis(metrik, stadt) {
   return h;
 }
 
+/** Untertitel der Legende: bis drei Städte mit Jahren („Berlin 2017–2020 · Aachen 2020–2026“),
+ * mehr als Zahl und Zeitspanne („6 Städte und Gemeinden · 2016–2026“). */
+export function untertitel(staedte) {
+  const spanne = (j) => (j.length ? (j[0] === j[j.length - 1] ? String(j[0]) : `${j[0]}–${j[j.length - 1]}`) : "");
+  if (staedte.length <= 3) return staedte.map((s) => `${s.label} ${spanne(s.jahre || [])}`.trim()).join(" · ");
+  const alle = [...new Set(staedte.flatMap((s) => s.jahre || []))].sort();
+  return `${staedte.length} Städte und Gemeinden · ${spanne(alle)}`;
+}
+
 /** „Berlin“, „Berlin und Köln“, „Berlin, Köln und Bonn“. */
 function aufzaehlung(namen) {
   return namen.length < 2 ? namen.join("") : `${namen.slice(0, -1).join(", ")} und ${namen[namen.length - 1]}`;

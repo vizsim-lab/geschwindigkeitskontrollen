@@ -9,7 +9,9 @@ from pathlib import Path
 import pandas as pd
 import typer
 
-from kontrollen import aachen, berlin, fetch, geocode, koeln, osm, site
+from kontrollen import (
+    aachen, berlin, bonn, fetch, geocode, koeln, oberderdingen, osm, schonungen, site,
+)  # fmt: skip
 from kontrollen.config import get_paths, load_yaml, quellen
 
 app = typer.Typer(no_args_is_help=True, help="Pipeline der Karte der Geschwindigkeitskontrollen")
@@ -114,6 +116,15 @@ def _katalogdateien(p, cfg: dict) -> list[Path]:
     return sorted(ordner.glob("*.csv")) + sorted(ordner.glob("*.csv.gz"))
 
 
+# Städte aus Katalogen: Leser je Stadt (Dateien aus `_katalogdateien`) -> (Kontrollen, Bericht)
+LESER = {
+    "koeln": koeln.lies_alle,
+    "bonn": bonn.lies_alle,
+    "schonungen": schonungen.lies_alle,
+    "oberderdingen": oberderdingen.lies_alle,
+}
+
+
 @app.command()
 def build() -> None:
     """Rohdaten aller Städte -> data/interim/kontrollen.parquet (gemeinsames Schema)."""
@@ -127,7 +138,7 @@ def build() -> None:
     a, hinweise = aachen.lies_alle(dateien, p.data_file(alt["datei"]) if alt else None)
     teile = [b, a]
     weitere: dict[str, dict] = {}
-    for code, leser in (("koeln", koeln.lies_alle),):
+    for code, leser in LESER.items():
         if code not in q:
             continue
         fd = [f for f in _katalogdateien(p, q[code]) if f.exists()]

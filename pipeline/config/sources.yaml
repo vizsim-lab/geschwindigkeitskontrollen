@@ -146,6 +146,12 @@ staedte:
       kurz: "Stadt Bonn"
       titel: "Bußgelder fließender Verkehr (Open Data, Einzelverstöße)"
       herkunft_url: "https://opendata.bonn.de/"
+      hinweis: >-
+        Tatorte mit Verstößen an mehr als 250 Tagen eines Jahres gelten als feste Anlagen und
+        bleiben draußen (B9 Mainzer Straße, Straßentunnel Bad Godesberg, Reichsstraße,
+        Konrad-Adenauer-Damm, Ludwig-Erhard-Allee). Tempolimit und Höhe der Überschreitung nennt
+        Bonn nicht; an der Autobahn steht meist nur der Kilometer – solche Kontrollen haben keine
+        Lage. 2018 ist zurzeit nicht abrufbar.
       # Jahresdateien „Bußgelder fließender Verkehr“ (je Verstoß Tag, Uhrzeit, Tatort,
       # Tatbestandsnummer, Bußgeld) und die Messstellen der mobilen Überwachung. Gefunden über
       # GovData (CKAN), das die Bonner Datensätze spiegelt; dazu das Stadtportal (DKAN).
@@ -182,6 +188,10 @@ staedte:
       titel: "Verkehrsstatistik – Geschwindigkeitsmessungen (Monatsberichte, PDF)"
       herkunft_url: "https://schonungen.de/"
       lizenz_hinweis: "Monatsberichte der Gemeinde, ohne Lizenzangabe"
+      hinweis: >-
+        Je Messung Messstelle, Tag, Beginn und Ende, Tempolimit, gemessene Fahrzeuge und Verstöße
+        nach Klassen (bis/über 20 km/h). Veröffentlicht sind die Monate seit August 2022 und der
+        Mai 2020, nicht lückenlos.
       # Die Gemeinde stellt die Berichte des Zweckverbands in ihre WordPress-Mediathek
       # (`wp-json/wp/v2/media`); einige Monate nur als Word-Datei.
       kataloge:
@@ -212,6 +222,11 @@ staedte:
       titel: "Kommunale Geschwindigkeitsmessungen durch das Landratsamt (Quartalstabellen, PDF)"
       herkunft_url: "https://www.oberderdingen.de/"
       lizenz_hinweis: "Tabellen der Stadt, ohne Lizenzangabe"
+      hinweis: >-
+        Je Messung Tag, Messstelle, Tempolimit, gemessene Fahrzeuge und Beanstandungen; Uhrzeit und
+        Dauer fehlen. Gefunden sind drei Quartale (1/2024, 4/2025, 1/2026). Zählt das Gerät beide
+        Richtungen zusammen (dieselbe Zahl gemessener Fahrzeuge in zwei Zeilen), ist das eine
+        Kontrolle.
       # Die Tabellen liegen als PDF im CMS der Stadt („resources/ecics_<Nr>.pdf“) ohne
       # Übersichtsseite, die sich abfragen ließe – darum eine feste Liste (gefunden über eine
       # Websuche, Stand 11/2026). Neue Quartale hier eintragen.
@@ -364,90 +379,68 @@ datenlage:
     links:
       - ["Offene Daten Köln 2017–2022", "https://www.offenedaten-koeln.de/dataset/geschwindigkeitsueberwachung-koeln-2017-bis-2022"]
       - ["Offene Daten Köln 2025", "https://www.offenedaten-koeln.de/dataset/geschwindigkeitsueberwachung-koeln-2025"]
-
-  # --- offen, noch nicht in der Karte ---
   - kommune: Bonn
+    stadt: bonn
     land: NW
-    lon: 7.0982
-    lat: 50.7374
-    stand: offen
+    stand: in_karte
     was: >-
       jeder Geschwindigkeitsverstoß als Open Data („Bußgelder fließender Verkehr“, Jahresdateien
       2016–2024): Tag, Uhrzeit, Tatort, Tatbestandsnummer, Bußgeld; dazu die Messstellen der
       mobilen Überwachung
     situation: >-
-      Gemessene Fahrzeuge fehlen; feste und mobile Messungen sind nicht getrennt (an gut 60
-      Tatorten gibt es in einem Jahr an mehr als 200 Tagen Verstöße – feste Anlagen); die Höhe
-      der Überschreitung steckt nur in der Tatbestandsnummer, der Tatort ist Freitext ohne
-      Stadtteil. Die Pipeline lädt die Dateien schon, für die Karte fehlt noch ein Leser.
-    weg: "offen"
+      Gemessene Fahrzeuge, Tempolimit und die Höhe der Überschreitung fehlen (sie steckt nur in
+      der Tatbestandsnummer). Feste und mobile Messungen sind nicht getrennt: Tatorte mit
+      Verstößen an mehr als 250 Tagen eines Jahres gelten in der Karte als feste Anlagen und
+      bleiben draußen. Eine Kontrolle ist alle Verstöße eines Tatorts an einem Tag; 2018 ist
+      zurzeit nicht abrufbar.
+    empfehlung: >-
+      Für den Anteil zu schneller Fahrzeuge die Zahl aller gemessenen Fahrzeuge je Messeinsatz
+      bei der Stadt anfragen.
+    weg: "FragDenStaat, IFG NRW"
+    kontakt: {fds_suche: "Bundesstadt Bonn"}
+    anfrage: true
+    stelle: "die Bundesstadt Bonn"
+    seit: "dem 1. Januar 2016"
+    anfrage_zusatz: >-
+      Auf dem Open-Data-Portal stehen die einzelnen Verstöße mit Tatort. Ich bitte ergänzend um
+      die Zahl aller gemessenen Fahrzeuge je Messeinsatz und um die Angabe, welche Tatorte feste
+      Anlagen sind.
     links:
       - ["Open Data Bonn (2023)", "https://opendata.bonn.de/dataset/757e5b85-26c2-46e7-944c-f3d5cf445c4d/resource/d91a7a3e-d630-4391-b1ce-226837233b83"]
       - ["Messstellen (open.nrw)", "https://ckan.open.nrw.de/km/dataset/messstellen-der-mobilen-geschwindigkeitsuberwachung-bn"]
-  - kommune: Konstanz
-    land: BW
-    lon: 9.1737
-    lat: 47.6603
-    stand: offen
-    was: >-
-      Jahresstatistik der Stadt 2018–2023 als Open Data (CC BY 4.0): je Messstandort und Monat
-      gemessene Fahrzeuge, Verstöße und Überschreitungsklassen
-    situation: >-
-      Einzelne Kontrollen mit Datum und Uhrzeit sind nicht veröffentlicht, nur Monatssummen je
-      Standort – daraus ließe sich der Anteil zu schneller Fahrzeuge rechnen, für die Karte
-      bräuchte es einen eigenen Leser.
-    empfehlung: >-
-      Für die Monatswerte keine Anfrage nötig; einzelne Kontrollen ließen sich nach dem LIFG
-      anfragen.
-    weg: "offen"
-    links:
-      - ["Offene Daten Konstanz", "https://offenedaten-konstanz.de/node/42541"]
-      - ["MobiData BW", "https://mobidata-bw.de/he/dataset/geschwindigkeits-berwachung-jahresstatistik"]
   - kommune: Schonungen
+    stadt: schonungen
     land: BY
-    lon: 10.3122
-    lat: 50.0496
-    stand: offen
+    stand: in_karte
     was: >-
       Monatsberichte der kommunalen Verkehrsüberwachung mit jeder Messung (Messstelle,
-      Tempolimit, Zeitfenster, Fahrzeuge, Verstöße) als PDF
+      Tempolimit, Zeitfenster, Fahrzeuge, Verstöße nach Klassen) als PDF, seit 2022 fast jeden
+      Monat
     situation: >-
-      Der Bericht kommt vom Zweckverband, der für die Gemeinde misst. Vermutlich veröffentlichen
+      Der Bericht kommt vom Zweckverband Kommunale Verkehrsüberwachung Südostbayern, der für die
+      Gemeinde misst; die Gemeinde stellt ihn in ihre Mediathek. Vermutlich veröffentlichen
       viele kleine Gemeinden solche Berichte – einzeln, als PDF.
     weg: "offen"
     links:
       - ["Bericht Februar 2024 (PDF)", "https://schonungen.de/wp-content/uploads/2024/03/Verkehrsstatistik-KVUe-2024-02.pdf"]
   - kommune: Oberderdingen
+    stadt: oberderdingen
     land: BW
-    lon: 8.8053
-    lat: 49.0656
-    stand: offen
+    stand: in_karte
     was: >-
-      Tabellen mit jeder Messung (Datum, Messstelle, Tempolimit, gemessene Fahrzeuge,
-      Beanstandungen) als PDF
+      Quartalstabellen mit jeder Messung des Landratsamts (Datum, Messstelle, Tempolimit,
+      gemessene Fahrzeuge, Beanstandungen) als PDF
+    situation: >-
+      Gefunden sind das 1. Quartal 2024, das 4. Quartal 2025 und das 1. Quartal 2026 – die PDFs
+      liegen im CMS der Stadt ohne Übersicht. Uhrzeit und Dauer der Messung fehlen.
     weg: "offen"
     links:
-      - ["Messergebnisse (PDF)", "https://oberderdingen.de/resources/ecics_3985.pdf"]
+      - ["1. Quartal 2024 (PDF)", "https://oberderdingen.de/resources/ecics_3985.pdf"]
+      - ["4. Quartal 2025 (PDF)", "https://www.oberderdingen.de/resources/ecics_4317.pdf"]
+      - ["1. Quartal 2026 (PDF)", "https://www.oberderdingen.de/resources/ecics_4342.pdf"]
+
 
   # --- auf Anfrage herausgegeben ---
-  - kommune: Duisburg
-    land: NW
-    lon: 6.7623
-    lat: 51.4344
-    stand: geliefert
-    was: >-
-      Statistik je Standort der mobilen Kontrollen 10/2019–09/2020 auf Anfrage (PDF, mit
-      Tempolimit und Verstößen); die Messstellen kündigt die Stadt wöchentlich an
-    empfehlung: >-
-      Für die Karte bräuchte es Datum und Ort je Kontrolle – Anfrage nach dem IFG NRW.
-    weg: "FragDenStaat, IFG NRW"
-    kontakt: {fds_suche: "Stadt Duisburg"}
-    anfrage: true
-    anfrage_zusatz: >-
-      Auf eine frühere Anfrage (FragDenStaat) haben Sie eine Statistik je Standort für Oktober
-      2019 bis September 2020 herausgegeben; ich bitte um die Angaben je Kontrolle.
-    links:
-      - ["FragDenStaat", "https://fragdenstaat.de/anfrage/standorte-der-mobilen-blitzer-in-duisburg/"]
   - kommune: Krefeld
     land: NW
     lon: 6.5623
@@ -455,6 +448,9 @@ datenlage:
     stand: geliefert
     was: >-
       Polizei: geschwärzte Messprotokolle aller Polizeikontrollen eines Tages (1. April 2021)
+    situation: >-
+      Vier Messungen an einem Tag, je Messung Ort, Zeit und Verstöße nach Klassen (ohne
+      gemessene Fahrzeuge), als Scan – für die Karte zu wenig.
     empfehlung: >-
       Die Polizei gibt Messprotokolle heraus – Anfrage für alle Kontrollen eines Zeitraums. Die
       Kontrollen der Stadt liegen bei der Stadt.
@@ -471,6 +467,9 @@ datenlage:
     stand: geliefert
     was: >-
       Polizei: Messprotokolle der Kontrollen in Holzwickede gebührenfrei herausgegeben
+    situation: >-
+      Handschriftliche Protokolle einzelner Lasermessungen (Ort, Zeit, die einzelnen Verstöße),
+      ohne Zahl der gemessenen Fahrzeuge – für die Karte nicht auswertbar.
     empfehlung: >-
       Anfrage für alle Kontrollen der Kreispolizeibehörde.
     weg: "FragDenStaat, IFG NRW"
@@ -565,6 +564,48 @@ datenlage:
       - ["Ratsinformationssystem", "https://piwi.wiesbaden.de/dokument/v/3118284"]
 
   # --- nur Summen, Standorte oder Planungen ---
+  - kommune: Konstanz
+    land: BW
+    lon: 9.1737
+    lat: 47.6603
+    stand: teilweise
+    was: >-
+      Jahresstatistik 2018–2021 als Open Data (CC BY 4.0): je Monat gemessene Fahrzeuge,
+      Verstöße und Überschreitungsklassen – für die acht festen Radaranlagen und die ganze Stadt
+    situation: >-
+      Die Statistik beschreibt die festen Anlagen (Untere Laube, Gartenstraße, Steinstraße,
+      Mainaustraße, Im Loh, drei an der Reichenaustraße) und Monatssummen; mobile Kontrollen mit
+      Ort und Datum stehen nicht darin. Die Karte zeigt Kontrollen, keine festen Anlagen.
+    empfehlung: >-
+      Die mobilen Kontrollen der Stadt je Einsatz nach dem LIFG anfragen.
+    weg: "FragDenStaat, LIFG"
+    kontakt: {fds_suche: "Stadt Konstanz"}
+    anfrage: true
+    links:
+      - ["Offene Daten Konstanz", "https://offenedaten-konstanz.de/node/42541"]
+      - ["MobiData BW", "https://mobidata-bw.de/he/dataset/geschwindigkeits-berwachung-jahresstatistik"]
+  - kommune: Duisburg
+    land: NW
+    lon: 6.7623
+    lat: 51.4344
+    stand: teilweise
+    was: >-
+      Statistik je Standort der mobilen Kontrollen 10/2019–09/2020 auf Anfrage (PDF, mit
+      Tempolimit und Verstößen); die Messstellen kündigt die Stadt wöchentlich an
+    situation: >-
+      Die Statistik nennt je Standort nur die Zahl der Überschreitungen und die Bußgelder eines
+      Jahres – ohne Datum der Kontrollen und ohne gemessene Fahrzeuge; für die Karte reicht das
+      nicht.
+    empfehlung: >-
+      Für die Karte bräuchte es Datum und Ort je Kontrolle – Anfrage nach dem IFG NRW.
+    weg: "FragDenStaat, IFG NRW"
+    kontakt: {fds_suche: "Stadt Duisburg"}
+    anfrage: true
+    anfrage_zusatz: >-
+      Auf eine frühere Anfrage (FragDenStaat) haben Sie eine Statistik je Standort für Oktober
+      2019 bis September 2020 herausgegeben; ich bitte um die Angaben je Kontrolle.
+    links:
+      - ["FragDenStaat", "https://fragdenstaat.de/anfrage/standorte-der-mobilen-blitzer-in-duisburg/"]
   - kommune: Essen
     land: NW
     lon: 7.0116

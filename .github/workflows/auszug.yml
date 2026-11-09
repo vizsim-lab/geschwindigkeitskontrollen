@@ -77,6 +77,8 @@ jobs:
           # die Ressourcenlisten sind auf main versioniert -> der Orphan-Branch entfernt sie
           mkdir -p "$RUNNER_TEMP/res"
           cp pipeline/config/*_ressourcen.json "$RUNNER_TEMP/res/" 2>/dev/null || true
+          # neu geschriebene, auf main versionierte Listen würden den Wechsel blockieren
+          git reset -q --hard
           git switch --orphan dev/auszug
           mkdir -p pipeline/config && cp "$RUNNER_TEMP"/res/*_ressourcen.json pipeline/config/ 2>/dev/null || true
           # große CSV-Dateien komprimiert (GitHub nimmt keine Dateien über 100 MB)

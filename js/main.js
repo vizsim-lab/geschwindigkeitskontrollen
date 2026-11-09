@@ -350,10 +350,7 @@ function schreibeLink() {
 
 function legendeAufbauen() {
   const st = manifest.staedte;
-  document.getElementById("untertitel").textContent = mitDaten()
-    .map(([, s]) => s)
-    .map((s) => `${s.label} ${jahre(s.jahre)}`)
-    .join(" · ");
+  document.getElementById("untertitel").textContent = D.untertitel(mitDaten().map(([, s]) => s));
   document.getElementById("quelle-tip").dataset.tip = `Quellen: ${mitDaten().map(([, s]) => s.quelle.bereitsteller).join(", ")} · Verortung: OpenStreetMap (ODbL) · Stand ${manifest.stand}`;
   document.getElementById("tempo-tip").dataset.tip = D.tempoHinweis(st);
   const wahl = document.getElementById("stadt-wahl");

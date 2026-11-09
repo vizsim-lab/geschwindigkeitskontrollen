@@ -43,7 +43,7 @@ _ENDE = re.compile(
     r"\s*[,:]"
     r"|(?:\s+|(?<=\.))(?:(?:in\s+)?[Hh](?:ö|oe)he|i\.\s*H\.|" + _GG + r"\.?|vor|v\.|hinter|"
     r"nach|unter|neben|neb\.|bis|zwischen|zw\.|Haus(?:nr|Nr|nummer|r)?|Hs\.?|HS|Nr|NR|Kreuzung|Ecke|"
-    r"Einm(?:ü|ue)ndung|Einf\.|Ausf\.|Einfahrt|Ausfahrt|Km|km)" + _FREI + r"|"
+    r"Einm(?:ü|ue)ndung|Einm\.|Einf\.|Ausf\.|Einfahrt|Ausfahrt|Km|km)" + _FREI + r"|"
     r"(?:\s+|(?<=\.)|(?<=[a-zäöüß]))" + _LAT + r"|"
     r"(?<=[a-zäöüß])(?=Höhe\b)"  # „AgrippinauferHöhe“
     r"|(?<=[a-zäöüß.])\s*(?=\d)"
@@ -71,10 +71,12 @@ _NR = re.compile(r"\bNr\b\.?\s*" + _NUMMER, re.I)
 _VORN = re.compile(r"^" + _NUMMER)
 _GGUE = re.compile(r"(?<![a-zäöüß])" + _GG + _FREI, re.I)
 _QUER = re.compile(
-    r"(?:Kreuzung|Ecke|Einm(?:ü|ue)ndung|vor|v\.|hinter|unter|[Hh](?:ö|oe)he|i\.\s*H\.)\s*"
+    r"(?:Kreuzung|Ecke|Einm(?:ü|ue)ndung|Einm\.|vor|v\.|hinter|unter|[Hh](?:ö|oe)he|i\.\s*H\.)\s*"
     r"(?P<q>[A-ZÄÖÜ][^,]*)$"
 )
-_KEINE_QUER = re.compile(r"^(?:Haus|Hs|HS|Nr|NR|Lat|Laterne|Mast|Kita|Schule|L\d)", re.I)
+_KEINE_QUER = re.compile(
+    r"^(?:Haus|Hs|HS|Nr|NR|Lat|Laterne|Lichtmast|Strommast|Mast|Kita|Schule|Tür|Tor|L\d|\")", re.I
+)
 _SCHRAEG = re.compile(r"^(?P<a>[^/\d]+?)\s*/\s*(?P<b>[A-ZÄÖÜ][^/\d]+)$")
 
 
@@ -87,7 +89,7 @@ def adresse(text: str | None) -> Adresse:
     if not s:
         return Adresse(None)
     m = _SCHRAEG.match(s)
-    if m:
+    if m and not _ENDE.search(m.group("a")):  # nicht „Sulzfelder Straße in Höhe Kirchberg/ …“
         return Adresse(m.group("a").strip(" .,"), quer=m.group("b").strip(" .,"))
     e = _ENDE.search(s)
     strasse, rest = (s[: e.start()], s[e.start() :]) if e else (s, "")
@@ -105,5 +107,12 @@ def adresse(text: str | None) -> Adresse:
     )
     nr = namen.nummer(n.group(1) + (n.group(2) or "")).hausnummer if n else None
     q = _QUER.search(rest) if nr is None else None
-    quer = q.group("q").strip(" .,") if q and not _KEINE_QUER.match(q.group("q")) else None
+    quer = q.group("q").strip(" .,/") if q and not _KEINE_QUER.match(q.group("q")) else None
+    if quer:  # „Höhe Einmündung Steinbergstraße“ -> Steinbergstraße; „Jahnstr. o. ggü.“
+        quer = re.sub(
+            r"^(?:Einm(?:ü|ue)ndung(?:sbereich)?|Einm\.|Kreuzung(?:sbereich)?|Ecke)\s*", "", quer
+        )
+        quer = re.sub(r"\s+(?:o\.|oder)\s+gg.*$|\s*/.*$", "", quer)  # „Kirchberg/ Heiliggrund“
+    if quer:  # „Höhe Weidenweg 1“ -> Kreuzung mit dem Weidenweg
+        quer = re.sub(r"(?<=[a-zäöüß.])\s+\d{1,4}\s*[a-zA-Z]?$", "", quer).strip(" .,/") or None
     return Adresse(strasse or None, hausnummer=nr, gegenueber=bool(_GGUE.search(rest)), quer=quer)
