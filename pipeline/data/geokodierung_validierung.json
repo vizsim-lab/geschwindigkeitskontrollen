@@ -19,41 +19,41 @@
   }
  },
  "berlin": {
-  "kontrollen": 27945,
-  "verortet": 27862,
+  "kontrollen": 33401,
+  "verortet": 33295,
   "je_methode": {
-   "hausnummer": 20310,
-   "abschnitt": 3238,
-   "kreuzung": 3526,
-   "anschlussstelle": 634,
-   "strasse": 154
+   "hausnummer": 24778,
+   "abschnitt": 3901,
+   "kreuzung": 3593,
+   "anschlussstelle": 861,
+   "strasse": 162
   },
-  "ohne_lage": 83,
+  "ohne_lage": 106,
   "je_gebiet": {
-   "bezirk": 26738,
-   "stadt": 933,
-   "umgebung": 191
+   "bezirk": 31862,
+   "stadt": 1211,
+   "umgebung": 222
   },
   "hinweise": {
-   "Hausnummer liegt außerhalb des Abschnitts": 270,
-   "nur eine der Querstraßen gefunden": 260,
-   "Ortsangabe statt Querstraße": 240,
-   "Ortsangabe von Hand zugeordnet (config/orte.yaml)": 167,
-   "auf der A 103 gefunden (Quelle: A 100)": 29,
+   "Hausnummer liegt außerhalb des Abschnitts": 358,
+   "nur eine der Querstraßen gefunden": 300,
+   "Ortsangabe statt Querstraße": 285,
+   "Ortsangabe von Hand zugeordnet (config/orte.yaml)": 219,
+   "auf der A 103 gefunden (Quelle: A 100)": 31,
    "auf der A 111 gefunden (Quelle: A 100)": 5,
    "auf der A 100 gefunden (Quelle: A 113)": 1
   },
   "hausnummer_gegen_abschnitt": {
-   "n": 19156,
-   "im_abschnitt": 0.528,
-   "unter_50m": 0.925,
-   "ueber_widerspruch": 0.014,
+   "n": 23459,
+   "im_abschnitt": 0.531,
+   "unter_50m": 0.927,
+   "ueber_widerspruch": 0.015,
    "median_m": 0.1,
-   "p90_m": 32.8
+   "p90_m": 32.1
   },
   "adresse_zur_achse_m": {
-   "median": 21.5,
-   "p90": 49.4
+   "median": 21.6,
+   "p90": 49.1
   }
  }
 }

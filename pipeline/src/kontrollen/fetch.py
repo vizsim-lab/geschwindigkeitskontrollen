@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
-"""Rohdaten holen: Berlin (feste CSV mit Prüfsumme), Aachen (alle Monatsdateien über CKAN),
+"""Rohdaten holen: Berlin (die PDF-Anlagen, mit Prüfsumme), Aachen (alle Monatsdateien über CKAN),
 OSM-Abzüge (Geofabrik).
 
 Aachen: `fetch --aachen --neu` fragt die CKAN-Kataloge (sources.yaml) nach allen Datensätzen
@@ -54,6 +54,9 @@ def lade(url: str, ziel: Path, pruefsumme: str | None = None, *, neu: bool = Fal
     if pruefsumme and sha256(tmp) != pruefsumme:
         tmp.unlink()
         raise ValueError(f"Prüfsumme stimmt nicht: {url}")
+    if ziel.suffix.lower() == ".pdf" and tmp.read_bytes()[:5] != b"%PDF-":
+        tmp.unlink()  # etwa eine Vorschauseite statt der Datei
+        raise ValueError(f"Keine PDF-Datei: {url}")
     tmp.replace(ziel)
     return ziel
 
@@ -61,10 +64,11 @@ def lade(url: str, ziel: Path, pruefsumme: str | None = None, *, neu: bool = Fal
 # --- Berlin --------------------------------------------------------------------------------
 
 
-def berlin(paths: Paths | None = None) -> Path:
+def berlin(paths: Paths | None = None) -> list[Path]:
+    """Die PDF-Anlagen des IFG-Bescheids (2017 bis August 2020)."""
     paths = paths or get_paths()
-    q = quellen(paths)["staedte"]["berlin"]["kontrollen"]
-    return lade(q["url"], paths.data_file(q["datei"]), q["sha256"])
+    k = quellen(paths)["staedte"]["berlin"]["kontrollen"]
+    return [lade(a["url"], paths.data_file(a["datei"]), a.get("sha256")) for a in k["anlagen"]]
 
 
 # --- Aachen --------------------------------------------------------------------------------

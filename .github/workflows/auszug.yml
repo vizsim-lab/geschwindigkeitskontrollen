@@ -1,6 +1,7 @@
-# Entwicklungsauszug: lädt, was die Verortung braucht (OSM Berlin + Regierungsbezirk Köln,
-# Aachener Monatsdateien), liest es in die kompakten Tabellen von `kontrollen osm` und legt
-# diese samt der Aachener Rohdateien auf den Branch `dev/auszug` (orphan, wird überschrieben).
+# Entwicklungsauszug: lädt, was die Pipeline braucht (OSM Berlin + Regierungsbezirk Köln,
+# Berliner PDF-Anlagen, Aachener Monatsdateien), liest OSM in die kompakten Tabellen von
+# `kontrollen osm` und legt diese samt den Rohdateien auf den Branch `dev/auszug` (orphan,
+# wird überschrieben).
 # Wozu: Entwickeln und Testen der Verortung ohne Netzzugang zu Geofabrik/Open-Data-Portalen –
 # `git fetch origin dev/auszug` und die Dateien nach pipeline/data/ kopieren.
 # Der Branch gehört nicht nach main und kann jederzeit gelöscht werden.
@@ -32,7 +33,7 @@ jobs:
           enable-cache: true
           cache-dependency-glob: pipeline/uv.lock
       - run: uv sync --locked
-      - name: Rohdaten laden (Berlin-CSV, Aachener Katalog neu, OSM)
+      - name: Rohdaten laden (Berliner PDF-Anlagen, Aachener Katalog neu, OSM)
         run: uv run kontrollen fetch --osm --neu
       - name: OSM auslesen
         run: uv run kontrollen osm
@@ -45,6 +46,7 @@ jobs:
             echo '```'
             du -sh data/interim/osm/* data/raw/aachen 2>/dev/null
             ls data/raw/aachen | head -100
+            sha256sum data/raw/berlin/* 2>/dev/null
             echo '```'
             echo '```json'
             cat data/interim/build_bericht.json 2>/dev/null || true
@@ -60,6 +62,7 @@ jobs:
           git switch --orphan dev/auszug
           mkdir -p pipeline/config && cp "$RUNNER_TEMP/aachen_ressourcen.json" pipeline/config/
           git add -f pipeline/data/interim/osm pipeline/data/raw/aachen pipeline/config/aachen_ressourcen.json
+          git add -f pipeline/data/raw/berlin/*.pdf 2>/dev/null || true
           for f in pipeline/data/interim/build_bericht.json pipeline/data/interim/build_fehlgeschlagen.txt; do
             [ -f "$f" ] && git add -f "$f"
           done

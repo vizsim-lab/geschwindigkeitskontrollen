@@ -12,7 +12,9 @@ berlin:
   ICC: "Messedamm-Süd"                            # A 100, Anschlussstelle am ICC
   "ICC/Überleitung zur A 115": "Dreieck Funkturm" # Übergang A 100 -> A 115
   "Höhe Eichkampsiedlung": "Eichkampstraße"       # A 115 unter der Eichkampstraße
+  "Eichkampsiedlung": "Eichkampstraße"            # dasselbe, 2020 ohne „Höhe“
   "Zollamt Dreilinden": "Stadtgrenze"             # A 115 an der Landesgrenze bei Dreilinden
+  "Höhe Zollamt Dreilinden": "Stadtgrenze"        # dasselbe (2020)
   "Siegessäule": "Großer Stern"                   # die Säule steht im Kreisverkehr
   "Brandenburger Tor": "Platz des 18. März"       # westlich des Tors
   "Nachtigalplatz": "Manga-Bell-Platz"            # 2022 umbenannt

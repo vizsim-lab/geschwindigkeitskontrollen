@@ -1,6 +1,6 @@
 import pytest
 
-from kontrollen import berlin, namen
+from kontrollen import namen
 
 
 @pytest.mark.parametrize(
@@ -76,17 +76,3 @@ def test_autobahn():
     assert (
         namen.autobahn_ort("Ausf. Tunnel Schlangenbader Str.")[1] == "Tunnel Schlangenbader Straße"
     )
-
-
-@pytest.mark.parametrize(
-    ("strasse", "nr", "erwartet"),
-    [
-        ("Charlottenburger Chauss", "ee 43", ("Charlottenburger Chaussee", "43")),
-        ("Manfred-von-Richthofen", "-Str 31", ("Manfred-von-Richthofen-Str", "31")),
-        ("Platz der Vereinten Natio", "n g1", ("Platz der Vereinten Nation", "g1")),
-        ("Adlergestell", "423", ("Adlergestell", "423")),
-        ("An der Wuhlheide", "g232", ("An der Wuhlheide", "g232")),
-    ],
-)
-def test_ueberlauf(strasse, nr, erwartet):
-    assert berlin.repariere_ueberlauf(strasse, nr) == erwartet

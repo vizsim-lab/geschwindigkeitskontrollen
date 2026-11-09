@@ -32,8 +32,9 @@ def info() -> None:
     typer.echo(f"Daten: {p.data}")
     for code, s in q["staedte"].items():
         k, o = s["kontrollen"], s["osm"]
-        ziel = p.data_file(k.get("datei") or k.get("ordner"))
-        typer.echo(f"{code}: Kontrollen {'da' if ziel.exists() else 'fehlt'} ({ziel})")
+        for d in [a["datei"] for a in k.get("anlagen", [])] or [k.get("datei") or k["ordner"]]:
+            ziel = p.data_file(d)
+            typer.echo(f"{code}: Kontrollen {'da' if ziel.exists() else 'fehlt'} ({ziel})")
         typer.echo(f"{code}: OSM {'da' if p.data_file(o['datei']).exists() else 'fehlt'}")
     for name in ("interim/kontrollen.parquet", "geokodierung.csv", "karte/manifest.json"):
         typer.echo(f"{name}: {'da' if p.data_file(name).exists() else 'fehlt'}")
@@ -46,7 +47,7 @@ def fetch_cmd(
     mit_osm: bool = typer.Option(False, "--osm", help="auch die OSM-Abzüge (Geofabrik)"),
     neu: bool = typer.Option(False, "--neu", help="Aachen: Katalog neu fragen; OSM: neu laden"),
 ) -> None:
-    """Rohdaten laden (Berlin-CSV, Aachener Monatsdateien, optional OSM)."""
+    """Rohdaten laden (Berliner PDF-Anlagen, Aachener Monatsdateien, optional OSM)."""
     if berlin_:
         typer.echo(f"Berlin: {fetch.berlin()}")
     if aachen_:
@@ -78,7 +79,8 @@ def build() -> None:
     """Rohdaten beider Städte -> data/interim/kontrollen.parquet (gemeinsames Schema)."""
     p = get_paths()
     q = quellen(p)["staedte"]
-    b = berlin.lies(p.data_file(q["berlin"]["kontrollen"]["datei"]))
+    anlagen = [(a, p.data_file(a["datei"])) for a in q["berlin"]["kontrollen"]["anlagen"]]
+    b, berlin_bericht = berlin.lies(anlagen)
     ordner = p.data_file(q["aachen"]["kontrollen"]["ordner"])
     dateien = [f for f in sorted(ordner.glob("*")) if f.suffix.lower() in (".xlsx", ".xls", ".csv")]
     alt = q["aachen"]["kontrollen"].get("alt")
@@ -88,6 +90,7 @@ def build() -> None:
     df.to_parquet(p.interim / "kontrollen.parquet", index=False)
     bericht = {
         "berlin": int(len(b)),
+        "berlin_anlagen": berlin_bericht,
         "aachen": int(len(a)),
         "aachen_dateien": len(dateien),
         "aachen_zeitraum": [a["datum"].min(), a["datum"].max()] if len(a) else None,
@@ -97,8 +100,17 @@ def build() -> None:
         json.dumps(bericht, ensure_ascii=False, indent=1), encoding="utf-8"
     )
     typer.echo(
-        json.dumps({k: v for k, v in bericht.items() if k != "hinweise"}, ensure_ascii=False)
+        json.dumps(
+            {k: v for k, v in bericht.items() if k not in ("hinweise", "berlin_anlagen")},
+            ensure_ascii=False,
+        )
     )
+    for a in berlin_bericht:
+        typer.echo(
+            f"  Berlin {a['jahr']}: {a['zeilen']} Zeilen auf {a['seiten']} Seiten, "
+            f"{a['uebersprungen']} übersprungen, {a['fehler']} Fehler, "
+            f"{a['andere_jahre']} aus anderen Jahren"
+        )
     for h in hinweise[:40]:
         typer.echo(f"  Hinweis: {h}")
 
