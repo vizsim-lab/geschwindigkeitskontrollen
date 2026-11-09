@@ -1,13 +1,13 @@
 # kontrollen – Pipeline
 
-uv-Paket, das aus den Rohdaten (Berlin, Aachen) und den OSM-Abzügen die Kartendaten baut.
-Alle Befehle aus `pipeline/` heraus:
+uv-Paket, das aus den Rohdaten (Berlin, Aachen, Köln, Bonn, Schonungen, Oberderdingen) und den
+OSM-Abzügen die Kartendaten baut. Alle Befehle aus `pipeline/` heraus:
 
 ```bash
 uv sync
 uv run kontrollen info       # Pfade, Quellen, was fehlt
-uv run kontrollen fetch      # Berliner PDF-Anlagen + Aachener Monatsdateien (mit Prüfsummen)
-                             #   --osm: OSM-Abzüge (Geofabrik)  --neu: Aachener Katalog neu fragen
+uv run kontrollen fetch      # Berliner PDF-Anlagen + Dateien der anderen Städte (mit Prüfsummen)
+                             #   --osm: OSM-Abzüge (Geofabrik)  --neu: Kataloge neu fragen
 uv run kontrollen osm        # PBF -> data/interim/osm/*.parquet
 uv run kontrollen build      # Rohdaten -> data/interim/kontrollen.parquet (gemeinsames Schema)
 uv run kontrollen geocode    # Verortung -> data/geokodierung.csv + geokodierung_validierung.json
@@ -24,21 +24,31 @@ uv run ruff check && uv run ruff format --check
 sources.yaml ─ fetch ─> data/raw/berlin/anlage{1..4}_<jahr>.pdf         (FragDenStaat, sha256)
                         data/raw/aachen/*.xlsx|*.csv                     (Liste: config/aachen_ressourcen.json)
                         data/raw/aachen_alt/geschw_aachen_juni2020.html  (Juni 2020, alte Karte)
-                        data/raw/osm/berlin-latest.osm.pbf, koeln-regbez-latest.osm.pbf
+                        data/raw/{koeln,bonn}/*.csv(.gz)                 (Listen: config/<stadt>_ressourcen.json)
+                        data/raw/{schonungen,oberderdingen}/*.pdf|*.docx
+                        data/raw/osm/*.osm.pbf                           (Geofabrik, je Stadt in sources.yaml)
 osm      -> data/interim/osm/{strassen,adressen,knoten,gebiete}_<stadt>.parquet
-build    -> data/interim/kontrollen.parquet   berlin_pdf.py, berlin.py, aachen.py -> schema.py
-            data/interim/build_bericht.json   je Anlage: Zeilen, Übersprungenes, Nachträge
+build    -> data/interim/kontrollen.parquet   berlin_pdf.py, berlin.py, aachen.py, koeln.py, bonn.py,
+                                              schonungen.py, oberderdingen.py -> schema.py
+            data/interim/build_bericht.json   je Datei: Zeilen, Übersprungenes, Nachträge
 geocode  -> data/geokodierung.csv             je Kontrolle: lon, lat, Methode, Suchgebiet,
             data/geokodierung_validierung.json OSM-Straße, Abschnitt (WKT), Abstände, Hinweis
-site     -> data/karte/messstellen.json       Messstellen (gebündelte Verortungen)
+site     -> data/karte/messstellen.json       Messstellen (gebündelte Verortungen, Ids bleiben)
             data/karte/kontrollen.json        eine Zeile je Kontrolle, nur Zahlen + Verweise
             data/karte/abschnitte.geojson     Abschnitte zwischen Querstraßen / ganze Straßen
             data/karte/kontrollen.csv         Download, eine Zeile je Kontrolle
             data/karte/manifest.json          Stand, Zahlen, Quellen, Lizenzen, Verortung
 ```
 
-Im Git liegen `data/karte/`, `data/geokodierung*` und `config/aachen_ressourcen.json`;
-`data/raw/` und `data/interim/` bleiben lokal.
+Im Git liegen `data/karte/`, `data/geokodierung*` und `config/*_ressourcen.json`; `data/raw/`
+und `data/interim/` bleiben lokal. `build` bricht ab, wenn zwei Kontrollen dieselbe Id tragen –
+Verortung und Karte hängen an ihr.
+
+**Messstellen-Ids** („K09412“, im Link `s=`, in der CSV `messstelle`) bleiben über Neubauten
+hinweg: `site` liest vor dem Schreiben die bisherige `messstellen.json` und gibt jeder Messstelle
+mit gleicher Stadt, Straße, gleichem Punkt und gleicher Genauigkeit ihre alte Id; neue bekommen
+die nächste freie Nummer (`messstellen_naechste_id` im Manifest). Eine Nummer wird nie zweimal
+vergeben – ein alter Link öffnet dann nichts statt einer anderen Stelle.
 
 ## Die Quellen
 
@@ -118,10 +128,49 @@ einmal dekodierte. `koeln.py`:
 - Gelesen wird stückweise und gleich je Standort und Tag gezählt (4,9 Mio. Zeilen, ~10 s).
 - Id = Tag und Kürzel (`K2019-01-01-0101`).
 
-**Bonn** wird geladen (GovData, `config/bonn_ressourcen.json`), aber noch nicht gelesen: je
-Verstoß Tattag, Tatzeit, Tatort (Freitext ohne Stadtteil), Tatbestandsnummer, Bußgeld; feste und
-mobile Messungen stehen ungetrennt beieinander, die Höhe der Überschreitung steckt nur in der
-Tatbestandsnummer. Ältere Dateien sind zum Teil als Mac-Roman kodiert („Stra§e“).
+Adressen in Freitext liest `adressen.py` (aus `koeln.py` herausgelöst, genutzt von Köln, Bonn,
+Schonungen und Oberderdingen): Die Straße endet an Komma, Zusatz („Höhe“, „ggü.“, „unterhalb“,
+„Haus Nr.“, „Laterne“ …), Zahl oder einem großgeschriebenen Wort nach „Str.“; Hausnummer gleich
+nach den Zusätzen, sonst nach „Haus“, „Hs.“, „Nr.“ (auch „Nr.: 100“).
+
+**Bonn.** Je Jahr eine Datei „Bußgelder fließender Verkehr“ (GovData, `config/bonn_ressourcen.json`;
+opendata.bonn.de weist Verbindungen zeitweise ab – `lade` wartet dann 5, 30 und 90 s), **ein
+Verstoß je Zeile**: Tattag, Tatzeit, Tatort (Freitext), Tatbestandsnummer, Bußgeld. 2016 ist
+als Mac-Roman gespeichert (`tabellen.kodierung` erkennt „Stra§e“), in manchen Zeilen steht
+„"“ für „ö“ („H"he“). `bonn.py`:
+
+- **Feste Anlagen** sind nicht gekennzeichnet: Ein Tatort mit Verstößen an mehr als 250 Tagen
+  eines Jahres gilt als feste Anlage und bleibt in allen Jahren draußen (`FEST_TAGE`; 9 Tatorte,
+  62 Tatort-Jahre mit über 300 Tagen, sonst höchstens 227).
+- **Kontrolle = alle Verstöße eines Tatorts an einem Tag**, wie in Köln; gemessene Fahrzeuge,
+  Tempolimit und Stufen fehlen (`alle_gezaehlt = false`).
+- Tatort: `Bonn, <Straße> Höhe Haus-Nr. 15 Fahrtrichtung <Ziel>`, auch `Bonn - Mehlem, …`,
+  `Bonn Beuel, …`, `53179, Bonn, …`; zwei Straßen mit Komma oder „/“ sind eine Kreuzung,
+  „Höhe Überführung B“ die Kreuzung mit B, „BAB A 562 / B“ eine Autobahn mit Ort. An der
+  Autobahn steht meist nur der Kilometer (`A 555; km 018,000`) – ohne Lage, ebenso Landes- und
+  Kreisstraßen ohne Namen („L 16 Höhe Auf der Rötschen“: OSM kennt die Nummer, die Verortung
+  sucht nur Namen).
+- Id = Tag und die ersten 8 Zeichen des SHA-1 des Tatorts (`N2023-05-02-1a2b3c4d`).
+
+**Schonungen** (Landkreis Schweinfurt). Monatsberichte des Zweckverbands Kommunale
+Verkehrsüberwachung Südostbayern in der WordPress-Mediathek der Gemeinde (`kataloge: art:
+wordpress` fragt `wp-json/wp/v2/media`; PDF, einige als Word-Datei – `dokumente.text`). Je
+Messung ein Absatz („Messstelle Mainberg, St2447, Mainleite / Bereich Hs.-Nr. 28“, Tempolimit,
+Messzeitpunkt mit Beginn und Ende, Fahrzeuge, Verstöße, Klassen). `schonungen.py`: eine Zeile =
+eine Kontrolle mit allen Fahrzeugen; Stufen bis/über 20 km/h nur, wenn die Klassen die Summe
+ergeben; derselbe Bericht zweimal hochgeladen zählt einmal. Gemeindeteil und Straßennummer
+(St2447, SW 25) stehen vor der Straße; Gemeindeteile haben in OSM keine Grenzen. Abkürzungen
+(„Marktst. Hauptstr.“) übersetzt `config/orte.yaml`. Id = Beginn und Messstelle
+(`S2026-03-10-1154-3f2a`).
+
+**Oberderdingen** (Landkreis Karlsruhe). Quartalstabellen des Landratsamts als PDF im CMS der
+Stadt, ohne abfragbare Übersicht – `kataloge: art: liste` nennt die Dateien fest (neue Quartale
+dort eintragen). `oberderdingen.py`: eine Tabellenzeile = eine Kontrolle mit allen Fahrzeugen,
+ohne Uhrzeit. Stehen am selben Tag an derselben Stelle zwei Richtungen mit derselben Zahl
+gemessener Fahrzeuge, hat das Gerät beide zusammen gezählt: eine Kontrolle, Richtung „beide“,
+Beanstandungen addiert. Bei mehrtägigen Messungen steht mitunter an jedem Tag dieselbe Zahl
+(vermutlich ein Tagesschnitt). Id = Tag und Messstelle (`O2026-01-15-3f2a1b`, eine zweite
+gleiche Zeile `…-2`).
 
 ## Datenlage
 
@@ -161,8 +210,8 @@ und „nur Straße“ gelten erst, wenn keine Stufe Genaueres findet. Je Kontrol
    A-Nummer, wenn alle Orte ≤ 100 m daneben liegen (die Daten nennen die A 103 in Steglitz
    „A 100“).
 5. **strasse** — nur der Name: Mitte des längsten Stücks; die ganze Straße geht als Linie mit.
-   Stadtweit nur, wenn die Straße nicht an mehreren Orten liegt – außer in Aachen (keine
-   Bezirke in der Quelle): dort mit Hinweis.
+   Stadtweit nur, wenn die Straße nicht an mehreren Orten liegt – außer dort, wo die
+   Verortung keine Bezirke kennt (Aachen, Bonn, Schonungen, Oberderdingen): dann mit Hinweis.
 
 **Gegenprobe** (`validiere`): Wo Hausnummer und Querstraßen vorliegen, misst die Pipeline den
 Abstand des Hausnummer-Punkts zum Abschnitt – Stand 9. November 2026 (Geofabrik-Abzug dieses Tages):
@@ -175,24 +224,31 @@ und einzelne Abkürzungen.
 
 ## Entwickeln ohne Netz
 
-Wer keinen Zugang zu Geofabrik, FragDenStaat und dem Aachener Portal hat (etwa in einer
+Wer keinen Zugang zu Geofabrik, FragDenStaat und den Portalen der Städte hat (etwa in einer
 Sandbox), startet den Workflow „Entwicklungsauszug“ (oder pusht auf `dev/auszug-anfordern`). Er
-legt die kompakten OSM-Tabellen (~20 MB), die Berliner PDF-Anlagen und die Aachener Rohdateien
-auf den Branch `dev/auszug`:
+legt die kompakten OSM-Tabellen, die Berliner PDF-Anlagen und die Rohdateien von Aachen, Köln,
+Bonn, Schonungen und Oberderdingen (große CSV gzip-komprimiert) samt den neu erfragten Listen
+`config/*_ressourcen.json` auf den Branch `dev/auszug`:
 
 ```bash
 git fetch origin dev/auszug
-git archive origin/dev/auszug | tar -x -C /tmp/auszug
+git archive FETCH_HEAD | tar -x -C /tmp/auszug
 cp /tmp/auszug/pipeline/data/interim/osm/*.parquet pipeline/data/interim/osm/
-cp -r /tmp/auszug/pipeline/data/raw/aachen /tmp/auszug/pipeline/data/raw/berlin pipeline/data/raw/
+cp -r /tmp/auszug/pipeline/data/raw/* pipeline/data/raw/
 ```
+
+Die Listen dort nur übernehmen, wenn sie vollständig sind (`fehler` leer bis auf Kataloge, die
+nicht antworten) – sonst fehlen Dateien, die der Server gerade abgewiesen hat.
 
 ## Neue Daten
 
-- **Neue Aachener Monate:** Workflow „Kartendaten neu bauen“ mit „Aachener Katalog neu
-  fragen“; der PR zeigt die neuen Dateien in `config/aachen_ressourcen.json`.
-- **Neue Stadt:** Eintrag unter `staedte` in `sources.yaml` (Quelle, OSM-Abzug, `bbox`,
-  `crs_m`, `stadtgrenze`; aus Open-Data-Katalogen mit `kataloge`, `suche`, `titel_muster`,
-  `stadt_muster`, `ressourcen`), Leser nach dem Muster von `koeln.py`/`aachen.py`, Aufruf in
-  `cli.build`; die Karte nimmt die Stadt aus dem Manifest (Knopf, Hinweise, Methode). Dazu den
+- **Neue Aachener Monate:** Workflow „Kartendaten neu bauen“ mit „Kataloge neu fragen“; der PR
+  zeigt die neuen Dateien in `config/aachen_ressourcen.json`.
+- **Neue Stadt:** Eintrag unter `staedte` in `sources.yaml`: Quelle, OSM-Abzug, `bbox`,
+  `crs_m`, `stadtgrenze`; Dateien aus Katalogen (`kataloge` mit
+  `art: ckan | dkan | wordpress | liste`, `suche`, `titel_muster`, `stadt_muster`,
+  `ressourcen`), Leser nach dem Muster von `bonn.py` oder `oberderdingen.py`, Eintrag in
+  `cli.LESER`; die Karte nimmt die Stadt aus dem Manifest (Knopf, Hinweise, Methode). Dazu den
   Eintrag in `datenlage` auf `stand: in_karte` mit `stadt:` umstellen.
+- **Neue Monate oder Quartale:** Köln, Bonn und Schonungen über „Kataloge neu fragen“;
+  Oberderdingen von Hand in die Liste in `sources.yaml`.

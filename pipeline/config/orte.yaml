@@ -37,3 +37,10 @@ koeln:
   "H.-Erpenbach-Str.": "Heinrich-Erpenbach-Straße"    # Sürth – die einzige Erpenbach-Straße in Köln
   "Ricarda-Huch-tr.": "Ricarda-Huch-Straße"           # Stammheim, Tippfehler („tr.“ statt „Str.“)
   "Lib.Landstr.": "Liburer Landstraße"                # Libur
+
+schonungen:
+  # Abkürzungen in den Monatsberichten; gesucht wird in der ganzen Gemeinde (die Gemeindeteile
+  # haben in OSM keine Grenzen) – beide Straßen gibt es dort nur einmal
+  "Marktst. Hauptstr.": "Marktsteinacher Hauptstraße"      # Marktsteinach, St 2266
+  "Marktstein. Hauptstraße": "Marktsteinacher Hauptstraße" # dasselbe (auch „Marktstein. Hauptstr.“)
+  "Marktst. Straße": "Marktsteinacher Straße"              # Waldsachsen, SW 24

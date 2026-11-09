@@ -1,6 +1,7 @@
-# Entwicklungsauszug: lädt, was die Pipeline braucht (OSM Berlin + Regierungsbezirk Köln,
-# Berliner PDF-Anlagen, Aachener Monatsdateien, Kölner und Bonner Jahresdateien), liest OSM in
-# die kompakten Tabellen von `kontrollen osm` und legt diese samt den Rohdateien auf den Branch
+# Entwicklungsauszug: lädt, was die Pipeline braucht (OSM Berlin, Regierungsbezirk Köln,
+# Unterfranken, Regierungsbezirk Karlsruhe; Berliner PDF-Anlagen, Aachener Monatsdateien, Kölner
+# und Bonner Jahresdateien, die Berichte von Schonungen und Oberderdingen), liest OSM in die
+# kompakten Tabellen von `kontrollen osm` und legt diese samt den Rohdateien auf den Branch
 # `dev/auszug` (orphan, wird überschrieben). Große CSV-Dateien liegen dort gzip-komprimiert
 # (`gunzip` nach dem Kopieren).
 # Wozu: Entwickeln und Testen der Verortung ohne Netzzugang zu Geofabrik/Open-Data-Portalen –

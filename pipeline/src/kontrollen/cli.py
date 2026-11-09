@@ -158,6 +158,9 @@ def build() -> None:
         teile.append(t)
         weitere[code] = {"kontrollen": int(len(t)), **ber}
     df = pd.concat(teile, ignore_index=True)
+    doppelt = sorted(set(df.loc[df["id"].duplicated(), "id"]))
+    if doppelt:  # Verortung und Karte hängen an der Id
+        raise RuntimeError(f"{len(doppelt)} Ids doppelt, etwa {doppelt[:5]}")
     p.interim.mkdir(parents=True, exist_ok=True)
     df.to_parquet(p.interim / "kontrollen.parquet", index=False)
     bericht = {

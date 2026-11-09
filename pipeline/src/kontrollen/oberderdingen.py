@@ -14,7 +14,7 @@ derselben Zahl gemessener Fahrzeuge, aber verschiedener Fahrtrichtung (Flehinger
 15.01.2026: je 1.762), hat das Gerät beide Richtungen zusammen gezählt – dann ist das eine
 Kontrolle mit den Beanstandungen beider Zeilen (sonst zählte die Karte die Fahrzeuge doppelt).
 
-Id: `O<Datum>-<Kurzzeichen der Messstelle>`.
+Id: `O<Datum>-<Kurzzeichen der Messstelle>`, bei zwei Zeilen desselben Orts und Tags `…-2`.
 """
 
 from __future__ import annotations
@@ -140,6 +140,13 @@ def lies_alle(dateien: list[Path]) -> tuple[pd.DataFrame, dict]:
                     and r["messungen"] >= r["ueberschreitungen"],
                 }
             )
+    # zwei Zeilen mit gleichem Tag, Ort und Fahrzeugen, aber anderen Beanstandungen (Flehingen,
+    # 22.10.2025: 22 Fahrzeuge, 0 und 2) – beide bleiben, die zweite Id bekommt „-2“
+    gezaehlt: dict[str, int] = {}
+    for z in zeilen_out:
+        n = gezaehlt[z["id"]] = gezaehlt.get(z["id"], 0) + 1
+        if n > 1:
+            z["id"] = f"{z['id']}-{n}"
     out = in_schema(pd.DataFrame(zeilen_out))
     bericht["kontrollen"] = int(len(out))
     return out, bericht

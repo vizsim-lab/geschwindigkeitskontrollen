@@ -1,9 +1,10 @@
 # CLAUDE.md — geschwindigkeitskontrollen
 
 Karte der Geschwindigkeitskontrollen in Berlin (Polizei Berlin, 2017 bis August 2020), Aachen
-(Stadt Aachen, Open Data seit 2020) und Köln (Stadt Köln, Open Data 2017–2025, Einzelverstöße
-der mobilen Überwachung), jede Kontrolle über OSM verortet – dazu die Ebene „Datenlage je Stadt“
-(wo es solche Daten sonst gibt; Bonn wird schon geladen, aber noch nicht gelesen).
+(Stadt Aachen, Open Data seit 2020), Köln (Stadt Köln, Open Data 2017–2025) und Bonn (Bundesstadt
+Bonn, Open Data 2016–2024) – beide aus Einzelverstößen der mobilen Überwachung –, Schonungen
+(Monatsberichte, PDF/Word) und Oberderdingen (Quartalstabellen, PDF), jede Kontrolle über OSM
+verortet – dazu die Ebene „Datenlage je Stadt“ (wo es solche Daten sonst gibt).
 Überblick: `README.md`, Pipeline und Datenfluss: `pipeline/README.md`. Diese Datei = die Regeln,
 die in jeder Session gelten.
 
@@ -33,12 +34,17 @@ die in jeder Session gelten.
 - **Frontend-Vertrag:** Feldnamen in `messstellen.json`/`kontrollen.json` (`felder`), die Liste
   `methoden`, die Dateinamen in `manifest.dateien` und die Permalink-Kürzel
   (`js/permalink.js`: `m`, `j`, `t`, `v`, `s`, `d` und die Werte von `m` und `v`) – nie
-  umdeuten, nur ergänzen. Wer Felder ändert, zieht `site.py`, `js/` und `tests/` im selben Schritt mit
+  umdeuten, nur ergänzen. Die Messstellen-Ids in `s` bleiben über Neubauten hinweg: `site.py`
+  übernimmt sie aus der bisherigen `messstellen.json`, neue Messstellen bekommen neue Nummern
+  (`messstellen_naechste_id` im Manifest), eine Nummer wird nie zweimal vergeben – darum
+  `messstellen.json` und `manifest.json` vor `kontrollen site` nicht löschen; Grundlage ist der
+  Stand auf `main`.
+  Wer Felder ändert, zieht `site.py`, `js/` und `tests/` im selben Schritt mit
   (`tests/web/vertrag.spec.js` prüft die Feldnamen).
 - **MapLibre-Version** in `index.html` (samt `integrity`) und `package.json` nur gemeinsam
   ändern (`tests/web/vertrag.spec.js`).
 - **Keyless:** OpenFreeMap, Photon, OSM-/Esri-Kacheln – keine API-Keys, keine Secrets im Repo.
-- **CRS:** metrisch je Stadt (`crs_m` in sources.yaml: Berlin EPSG:25833, Aachen und Köln
+- **CRS:** metrisch je Stadt (`crs_m` in sources.yaml: Berlin EPSG:25833, alle anderen
   EPSG:25832), Ausgabe immer EPSG:4326.
 - **Lieber keine Lage als eine falsche.** Neue Regeln in `geocode.py` nie ohne Test in
   `pipeline/tests/test_geocode.py` (Ausschnitt `tests/fixtures/mini.osm`); nach Änderungen die
@@ -47,10 +53,10 @@ die in jeder Session gelten.
 - **Von Hand zugeordnete Orte** nur in `config/orte.yaml`, nur eindeutige, mit Kommentar.
 - **Wording:** „Kontrollen“ und „Messstellen“, nie „Blitzer“ als Tatsache. Ein Anteil gibt es
   nur aus Kontrollen, die alle Fahrzeuge zählen (`alle_gezaehlt`); Berlin hat viele, die nur
-  Überschreitungen zählen, Köln (und Bonn, sobald es einen Leser gibt) nennt nur Verstöße –
-  dann „kein Wert“, nie 100 %. In Köln ist eine „Kontrolle“ alle Verstöße eines Standorts an
-  einem Tag (so steht es auch in der Karte); feste Anlagen gehören nicht dazu. Fehlende Werte
-  sind leer, nie 0.
+  Überschreitungen zählen, Köln und Bonn nennen nur Verstöße – dann „kein Wert“, nie 100 %. In
+  Köln und Bonn ist eine „Kontrolle“ alle Verstöße eines Standorts an einem Tag (so steht es
+  auch in der Karte); feste Anlagen gehören nicht dazu (Bonn kennzeichnet sie nicht: Tatorte mit
+  Verstößen an mehr als 250 Tagen eines Jahres gelten als fest). Fehlende Werte sind leer, nie 0.
   Hohe Quoten nicht als „hier wird am meisten gerast“ formulieren (Kontrollen sind keine
   Stichprobe).
 - **Lizenz:** AGPL-3.0-or-later; neue Quelldateien mit SPDX-Kopfzeile.
@@ -64,5 +70,6 @@ die in jeder Session gelten.
   Kartendaten selbst – keine festen Messstellen oder Pixel.
 - **Ohne Netz entwickeln:** Workflow „Entwicklungsauszug“ (auch per Push auf
   `dev/auszug-anfordern`) legt OSM-Tabellen, die Berliner PDF-Anlagen und die Rohdateien von
-  Aachen, Köln und Bonn auf `dev/auszug` (große CSV gzip-komprimiert); `git fetch origin
-  dev/auszug` und nach `pipeline/data/` kopieren (siehe `pipeline/README.md`).
+  Aachen, Köln, Bonn, Schonungen und Oberderdingen auf `dev/auszug` (große CSV
+  gzip-komprimiert); `git fetch origin dev/auszug` und nach `pipeline/data/` kopieren (siehe
+  `pipeline/README.md`).

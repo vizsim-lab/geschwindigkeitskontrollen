@@ -55,6 +55,11 @@ FEST = "Bonn, B9 Mainzer Straße Bahnüberführung FR Mehlem"
          "Niederkasseler Straße", None, "Vilicher Straße", None, None, None, None),
         ("Bonn, Kennedybrücke, (Höhe Brückenforum, FR Beuel)",
          "Kennedybrücke", None, "Brückenforum", None, None, "Beuel", None),
+        # Über-/Unterführung: die Kreuzung der beiden Straßen
+        ("Bonn, Remagener Straße Höhe Überführung Meckenheimer Straße Fahrtrichtung Süden",
+         "Remagener Straße", None, "Meckenheimer Straße", None, None, "Süden", None),
+        ("Bonn, Reuterstraße Höhe Unterführung A 565", "Reuterstraße", None, "A 565", None, None,
+         None, None),
         ("Bonn, Willy-Brandt-Allee / Adenauerallee / Unterführung",
          "Willy-Brandt-Allee", None, "Adenauerallee", None, None, None, None),
         # Straßennummer vor dem Namen weg; ohne Namen bleibt sie (nicht verortbar)

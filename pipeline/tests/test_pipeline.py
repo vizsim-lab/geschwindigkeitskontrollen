@@ -8,7 +8,7 @@ import pandas as pd
 import pytest
 from anlage_pdf import anlage, zeile
 
-from kontrollen import cli, osm
+from kontrollen import cli, osm, site
 from kontrollen.config import get_paths
 
 # je Jahr eine Anlage wie die Polizei-PDFs (tests/anlage_pdf.py)
@@ -88,6 +88,9 @@ def test_kette(daten):
     stellen = json.loads((p.karte / "messstellen.json").read_text())
     kontrollen = json.loads((p.karte / "kontrollen.json").read_text())
     assert stellen["felder"][:4] == ["id", "stadt", "lon", "lat"]
+    i = stellen["felder"].index("osm_maxspeed")  # Zahl oder leer, nie Text („walk“)
+    assert {type(s[i]) for s in stellen["zeilen"]} <= {int, float, type(None)}
+    assert any(s[i] == 50 for s in stellen["zeilen"])
     # Reihenfolge: Anlagen 1–4, dann Aachen
     z = kontrollen["zeilen"]
     f = {k: kontrollen["felder"].index(k) for k in ("stelle", "alle", "tempo", "fahrverbote")}
@@ -121,3 +124,30 @@ def test_kette(daten):
     assert abschn["features"], "Abschnitt Querweg–Nebenstraße fehlt"
     csv = pd.read_csv(p.karte / "kontrollen.csv")
     assert {"lon", "lat", "verortung", "messstelle"} <= set(csv.columns)
+    ids = [s[0] for s in stellen["zeilen"]]
+    assert set(csv["messstelle"].dropna()) <= set(ids)  # dieselbe Id wie in Karte und Link
+    assert manifest["messstellen_naechste_id"] == len(ids)
+
+    cli.site_cmd()  # noch einmal: dieselben Ids, keine neuen Nummern
+    nochmal = json.loads((p.karte / "messstellen.json").read_text())
+    assert [s[0] for s in nochmal["zeilen"]] == ids
+    neu = json.loads((p.karte / "manifest.json").read_text())
+    assert neu["messstellen_naechste_id"] == len(ids)
+
+
+def test_messstellen_ids_bleiben_und_werden_nie_neu_vergeben():
+    """Bisherige Messstellen behalten ihre Id (geteilte Links), neue bekommen eine neue Nummer –
+    auch wenn eine alte Messstelle verschwunden ist, deren Nummer kleiner wäre."""
+    alt = {site._schluessel("koeln", "Aachener Straße", 6.9, 50.94, "hausnummer"): "K00007"}
+    stellen = [
+        {"stadt": "bonn", "strasse": None, "lon": 7.1, "lat": 50.7, "methode": "strasse"},
+        {"stadt": "koeln", "strasse": "Aachener Straße", "lon": 6.9, "lat": 50.94,
+         "methode": "kreuzung"},  # genau wie vorher (Hausnummer) – dieselbe Messstelle
+        # am selben Punkt, aber „nur Straße“: eine andere Messstelle
+        {"stadt": "koeln", "strasse": "Aachener Straße", "lon": 6.9, "lat": 50.94,
+         "methode": "strasse"},
+        {"stadt": "koeln", "strasse": "Aachener Straße", "lon": 6.91, "lat": 50.94,
+         "methode": "hausnummer"},
+    ]  # fmt: skip
+    assert site.vergib_ids(stellen, alt, naechste=12) == 15
+    assert [s["id"] for s in stellen] == ["B00012", "K00007", "K00013", "K00014"]

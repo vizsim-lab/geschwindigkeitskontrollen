@@ -8,15 +8,17 @@ nummer), GELDBUSSE. 2016 ist als Mac-Roman gespeichert (`tabellen.kodierung` erk
 - **Feste Anlagen** sind nicht gekennzeichnet. Ein Tatort, an dem in einem Jahr an mehr als
   `FEST_TAGE` Tagen Verstöße stehen, gilt als feste Anlage und bleibt in allen Jahren draußen
   (B9 Mainzer Straße, Straßentunnel Bad Godesberg, Reichsstraße, Konrad-Adenauer-Damm,
-  Ludwig-Erhard-Allee). 2016–2024 sind das 57 Tatort-Jahre mit über 300 Tagen; die mobile
-  Messung mit den meisten Tagen liegt bei 221 (An der Josefshöhe 2023, vermutlich ein Anhänger)
-  – die Grenze liegt in der Lücke.
+  Ludwig-Erhard-Allee). 2016–2024 sind das 62 Tatort-Jahre mit über 300 Tagen, die übrigen
+  Tatorte kommen auf höchstens 227 Tage (Friedrich-Ebert-Allee, Lichtmast 16, 2018) – die
+  Grenze liegt in der Lücke.
 - Eine **Kontrolle** ist hier: alle Verstöße eines Tatorts an einem Tag. Gemessene Fahrzeuge,
   Tempolimit und die Höhe der Überschreitung nennt Bonn nicht (sie steckt nur in der
   Tatbestandsnummer) – `messungen`, `tempo` und die Stufen bleiben leer.
 - **Tatort:** „Bonn, <Straße> Höhe Haus-Nr. 15  Fahrtrichtung <Ziel>“, auch „Bonn - Mehlem, …“,
-  „… Höhe Lichtmast Nr. 86 …“ (keine Hausnummer), an der Autobahn „Bonn, A 555; km 018,000;
-  RF Köln“ (nur Kilometer – nicht verortbar). Gelesen mit `adressen.adresse`.
+  „Bonn Beuel, …“, „53179, Bonn, …“, „… Höhe Lichtmast Nr. 86 …“ (keine Hausnummer), „… Höhe
+  Überführung Meckenheimer Straße …“ (Kreuzung), an der Autobahn „Bonn, A 555; km 018,000;
+  RF Köln“ (nur Kilometer – nicht verortbar). Gelesen mit `adressen.adresse`. In manchen Zeilen
+  steht „"“ für „ö“ („H"he“) – das wird vor allem anderen zurückgesetzt.
 
 Die Id einer Kontrolle: `N<Datum>-<Kurzzeichen des Tatorts>` (die ersten 8 Zeichen des
 SHA-1 des Tatort-Texts), z. B. `N2023-05-02-1a2b3c4d`.
@@ -37,8 +39,13 @@ from kontrollen.schema import in_schema
 FEST_TAGE = 250  # Tage mit Verstößen in einem Jahr, ab denen ein Tatort eine feste Anlage ist
 
 
+# In manchen Zeilen steht „"“ für „ö“ („H"he“, „K"lnstraße“, „R"merstraße“) – alle Jahre
+# 2016–2024; Anführungszeichen um Namen („geg. "Auf den Rötschen"“) stehen nie zwischen Buchstaben
+_OE = re.compile(r'(?<=[A-Za-zÄÖÜäöüß])"(?=[a-zäöüß])')
+
+
 def _text(s: str) -> str:
-    return " ".join(str(s or "").split())
+    return _OE.sub("ö", " ".join(str(s or "").split()))
 
 
 def lies_datei(pfad: Path) -> pd.DataFrame:
@@ -86,6 +93,7 @@ _REF_VORN = re.compile(
     r"^[BLK]\s?\d{1,4}[a-z]?\s+(?!(?:Höhe|Hoehe|Ecke|Einm|Kreuzung|gg|geg|ggü)\b)"
     r"(?=[A-ZÄÖÜ][\wäöüß.-]*(?:\s+[A-ZÄÖÜ][\wäöüß.-]*)?" + _ENDUNG + r")"
 )
+_BAUWERK = re.compile(r"^(?:Bahn)?(?:Ü|Ue|U)\w*führung\s+(?:der\s+|zur\s+)?(?=[A-ZÄÖÜ])")
 _REF_KLAMMER = re.compile(r"\s*\(\s*(?:[BLK]|BAB|A)\s?\d{1,4}[a-z]?\s*\)")  # „Straße (L 16)“
 
 
@@ -139,6 +147,8 @@ def tatort(text: str) -> dict:
         zweite = rest.split(",", 1)[1].strip()
         if _STRASSE.match(zweite):
             quer = zweite
+    if quer:  # „Höhe Überführung Meckenheimer Straße“: wo die beiden Straßen sich kreuzen
+        quer = _BAUWERK.sub("", quer) or None
     if quer:
         quer = _BAB.sub(r"A \1", quer)
     out.update(

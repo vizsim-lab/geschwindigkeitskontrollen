@@ -118,13 +118,20 @@ def test_oberderdingen_beide_richtungen(monkeypatch, tmp_path):
         ["15.01.2026", "Oberderdingen,\nFlehinger Straße 27,\nFR Brettener Straße", "30", "1762", "47"],
         ["10.01.2024", "Oberderdingen,\nBrettener Straße ggü.\nHausnummer 15,\nFR Flehinger Straße", "30", "223", "6"],
         ["10.01.2024", "Oberderdingen,\nBrettener Straße ggü.\nHausnummer 15,\nFR Am Stadion", "30", "1.324", "15"],
+        # gleicher Ort, Tag und Fahrzeuge, andere Beanstandungen: zwei Kontrollen, eigene Ids
+        ["22.10.2025", "Oberderdingen, Flehingen,\nSteinbrunnenstraße in Höhe\nKindergarten,\nFR Franz-von-Sickingen-Straße", "10", "22", "0"],
+        ["22.10.2025", "Oberderdingen, Flehingen,\nSteinbrunnenstraße in Höhe\nKindergarten,\nFR Franz-von-Sickingen-Straße", "10", "22", "2"],
     ]  # fmt: skip
     monkeypatch.setattr(dokumente, "tabellen", lambda pfad: tabelle)
     f = tmp_path / "q.pdf"
     f.write_bytes(b"%PDF-")
     df, b = oberderdingen.lies_alle([f])
-    assert len(df) == 3 and b["beide_richtungen"] == 1
+    assert len(df) == 5 and b["beide_richtungen"] == 1 and df["id"].is_unique
     beide = df[df["richtung_roh"] == "beide"].iloc[0]
     assert (beide["messungen"], beide["ueberschreitungen"]) == (1762, 55)
-    assert sorted(df["messungen"].tolist()) == [223, 1324, 1762]
+    assert sorted(df["messungen"].tolist()) == [22, 22, 223, 1324, 1762]
+    kita = df[df["messungen"] == 22].sort_values("id")
+    assert kita["ueberschreitungen"].tolist() == [0, 2]
+    assert kita["id"].iloc[1] == kita["id"].iloc[0] + "-2"
+    assert set(kita["richtung_roh"]) == {"Franz-von-Sickingen-Straße"}
     assert df["alle_gezaehlt"].all() and df["beginn"].isna().all()

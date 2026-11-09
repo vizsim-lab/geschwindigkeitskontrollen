@@ -104,7 +104,7 @@ staedte:
       label: "Geschwindigkeitsüberwachung der Stadt Köln"
       bereitsteller: "Stadt Köln"
       kurz: "Stadt Köln"
-      titel: "Geschwindigkeitsüberwachung Köln (Open Data, Einzelverstöße und Standorte)"
+      titel: "Geschwindigkeitsüberwachung Köln – Open Data, Einzelverstöße und Standorte"
       herkunft_url: "https://www.offenedaten-koeln.de/"
       hinweis: >-
         Nur die mobile Überwachung der Stadt (Dienststelle S-02; 2017 ohne Dienststelle und
@@ -144,14 +144,18 @@ staedte:
       label: "Geschwindigkeitsverstöße der Bundesstadt Bonn"
       bereitsteller: "Bundesstadt Bonn"
       kurz: "Stadt Bonn"
-      titel: "Bußgelder fließender Verkehr (Open Data, Einzelverstöße)"
+      titel: "Bußgelder fließender Verkehr – Open Data, Einzelverstöße"
       herkunft_url: "https://opendata.bonn.de/"
+      # GovData nennt keine Lizenz; Open.NRW führt die Jahresdateien als „Creative Commons CC
+      # Zero License (cc-zero)“, z. B. https://ckan.open.nrw/dataset/bussgelder-fliessender-verkehr-2024-bn
+      # und …-2020-bn (abgerufen 11/2026)
+      lizenz: "Creative Commons CC Zero (CC0)"
       hinweis: >-
         Tatorte mit Verstößen an mehr als 250 Tagen eines Jahres gelten als feste Anlagen und
         bleiben draußen (B9 Mainzer Straße, Straßentunnel Bad Godesberg, Reichsstraße,
         Konrad-Adenauer-Damm, Ludwig-Erhard-Allee). Tempolimit und Höhe der Überschreitung nennt
         Bonn nicht; an der Autobahn steht meist nur der Kilometer – solche Kontrollen haben keine
-        Lage. 2018 ist zurzeit nicht abrufbar.
+        Lage.
       # Jahresdateien „Bußgelder fließender Verkehr“ (je Verstoß Tag, Uhrzeit, Tatort,
       # Tatbestandsnummer, Bußgeld) und die Messstellen der mobilen Überwachung. Gefunden über
       # GovData (CKAN), das die Bonner Datensätze spiegelt; dazu das Stadtportal (DKAN).
@@ -183,15 +187,16 @@ staedte:
     start: { lon: 10.3122, lat: 50.0496, zoom: 12.2 }
     kontrollen:
       label: "Geschwindigkeitsmessungen in der Gemeinde Schonungen"
-      bereitsteller: "Gemeinde Schonungen (Zweckverband Kommunale Verkehrsüberwachung Südostbayern)"
+      bereitsteller: "Gemeinde Schonungen"
       kurz: "Gemeinde Schonungen"
-      titel: "Verkehrsstatistik – Geschwindigkeitsmessungen (Monatsberichte, PDF)"
+      titel: "Verkehrsstatistik – Monatsberichte der kommunalen Verkehrsüberwachung (PDF)"
       herkunft_url: "https://schonungen.de/"
-      lizenz_hinweis: "Monatsberichte der Gemeinde, ohne Lizenzangabe"
+      lizenz_hinweis: "ohne Lizenzangabe"
       hinweis: >-
-        Je Messung Messstelle, Tag, Beginn und Ende, Tempolimit, gemessene Fahrzeuge und Verstöße
-        nach Klassen (bis/über 20 km/h). Veröffentlicht sind die Monate seit August 2022 und der
-        Mai 2020, nicht lückenlos.
+        Gemessen hat der Zweckverband Kommunale Verkehrsüberwachung Südostbayern. Je Messung
+        Messstelle, Tag, Beginn und Ende, Tempolimit, gemessene Fahrzeuge und Verstöße nach
+        Klassen (bis/über 20 km/h). Veröffentlicht sind die Monate seit August 2022 und der Mai
+        2020, nicht lückenlos.
       # Die Gemeinde stellt die Berichte des Zweckverbands in ihre WordPress-Mediathek
       # (`wp-json/wp/v2/media`); einige Monate nur als Word-Datei.
       kataloge:
@@ -217,16 +222,18 @@ staedte:
     start: { lon: 8.8053, lat: 49.0656, zoom: 12.6 }
     kontrollen:
       label: "Kommunale Geschwindigkeitsmessungen in Oberderdingen"
-      bereitsteller: "Stadt Oberderdingen (Messungen: Landratsamt Karlsruhe)"
+      bereitsteller: "Stadt Oberderdingen"
       kurz: "Stadt Oberderdingen"
-      titel: "Kommunale Geschwindigkeitsmessungen durch das Landratsamt (Quartalstabellen, PDF)"
+      titel: "Kommunale Geschwindigkeitsmessungen durch das Landratsamt – Quartalstabellen (PDF)"
       herkunft_url: "https://www.oberderdingen.de/"
-      lizenz_hinweis: "Tabellen der Stadt, ohne Lizenzangabe"
+      lizenz_hinweis: "ohne Lizenzangabe"
       hinweis: >-
-        Je Messung Tag, Messstelle, Tempolimit, gemessene Fahrzeuge und Beanstandungen; Uhrzeit und
+        Gemessen hat das Landratsamt Karlsruhe. Je Messung Tag, Messstelle, Tempolimit, gemessene Fahrzeuge und Beanstandungen; Uhrzeit und
         Dauer fehlen. Gefunden sind drei Quartale (1/2024, 4/2025, 1/2026). Zählt das Gerät beide
         Richtungen zusammen (dieselbe Zahl gemessener Fahrzeuge in zwei Zeilen), ist das eine
-        Kontrolle.
+        Kontrolle. Bei mehrtägigen Messungen steht mitunter an jedem Tag dieselbe Zahl
+        (Flehinger Straße 27 im Januar 2026: 3.524, an den angebrochenen Tagen die Hälfte) –
+        vermutlich ein Tagesschnitt; der Anteil stimmt dann nur über alle Tage zusammen.
       # Die Tabellen liegen als PDF im CMS der Stadt („resources/ecics_<Nr>.pdf“) ohne
       # Übersichtsseite, die sich abfragen ließe – darum eine feste Liste (gefunden über eine
       # Websuche, Stand 11/2026). Neue Quartale hier eintragen.
@@ -391,8 +398,7 @@ datenlage:
       Gemessene Fahrzeuge, Tempolimit und die Höhe der Überschreitung fehlen (sie steckt nur in
       der Tatbestandsnummer). Feste und mobile Messungen sind nicht getrennt: Tatorte mit
       Verstößen an mehr als 250 Tagen eines Jahres gelten in der Karte als feste Anlagen und
-      bleiben draußen. Eine Kontrolle ist alle Verstöße eines Tatorts an einem Tag; 2018 ist
-      zurzeit nicht abrufbar.
+      bleiben draußen. Eine Kontrolle ist alle Verstöße eines Tatorts an einem Tag.
     empfehlung: >-
       Für den Anteil zu schneller Fahrzeuge die Zahl aller gemessenen Fahrzeuge je Messeinsatz
       bei der Stadt anfragen.
