@@ -40,3 +40,16 @@ def test_fehlende_spalte(tmp_path):
     p.write_text("a,b\n1,2\n", encoding="utf-8")
     with pytest.raises(ValueError, match="Spalten fehlen"):
         list(tabellen.stuecke(p, ["c"]))
+
+
+def test_zeilen_ohne_kopf_und_ungleich_lang(tmp_path):
+    f = tmp_path / "s02.csv"
+    f.write_bytes(
+        "0101;0;050;AA   Riehl ;Amsterdamer Str. 80-86;\r\n\r\n0102;6;010;Brück\r\n".encode(
+            "cp1252"
+        )
+    )
+    assert tabellen.zeilen(f) == [
+        ["0101", "0", "050", "AA   Riehl ", "Amsterdamer Str. 80-86", ""],
+        ["0102", "6", "010", "Brück"],
+    ]

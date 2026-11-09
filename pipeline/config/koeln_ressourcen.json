@@ -1,0 +1,264 @@
+{
+ "katalog": "https://www.offenedaten-koeln.de/api/1/",
+ "datensaetze": [
+  {
+   "name": "geschwindigkeitsueberwachung-koeln-2025",
+   "titel": "Geschwindigkeitsüberwachung Köln 2025",
+   "organisation": "Stadt Köln",
+   "lizenz": "Datenlizenz Deutschland – Zero – Version 2.0",
+   "lizenz_id": "dl-zero-de/2.0",
+   "lizenz_url": "http://dcat-ap.de/def/licenses/dl-zero-de/2.0",
+   "url": "https://www.offenedaten-koeln.de/dataset/geschwindigkeitsueberwachung-koeln-2025"
+  },
+  {
+   "name": "geschwindigkeitsueberwachung-koeln-2023",
+   "titel": "Geschwindigkeitsüberwachung Köln 2023",
+   "organisation": "Stadt Köln",
+   "lizenz": "Datenlizenz Deutschland – Zero – Version 2.0",
+   "lizenz_id": "dl-zero-de/2.0",
+   "lizenz_url": "http://dcat-ap.de/def/licenses/dl-zero-de/2.0",
+   "url": "https://www.offenedaten-koeln.de/dataset/geschwindigkeitsueberwachung-koeln-2023"
+  },
+  {
+   "name": "geschwindigkeitsueberwachung-koeln-2024",
+   "titel": "Geschwindigkeitsüberwachung Köln 2024",
+   "organisation": "Stadt Köln",
+   "lizenz": "Datenlizenz Deutschland – Zero – Version 2.0",
+   "lizenz_id": "dl-zero-de/2.0",
+   "lizenz_url": "http://dcat-ap.de/def/licenses/dl-zero-de/2.0",
+   "url": "https://www.offenedaten-koeln.de/dataset/geschwindigkeitsueberwachung-koeln-2024"
+  },
+  {
+   "name": "geschwindigkeitsueberwachung-koeln-2017-bis-2022",
+   "titel": "Geschwindigkeitsüberwachung Köln 2017 bis 2022",
+   "organisation": "Stadt Köln",
+   "lizenz": "Datenlizenz Deutschland – Zero – Version 2.0",
+   "lizenz_id": "dl-zero-de/2.0",
+   "lizenz_url": "http://dcat-ap.de/def/licenses/dl-zero-de/2.0",
+   "url": "https://www.offenedaten-koeln.de/dataset/geschwindigkeitsueberwachung-koeln-2017-bis-2022"
+  }
+ ],
+ "fehler": [],
+ "dateien": [
+  {
+   "id": "https://www.offenedaten-koeln.de/sites/default/files/distribution/Geschwindigkeit%25C3%25BCberwachung_Koeln_Gesamt_2017-2022_2.csv",
+   "name": "Geschwindigkeitsüberwachung Köln ab 2017 bis 2022",
+   "format": "CSV",
+   "url": "https://www.offenedaten-koeln.de/sites/default/files/distribution/Geschwindigkeit%25C3%25BCberwachung_Koeln_Gesamt_2017-2022_2.csv",
+   "geaendert": "2025-09-24T10:15:59+00:00",
+   "datensatz": "geschwindigkeitsueberwachung-koeln-2017-bis-2022",
+   "datei": "geschwindigkeitsueberwachung-koeln-2017-bis-2022__Geschwindigkeitsüberwachung_Köln_ab_2017_bis_2022.csv",
+   "sha256": "b39da0bf38245f939dfb772524e4285571bcdb45e72c0af785324b7ddf2d9964"
+  },
+  {
+   "id": "https://www.offenedaten-koeln.de/sites/default/files/distribution/k-loc-03_0.csv",
+   "name": "Standorttabelle k03",
+   "format": "CSV",
+   "url": "https://www.offenedaten-koeln.de/sites/default/files/distribution/k-loc-03_0.csv",
+   "geaendert": "2023-07-19T12:11:31+00:00",
+   "datensatz": "geschwindigkeitsueberwachung-koeln-2017-bis-2022",
+   "datei": "geschwindigkeitsueberwachung-koeln-2017-bis-2022__Standorttabelle_k03.csv",
+   "sha256": "ecc7397badb81360b6f19e49e18e61a1ba438bbd92e717cb634265c8a10ad713"
+  },
+  {
+   "id": "https://www.offenedaten-koeln.de/sites/default/files/distribution/k-loc-04_0.csv",
+   "name": "Standorttabelle k04",
+   "format": "CSV",
+   "url": "https://www.offenedaten-koeln.de/sites/default/files/distribution/k-loc-04_0.csv",
+   "geaendert": "2023-07-19T12:13:40+00:00",
+   "datensatz": "geschwindigkeitsueberwachung-koeln-2017-bis-2022",
+   "datei": "geschwindigkeitsueberwachung-koeln-2017-bis-2022__Standorttabelle_k04.csv",
+   "sha256": "ec9655bffe48de0d7808068b156da8b2d4d74db900c19b150678d2b1f0e5549e"
+  },
+  {
+   "id": "https://www.offenedaten-koeln.de/sites/default/files/distribution/s-loc-01_3.csv",
+   "name": "Standorttabelle s01",
+   "format": "CSV",
+   "url": "https://www.offenedaten-koeln.de/sites/default/files/distribution/s-loc-01_3.csv",
+   "geaendert": "2025-09-24T10:15:34+00:00",
+   "datensatz": "geschwindigkeitsueberwachung-koeln-2017-bis-2022",
+   "datei": "geschwindigkeitsueberwachung-koeln-2017-bis-2022__Standorttabelle_s01.csv",
+   "sha256": "e0e6ed015993ffdd674d14b454f295c9a0bc87fb84665b6db67d45ac199c3295"
+  },
+  {
+   "id": "https://www.offenedaten-koeln.de/sites/default/files/distribution/s-loc-02_2.csv",
+   "name": "Standorttabelle s02",
+   "format": "CSV",
+   "url": "https://www.offenedaten-koeln.de/sites/default/files/distribution/s-loc-02_2.csv",
+   "geaendert": "2023-07-19T11:47:24+00:00",
+   "datensatz": "geschwindigkeitsueberwachung-koeln-2017-bis-2022",
+   "datei": "geschwindigkeitsueberwachung-koeln-2017-bis-2022__Standorttabelle_s02.csv",
+   "sha256": "c99fdc1478fbd61373b79f94675985da27a67c752eb8315c32ce1924945a5435"
+  },
+  {
+   "id": "https://www.offenedaten-koeln.de/sites/default/files/distribution/s-loc-04_0.csv",
+   "name": "Standorttabelle s04",
+   "format": "CSV",
+   "url": "https://www.offenedaten-koeln.de/sites/default/files/distribution/s-loc-04_0.csv",
+   "geaendert": "2023-07-19T12:00:48+00:00",
+   "datensatz": "geschwindigkeitsueberwachung-koeln-2017-bis-2022",
+   "datei": "geschwindigkeitsueberwachung-koeln-2017-bis-2022__Standorttabelle_s04.csv",
+   "sha256": "df546e26bc0194890169357df19b39b0ec7a8cba04d3d5a317a7fdba5f2c4ba4"
+  },
+  {
+   "id": "https://www.offenedaten-koeln.de/sites/default/files/distribution/s-loc-11_0.csv",
+   "name": "Standorttabelle s11",
+   "format": "CSV",
+   "url": "https://www.offenedaten-koeln.de/sites/default/files/distribution/s-loc-11_0.csv",
+   "geaendert": "2023-07-19T12:08:35+00:00",
+   "datensatz": "geschwindigkeitsueberwachung-koeln-2017-bis-2022",
+   "datei": "geschwindigkeitsueberwachung-koeln-2017-bis-2022__Standorttabelle_s11.csv",
+   "sha256": "3419512e7b527a44072a1c587f3fef1f481478f2dff39eb2bb951800468b8a83"
+  },
+  {
+   "id": "https://www.offenedaten-koeln.de/sites/default/files/distribution/Geschwindigkeit%25C3%25BCberwachung_Koeln_Gesamt_2023.csv",
+   "name": "Geschwindigkeitsüberwachung Köln ab 2023",
+   "format": "CSV",
+   "url": "https://www.offenedaten-koeln.de/sites/default/files/distribution/Geschwindigkeit%25C3%25BCberwachung_Koeln_Gesamt_2023.csv",
+   "geaendert": "2025-04-30T12:17:25+00:00",
+   "datensatz": "geschwindigkeitsueberwachung-koeln-2023",
+   "datei": "geschwindigkeitsueberwachung-koeln-2023__Geschwindigkeitsüberwachung_Köln_ab_2023.csv",
+   "sha256": "4bdccac7a4f1e4ad8c487c7b1e1728027cc9f82bf7e32e7c9a51a01ccce94171"
+  },
+  {
+   "id": "https://www.offenedaten-koeln.de/sites/default/files/distribution/sloc-01_2.csv",
+   "name": "Standorttabelle s01",
+   "format": "CSV",
+   "url": "https://www.offenedaten-koeln.de/sites/default/files/distribution/sloc-01_2.csv",
+   "geaendert": "2025-04-30T12:12:25+00:00",
+   "datensatz": "geschwindigkeitsueberwachung-koeln-2023",
+   "datei": "geschwindigkeitsueberwachung-koeln-2023__Standorttabelle_s01.csv",
+   "sha256": "80d1f2c38e4ee46e02db84917d04dae75970784a1bf9c93c78ad20254486a823"
+  },
+  {
+   "id": "https://www.offenedaten-koeln.de/sites/default/files/distribution/sloc-02.csv",
+   "name": "Standorttabelle s02",
+   "format": "CSV",
+   "url": "https://www.offenedaten-koeln.de/sites/default/files/distribution/sloc-02.csv",
+   "geaendert": "2025-04-30T12:13:25+00:00",
+   "datensatz": "geschwindigkeitsueberwachung-koeln-2023",
+   "datei": "geschwindigkeitsueberwachung-koeln-2023__Standorttabelle_s02.csv",
+   "sha256": "c115e92e50b8647ace3c6715617f30d66f1abeb606c1aae923b187e4c3d731c4"
+  },
+  {
+   "id": "https://www.offenedaten-koeln.de/sites/default/files/distribution/sloc-04.csv",
+   "name": "Standorttabelle s04",
+   "format": "CSV",
+   "url": "https://www.offenedaten-koeln.de/sites/default/files/distribution/sloc-04.csv",
+   "geaendert": "2025-04-30T12:14:20+00:00",
+   "datensatz": "geschwindigkeitsueberwachung-koeln-2023",
+   "datei": "geschwindigkeitsueberwachung-koeln-2023__Standorttabelle_s04.csv",
+   "sha256": "b4c0c91325c6e2dafb52cb173311b555e7462e08a70da6b02bb7b5e05541571e"
+  },
+  {
+   "id": "https://www.offenedaten-koeln.de/sites/default/files/distribution/sloc-11.csv",
+   "name": "Standorttabelle s11",
+   "format": "CSV",
+   "url": "https://www.offenedaten-koeln.de/sites/default/files/distribution/sloc-11.csv",
+   "geaendert": "2025-04-30T12:15:10+00:00",
+   "datensatz": "geschwindigkeitsueberwachung-koeln-2023",
+   "datei": "geschwindigkeitsueberwachung-koeln-2023__Standorttabelle_s11.csv",
+   "sha256": "8c9bfc925266d15c83805d8112c485b99f2f4a2c6f433d443c00f95d581337fe"
+  },
+  {
+   "id": "https://www.offenedaten-koeln.de/sites/default/files/uploaded_resources/Geschwindigkeitsueberwachung_Koeln_Gesamt_2024.csv",
+   "name": "Geschwindigkeitsüberwachung Köln ab 2024",
+   "format": "CSV",
+   "url": "https://www.offenedaten-koeln.de/sites/default/files/uploaded_resources/Geschwindigkeitsueberwachung_Koeln_Gesamt_2024.csv",
+   "geaendert": "2026-04-30T10:17:06+00:00",
+   "datensatz": "geschwindigkeitsueberwachung-koeln-2024",
+   "datei": "geschwindigkeitsueberwachung-koeln-2024__Geschwindigkeitsüberwachung_Köln_ab_2024.csv",
+   "sha256": "3aa31c2d92f8c7b5a1d3a8775a1f6f3edb1d822202c7014fe6e620c1e33dee6e"
+  },
+  {
+   "id": "https://www.offenedaten-koeln.de/sites/default/files/uploaded_resources/sloc-01.csv",
+   "name": "Standorttabelle s01",
+   "format": "CSV",
+   "url": "https://www.offenedaten-koeln.de/sites/default/files/uploaded_resources/sloc-01.csv",
+   "geaendert": "2026-04-30T10:19:51+00:00",
+   "datensatz": "geschwindigkeitsueberwachung-koeln-2024",
+   "datei": "geschwindigkeitsueberwachung-koeln-2024__Standorttabelle_s01.csv",
+   "sha256": "fc360cf8a32edce74d7d1c33ff0dd7ac93c8cd75155bc5371175434e72569b4d"
+  },
+  {
+   "id": "https://www.offenedaten-koeln.de/sites/default/files/uploaded_resources/sloc-02.csv",
+   "name": "Standorttabelle s02",
+   "format": "CSV",
+   "url": "https://www.offenedaten-koeln.de/sites/default/files/uploaded_resources/sloc-02.csv",
+   "geaendert": "2026-04-30T10:24:11+00:00",
+   "datensatz": "geschwindigkeitsueberwachung-koeln-2024",
+   "datei": "geschwindigkeitsueberwachung-koeln-2024__Standorttabelle_s02.csv",
+   "sha256": "f1ac91ea62fd4370b8631b9a9c09050e1d5c2fb33933b054f67f34ca27c308a2"
+  },
+  {
+   "id": "https://www.offenedaten-koeln.de/sites/default/files/uploaded_resources/sloc-04.csv",
+   "name": "Standorttabelle s04",
+   "format": "CSV",
+   "url": "https://www.offenedaten-koeln.de/sites/default/files/uploaded_resources/sloc-04.csv",
+   "geaendert": "2026-04-30T10:26:34+00:00",
+   "datensatz": "geschwindigkeitsueberwachung-koeln-2024",
+   "datei": "geschwindigkeitsueberwachung-koeln-2024__Standorttabelle_s04.csv",
+   "sha256": "e5f7a5c942426485e46f7c01354c213332abbcdd52ebfe33f4e9bec970fb51e8"
+  },
+  {
+   "id": "https://www.offenedaten-koeln.de/sites/default/files/uploaded_resources/sloc-11.csv",
+   "name": "Standorttabelle s11",
+   "format": "CSV",
+   "url": "https://www.offenedaten-koeln.de/sites/default/files/uploaded_resources/sloc-11.csv",
+   "geaendert": "2026-04-30T10:28:15+00:00",
+   "datensatz": "geschwindigkeitsueberwachung-koeln-2024",
+   "datei": "geschwindigkeitsueberwachung-koeln-2024__Standorttabelle_s11.csv",
+   "sha256": "b08f20caa0aad6faa16c3a5099deb206aae5c6b02121fcd49e046c43a189102d"
+  },
+  {
+   "id": "https://www.offenedaten-koeln.de/sites/default/files/uploaded_resources/Geschwindigkeitsueberwachung_Koeln_Gesamt_2025.csv",
+   "name": "Geschwindigkeitsüberwachung Köln ab 2025",
+   "format": "CSV",
+   "url": "https://www.offenedaten-koeln.de/sites/default/files/uploaded_resources/Geschwindigkeitsueberwachung_Koeln_Gesamt_2025.csv",
+   "geaendert": "2026-04-30T11:19:22+00:00",
+   "datensatz": "geschwindigkeitsueberwachung-koeln-2025",
+   "datei": "geschwindigkeitsueberwachung-koeln-2025__Geschwindigkeitsüberwachung_Köln_ab_2025.csv",
+   "sha256": "8718ae4674907f8a44a8d5234595dfd752371e077be77efe0d99de92b505557c"
+  },
+  {
+   "id": "https://www.offenedaten-koeln.de/sites/default/files/uploaded_resources/sloc-01_0.csv",
+   "name": "Standorttabelle s01",
+   "format": "CSV",
+   "url": "https://www.offenedaten-koeln.de/sites/default/files/uploaded_resources/sloc-01_0.csv",
+   "geaendert": "2026-04-30T11:21:29+00:00",
+   "datensatz": "geschwindigkeitsueberwachung-koeln-2025",
+   "datei": "geschwindigkeitsueberwachung-koeln-2025__Standorttabelle_s01.csv",
+   "sha256": "fc360cf8a32edce74d7d1c33ff0dd7ac93c8cd75155bc5371175434e72569b4d"
+  },
+  {
+   "id": "https://www.offenedaten-koeln.de/sites/default/files/uploaded_resources/sloc-02_0.csv",
+   "name": "Standorttabelle s02",
+   "format": "CSV",
+   "url": "https://www.offenedaten-koeln.de/sites/default/files/uploaded_resources/sloc-02_0.csv",
+   "geaendert": "2026-04-30T11:23:16+00:00",
+   "datensatz": "geschwindigkeitsueberwachung-koeln-2025",
+   "datei": "geschwindigkeitsueberwachung-koeln-2025__Standorttabelle_s02.csv",
+   "sha256": "f1ac91ea62fd4370b8631b9a9c09050e1d5c2fb33933b054f67f34ca27c308a2"
+  },
+  {
+   "id": "https://www.offenedaten-koeln.de/sites/default/files/uploaded_resources/sloc-04_0.csv",
+   "name": "Standorttabelle s04",
+   "format": "CSV",
+   "url": "https://www.offenedaten-koeln.de/sites/default/files/uploaded_resources/sloc-04_0.csv",
+   "geaendert": "2026-04-30T11:24:29+00:00",
+   "datensatz": "geschwindigkeitsueberwachung-koeln-2025",
+   "datei": "geschwindigkeitsueberwachung-koeln-2025__Standorttabelle_s04.csv",
+   "sha256": "e5f7a5c942426485e46f7c01354c213332abbcdd52ebfe33f4e9bec970fb51e8"
+  },
+  {
+   "id": "https://www.offenedaten-koeln.de/sites/default/files/uploaded_resources/sloc-11_0.csv",
+   "name": "Standorttabelle s11",
+   "format": "CSV",
+   "url": "https://www.offenedaten-koeln.de/sites/default/files/uploaded_resources/sloc-11_0.csv",
+   "geaendert": "2026-04-30T11:25:50+00:00",
+   "datensatz": "geschwindigkeitsueberwachung-koeln-2025",
+   "datei": "geschwindigkeitsueberwachung-koeln-2025__Standorttabelle_s11.csv",
+   "sha256": "b08f20caa0aad6faa16c3a5099deb206aae5c6b02121fcd49e046c43a189102d"
+  }
+ ]
+}

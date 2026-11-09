@@ -1,0 +1,5 @@
+jahr;monat;vorfallsdatum ;vorfallsuhrzeit;kennz;geschwindigkeit ;ueberschreitung ;fahrzeugart ;dienststelle ;standort
+2024;1;010124        ;45052;K-;039             ;006             ;04a         ;S-01         ;0001
+2024;1;020124        ;133638;K-;043             ;010             ;04a         ;S-02         ;0102
+2024;1;020124        ;133645;K-;044             ;011             ;04a         ;S-02         ;0102
+2024;1;020124        ;133700;K-;064             ;031             ;06c         ;S-02         ;0102

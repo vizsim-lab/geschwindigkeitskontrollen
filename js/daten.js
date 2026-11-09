@@ -107,7 +107,7 @@ export function passt(k, filter, daten) {
 }
 
 function leer() {
-  return { n: 0, mess: 0, ueber: 0, messAlle: 0, ueberAlle: 0, s1: 0, s2: 0, fv: 0, fvBekannt: 0, minuten: 0, ueberMitDauer: 0, tagMin: Infinity, tagMax: -Infinity };
+  return { n: 0, mess: 0, messBekannt: 0, ueber: 0, messAlle: 0, ueberAlle: 0, s1: 0, s2: 0, fv: 0, fvBekannt: 0, minuten: 0, ueberMitDauer: 0, tagMin: Infinity, tagMax: -Infinity };
 }
 
 /** Kontrollen -> je Messstelle die Summen (Map: Index der Messstelle -> Summen). */
@@ -119,6 +119,7 @@ export function verdichte(daten, filter) {
     if (!a) agg.set(k.stelle, (a = leer()));
     a.n += 1;
     a.mess += k.messungen ?? 0;
+    if (k.messungen != null) a.messBekannt += 1;
     a.ueber += k.ueber ?? 0;
     if (k.alle === 1 && k.messungen > 0) {
       a.messAlle += k.messungen;
@@ -165,17 +166,42 @@ export function wert(a, metrik) {
  * dazu (nicht) liefert – aus den Angaben im Manifest (`hat_dauer`, `hat_fahrverbote`,
  * `anteil_alle_gezaehlt`).
  */
+/** Gibt die Kennzahl in dieser Stadt gar keinen Wert (alles grau)? */
+export function ohneWert(metrik, stadt) {
+  if (!stadt) return false;
+  return (
+    (metrik === "stunde" && !stadt.hat_dauer) ||
+    (metrik === "fahrverbote" && stadt.hat_fahrverbote === false) ||
+    (metrik === "anteil" && stadt.anteil_alle_gezaehlt === 0)
+  );
+}
+
 export function metrikHinweis(metrik, stadt) {
   let h = METRIKEN[metrik].hinweis;
   if (!stadt) return h;
-  const fehlt = (metrik === "stunde" && !stadt.hat_dauer) || (metrik === "fahrverbote" && stadt.hat_fahrverbote === false);
-  if (fehlt) return `${h} ${stadt.label} nennt das nicht – hier grau.`;
+  if (metrik !== "anteil" && ohneWert(metrik, stadt)) return `${h} ${stadt.label} nennt das nicht – hier grau.`;
   if (metrik === "anteil") {
     const a = stadt.anteil_alle_gezaehlt;
     if (a === 0) h += ` ${stadt.label} nennt nur die Verstöße, nicht alle gemessenen Fahrzeuge – hier grau; „je Kontrolle“ geht.`;
     else if (a != null && a < 1) h += ` In ${stadt.label} sind bei ${zahl(100 - 100 * a)} % der Kontrollen nur die zu schnellen Fahrzeuge gezählt.`;
   }
   return h;
+}
+
+/** „Berlin“, „Berlin und Köln“, „Berlin, Köln und Bonn“. */
+function aufzaehlung(namen) {
+  return namen.length < 2 ? namen.join("") : `${namen.slice(0, -1).join(", ")} und ${namen[namen.length - 1]}`;
+}
+
+/** Hinweis am Filter „Tempolimit“ aus dem Manifest: welche Städte es nennen, welche nicht. */
+export function tempoHinweis(staedte) {
+  const mit = Object.values(staedte || {}).filter((s) => s.kontrollen > 0);
+  const ja = mit.filter((s) => s.hat_tempo).map((s) => s.label);
+  const nein = mit.filter((s) => !s.hat_tempo).map((s) => s.label);
+  if (!ja.length) return "Keine Stadt nennt das Tempolimit.";
+  const vorn = `${nein.length && ja.length === 1 ? "Nur " : ""}${aufzaehlung(ja)} ${ja.length === 1 ? "nennt" : "nennen"} das Tempolimit`;
+  if (!nein.length) return `${vorn}.`;
+  return `${vorn}; ${aufzaehlung(nein)} ${nein.length === 1 ? "steht" : "stehen"} unter „unbekannt“.`;
 }
 
 /** Farbklasse 0..4 (FARBEN), -1 für „kein Wert“. */

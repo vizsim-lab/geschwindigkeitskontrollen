@@ -139,10 +139,31 @@ test("Hinweis zur Kennzahl je Stadt aus dem Manifest", () => {
   assert.doesNotMatch(D.metrikHinweis("kontrollen", koeln), /grau/);
 });
 
+test("Hinweis am Tempolimit-Filter nennt, wer das Tempolimit liefert", () => {
+  const s = (label, hat_tempo, kontrollen = 10) => ({ label, hat_tempo, kontrollen });
+  assert.equal(D.tempoHinweis({ b: s("Berlin", true), a: s("Aachen", false) }), "Nur Berlin nennt das Tempolimit; Aachen steht unter „unbekannt“.");
+  assert.equal(
+    D.tempoHinweis({ b: s("Berlin", true), a: s("Aachen", false), k: s("Köln", true), x: s("Bonn", false, 0) }),
+    "Berlin und Köln nennen das Tempolimit; Aachen steht unter „unbekannt“."
+  );
+  assert.equal(D.tempoHinweis({ b: s("Berlin", true), k: s("Köln", true) }), "Berlin und Köln nennen das Tempolimit.");
+  assert.equal(D.tempoHinweis({ a: s("Aachen", false) }), "Keine Stadt nennt das Tempolimit.");
+});
+
 test("Kennzahl je Kontrolle: Überschreitungen durch Kontrollen, in jeder Stadt", () => {
   const a = { n: 4, ueber: 30, messAlle: 0, ueberAlle: 0, minuten: 0, ueberMitDauer: 0, fvBekannt: 0, fv: 0 };
   assert.equal(D.wert(a, "jekontrolle"), 7.5);
   assert.equal(D.klasse(7.5, "jekontrolle"), 1);
   assert.deepEqual(D.klassenText("jekontrolle"), ["unter 5", "5–10", "10–25", "25–60", "ab 60"]);
   assert.equal(P.lies("10/52/13&m=jekontrolle").metrik, "jekontrolle");
+});
+
+test("Kennzahl ohne Wert in einer Stadt: Köln hat keinen Anteil, Aachen keine Dauer", () => {
+  const koeln = { label: "Köln", hat_dauer: false, hat_fahrverbote: false, anteil_alle_gezaehlt: 0 };
+  const berlin = { label: "Berlin", hat_dauer: true, hat_fahrverbote: true, anteil_alle_gezaehlt: 0.66 };
+  assert.equal(D.ohneWert("anteil", koeln), true);
+  assert.equal(D.ohneWert("jekontrolle", koeln), false);
+  assert.equal(D.ohneWert("stunde", koeln), true);
+  assert.equal(D.ohneWert("anteil", berlin), false);
+  assert.equal(D.ohneWert("anteil", undefined), false);
 });

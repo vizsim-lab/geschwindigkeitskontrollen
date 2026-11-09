@@ -3,6 +3,7 @@
 import math
 
 import pytest
+import shapely
 from pyproj import Transformer
 
 from kontrollen import geocode
@@ -113,6 +114,17 @@ def test_autobahn(netz, gebiete):
 def test_bezirke_abgeschnitten(gebiete):
     assert gebiete.bezirke_aus(["Mit", "Pank"]) == ["Mitte", "Pankow"]
     assert gebiete.bezirke_aus(["X"]) == []
+
+
+def test_bezirk_vollstaendiger_name_vor_anfang():
+    # Köln: „Lind“ und „Weiden“ sind Stadtteile – und der Anfang von „Lindenthal“, „Weidenpesch“
+    f = shapely.box(0, 0, 1, 1)
+    g = geocode.Gebiete(
+        stadt=f, grenze=f.boundary, bezirke={n: f for n in ("Lind", "Lindenthal", "Lindweiler")}
+    )
+    assert g.bezirke_aus(["Lind"]) == ["Lind"]
+    assert g.bezirke_aus(["Linde"]) == ["Lindenthal"]
+    assert g.bezirke_aus(["Lin"]) == []  # mehrdeutig
 
 
 def test_bezirk_falsch_genannt_umgebung_hilft(netz, gebiete):

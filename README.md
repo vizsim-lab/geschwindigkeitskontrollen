@@ -1,11 +1,14 @@
 ![Status: Beta](https://img.shields.io/badge/Status-Beta-4338ca)
 ![License: AGPL-3.0-or-later](https://img.shields.io/badge/License-AGPL--3.0--or--later-blue)
 
-# Geschwindigkeitskontrollen (Berlin, Aachen)
+# Geschwindigkeitskontrollen (Berlin, Aachen, Köln)
 
 Wo wurde wie oft kontrolliert – und wie viele waren zu schnell? Die Karte zeigt **33.401
-temporäre Geschwindigkeitskontrollen der Polizei Berlin (Januar 2017 bis August 2020)** und
-**3.467 Kontrollen der Stadt Aachen (Juni 2020 bis September 2026)**, jede an ihrer Messstelle.
+temporäre Geschwindigkeitskontrollen der Polizei Berlin (Januar 2017 bis August 2020)**,
+**3.467 Kontrollen der Stadt Aachen (Juni 2020 bis September 2026)** und **44.633 mobile
+Kontrollen der Stadt Köln (2017 bis 2025)**, jede an ihrer Messstelle. Die Ebene **„Datenlage je
+Stadt“** zeigt für 23 weitere Städte und Kreise, ob es solche Daten gibt – veröffentlicht, auf
+Anfrage herausgegeben, nur als Summen oder abgelehnt –, mit einem Anfragetext für FragDenStaat.
 
 **Karte: <https://vizsim-lab.github.io/geschwindigkeitskontrollen/>** · Daten als
 [CSV](pipeline/data/karte/kontrollen.csv)
@@ -21,10 +24,11 @@ Verortung folgt dem Muster von
 ## Was die Karte zeigt
 
 Jeder Kreis ist eine **Messstelle** – Kontrollen an derselben Stelle derselben Straße
-(Berlin: 9.246, Aachen: 166). Die Farbe zeigt wahlweise
+(Berlin: 9.246, Aachen: 166, Köln: 1.367). Die Farbe zeigt wahlweise
 
-- **Anteil zu schnell** – Überschreitungen je gemessenem Fahrzeug,
+- **Anteil zu schnell** – Überschreitungen je gemessenem Fahrzeug (Berlin, Aachen),
 - **je Stunde** – Überschreitungen je Stunde Messdauer (nur Berlin),
+- **je Kontrolle** – Überschreitungen geteilt durch die Zahl der Kontrollen (überall),
 - **Fahrverbote** (nur Berlin) oder die Zahl der **Kontrollen**;
 
 die Größe zeigt, wie oft dort kontrolliert wurde. Ab Zoom 12 zeigt eine Linie den Abschnitt
@@ -41,22 +45,30 @@ Wichtig für die Einordnung:
 - **Aachen veröffentlicht je Jahr nur die letzten drei Monate.** Im Portal stehen darum Oktober
   bis Dezember 2020–2025 und Januar bis September 2026; der Juni 2020 stammt aus der alten
   Karte. Aachen nennt weder Uhrzeit noch Dauer, Tempolimit oder die Stelle auf der Straße.
+- **Köln nennt nur die Verstöße**, nicht alle gemessenen Fahrzeuge – einen Anteil gibt es dort
+  nicht. Eine „Kontrolle“ ist in Köln: alle Verstöße eines Standorts an einem Tag; Uhrzeit und
+  Dauer fehlen. In der Karte steht nur die **mobile Überwachung der Stadt** – die festen Anlagen
+  messen fast jeden Tag und bleiben draußen, die Kontrollen der Polizei fehlen in den Daten.
 - **Kontrollen sind keine Stichprobe.** Kontrolliert wird, wo die Behörden es für nötig halten;
   eine hohe Quote heißt nicht, dass dort mehr gerast wird als anderswo.
 
 ## Verortung
 
 Gesucht wird im OSM-Abzug von Geofabrik, in Berlin im genannten Bezirk (die Angabe ist oft
-abgeschnitten und wird über den Anfang gelesen), von genau nach grob:
+abgeschnitten und wird über den Anfang gelesen), in Köln im genannten Stadtteil, von genau nach
+grob:
 
-| Methode | Berlin | | Aachen |
-|---|--:|--:|--:|
-| **Hausnummer** – die OSM-Adresse auf der Straßenachse | 24.778 | 74,2 % | – |
-| **Abschnitt** – Mitte zwischen den Kreuzungen mit A und B | 3.901 | 11,7 % | – |
-| **Kreuzung** – mit der genannten Straße, Brücke, Platz | 3.593 | 10,8 % | – |
-| **Anschlussstelle** – Autobahn, Tunnel, Brücke | 861 | 2,6 % | – |
-| **nur Straße** – Punkt in der Mitte, Linie = ganze Straße (≈) | 162 | 0,5 % | 3.467 |
-| ohne Lage | 106 | 0,3 % | 0 |
+| Methode | Berlin | | Aachen | Köln | |
+|---|--:|--:|--:|--:|--:|
+| **Hausnummer** – die OSM-Adresse auf der Straßenachse | 24.778 | 74,2 % | – | 30.303 | 67,9 % |
+| **Abschnitt** – Mitte zwischen den Kreuzungen mit A und B | 3.901 | 11,7 % | – | – | |
+| **Kreuzung** – mit der genannten Straße, Brücke, Platz | 3.593 | 10,8 % | – | 555 | 1,2 % |
+| **Anschlussstelle** – Autobahn, Tunnel, Brücke | 861 | 2,6 % | – | – | |
+| **nur Straße** – Punkt in der Mitte, Linie = ganze Straße (≈) | 162 | 0,5 % | 3.467 | 13.552 | 30,4 % |
+| ohne Lage | 106 | 0,3 % | 0 | 223 | 0,5 % |
+
+In Köln bleibt es bei „nur Straße“ vor allem dort, wo die Stadt statt einer Hausnummer eine
+Laterne nennt („Laterne 85-77“) – Laternennummern gibt es in OSM nicht.
 
 **Gegenprobe** (GPS gibt es nicht): Wo Hausnummer *und* Querstraßen vorliegen – 23.459
 Kontrollen –, liegt der Hausnummer-Punkt bei 92,7 % höchstens 50 m neben dem Abschnitt
@@ -97,5 +109,11 @@ uv run pytest && uv run ruff check
   PDFs direkt. Der Bescheid nennt keine Lizenz.
 - **Aachen:** Stadt Aachen, [Open Data](https://offenedaten.aachen.de/) „Geschwindigkeitskontrollen
   der Stadt Aachen“, Datenlizenz Deutschland – Namensnennung – Version 2.0.
+- **Köln:** Stadt Köln, [Offene Daten Köln](https://www.offenedaten-koeln.de/)
+  „Geschwindigkeitsüberwachung Köln“ (Datensätze 2017–2022, 2023, 2024, 2025: je Verstoß eine
+  Zeile, dazu die Standorttabellen), Datenlizenz Deutschland – Zero – Version 2.0.
+- **Datenlage je Stadt:** Recherche mit Belegen je Eintrag in
+  [`pipeline/config/sources.yaml`](pipeline/config/sources.yaml), Übersicht in
+  [`docs/DATENLAGE.md`](docs/DATENLAGE.md); keine Rechtsberatung.
 - **Straßennetz und Adressen:** © OpenStreetMap-Mitwirkende, ODbL (Abzüge von Geofabrik).
 - **Code:** AGPL-3.0-or-later.

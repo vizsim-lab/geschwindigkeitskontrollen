@@ -1,8 +1,9 @@
 # CLAUDE.md — geschwindigkeitskontrollen
 
 Karte der Geschwindigkeitskontrollen in Berlin (Polizei Berlin, 2017 bis August 2020), Aachen
-(Stadt Aachen, Open Data seit 2020), Köln und Bonn (Open Data, Einzelverstöße), jede Kontrolle
-über OSM verortet – dazu die Ebene „Datenlage je Stadt“ (wo es solche Daten sonst gibt).
+(Stadt Aachen, Open Data seit 2020) und Köln (Stadt Köln, Open Data 2017–2025, Einzelverstöße
+der mobilen Überwachung), jede Kontrolle über OSM verortet – dazu die Ebene „Datenlage je Stadt“
+(wo es solche Daten sonst gibt; Bonn wird schon geladen, aber noch nicht gelesen).
 Überblick: `README.md`, Pipeline und Datenfluss: `pipeline/README.md`. Diese Datei = die Regeln,
 die in jeder Session gelten.
 
@@ -37,8 +38,8 @@ die in jeder Session gelten.
 - **MapLibre-Version** in `index.html` (samt `integrity`) und `package.json` nur gemeinsam
   ändern (`tests/web/vertrag.spec.js`).
 - **Keyless:** OpenFreeMap, Photon, OSM-/Esri-Kacheln – keine API-Keys, keine Secrets im Repo.
-- **CRS:** metrisch je Stadt (`crs_m` in sources.yaml: Berlin EPSG:25833, Aachen EPSG:25832),
-  Ausgabe immer EPSG:4326.
+- **CRS:** metrisch je Stadt (`crs_m` in sources.yaml: Berlin EPSG:25833, Aachen und Köln
+  EPSG:25832), Ausgabe immer EPSG:4326.
 - **Lieber keine Lage als eine falsche.** Neue Regeln in `geocode.py` nie ohne Test in
   `pipeline/tests/test_geocode.py` (Ausschnitt `tests/fixtures/mini.osm`); nach Änderungen die
   Gegenprobe in `geokodierung_validierung.json` vergleichen (Anteil `unter_50m` darf nicht
@@ -46,9 +47,10 @@ die in jeder Session gelten.
 - **Von Hand zugeordnete Orte** nur in `config/orte.yaml`, nur eindeutige, mit Kommentar.
 - **Wording:** „Kontrollen“ und „Messstellen“, nie „Blitzer“ als Tatsache. Ein Anteil gibt es
   nur aus Kontrollen, die alle Fahrzeuge zählen (`alle_gezaehlt`); Berlin hat viele, die nur
-  Überschreitungen zählen, Köln und Bonn nennen nur Verstöße – dann „kein Wert“, nie 100 %.
-  In Köln und Bonn ist eine „Kontrolle“ alle Verstöße einer Messstelle an einem Tag (so steht
-  es auch in der Karte). Fehlende Werte sind leer, nie 0.
+  Überschreitungen zählen, Köln (und Bonn, sobald es einen Leser gibt) nennt nur Verstöße –
+  dann „kein Wert“, nie 100 %. In Köln ist eine „Kontrolle“ alle Verstöße eines Standorts an
+  einem Tag (so steht es auch in der Karte); feste Anlagen gehören nicht dazu. Fehlende Werte
+  sind leer, nie 0.
   Hohe Quoten nicht als „hier wird am meisten gerast“ formulieren (Kontrollen sind keine
   Stichprobe).
 - **Lizenz:** AGPL-3.0-or-later; neue Quelldateien mit SPDX-Kopfzeile.

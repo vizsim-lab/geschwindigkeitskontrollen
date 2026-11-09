@@ -4,7 +4,16 @@
   "messstellen": "messstellen.json",
   "kontrollen": "kontrollen.json",
   "abschnitte": "abschnitte.geojson",
-  "csv": "kontrollen.csv"
+  "csv": "kontrollen.csv",
+  "datenlage": "datenlage.json"
+ },
+ "datenlage_stand": {
+  "in_karte": "in der Karte",
+  "offen": "offen, noch nicht in der Karte",
+  "geliefert": "auf Anfrage herausgegeben",
+  "kandidat": "erhoben – Anfrage aussichtsreich",
+  "teilweise": "nur Summen, Standorte oder Planungen offen",
+  "abgelehnt": "Anfrage gescheitert"
  },
  "staedte": {
   "berlin": {
@@ -31,6 +40,7 @@
     "über 20 km/h"
    ],
    "hat_dauer": true,
+   "hat_fahrverbote": true,
    "hat_tempo": true,
    "anteil_alle_gezaehlt": 0.669,
    "quelle": {
@@ -40,7 +50,8 @@
     "titel": "Auszug aus der Geschwindigkeitsdatenbank (IFG-Bescheid vom 09.12.2020, Anlagen 1–4)",
     "herkunft_url": "https://fragdenstaat.de/anfrage/geschwindigkeitskontrollen-von-kfz-in-berlin/",
     "lizenz": null,
-    "lizenz_hinweis": "Amtliche Auskunft nach IFG, ohne Lizenzangabe"
+    "lizenz_hinweis": "Amtliche Auskunft nach IFG, ohne Lizenzangabe",
+    "hinweis": null
    },
    "verortung": {
     "kontrollen": 33401,
@@ -104,10 +115,11 @@
     2026
    ],
    "stufen": [
-    "bis 15 km/h",
-    "über 15 km/h"
+    "bis 20 km/h",
+    "über 20 km/h"
    ],
    "hat_dauer": false,
+   "hat_fahrverbote": false,
    "hat_tempo": false,
    "anteil_alle_gezaehlt": 1.0,
    "quelle": {
@@ -118,6 +130,7 @@
     "herkunft_url": "https://offenedaten.aachen.de/",
     "lizenz": "Datenlizenz Deutschland - Namensnennung - Version 2.0",
     "lizenz_hinweis": null,
+    "hinweis": null,
     "datensaetze": [
      {
       "titel": "Geschwindigkeitskontrollen 2021",
@@ -176,6 +189,173 @@
      "Ortsangabe von Hand zugeordnet (config/orte.yaml)": 11
     }
    }
+  },
+  "koeln": {
+   "label": "Köln",
+   "start": {
+    "lon": 6.96,
+    "lat": 50.94,
+    "zoom": 11.2
+   },
+   "kontrollen": 44633,
+   "messstellen": 1367,
+   "zeitraum": [
+    "2017-01-02",
+    "2025-12-19"
+   ],
+   "jahre": [
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025
+   ],
+   "stufen": [
+    "bis 20 km/h",
+    "über 20 km/h"
+   ],
+   "hat_dauer": false,
+   "hat_fahrverbote": false,
+   "hat_tempo": true,
+   "anteil_alle_gezaehlt": 0.0,
+   "quelle": {
+    "label": "Geschwindigkeitsüberwachung der Stadt Köln",
+    "bereitsteller": "Stadt Köln",
+    "kurz": "Stadt Köln",
+    "titel": "Geschwindigkeitsüberwachung Köln (Open Data, Einzelverstöße und Standorte)",
+    "herkunft_url": "https://www.offenedaten-koeln.de/",
+    "lizenz": "Datenlizenz Deutschland – Zero – Version 2.0",
+    "lizenz_hinweis": null,
+    "hinweis": "Nur die mobile Überwachung der Stadt (Dienststelle S-02; 2017 ohne Dienststelle und 2018/19 bei S-01 nach dem Standort): die festen Anlagen (S-01, K-04) messen fast jeden Tag und bleiben draußen, ebenso Fälle an Kürzeln, die keine Standorttabelle nennt (vor allem 2017–2019). Die Kontrollen der Polizei fehlen in den Daten; Uhrzeit und Dauer der Messung nennt Köln nicht.",
+    "datensaetze": [
+     {
+      "titel": "Geschwindigkeitsüberwachung Köln 2025",
+      "url": "https://www.offenedaten-koeln.de/dataset/geschwindigkeitsueberwachung-koeln-2025",
+      "lizenz": "Datenlizenz Deutschland – Zero – Version 2.0"
+     },
+     {
+      "titel": "Geschwindigkeitsüberwachung Köln 2023",
+      "url": "https://www.offenedaten-koeln.de/dataset/geschwindigkeitsueberwachung-koeln-2023",
+      "lizenz": "Datenlizenz Deutschland – Zero – Version 2.0"
+     },
+     {
+      "titel": "Geschwindigkeitsüberwachung Köln 2024",
+      "url": "https://www.offenedaten-koeln.de/dataset/geschwindigkeitsueberwachung-koeln-2024",
+      "lizenz": "Datenlizenz Deutschland – Zero – Version 2.0"
+     },
+     {
+      "titel": "Geschwindigkeitsüberwachung Köln 2017 bis 2022",
+      "url": "https://www.offenedaten-koeln.de/dataset/geschwindigkeitsueberwachung-koeln-2017-bis-2022",
+      "lizenz": "Datenlizenz Deutschland – Zero – Version 2.0"
+     }
+    ],
+    "dateien": 22
+   },
+   "verortung": {
+    "kontrollen": 44633,
+    "verortet": 44410,
+    "je_methode": {
+     "hausnummer": 30303,
+     "abschnitt": 0,
+     "kreuzung": 555,
+     "anschlussstelle": 0,
+     "strasse": 13552
+    },
+    "ohne_lage": 223,
+    "je_gebiet": {
+     "bezirk": 43913,
+     "stadt": 328,
+     "umgebung": 169
+    },
+    "hinweise": {
+     "Ortsangabe von Hand zugeordnet (config/orte.yaml)": 301,
+     "Ortsangabe statt Querstraße": 14
+    },
+    "adresse_zur_achse_m": {
+     "median": 18.2,
+     "p90": 29.7
+    }
+   }
+  },
+  "bonn": {
+   "label": "Bonn",
+   "start": {
+    "lon": 7.1,
+    "lat": 50.71,
+    "zoom": 11.8
+   },
+   "kontrollen": 0,
+   "messstellen": 0,
+   "zeitraum": null,
+   "jahre": [],
+   "stufen": null,
+   "hat_dauer": false,
+   "hat_fahrverbote": false,
+   "hat_tempo": false,
+   "anteil_alle_gezaehlt": null,
+   "quelle": {
+    "label": "Geschwindigkeitsverstöße der Bundesstadt Bonn",
+    "bereitsteller": "Bundesstadt Bonn",
+    "kurz": "Stadt Bonn",
+    "titel": "Bußgelder fließender Verkehr (Open Data, Einzelverstöße)",
+    "herkunft_url": "https://opendata.bonn.de/",
+    "lizenz": null,
+    "lizenz_hinweis": null,
+    "hinweis": null,
+    "datensaetze": [
+     {
+      "titel": "Bußgelder fließender Verkehr 2022",
+      "url": "https://www.govdata.de/dataset/bussgelder-fliessender-verkehr-2022b723d",
+      "lizenz": ""
+     },
+     {
+      "titel": "Bußgelder fließender Verkehr 2024",
+      "url": "https://www.govdata.de/dataset/bussgelder-fliessender-verkehr-2024",
+      "lizenz": ""
+     },
+     {
+      "titel": "Bußgelder fließender Verkehr 2021",
+      "url": "https://www.govdata.de/dataset/bussgelder-fliessender-verkehr-2021",
+      "lizenz": ""
+     },
+     {
+      "titel": "Bußgelder fließender Verkehr 2018",
+      "url": "https://www.govdata.de/dataset/bussgelder-fliessender-verkehr-2018",
+      "lizenz": ""
+     },
+     {
+      "titel": "Bußgelder fließender Verkehr 2017",
+      "url": "https://www.govdata.de/dataset/bussgelder-fliessender-verkehr-2017",
+      "lizenz": ""
+     },
+     {
+      "titel": "Bußgelder fließender Verkehr 2016",
+      "url": "https://www.govdata.de/dataset/bussgelder-fliessender-verkehr-2016",
+      "lizenz": ""
+     },
+     {
+      "titel": "Bußgelder fließender Verkehr 2023",
+      "url": "https://www.govdata.de/dataset/bussgelder-fliessender-verkehr-2023",
+      "lizenz": ""
+     },
+     {
+      "titel": "Bußgelder fließender Verkehr 2020",
+      "url": "https://www.govdata.de/dataset/bussgelder-fliessender-verkehr-20206ac11",
+      "lizenz": ""
+     },
+     {
+      "titel": "Bußgelder fließender Verkehr 2019",
+      "url": "https://www.govdata.de/dataset/bussgelder-fliessender-verkehr-2019",
+      "lizenz": ""
+     }
+    ],
+    "dateien": 8
+   },
+   "verortung": null
   }
  },
  "osm": {

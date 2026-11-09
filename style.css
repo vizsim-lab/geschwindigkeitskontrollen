@@ -775,6 +775,9 @@ body {
 
 .pop-tabelle {
   overflow-x: auto;
+  /* Köln: an manchen Standorten Hunderte Kontrollen – die Liste scrollt */
+  max-height: min(30vh, 240px);
+  overflow-y: auto;
 }
 
 .pop-liste table {

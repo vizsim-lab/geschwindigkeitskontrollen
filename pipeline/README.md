@@ -89,16 +89,39 @@ antwortet GitHub Actions nicht). Die Liste der Dateien steht in `config/koeln_re
 manche Download-Adressen sind doppelt kodiert (`%25C3%25BC`) – `fetch` versucht dann die
 einmal dekodierte. `koeln.py`:
 
-- Vorgänge: `vorfallsdatum` `10119` = 1.1.2019 (Tag ohne führende Null), `ueberschreitung` in
-  km/h, `dienststelle` = Standorttyp (`S-01` …; `K-…` = Rotlicht, bleibt draußen), `standort` =
-  Kürzel in der Standorttabelle desselben Datensatzes.
-- Standorte: Stadtteil (zum Teil mit zwei Buchstaben davor, einem anderen Code), Tatstraße mit
-  Hausnummer („Höhe Haus 20“, „ggü. Haus 65“), Fahrtrichtung, Tempolimit Pkw/Lkw.
-- **Kontrolle = alle Verstöße einer Messstelle an einem Tag.** Gemessene Fahrzeuge nennt Köln
+- Vorgänge: `vorfallsdatum` `10117` = 1.1.2017 (Tag ohne führende Null; ab 2023 `010123`),
+  `ueberschreitung` in km/h nach Toleranzabzug, `dienststelle`, `standort` = Kürzel. Kopf und
+  Auffüllung wechseln je Jahr (`vorfallsdatum `, `010124        `); um ein Feld verrutschte
+  Zeilen (2025: knapp 6.000 von 450.000) bleiben als unlesbar draußen.
+- **Nur die mobile Überwachung.** `S-02` misst mobil (Median sechs Tage je Standort und Jahr),
+  `S-01` sind die festen Anlagen und `K-04` die an Kreuzungen (über 300 Tage im Jahr) – draußen.
+  2017 fehlt die Dienststelle, 2018/19 führt `S-01` einige Fälle an mobilen Standorten: dann
+  zählt ein Fall als mobil, wenn sein Kürzel nur in der mobilen Tabelle (s02) steht, nicht auch
+  in s01 (dieselben Kürzel stehen dort für andere Orte: 971–983 in s01 = Rheinbrücke der A 1, in
+  s02 = Brühler Straße). Fälle an Kürzeln, die keine Tabelle kennt (2017–2019, rund 90.000),
+  fehlen; der Bericht des Builds zählt alles (`mobil`, `fest`, `kreuzung`, `unbekannt`,
+  `unlesbar`).
+- Standorttabellen: Kürzel; Tempolimit Pkw/Lkw; „Stadtteil Tatort“ (oft mit einem Code davor:
+  `AA   Riehl`, `1682 Riehl`); Tatstraße mit Hausnummer; Fahrtrichtung. 2024/2025 ohne
+  Kopfzeile und mit einer Kennziffer nach dem Kürzel; **2023 ohne Kürzel** (vorn steht die
+  Kennziffer – `pruefe_kuerzel` erkennt das am Abgleich mit den anderen Jahren, `ergaenze_kuerzel`
+  holt das Kürzel über den gleichen Text aus 2024 bzw. 2017–2022). Kürzel werden über die Jahre
+  neu vergeben, darum gilt immer die Tabelle desselben Datensatzes.
+- Adressen (`adresse`): Hausnummer aus `80-86`, `Haus Nr.`, `Hs.Nr.`, `Hausnr.`, `ggü. 161`,
+  `Höhe 179` – auch angeklebt (`Nettesheimerstr.Hs.Nr.76a`). Laternen, Masten, Kilometer und Meter
+  (`Lat.Nr.106`, `L.21`, `L 489 0,29`, `20mtr.`) sind keine Hausnummern: dann nur die Straße.
+  `A/B`, `vor B`, `Höhe B`, `unter B` -> Kreuzung mit B. Abkürzungen der älteren Tabellen
+  (`Ber.Gl.Str.`, `K.-Aden.-Ufer`) übersetzt `config/orte.yaml`.
+- **Kontrolle = alle Verstöße eines Standorts an einem Tag.** Gemessene Fahrzeuge nennt Köln
   nicht (`messungen` leer, `alle_gezaehlt = false`), Uhrzeit und Dauer einer Kontrolle auch nicht.
   Stufen: bis/über 20 km/h aus der Überschreitung jedes Verstoßes.
-- Gelesen wird stückweise und gleich je Messstelle und Tag gezählt (Millionen Zeilen).
-- Id = Tag, Dienststelle, Standort (`K2019-01-01-S02-0039`).
+- Gelesen wird stückweise und gleich je Standort und Tag gezählt (4,9 Mio. Zeilen, ~10 s).
+- Id = Tag und Kürzel (`K2019-01-01-0101`).
+
+**Bonn** wird geladen (GovData, `config/bonn_ressourcen.json`), aber noch nicht gelesen: je
+Verstoß Tattag, Tatzeit, Tatort (Freitext ohne Stadtteil), Tatbestandsnummer, Bußgeld; feste und
+mobile Messungen stehen ungetrennt beieinander, die Höhe der Überschreitung steckt nur in der
+Tatbestandsnummer. Ältere Dateien sind zum Teil als Mac-Roman kodiert („Stra§e“).
 
 ## Datenlage
 

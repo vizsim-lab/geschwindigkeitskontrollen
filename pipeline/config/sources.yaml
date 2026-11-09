@@ -106,6 +106,12 @@ staedte:
       kurz: "Stadt Köln"
       titel: "Geschwindigkeitsüberwachung Köln (Open Data, Einzelverstöße und Standorte)"
       herkunft_url: "https://www.offenedaten-koeln.de/"
+      hinweis: >-
+        Nur die mobile Überwachung der Stadt (Dienststelle S-02; 2017 ohne Dienststelle und
+        2018/19 bei S-01 nach dem Standort): die festen Anlagen (S-01, K-04) messen fast jeden Tag
+        und bleiben draußen, ebenso Fälle an Kürzeln, die keine Standorttabelle nennt (vor allem
+        2017–2019). Die Kontrollen der Polizei fehlen in den Daten; Uhrzeit und Dauer der Messung
+        nennt Köln nicht.
       # Jahresdatensätze (2017–2022, 2023, 2024, …): je Verstoß eine Zeile, dazu Tabellen der
       # Standorte je Dienststelle. Das Stadtportal ist ein DKAN 2 (Suche `api/1/search`);
       # GovData spiegelt es (CKAN). open.nrw antwortet GitHub Actions nicht (Stand 11/2026).
@@ -276,8 +282,8 @@ datenlage:
       Standort, Tag, Uhrzeit und gemessener Geschwindigkeit
     situation: >-
       Die Stadt nennt nur die Verstöße, nicht alle gemessenen Fahrzeuge – einen Anteil gibt es
-      darum nicht. Die Karte fasst die Verstöße einer Messstelle an einem Tag zu einer Kontrolle
-      zusammen. Die Kontrollen der Polizei fehlen.
+      darum nicht. Die Karte fasst die Verstöße eines mobilen Standorts an einem Tag zu einer
+      Kontrolle zusammen; die festen Anlagen bleiben draußen, die Kontrollen der Polizei fehlen.
     empfehlung: >-
       Für den Anteil zu schneller Fahrzeuge die Zahl aller gemessenen Fahrzeuge je Messeinsatz bei
       der Stadt anfragen; die Kontrollen der Polizei beim Polizeipräsidium Köln.
@@ -290,7 +296,8 @@ datenlage:
       um die Zahl aller gemessenen Fahrzeuge je Messeinsatz (Standort, Datum, Beginn und Ende der
       Messung).
     links:
-      - ["Offene Daten Köln", "https://offenedaten-koeln.de/dataset/geschwindigkeitsueberwachung-koeln-ab-2023"]
+      - ["Offene Daten Köln 2017–2022", "https://www.offenedaten-koeln.de/dataset/geschwindigkeitsueberwachung-koeln-2017-bis-2022"]
+      - ["Offene Daten Köln 2025", "https://www.offenedaten-koeln.de/dataset/geschwindigkeitsueberwachung-koeln-2025"]
 
   # --- offen, noch nicht in der Karte ---
   - kommune: Bonn
@@ -299,12 +306,14 @@ datenlage:
     lat: 50.7374
     stand: offen
     was: >-
-      jeder Verstoß als Open Data („Bußgelder fließender Verkehr“, Jahresdateien seit 2019):
-      Tag, Uhrzeit, Tatort, Tatbestandsnummer, Bußgeld; dazu die Messstellen der mobilen
-      Überwachung
+      jeder Geschwindigkeitsverstoß als Open Data („Bußgelder fließender Verkehr“, Jahresdateien
+      2016–2024): Tag, Uhrzeit, Tatort, Tatbestandsnummer, Bußgeld; dazu die Messstellen der
+      mobilen Überwachung
     situation: >-
-      Gemessene Fahrzeuge fehlen, die Höhe der Überschreitung steckt nur in der
-      Tatbestandsnummer, der Tatort ist Freitext. Für die Karte fehlt noch ein Leser.
+      Gemessene Fahrzeuge fehlen; feste und mobile Messungen sind nicht getrennt (an gut 60
+      Tatorten gibt es in einem Jahr an mehr als 200 Tagen Verstöße – feste Anlagen); die Höhe
+      der Überschreitung steckt nur in der Tatbestandsnummer, der Tatort ist Freitext ohne
+      Stadtteil. Die Pipeline lädt die Dateien schon, für die Karte fehlt noch ein Leser.
     weg: "offen"
     links:
       - ["Open Data Bonn (2023)", "https://opendata.bonn.de/dataset/757e5b85-26c2-46e7-944c-f3d5cf445c4d/resource/d91a7a3e-d630-4391-b1ce-226837233b83"]

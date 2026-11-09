@@ -278,8 +278,8 @@ function zeigeDatenlage(kommune) {
   document.body.classList.add("detail-offen");
   el.querySelector("[data-schliessen]").onclick = schliesseDatenlage;
   el.querySelector("[data-hinzoomen]")?.addEventListener("click", () => {
-    const s = manifest.staedte[p.stadt]?.start;
-    map.flyTo(s ? { center: [s.lon, s.lat], zoom: s.zoom, essential: true } : { center: f.geometry.coordinates, zoom: 11, essential: true });
+    if (manifest.staedte[p.stadt]) zuStadt(p.stadt);
+    else map.flyTo({ center: f.geometry.coordinates, zoom: 11, essential: true });
     schliesseDatenlage();
   });
   el.querySelector("[data-kopieren]")?.addEventListener("click", async (e) => {
@@ -355,15 +355,13 @@ function legendeAufbauen() {
     .map((s) => `${s.label} ${jahre(s.jahre)}`)
     .join(" · ");
   document.getElementById("quelle-tip").dataset.tip = `Quellen: ${mitDaten().map(([, s]) => s.quelle.bereitsteller).join(", ")} · Verortung: OpenStreetMap (ODbL) · Stand ${manifest.stand}`;
+  document.getElementById("tempo-tip").dataset.tip = D.tempoHinweis(st);
   const wahl = document.getElementById("stadt-wahl");
   wahl.innerHTML = Object.entries(st)
     .filter(([, s]) => s.kontrollen > 0)
     .map(([code, s]) => `<button type="button" class="stadt-btn" data-stadt="${esc(code)}">${esc(s.label)} <span class="stadt-jahre">${esc(jahre(s.jahre))} · ${D.zahl(s.kontrollen)} Kontrollen</span></button>`)
     .join("");
-  for (const b of wahl.querySelectorAll(".stadt-btn")) {
-    const s = st[b.dataset.stadt];
-    b.addEventListener("click", () => map.flyTo({ center: [s.start.lon, s.start.lat], zoom: s.start.zoom, essential: true }));
-  }
+  for (const b of wahl.querySelectorAll(".stadt-btn")) b.addEventListener("click", () => zuStadt(b.dataset.stadt));
   for (const r of document.querySelectorAll('input[name="metrik"]')) {
     r.checked = r.value === zustand.metrik;
     r.addEventListener("change", () => {
@@ -397,6 +395,18 @@ function legendeAufbauen() {
   dlg.querySelector(".info-zu").addEventListener("click", () => dlg.close());
   dlg.addEventListener("click", (e) => e.target === dlg && dlg.close());
   document.getElementById("csv-link").href = PFAD + manifest.dateien.csv;
+}
+
+/** Zu einer Stadt fliegen; gibt die Kennzahl dort keinen Wert (Köln: kein Anteil), gilt
+ * „je Kontrolle“ statt einer ganz grauen Karte. */
+function zuStadt(code) {
+  const s = manifest.staedte[code];
+  if (D.ohneWert(zustand.metrik, s)) {
+    zustand.metrik = "jekontrolle";
+    for (const r of document.querySelectorAll('input[name="metrik"]')) r.checked = r.value === zustand.metrik;
+    zeichne();
+  }
+  map.flyTo({ center: [s.start.lon, s.start.lat], zoom: s.start.zoom, essential: true });
 }
 
 function chips(id, eintraege, feld, typ) {

@@ -21,11 +21,11 @@ export function stelleHtml({ daten, stelle, agg, metrik, filter, manifest, voll 
   const farbe = k < 0 ? D.GRAU : D.FARBEN[k];
   const m = D.METRIKEN[metrik];
   const zeitraum = agg.tagMin <= agg.tagMax ? jahreText(daten, agg) : "";
-  const zeilen = [
-    ["Kontrollen", `${D.zahl(agg.n)}${zeitraum ? ` <span class="pop-meta">(${zeitraum})</span>` : ""}`],
-    ["Gemessen", `${D.zahl(agg.mess)} Fahrzeuge`],
-    ["Zu schnell", D.zahl(agg.ueber)],
-  ];
+  const zeilen = [["Kontrollen", `${D.zahl(agg.n)}${zeitraum ? ` <span class="pop-meta">(${zeitraum})</span>` : ""}`]];
+  // Köln nennt nur die Verstöße: dann keine „0 gemessenen Fahrzeuge“, sondern Verstöße je Kontrolle
+  if (agg.messBekannt) zeilen.push(["Gemessen", `${D.zahl(agg.mess)} Fahrzeuge`]);
+  zeilen.push(["Zu schnell", D.zahl(agg.ueber)]);
+  if (!agg.messBekannt && agg.n) zeilen.push(["Zu schnell je Kontrolle", D.zahl(agg.ueber / agg.n, agg.ueber / agg.n < 10 ? 1 : 0)]);
   if (agg.s1 || agg.s2) {
     const grenzen = new Set(D.kontrollenDerStelle(daten, stelle.i, filter).filter((x) => x.imFilter && x.grenze).map((x) => x.grenze));
     const kmh = grenzen.size === 1 ? [...grenzen][0] : null;
@@ -67,12 +67,13 @@ export function stelleHtml({ daten, stelle, agg, metrik, filter, manifest, voll 
   const mitZeit = liste.some((x) => x.beginn != null);
   const mitTempo = liste.some((x) => x.tempo != null);
   const mitFv = liste.some((x) => x.fahrverbote != null);
+  const mitFzg = liste.some((x) => x.messungen != null);
   const kopf = [
     "<th>Datum</th>",
     mitZeit ? '<th class="zeit">Zeit</th>' : "",
     "<th>Richtung</th>",
     mitTempo ? '<th class="rechts">km/h</th>' : "",
-    '<th class="rechts">Fzg.</th>',
+    mitFzg ? '<th class="rechts">Fzg.</th>' : "",
     '<th class="rechts">zu schnell</th>',
     mitFv ? '<th class="rechts">FV</th>' : "",
   ].join("");
@@ -84,7 +85,7 @@ export function stelleHtml({ daten, stelle, agg, metrik, filter, manifest, voll 
       ${mitZeit ? `<td class="zeit">${zeit}</td>` : ""}
       <td class="richtung">${esc(daten.richtungen[x.richtung] || "–")}</td>
       ${mitTempo ? `<td class="rechts">${x.tempo ?? "–"}</td>` : ""}
-      <td class="rechts">${D.zahl(x.messungen)}</td>
+      ${mitFzg ? `<td class="rechts">${D.zahl(x.messungen)}</td>` : ""}
       <td class="rechts">${D.zahl(x.ueber)}${anteil}</td>
       ${mitFv ? `<td class="rechts">${x.fahrverbote ?? "–"}</td>` : ""}
     </tr>`;

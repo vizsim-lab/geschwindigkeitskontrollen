@@ -8,7 +8,9 @@ damit „ 335“ (03:35) oder „10119“ (1.1.2019) nicht als Zahl verloren geh
 
 from __future__ import annotations
 
+import csv
 import gzip
+import io
 import re
 from collections.abc import Iterator
 from pathlib import Path
@@ -75,6 +77,15 @@ def lies(pfad: Path, **kw) -> pd.DataFrame:
     )
     df.columns = [norm(c) for c in df.columns]
     return df
+
+
+def zeilen(pfad: Path) -> list[list[str]]:
+    """Kleine Datei als Liste von Zeilen (Felder ungekürzt) – auch mit oder ohne Kopfzeile und
+    mit ungleich vielen Feldern je Zeile (so liegen die Kölner Standorttabellen vor)."""
+    enc = kodierung(pfad)
+    with _oeffne(pfad) as f:
+        text = f.read().decode(enc, errors="replace").lstrip("﻿")
+    return [z for z in csv.reader(io.StringIO(text), delimiter=trenner(pfad, enc)) if any(z)]
 
 
 def stuecke(pfad: Path, spalten: list[str], groesse: int = 500_000) -> Iterator[pd.DataFrame]:

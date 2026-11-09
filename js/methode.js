@@ -22,7 +22,7 @@ function einzel(s, name) {
     (<a href="${esc(q.herkunft_url)}" target="_blank" rel="noopener">Open Data</a>${q.lizenz ? `, ${esc(q.lizenz)}` : ""}).
     ${q.hinweis ? esc(q.hinweis) : ""}</p>
     <ul>
-      <li>Eine <b>Kontrolle</b> ist hier: alle Verstöße einer Messstelle an einem Tag. Wann und wie
+      <li>Eine <b>Kontrolle</b> ist hier: alle Verstöße eines Standorts an einem Tag. Wann und wie
       lange gemessen wurde, steht nicht in den Daten.</li>
       <li>Gezählt sind nur die <b>Verstöße</b>, nicht alle gemessenen Fahrzeuge – einen Anteil gibt
       es darum nicht; „je Kontrolle“ geht.</li>
@@ -77,7 +77,7 @@ export function methodeHtml(m) {
 
     <h3>Verortung</h3>
     <p>Gesucht wird im Straßennetz von OpenStreetMap (Geofabrik-Abzug), für Berlin im genannten
-    Bezirk: zuerst die <b>Hausnummer</b> an der Straße, sonst die Mitte des <b>Abschnitts</b>
+    Bezirk, für Köln im genannten Stadtteil: zuerst die <b>Hausnummer</b> an der Straße, sonst die Mitte des <b>Abschnitts</b>
     zwischen den beiden Querstraßen, sonst die <b>Kreuzung</b> oder <b>Anschlussstelle</b>.
     Bleibt nur der Straßenname, steht der Kreis blass (≈) in der Mitte der Straße, und die
     gestrichelte Linie zeigt die ganze Straße.</p>
@@ -87,6 +87,8 @@ export function methodeHtml(m) {
     (Median ${D.zahl(probe.median_m, 0)} m).</p>` : ""}
     <p><b>Aachen</b> – nur der Straßenname ist bekannt:</p>${zeile(a)}
     ${["koeln", "bonn"].filter((c) => m.staedte[c]?.kontrollen).map((c) => `<p><b>${esc(m.staedte[c].label)}</b></p>${zeile(m.staedte[c])}`).join("")}
+    ${m.staedte.koeln?.kontrollen ? `<p>Nennt Köln statt einer Hausnummer eine Laterne („Laterne 85-77“), bleibt es bei der
+    Straße – Laternennummern stehen nicht in OpenStreetMap.</p>` : ""}
 
     <h3>Daten</h3>
     <p><a href="pipeline/data/karte/${esc(m.dateien.csv)}" download>Alle Kontrollen als CSV</a> (mit
