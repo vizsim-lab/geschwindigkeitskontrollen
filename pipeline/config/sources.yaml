@@ -11,42 +11,38 @@ staedte:
     bbox: [13.08, 52.33, 13.77, 52.68]
     start: { lon: 13.40, lat: 52.51, zoom: 10.6 }
     kontrollen:
-      label: "Temporäre Geschwindigkeitskontrollen 2017–2019"
+      label: "Temporäre Geschwindigkeitskontrollen 2017 bis August 2020"
       bereitsteller: "Polizei Berlin"
       kurz: "Polizei Berlin"
-      titel: "Auszug aus der Geschwindigkeitsdatenbank (IFG-Bescheid vom 09.12.2020, Anlagen 1–3)"
+      titel: "Auszug aus der Geschwindigkeitsdatenbank (IFG-Bescheid vom 09.12.2020, Anlagen 1–4)"
       herkunft_url: "https://fragdenstaat.de/anfrage/geschwindigkeitskontrollen-von-kfz-in-berlin/"
       lizenz: null                  # der Bescheid nennt keine Lizenz
       lizenz_hinweis: "Amtliche Auskunft nach IFG, ohne Lizenzangabe"
-      # Die Polizei hat PDF geliefert; die CSV ist die Aufbereitung aus vizsim/geschwindigkeitskontrollen
-      # (2017–2019, v01), auf einen Commit festgelegt.
-      aufbereitung: "vizsim/geschwindigkeitskontrollen, CSV v01"
-      url: "https://raw.githubusercontent.com/vizsim/geschwindigkeitskontrollen/47f921e01ec9aafcf9895c3b696de825a315f577/raw_data_berlin_temp_speed_17_18_19_v01.csv"
-      sha256: "bcf6c7eccef60e755c4276e6460da2cbe73be73944f72331046722e9cdd67505"
-      datei: "raw/berlin/kontrollen_2017-2019_v01.csv"
-    # Die Anlagen des Bescheids, wie die Polizei sie geliefert hat (PDF). 2017–2019 kommen aus
-    # der CSV oben; Anlage 4 (01.01.–31.08.2020) liest `berlin_pdf.py`. Anlage 3 (2019) ist die
-    # Probe für den PDF-Leser: gelesen muss sie die 2019er Zeilen der CSV ergeben.
-    anlagen:
-      label: "Anlagen des IFG-Bescheids (PDF)"
-      basis_url: "https://fragdenstaat.de/anfrage/geschwindigkeitskontrollen-von-kfz-in-berlin/"
-      dateien:
-        - code: "2019"
-          rolle: probe
+      # Die Polizei hat je Zeitraum ein PDF geliefert (gedruckte Tabelle, eine Zeile je
+      # Kontrolle); `berlin_pdf.py` liest es Zeichen für Zeichen. Gegenprobe: Anlage 3 ergibt
+      # alle 9.150 Zeilen von 2019 der früheren CSV (vizsim/geschwindigkeitskontrollen, v01) –
+      # bis auf deren Lesefehler („50/30“ als Tempo 0, „-“ als 0, abgeschnittene Zellen).
+      anlagen:
+        - jahr: 2017
+          titel: "Anlage 1 (2017)"
+          url: "https://media.frag-den-staat.de/files/foi/546222/202012094IFG102.20Anlage1GeschwindigkeitskontrollenBerlin2017.pdf"
+          sha256: null
+          datei: "raw/berlin/anlage1_2017.pdf"
+        - jahr: 2018
+          titel: "Anlage 2 (2018)"
+          url: "https://media.frag-den-staat.de/files/foi/546222/202012095IFG102.20Anlage2GeschwindigkeitskontrollenBerlin2018.pdf"
+          sha256: null
+          datei: "raw/berlin/anlage2_2018.pdf"
+        - jahr: 2019
+          titel: "Anlage 3 (2019)"
           url: "https://media.frag-den-staat.de/files/foi/546222/202012096IFG102.20Anlage3GeschwindigkeitskontrollenBerlin2019.pdf"
-          sha256: null
+          sha256: "93ff55540cd6bd713c6b2d9fbdf6b459b9752870cbb7b074013559bef243829a"
           datei: "raw/berlin/anlage3_2019.pdf"
-        - code: "2020"
-          rolle: daten
-          titel: "Anlage 4 des IFG-Bescheids vom 09.12.2020 (01.01.–31.08.2020)"
+        - jahr: 2020
+          titel: "Anlage 4 (01.01.–31.08.2020, Stand 05.10.2020)"
           url: "https://media.frag-den-staat.de/files/foi/546222/202012097IFG102.20Anlage4GeschwindigkeitskontrollenBerlinbis31.08.2020.pdf"
-          sha256: null
+          sha256: "f8ce5b590f5500bb968afd9269984fa51dce2826f7602457a6e0eeca1342a270"
           datei: "raw/berlin/anlage4_2020.pdf"
-        - code: "abhilfe"
-          rolle: info
-          url: "https://media.frag-den-staat.de/files/foi/546901/202012119IFG102.20AnlageAbhilfebescheid.pdf"
-          sha256: null
-          datei: "raw/berlin/anlage_abhilfebescheid.pdf"
     osm:
       label: "Straßennetz und Adressen Berlin (Verortung)"
       url: "https://download.geofabrik.de/europe/germany/berlin-latest.osm.pbf"

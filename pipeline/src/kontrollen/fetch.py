@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
-"""Rohdaten holen: Berlin (feste CSV mit Prüfsumme), Aachen (alle Monatsdateien über CKAN),
+"""Rohdaten holen: Berlin (die PDF-Anlagen, mit Prüfsumme), Aachen (alle Monatsdateien über CKAN),
 OSM-Abzüge (Geofabrik).
 
 Aachen: `fetch --aachen --neu` fragt die CKAN-Kataloge (sources.yaml) nach allen Datensätzen
@@ -65,14 +65,10 @@ def lade(url: str, ziel: Path, pruefsumme: str | None = None, *, neu: bool = Fal
 
 
 def berlin(paths: Paths | None = None) -> list[Path]:
-    """CSV 2017–2019 und die PDF-Anlagen (2020 und die Probe 2019)."""
+    """Die PDF-Anlagen des IFG-Bescheids (2017 bis August 2020)."""
     paths = paths or get_paths()
-    b = quellen(paths)["staedte"]["berlin"]
-    q = b["kontrollen"]
-    out = [lade(q["url"], paths.data_file(q["datei"]), q["sha256"])]
-    for a in b.get("anlagen", {}).get("dateien", []):
-        out.append(lade(a["url"], paths.data_file(a["datei"]), a.get("sha256")))
-    return out
+    k = quellen(paths)["staedte"]["berlin"]["kontrollen"]
+    return [lade(a["url"], paths.data_file(a["datei"]), a.get("sha256")) for a in k["anlagen"]]
 
 
 # --- Aachen --------------------------------------------------------------------------------
