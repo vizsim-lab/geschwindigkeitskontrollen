@@ -23,14 +23,22 @@ export const METRIKEN = {
     kurz: "je Stunde",
     einheit: "/h",
     grenzen: [10, 30, 60, 120],
-    hinweis: "Überschreitungen geteilt durch die Messdauer – nur, wo die Dauer bekannt ist (Berlin).",
+    hinweis: "Überschreitungen geteilt durch die Messdauer – nur, wo die Dauer bekannt ist.",
+  },
+  jekontrolle: {
+    label: "Überschreitungen je Kontrolle",
+    kurz: "je Kontrolle",
+    einheit: "",
+    grenzen: [5, 10, 25, 60],
+    hinweis:
+      "Überschreitungen geteilt durch die Zahl der Kontrollen – geht in jeder Stadt, aber Kontrollen sind verschieden lang.",
   },
   fahrverbote: {
     label: "Fahrverbote",
     kurz: "Fahrverbote",
     einheit: "",
     grenzen: [1, 2, 6, 21],
-    hinweis: "Summe der Fahrverbote aller Kontrollen der Stelle (nur Berlin).",
+    hinweis: "Summe der Fahrverbote aller Kontrollen der Stelle.",
   },
   kontrollen: {
     label: "Kontrollen",
@@ -141,6 +149,8 @@ export function wert(a, metrik) {
       return a.messAlle > 0 ? (100 * a.ueberAlle) / a.messAlle : null;
     case "stunde":
       return a.minuten > 0 ? a.ueberMitDauer / (a.minuten / 60) : null;
+    case "jekontrolle":
+      return a.n > 0 ? a.ueber / a.n : null;
     case "fahrverbote":
       return a.fvBekannt > 0 ? a.fv : null;
     case "kontrollen":
@@ -148,6 +158,24 @@ export function wert(a, metrik) {
     default:
       return null;
   }
+}
+
+/**
+ * Hinweis unter „Farbe nach“ für die Stadt im Bild: der Text der Kennzahl und, was die Stadt
+ * dazu (nicht) liefert – aus den Angaben im Manifest (`hat_dauer`, `hat_fahrverbote`,
+ * `anteil_alle_gezaehlt`).
+ */
+export function metrikHinweis(metrik, stadt) {
+  let h = METRIKEN[metrik].hinweis;
+  if (!stadt) return h;
+  const fehlt = (metrik === "stunde" && !stadt.hat_dauer) || (metrik === "fahrverbote" && stadt.hat_fahrverbote === false);
+  if (fehlt) return `${h} ${stadt.label} nennt das nicht – hier grau.`;
+  if (metrik === "anteil") {
+    const a = stadt.anteil_alle_gezaehlt;
+    if (a === 0) h += ` ${stadt.label} nennt nur die Verstöße, nicht alle gemessenen Fahrzeuge – hier grau; „je Kontrolle“ geht.`;
+    else if (a != null && a < 1) h += ` In ${stadt.label} sind bei ${zahl(100 - 100 * a)} % der Kontrollen nur die zu schnellen Fahrzeuge gezählt.`;
+  }
+  return h;
 }
 
 /** Farbklasse 0..4 (FARBEN), -1 für „kein Wert“. */
@@ -270,5 +298,6 @@ export function wertText(w, metrik) {
   if (w == null) return "–";
   if (metrik === "anteil") return `${zahl(w, 1)} %`;
   if (metrik === "stunde") return `${zahl(w, w < 10 ? 1 : 0)} je Stunde`;
+  if (metrik === "jekontrolle") return `${zahl(w, w < 10 ? 1 : 0)} je Kontrolle`;
   return zahl(w);
 }

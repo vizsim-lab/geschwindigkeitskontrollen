@@ -107,11 +107,12 @@ staedte:
       titel: "Geschwindigkeitsüberwachung Köln (Open Data, Einzelverstöße und Standorte)"
       herkunft_url: "https://www.offenedaten-koeln.de/"
       # Jahresdatensätze (2017–2022, 2023, 2024, …): je Verstoß eine Zeile, dazu Tabellen der
-      # Standorte je Dienststelle. Das Landesportal spiegelt sie nicht vollständig – darum
-      # werden beide Kataloge gefragt und die Funde vereinigt (`alle_kataloge`).
-      ckan:
-        - "https://www.offenedaten-koeln.de/api/3/action/"
-        - "https://ckan.open.nrw.de/api/3/action/"
+      # Standorte je Dienststelle. Das Stadtportal ist ein DKAN 2 (Suche `api/1/search`);
+      # GovData spiegelt es (CKAN). open.nrw antwortet GitHub Actions nicht (Stand 11/2026).
+      # Beide werden gefragt, die Funde vereinigt (`alle_kataloge`).
+      kataloge:
+        - { art: dkan, url: "https://www.offenedaten-koeln.de/api/1/" }
+        - { art: ckan, url: "https://www.govdata.de/ckan/api/3/action/" }
       alle_kataloge: true
       suche: ["Geschwindigkeitsüberwachung Köln"]
       titel_muster: "(?i)geschwindigkeits(ü|ue)berwachung"
@@ -140,10 +141,11 @@ staedte:
       titel: "Bußgelder fließender Verkehr (Open Data, Einzelverstöße)"
       herkunft_url: "https://opendata.bonn.de/"
       # Jahresdateien „Bußgelder fließender Verkehr“ (je Verstoß Tag, Uhrzeit, Tatort,
-      # Tatbestandsnummer, Bußgeld) und die Messstellen der mobilen Überwachung.
-      ckan:
-        - "https://opendata.bonn.de/api/3/action/"
-        - "https://ckan.open.nrw.de/api/3/action/"
+      # Tatbestandsnummer, Bußgeld) und die Messstellen der mobilen Überwachung. Gefunden über
+      # GovData (CKAN), das die Bonner Datensätze spiegelt; dazu das Stadtportal (DKAN).
+      kataloge:
+        - { art: ckan, url: "https://www.govdata.de/ckan/api/3/action/" }
+        - { art: dkan, url: "https://opendata.bonn.de/api/1/" }
       alle_kataloge: true
       suche: ["Bußgelder fließender Verkehr", "Messstellen Geschwindigkeitsüberwachung"]
       titel_muster:

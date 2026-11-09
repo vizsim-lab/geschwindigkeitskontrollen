@@ -2,7 +2,7 @@
 // permalink.js — REIN (kein DOM, kein window): Kartenzustand <-> Link-Anker.
 //
 // Format: #<zoom>/<lat>/<lon>&m=<metrik>&j=<jahre>&t=<tempo>&v=<verortung>
-//   m: anteil | stunde | fahrverbote | kontrollen (fehlt = anteil)
+//   m: anteil | stunde | jekontrolle | fahrverbote | kontrollen (fehlt = anteil)
 //   j: Jahre, Komma-getrennt (fehlt = alle)
 //   t: Tempoklassen 30,50,80,100,u (fehlt = alle)
 //   v: Verortung h,a,k,s,x = hausnummer, abschnitt, kreuzung, anschlussstelle, strasse
@@ -19,7 +19,7 @@ export const VERORTUNG_KUERZEL = {
   x: "strasse",
 };
 const KUERZEL_VON = Object.fromEntries(Object.entries(VERORTUNG_KUERZEL).map(([k, v]) => [v, k]));
-const METRIKEN = ["anteil", "stunde", "fahrverbote", "kontrollen"];
+const METRIKEN = ["anteil", "stunde", "jekontrolle", "fahrverbote", "kontrollen"];
 const TEMPO = ["30", "50", "80", "100", "u"];
 
 /** Zustand -> Anker (ohne „#“). Mengen als Set oder null (= alle). */

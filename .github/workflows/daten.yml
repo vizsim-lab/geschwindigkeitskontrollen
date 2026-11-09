@@ -16,7 +16,7 @@ on:
   workflow_dispatch:
     inputs:
       aachen_neu:
-        description: "Aachener Katalog neu fragen (neue Monate)"
+        description: "Kataloge neu fragen (neue Monate in Aachen, neue Jahre in Köln und Bonn)"
         type: boolean
         default: true
 
@@ -42,7 +42,7 @@ jobs:
           cache-dependency-glob: pipeline/uv.lock
       - run: uv sync --locked
       - run: uv run pytest -q
-      - name: Rohdaten laden (Berlin, Aachen, OSM-Abzüge Geofabrik)
+      - name: Rohdaten laden (Berlin, Aachen, Köln, Bonn, OSM-Abzüge Geofabrik)
         run: uv run kontrollen fetch --osm ${{ inputs.aachen_neu && '--neu' || '' }}
       - name: OSM auslesen (Straßen, Adressen, Orte, Gebiete)
         run: uv run kontrollen osm
@@ -69,7 +69,8 @@ jobs:
             pipeline/data/karte/
             pipeline/data/geokodierung.csv
             pipeline/data/geokodierung_validierung.json
-            pipeline/config/aachen_ressourcen.json
+            pipeline/config/*_ressourcen.json
+            docs/DATENLAGE.md
           retention-days: 30
       - name: Als Branch (und wenn erlaubt als PR) vorschlagen
         env:
@@ -82,7 +83,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           zweig="daten/lauf-$LAUF-$VERSUCH"
           git switch -c "$zweig"
-          git add data/karte data/geokodierung.csv data/geokodierung_validierung.json config/aachen_ressourcen.json
+          git add data/karte data/geokodierung.csv data/geokodierung_validierung.json config/*_ressourcen.json ../docs/DATENLAGE.md
           # nur das Datum im Manifest geändert -> nichts vorzuschlagen
           manifest_gleich() {
             [ "$(git show HEAD:pipeline/data/karte/manifest.json 2>/dev/null | jq -S 'del(.stand)')" = "$(jq -S 'del(.stand)' data/karte/manifest.json)" ]

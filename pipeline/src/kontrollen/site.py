@@ -348,10 +348,9 @@ def _manifest(p: Paths, q: dict, m: pd.DataFrame, stellen: list[dict]) -> dict:
             "messstellen": sum(1 for s in stellen if s["stadt"] == code),
             "zeitraum": [t["datum"].min(), t["datum"].max()] if len(t) else None,
             "jahre": sorted({int(d[:4]) for d in t["datum"].dropna()}),
-            "stufen": ["bis 20 km/h", "über 20 km/h"]
-            if code == "berlin"
-            else ["bis 15 km/h", "über 15 km/h"],
+            "stufen": _stufen(t),
             "hat_dauer": bool(t["dauer_min"].notna().any()),
+            "hat_fahrverbote": bool(t["fahrverbote"].notna().any()),
             "hat_tempo": bool(t["tempo"].notna().any()),
             "anteil_alle_gezaehlt": round(float(t["alle_gezaehlt"].mean()), 3) if len(t) else None,
             "quelle": quelle,
@@ -513,6 +512,16 @@ def datenlage_md(fc: dict, erzeugt: str) -> str:
                 "",
             ]
     return "\n".join(zeilen).rstrip() + "\n"
+
+
+def _stufen(t: pd.DataFrame) -> list[str] | None:
+    """Beschriftung der beiden Stufen nach der häufigsten Grenze der Stadt (Berlin 20 km/h,
+    Aachen meist 15 km/h); ohne Stufen in den Daten None."""
+    k = t["stufe_kmh"].dropna()
+    if k.empty:
+        return None
+    g = int(k.mode().iloc[0])
+    return [f"bis {g} km/h", f"über {g} km/h"]
 
 
 def _schreibe_json(pfad: Path, obj, eingerueckt: bool = False) -> None:

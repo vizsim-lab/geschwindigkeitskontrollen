@@ -75,7 +75,7 @@ def berlin(paths: Paths | None = None) -> list[Path]:
 
 
 def _ckan(basis: str, aktion: str, **params) -> dict:
-    r = requests.get(basis + aktion, params=params, timeout=60, headers=UA)
+    r = requests.get(basis + aktion, params=params, timeout=(20, 90), headers=UA)
     r.raise_for_status()
     js = r.json()
     if not js.get("success"):
@@ -100,6 +100,66 @@ def _suche(basis: str, q: str) -> list[dict]:
             return datensaetze
 
 
+LIZENZEN = {  # DCAT-AP.de-Kennungen -> Namen (wie CKAN sie nennt)
+    "dl-zero-de/2.0": "Datenlizenz Deutschland – Zero – Version 2.0",
+    "dl-by-de/2.0": "Datenlizenz Deutschland – Namensnennung – Version 2.0",
+    "cc-zero": "Creative Commons CC Zero License (cc-zero)",
+    "cc-by/4.0": "Creative Commons Namensnennung – 4.0 International (CC BY 4.0)",
+}
+
+
+def _lizenz_id(url: str | None) -> str | None:
+    """ "http://dcat-ap.de/def/licenses/dl-zero-de/2.0" -> "dl-zero-de/2.0"."""
+    if not url:
+        return None
+    return url.split("/licenses/", 1)[-1].strip("/") or None
+
+
+def _dkan_suche(basis: str, q: str) -> list[dict]:
+    """Suche in einem DKAN-2-Katalog (`api/1/search`, etwa offenedaten-koeln.de), die Treffer
+    in der Form von CKAN (`title`, `name`, `organization`, `resources`, Lizenz)."""
+    out, seite = [], 1
+    while True:
+        r = requests.get(
+            basis + "search",
+            params={"fulltext": q, "page-size": 100, "page": seite},
+            timeout=(20, 90),
+            headers=UA,
+        )
+        r.raise_for_status()
+        js = r.json()
+        res = js.get("results") or {}
+        eintraege = list(res.values()) if isinstance(res, dict) else list(res)
+        for d in eintraege:
+            verteilungen = d.get("distribution") or []
+            lizenzen = {v.get("dct_license") for v in verteilungen if v.get("dct_license")}
+            lizenz = sorted(lizenzen)[0] if lizenzen else None
+            out.append(
+                {
+                    "id": d.get("identifier"),
+                    "name": d.get("identifier"),
+                    "title": d.get("title"),
+                    "organization": {"title": (d.get("publisher") or {}).get("foaf_name")},
+                    "license_id": _lizenz_id(lizenz),
+                    "license_title": LIZENZEN.get(_lizenz_id(lizenz) or ""),
+                    "license_url": lizenz,
+                    "resources": [
+                        {
+                            "id": v.get("identifier") or v.get("downloadURL"),
+                            "name": v.get("title"),
+                            "format": v.get("format") or v.get("mediaType") or v.get("dct_format"),
+                            "url": v.get("downloadURL") or v.get("accessURL"),
+                            "last_modified": v.get("dctModified"),
+                        }
+                        for v in verteilungen
+                    ],
+                }
+            )
+        if not eintraege or len(out) >= int(js.get("total") or 0):
+            return out
+        seite += 1
+
+
 def _format(r: dict) -> str:
     """ "CSV", "csv", "text/csv" -> "CSV"; ohne Angabe die Dateiendung."""
     fmt = (r.get("format") or "").split("/")[-1].strip().upper()
@@ -107,15 +167,16 @@ def _format(r: dict) -> str:
 
 
 def treffer(datensaetze: list[dict], cfg: dict, basis: str) -> list[dict]:
-    """Datensätze, deren Titel zu `titel_muster` und deren Titel/Name/Organisation zur Stadt
-    passen, mit ihren Ressourcen der gewünschten Formate."""
+    """Datensätze, deren Titel zu `titel_muster` und deren Titel, Name, Organisation oder
+    Download-Adressen zur Stadt passen, mit ihren Ressourcen der gewünschten Formate."""
     titel = [re.compile(m) for m in _liste(cfg["titel_muster"])]
     stadt = re.compile(cfg.get("stadt_muster") or cfg["aachen_muster"])
     formate = {f.upper() for f in cfg["formate"]}
     out = []
     for d in datensaetze:
         org = (d.get("organization") or {}).get("title") or ""
-        text = " ".join([d.get("title") or "", d.get("name") or "", org])
+        urls = [r.get("url") or "" for r in d.get("resources", [])]
+        text = " ".join([d.get("title") or "", d.get("name") or "", org, *urls])
         if not any(t.search(d.get("title") or "") for t in titel) or not stadt.search(text):
             continue
         res = []
@@ -159,11 +220,14 @@ def katalog(cfg: dict) -> dict:
     mit den meisten Ressourcen (Landesportale spiegeln die Städte oft unvollständig)."""
     fehler: list[str] = []
     funde: dict[str, tuple[str, dict]] = {}
-    for basis in cfg["ckan"]:
+    kataloge = cfg.get("kataloge") or [{"art": "ckan", "url": u} for u in cfg["ckan"]]
+    for k in kataloge:
+        basis = k["url"]
+        suche = _dkan_suche if k.get("art") == "dkan" else _suche
         try:
             gefunden: dict[str, dict] = {}
             for q in _liste(cfg["suche"]):
-                for d in _suche(basis, q):
+                for d in suche(basis, q):
                     gefunden.setdefault(d.get("id") or d.get("name"), d)
         except (requests.RequestException, RuntimeError, ValueError) as e:
             fehler.append(f"{basis}: {e}")
@@ -180,9 +244,10 @@ def katalog(cfg: dict) -> dict:
             break
     if not funde:
         raise RuntimeError("Kein CKAN-Katalog lieferte passende Daten:\n" + "\n".join(fehler))
-    kataloge = sorted({b for b, _ in funde.values()}, key=cfg["ckan"].index)
+    urls = [k["url"] for k in kataloge]
+    benutzt = sorted({b for b, _ in funde.values()}, key=urls.index)
     datensaetze = [d for _, d in funde.values()]  # Reihenfolge der Suche (stabil für Aachen)
-    return {"katalog": " ".join(kataloge), "datensaetze": datensaetze, "fehler": fehler}
+    return {"katalog": " ".join(benutzt), "datensaetze": datensaetze, "fehler": fehler}
 
 
 def aachen_katalog(cfg: dict) -> dict:
@@ -195,6 +260,15 @@ def _datensatz_url(basis: str, name: str | None) -> str | None:
         return None
     u = urlparse(basis)
     return f"{u.scheme}://{u.netloc}/dataset/{name}"
+
+
+def url_varianten(url: str) -> list[str]:
+    """Die URL, wie der Katalog sie nennt, und – wenn sie doppelt kodiert ist („%25C3%25BC“,
+    so bei offenedaten-koeln.de) – einmal dekodiert."""
+    out = [url]
+    if "%25" in url:
+        out.append(url.replace("%25", "%"))
+    return out
 
 
 def _dateiname(ds: str, r: dict) -> str:
@@ -222,12 +296,18 @@ def ckan_dateien(stadt: str, paths: Paths | None = None, *, neu: bool = False) -
                 if name in namen:  # dieselbe Ressource in zwei Katalogen
                     continue
                 namen.add(name)
-                try:
-                    ziel = lade(r["url"], ordner / name, neu=True)
-                except (requests.RequestException, ValueError) as e:
+                ziel, letzter = None, None
+                for url in url_varianten(r["url"]):
+                    try:
+                        ziel = lade(url, ordner / name, neu=True)
+                        r = {**r, "url": url}
+                        break
+                    except (requests.RequestException, ValueError) as e:
+                        letzter = e
+                if ziel is None:
                     if not cfg.get("alle_kataloge"):
-                        raise
-                    kat["fehler"].append(f"{r['url']}: {e}")  # Spiegel ohne Datei: weiter
+                        raise letzter
+                    kat["fehler"].append(f"{r['url']}: {letzter}")  # Spiegel ohne Datei: weiter
                     continue
                 dateien.append({**r, "datensatz": d["name"], "datei": name, "sha256": sha256(ziel)})
         kat["dateien"] = sorted(dateien, key=lambda x: x["datei"])

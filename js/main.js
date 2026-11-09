@@ -418,11 +418,7 @@ function legendeAktualisieren() {
   document.getElementById("klassen").innerHTML =
     texte.map((t, i) => `<li><span class="punkt" style="background:${D.FARBEN[i]}"></span><span class="text">${esc(t)}</span><span class="count-badge">${D.zahl(z.jeKlasse[i])}</span></li>`).join("") +
     (z.ohneWert ? `<li><span class="punkt" style="background:${D.GRAU}"></span><span class="text">kein Wert</span><span class="count-badge">${D.zahl(z.ohneWert)}</span></li>` : "");
-  const st = manifest.staedte[stadtImBild];
-  let hinweis = D.METRIKEN[zustand.metrik].hinweis;
-  if (stadtImBild === "aachen" && (zustand.metrik === "stunde" || zustand.metrik === "fahrverbote")) hinweis += " Aachen nennt das nicht – hier grau.";
-  if (stadtImBild === "berlin" && zustand.metrik === "anteil") hinweis += ` In Berlin zählte die Polizei bei ${D.zahl(100 - 100 * st.anteil_alle_gezaehlt)} % der Kontrollen nur die zu schnellen Fahrzeuge.`;
-  document.getElementById("metrik-hinweis").textContent = hinweis;
+  document.getElementById("metrik-hinweis").textContent = D.metrikHinweis(zustand.metrik, manifest.staedte[stadtImBild]);
   zahlenInChips("f-jahre", z.jeJahr);
   zahlenInChips("f-tempo", z.jeTempo);
   zahlenInChips("f-verortung", z.jeMethode);

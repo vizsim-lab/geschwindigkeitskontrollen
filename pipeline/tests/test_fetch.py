@@ -105,3 +105,45 @@ def test_aachen_muster_gilt_weiter():
     cfg = {k: v for k, v in KOELN.items() if k != "stadt_muster"} | {"aachen_muster": "(?i)köln"}
     ds = [_ds("x", "Geschwindigkeitsüberwachung Köln", ("X", "CSV", "https://x/x.csv"))]
     assert len(fetch.treffer(ds, cfg, "https://s/api/3/action/")) == 1
+
+
+class _Antwort:
+    def __init__(self, js):
+        self._js = js
+
+    def raise_for_status(self):
+        pass
+
+    def json(self):
+        return self._js
+
+
+def test_dkan_suche_wie_ckan(monkeypatch):
+    """Antwort von offenedaten-koeln.de (api/1/search, gekürzt) -> CKAN-Form -> Treffer."""
+    import json
+    from pathlib import Path
+
+    js = json.loads((Path(__file__).parent / "fixtures" / "dkan_suche_koeln.json").read_text("utf-8"))
+    seiten = []
+    monkeypatch.setattr(
+        fetch.requests, "get", lambda url, params, **kw: seiten.append(params) or _Antwort(js)
+    )
+    ds = fetch._dkan_suche("https://www.offenedaten-koeln.de/api/1/", "Geschwindigkeitsüberwachung Köln")
+    assert len(seiten) == 1  # alle Treffer auf der ersten Seite
+    t = fetch.treffer(ds, KOELN, "https://www.offenedaten-koeln.de/api/1/")
+    namen = {d["titel"]: len(d["ressourcen"]) for d in t}
+    assert namen == {
+        "Geschwindigkeitsüberwachung Köln 2017 bis 2022": 7,
+        "Geschwindigkeitsüberwachung Köln 2025": 5,
+    }
+    d = next(x for x in t if x["titel"].endswith("2025"))
+    assert d["lizenz_id"] == "dl-zero-de/2.0"
+    assert d["lizenz"] == "Datenlizenz Deutschland – Zero – Version 2.0"
+    assert d["organisation"] == "Stadt Köln"
+    assert all(r["format"] == "CSV" for r in d["ressourcen"])
+
+
+def test_url_doppelt_kodiert():
+    u = "https://x/Geschwindigkeit%25C3%25BCberwachung_Koeln.csv"
+    assert fetch.url_varianten(u) == [u, "https://x/Geschwindigkeit%C3%BCberwachung_Koeln.csv"]
+    assert fetch.url_varianten("https://x/a.csv") == ["https://x/a.csv"]

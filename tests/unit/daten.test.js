@@ -126,3 +126,23 @@ test("Permalink: Datenlage an und aus", () => {
   assert.equal(P.lies("5/51/10").datenlage, undefined);
   assert.doesNotMatch(P.schreibe({ zoom: 5, lat: 51, lon: 10, datenlage: false }), /d=/);
 });
+
+test("Hinweis zur Kennzahl je Stadt aus dem Manifest", () => {
+  const berlin = { label: "Berlin", hat_dauer: true, hat_fahrverbote: true, anteil_alle_gezaehlt: 0.664 };
+  const aachen = { label: "Aachen", hat_dauer: false, hat_fahrverbote: false, anteil_alle_gezaehlt: 1 };
+  const koeln = { label: "Köln", hat_dauer: false, hat_fahrverbote: false, anteil_alle_gezaehlt: 0 };
+  assert.match(D.metrikHinweis("anteil", berlin), /In Berlin sind bei 34 % der Kontrollen nur die zu schnellen/);
+  assert.doesNotMatch(D.metrikHinweis("anteil", aachen), /nur die zu schnellen/);
+  assert.match(D.metrikHinweis("anteil", koeln), /Köln nennt nur die Verstöße/);
+  assert.match(D.metrikHinweis("stunde", aachen), /Aachen nennt das nicht – hier grau\./);
+  assert.match(D.metrikHinweis("fahrverbote", koeln), /Köln nennt das nicht/);
+  assert.doesNotMatch(D.metrikHinweis("kontrollen", koeln), /grau/);
+});
+
+test("Kennzahl je Kontrolle: Überschreitungen durch Kontrollen, in jeder Stadt", () => {
+  const a = { n: 4, ueber: 30, messAlle: 0, ueberAlle: 0, minuten: 0, ueberMitDauer: 0, fvBekannt: 0, fv: 0 };
+  assert.equal(D.wert(a, "jekontrolle"), 7.5);
+  assert.equal(D.klasse(7.5, "jekontrolle"), 1);
+  assert.deepEqual(D.klassenText("jekontrolle"), ["unter 5", "5–10", "10–25", "25–60", "ab 60"]);
+  assert.equal(P.lies("10/52/13&m=jekontrolle").metrik, "jekontrolle");
+});
