@@ -86,3 +86,17 @@ test("Aachen-Knopf fliegt nach Aachen und zählt Aachener Kontrollen", async ({ 
   await expect(page.locator('.stadt-btn[data-stadt="aachen"]')).toHaveClass(/is-active/, { timeout: 20_000 });
   await expect.poll(() => zahl(page, "#fc-kontrollen")).toBe(manifest.staedte.aachen.kontrollen - manifest.staedte.aachen.verortung.ohne_lage);
 });
+
+test("Stadt ohne Anteil (Köln): der Knopf schaltet auf „je Kontrolle“ statt alles grau", async ({ page }) => {
+  await oeffneKarte(page);
+  const manifest = await kartendaten(page, "manifest.json");
+  const [code, s] = Object.entries(manifest.staedte).find(([, x]) => x.kontrollen > 0 && x.anteil_alle_gezaehlt === 0);
+  await expect(page.locator('input[name="metrik"][value="anteil"]')).toBeChecked();
+  await page.locator(`.stadt-btn[data-stadt="${code}"]`).click();
+  await expect(page.locator('input[name="metrik"][value="jekontrolle"]')).toBeChecked();
+  await expect.poll(() => page.url()).toContain("m=jekontrolle");
+  await expect(page.locator(`.stadt-btn[data-stadt="${code}"]`)).toHaveClass(/is-active/, { timeout: 20_000 });
+  await expect.poll(() => zahl(page, "#fc-kontrollen")).toBe(s.kontrollen - s.verortung.ohne_lage);
+  await page.locator("#methode-auf").click();
+  await expect(page.locator("#methode")).toContainText(s.quelle.bereitsteller);
+});

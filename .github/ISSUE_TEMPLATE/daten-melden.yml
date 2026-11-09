@@ -1,0 +1,41 @@
+name: "Daten melden"
+description: "Du kennst Daten zu Geschwindigkeitskontrollen einer Stadt (offen, per Anfrage erhalten oder abgelehnt), die hier fehlen? Link reicht."
+title: "[Daten] <Stadt>"
+labels: ["datenquelle"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Danke! Stadt und Link genügen – den Rest schauen wir uns an.
+        Gemeint sind Kontrollen mit Ort und Ergebnis (gemessene Fahrzeuge, Überschreitungen), nicht nur Blitzer-Standorte.
+  - type: input
+    id: stadt
+    attributes:
+      label: Stadt, Kreis oder Polizeibehörde
+      placeholder: "z. B. Rostock"
+    validations:
+      required: true
+  - type: dropdown
+    id: stand
+    attributes:
+      label: Was gibt es?
+      options:
+        - "offen veröffentlicht (Portal, Download)"
+        - "auf Anfrage herausgegeben (IFG, z. B. FragDenStaat)"
+        - "Anfrage abgelehnt oder gescheitert"
+        - "wird erhoben, aber nicht veröffentlicht"
+    validations:
+      required: true
+  - type: input
+    id: url
+    attributes:
+      label: Link
+      description: Portal, Download oder die Anfrage auf FragDenStaat.
+      placeholder: "https://…"
+    validations:
+      required: true
+  - type: textarea
+    id: mehr
+    attributes:
+      label: Sonst noch was? (optional)
+      description: Format (PDF, Excel, CSV), Zeitraum, welche Angaben je Kontrolle, Lizenz – kein Muss.

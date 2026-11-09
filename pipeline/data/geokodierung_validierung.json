@@ -55,5 +55,30 @@
    "median": 21.6,
    "p90": 49.1
   }
+ },
+ "koeln": {
+  "kontrollen": 44633,
+  "verortet": 44410,
+  "je_methode": {
+   "hausnummer": 30303,
+   "abschnitt": 0,
+   "kreuzung": 555,
+   "anschlussstelle": 0,
+   "strasse": 13552
+  },
+  "ohne_lage": 223,
+  "je_gebiet": {
+   "bezirk": 43913,
+   "stadt": 328,
+   "umgebung": 169
+  },
+  "hinweise": {
+   "Ortsangabe von Hand zugeordnet (config/orte.yaml)": 301,
+   "Ortsangabe statt Querstraße": 14
+  },
+  "adresse_zur_achse_m": {
+   "median": 18.2,
+   "p90": 29.7
+  }
  }
 }

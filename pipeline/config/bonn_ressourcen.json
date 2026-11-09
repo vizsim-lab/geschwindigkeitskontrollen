@@ -1,0 +1,172 @@
+{
+ "katalog": "https://www.govdata.de/ckan/api/3/action/",
+ "datensaetze": [
+  {
+   "name": "bussgelder-fliessender-verkehr-2022b723d",
+   "titel": "Bußgelder fließender Verkehr 2022",
+   "organisation": "Mobilithek",
+   "lizenz": "",
+   "lizenz_id": "",
+   "lizenz_url": null,
+   "url": "https://www.govdata.de/dataset/bussgelder-fliessender-verkehr-2022b723d"
+  },
+  {
+   "name": "bussgelder-fliessender-verkehr-2024",
+   "titel": "Bußgelder fließender Verkehr 2024",
+   "organisation": "Open.NRW",
+   "lizenz": "",
+   "lizenz_id": "",
+   "lizenz_url": null,
+   "url": "https://www.govdata.de/dataset/bussgelder-fliessender-verkehr-2024"
+  },
+  {
+   "name": "bussgelder-fliessender-verkehr-2021",
+   "titel": "Bußgelder fließender Verkehr 2021",
+   "organisation": "Open.NRW",
+   "lizenz": "",
+   "lizenz_id": "",
+   "lizenz_url": null,
+   "url": "https://www.govdata.de/dataset/bussgelder-fliessender-verkehr-2021"
+  },
+  {
+   "name": "bussgelder-fliessender-verkehr-2018",
+   "titel": "Bußgelder fließender Verkehr 2018",
+   "organisation": "Open.NRW",
+   "lizenz": "",
+   "lizenz_id": "",
+   "lizenz_url": null,
+   "url": "https://www.govdata.de/dataset/bussgelder-fliessender-verkehr-2018"
+  },
+  {
+   "name": "bussgelder-fliessender-verkehr-2017",
+   "titel": "Bußgelder fließender Verkehr 2017",
+   "organisation": "Open.NRW",
+   "lizenz": "",
+   "lizenz_id": "",
+   "lizenz_url": null,
+   "url": "https://www.govdata.de/dataset/bussgelder-fliessender-verkehr-2017"
+  },
+  {
+   "name": "bussgelder-fliessender-verkehr-2016",
+   "titel": "Bußgelder fließender Verkehr 2016",
+   "organisation": "Open.NRW",
+   "lizenz": "",
+   "lizenz_id": "",
+   "lizenz_url": null,
+   "url": "https://www.govdata.de/dataset/bussgelder-fliessender-verkehr-2016"
+  },
+  {
+   "name": "bussgelder-fliessender-verkehr-2023",
+   "titel": "Bußgelder fließender Verkehr 2023",
+   "organisation": "Open.NRW",
+   "lizenz": "",
+   "lizenz_id": "",
+   "lizenz_url": null,
+   "url": "https://www.govdata.de/dataset/bussgelder-fliessender-verkehr-2023"
+  },
+  {
+   "name": "bussgelder-fliessender-verkehr-20206ac11",
+   "titel": "Bußgelder fließender Verkehr 2020",
+   "organisation": "Mobilithek",
+   "lizenz": "",
+   "lizenz_id": "",
+   "lizenz_url": null,
+   "url": "https://www.govdata.de/dataset/bussgelder-fliessender-verkehr-20206ac11"
+  },
+  {
+   "name": "bussgelder-fliessender-verkehr-2019",
+   "titel": "Bußgelder fließender Verkehr 2019",
+   "organisation": "Open.NRW",
+   "lizenz": "",
+   "lizenz_id": "",
+   "lizenz_url": null,
+   "url": "https://www.govdata.de/dataset/bussgelder-fliessender-verkehr-2019"
+  }
+ ],
+ "fehler": [
+  "https://opendata.bonn.de/api/1/: 404 Client Error: Not Found for url: https://opendata.bonn.de/api/1/search?fulltext=Bu%C3%9Fgelder+flie%C3%9Fender+Verkehr&page-size=100&page=1",
+  "https://opendata.bonn.de/sites/default/files/Geschwindigkeitsverstoesse2018_0.csv: HTTPSConnectionPool(host='opendata.bonn.de', port=443): Max retries exceeded with url: /sites/default/files/Geschwindigkeitsverstoesse2018_0.csv (Caused by NewConnectionError(\"HTTPSConnection(host='opendata.bonn.de', port=443): Failed to establish a new connection: [Errno 111] Connection refused\"))"
+ ],
+ "dateien": [
+  {
+   "id": "1e401229-216f-41b4-af17-8ba9a80084b4",
+   "name": "Bußgelder fließender Verkehr 2016",
+   "format": "CSV",
+   "url": "https://opendata.bonn.de/sites/default/files/OWI2016.csv",
+   "geaendert": "2026-09-19T23:14:28.237364",
+   "datensatz": "bussgelder-fliessender-verkehr-2016",
+   "datei": "bussgelder-fliessender-verkehr-2016__Bußgelder_fließender_Verkehr_2016.csv",
+   "sha256": "a732a06bcd80ae324df2ec591ef7fdfc4b517edf5c6bf79b042adba4a6672cc8"
+  },
+  {
+   "id": "394f88c7-d016-4c38-882b-4cf82f785fc4",
+   "name": "Bussgelder fliessender Verkehr 2017 ",
+   "format": "CSV",
+   "url": "https://opendata.bonn.de/sites/default/files/Geschwindigkeitsverstoesse%202017.csv",
+   "geaendert": "2026-09-19T23:15:01.374785",
+   "datensatz": "bussgelder-fliessender-verkehr-2017",
+   "datei": "bussgelder-fliessender-verkehr-2017__Bussgelder_fliessender_Verkehr_2017.csv",
+   "sha256": "cee8dd11160d30fb9ba32bcd03e227b0a838ed9c20a96321b40a7875965ff002"
+  },
+  {
+   "id": "19a2daf3-2034-4027-b245-5a635deb3125",
+   "name": "Bußgelder fließender Verkehr 2019",
+   "format": "CSV",
+   "url": "https://opendata.bonn.de/sites/default/files/Geschwindigkeitsverstoesse2019.csv",
+   "geaendert": "2026-09-19T23:15:34.304003",
+   "datensatz": "bussgelder-fliessender-verkehr-2019",
+   "datei": "bussgelder-fliessender-verkehr-2019__Bußgelder_fließender_Verkehr_2019.csv",
+   "sha256": "415f155ef7137b6de00dce28a0c35ede92205a5a90996cef5cc3742521ad881a"
+  },
+  {
+   "id": "2fdbee1d-f4c3-4a31-a391-8584c4aed590",
+   "name": "Bußgelder fließender Verkehr 2020",
+   "format": "CSV",
+   "url": "https://opendata.bonn.de/sites/default/files/GeschwindigkeitsverstoesseBonn2020.csv",
+   "geaendert": "2025-05-28T06:17:12.614995",
+   "datensatz": "bussgelder-fliessender-verkehr-20206ac11",
+   "datei": "bussgelder-fliessender-verkehr-20206ac11__Bußgelder_fließender_Verkehr_2020.csv",
+   "sha256": "ac99418f07a27a1790c486d3a2a19f761ef99533ed1f2ca3fe44a0161dc5abc1"
+  },
+  {
+   "id": "2ae29480-f63e-4a09-ad64-4f281ca49410",
+   "name": "Bußgelder fließender Verkehr 2021",
+   "format": "CSV",
+   "url": "https://opendata.bonn.de/sites/default/files/Geschwindigkeitsverst%C3%B6%C3%9Fe%202021.csv",
+   "geaendert": "2026-09-19T23:16:12.534881",
+   "datensatz": "bussgelder-fliessender-verkehr-2021",
+   "datei": "bussgelder-fliessender-verkehr-2021__Bußgelder_fließender_Verkehr_2021.csv",
+   "sha256": "40a4e2129e137cabf84cc0ab68c0262824a7923b47a4ab75b856074b0ae260ee"
+  },
+  {
+   "id": "faecefb1-07f2-42b8-bad2-3184e1752914",
+   "name": "Bußgelder fließender Verkehr 2022",
+   "format": "CSV",
+   "url": "https://opendata.bonn.de/sites/default/files/Geschwindigkeitsverstoesse2022.csv",
+   "geaendert": "2025-05-28T06:16:25.791440",
+   "datensatz": "bussgelder-fliessender-verkehr-2022b723d",
+   "datei": "bussgelder-fliessender-verkehr-2022b723d__Bußgelder_fließender_Verkehr_2022.csv",
+   "sha256": "7ea724a99e07c78cb4e489afc12b251eea7b9fc96e109c9f7404189a371c40b0"
+  },
+  {
+   "id": "8e73e230-137a-42f5-82c5-38a3d8c400fa",
+   "name": "Bußgelder fließender Verkehr 2023",
+   "format": "CSV",
+   "url": "https://opendata.bonn.de/sites/default/files/Geschwindigkeitsverstoesse2023.csv",
+   "geaendert": "2026-09-19T23:14:55.686449",
+   "datensatz": "bussgelder-fliessender-verkehr-2023",
+   "datei": "bussgelder-fliessender-verkehr-2023__Bußgelder_fließender_Verkehr_2023.csv",
+   "sha256": "32ef4df6706e65f09e80ee13e2efc41c1c8abe11dc77953d125674252245411f"
+  },
+  {
+   "id": "e4374f04-afbd-4fbc-8353-37e437a12776",
+   "name": "Bußgelder fließender Verkehr 2024",
+   "format": "CSV",
+   "url": "https://opendata.bonn.de/sites/default/files/Geschwindigkeitsverstoesse2024.csv",
+   "geaendert": "2026-09-19T23:16:46.831242",
+   "datensatz": "bussgelder-fliessender-verkehr-2024",
+   "datei": "bussgelder-fliessender-verkehr-2024__Bußgelder_fließender_Verkehr_2024.csv",
+   "sha256": "bcb679d7f7923618a92ba30ddd2fbc72f1b2895cca11809f980c5e9fbc6804b5"
+  }
+ ]
+}

@@ -1,7 +1,8 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 """Pfade und Konfiguration.
 
-Alles relativ zur Repo-Wurzel; `KONTROLLEN_DATA` biegt nur das Datenverzeichnis um (Tests).
+Alles relativ zur Repo-Wurzel; `KONTROLLEN_DATA` biegt das Datenverzeichnis um (Tests) – und
+mit ihm `docs`, damit ein Testlauf nicht die Übersicht im Repo überschreibt.
 """
 
 from __future__ import annotations
@@ -22,6 +23,7 @@ class Paths:
     pipeline: Path
     config: Path
     data: Path
+    docs: Path
 
     @property
     def raw(self) -> Path:
@@ -44,8 +46,10 @@ class Paths:
 
 def get_paths() -> Paths:
     pipeline = ROOT / "pipeline"
-    data = Path(os.environ.get("KONTROLLEN_DATA", pipeline / "data"))
-    return Paths(root=ROOT, pipeline=pipeline, config=pipeline / "config", data=data)
+    umgebogen = os.environ.get("KONTROLLEN_DATA")
+    data = Path(umgebogen) if umgebogen else pipeline / "data"
+    docs = data / "docs" if umgebogen else ROOT / "docs"
+    return Paths(root=ROOT, pipeline=pipeline, config=pipeline / "config", data=data, docs=docs)
 
 
 @cache

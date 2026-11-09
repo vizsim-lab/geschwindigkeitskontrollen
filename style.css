@@ -775,6 +775,9 @@ body {
 
 .pop-tabelle {
   overflow-x: auto;
+  /* Köln: an manchen Standorten Hunderte Kontrollen – die Liste scrollt */
+  max-height: min(30vh, 240px);
+  overflow-y: auto;
 }
 
 .pop-liste table {
@@ -1062,5 +1065,190 @@ body {
 
   .maplibregl-popup.pop-fest .maplibregl-popup-content {
     max-height: calc(100dvh - 62px - 130px);
+  }
+}
+
+/* ───── Datenlage je Stadt (js/datenlage.js; Muster aus vizsim-lab/zaehlkarte) ───── */
+.dl-titel {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dl-schalter {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.dl-schalter input {
+  margin: 0;
+  accent-color: var(--ui-accent);
+}
+
+#datenlage-legende {
+  margin-top: 6px;
+}
+
+.dl-punkt {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  margin: 0 6px 1px 0;
+  border-radius: 50%;
+  vertical-align: middle;
+}
+
+/* Seitenleiste einer Stadt (links, unter der Suche) */
+.detail-panel {
+  position: absolute;
+  top: 60px;
+  left: 10px;
+  z-index: 6;
+  width: 360px;
+  max-width: calc(100vw - 20px);
+  max-height: calc(100dvh - 76px);
+  overflow-y: auto;
+  box-sizing: border-box;
+  padding: 0 16px 14px;
+  background: var(--ui-surface);
+  color: var(--ui-text);
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius);
+  box-shadow: var(--ui-shadow);
+  font-size: 12px;
+  scrollbar-width: thin;
+  scrollbar-color: #d1d5db transparent;
+}
+
+.detail-panel a {
+  color: var(--ui-accent);
+  text-decoration: none;
+}
+
+.detail-panel a:hover {
+  text-decoration: underline;
+}
+
+.detail-kopf {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 0 -16px 8px;
+  padding: 14px 16px 10px;
+  background: var(--ui-surface);
+  box-shadow: 0 6px 10px -8px rgba(15, 23, 42, 0.45);
+}
+
+.detail-titel {
+  margin: 0 0 2px;
+  font-size: 16px;
+  line-height: 1.3;
+  color: var(--ui-text-strong);
+}
+
+.detail-zu {
+  flex: none;
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: 8px;
+  background: none;
+  color: var(--ui-text-muted);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.detail-zu:hover {
+  background: var(--ui-hover);
+  color: var(--ui-text);
+}
+
+.detail-text {
+  margin: 4px 0 8px;
+  line-height: 1.45;
+}
+
+.detail-abschnitt {
+  margin: 12px 0 5px;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #374151;
+}
+
+.detail-hinweise {
+  margin: 0;
+  padding-left: 16px;
+  color: var(--ui-text-muted);
+  line-height: 1.45;
+}
+
+.detail-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  align-items: center;
+}
+
+.link-knopf {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ui-accent);
+  font: inherit;
+  cursor: pointer;
+}
+
+.link-knopf:hover {
+  text-decoration: underline;
+}
+
+/* Anfragetext: lesbar, markierbar, nicht editierbar */
+.anfrage-text {
+  width: 100%;
+  box-sizing: border-box;
+  margin: 4px 0 2px;
+  padding: 8px 10px;
+  border: 1px solid var(--ui-border);
+  border-radius: 8px;
+  background: #fafafa;
+  font: 11.5px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  color: var(--ui-text);
+  resize: vertical;
+}
+
+/* Wenn die Seitenleiste offen ist, rücken die Bedienelemente unten links daneben. */
+body.detail-offen #bottom-left-ui-container,
+body.detail-offen .map-settings-toggle,
+body.detail-offen .map-settings-panel {
+  left: 380px;
+}
+
+@media (max-width: 640px) {
+  .detail-panel {
+    top: auto;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: auto;
+    max-width: none;
+    max-height: 70dvh;
+    border-radius: var(--ui-radius) var(--ui-radius) 0 0;
+    z-index: 8;
+    padding-bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+  }
+
+  body.detail-offen #bottom-left-ui-container,
+  body.detail-offen .map-settings-toggle,
+  body.detail-offen .map-settings-panel {
+    left: 10px;
   }
 }

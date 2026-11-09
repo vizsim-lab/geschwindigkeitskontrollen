@@ -3,14 +3,14 @@
 
 <head>
   <meta charset="utf-8" />
-  <title>Geschwindigkeitskontrollen – Berlin und Aachen</title>
+  <title>Geschwindigkeitskontrollen – Berlin, Aachen und Köln</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description"
-    content="Karte der Geschwindigkeitskontrollen in Berlin (2017–2019) und Aachen (seit 2020): jede Kontrolle an ihrer Messstelle, verortet über Hausnummer und Querstraßen im OpenStreetMap-Straßennetz." />
+    content="Karte der Geschwindigkeitskontrollen in Berlin (2017–2020), Aachen (seit 2020) und Köln (2017–2025): jede Kontrolle an ihrer Messstelle, verortet über Hausnummer und Querstraßen im OpenStreetMap-Straßennetz – dazu, wo es solche Daten in anderen Städten gibt." />
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="Geschwindigkeitskontrollen – Berlin und Aachen" />
+  <meta property="og:title" content="Geschwindigkeitskontrollen – Berlin, Aachen und Köln" />
   <meta property="og:description"
-    content="Wo wurde wie oft kontrolliert, und wie viele waren zu schnell? Polizei Berlin 2017–2019, Stadt Aachen seit 2020." />
+    content="Wo wurde wie oft kontrolliert, und wie viele waren zu schnell? Polizei Berlin 2017–2020, Stadt Aachen seit 2020, Stadt Köln 2017–2025." />
   <meta property="og:locale" content="de_DE" />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%23fff' stroke='%23d73027' stroke-width='4'/%3E%3Ctext x='16' y='21' font-family='Arial' font-size='13' font-weight='700' text-anchor='middle' fill='%23111'%3E50%3C/text%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://tiles.openfreemap.org" crossorigin>
@@ -40,16 +40,15 @@
 
     <div class="legend-section-divider"></div>
 
-    <div class="stadt-wahl" role="group" aria-label="Stadt">
-      <button type="button" class="stadt-btn" data-stadt="berlin">Berlin <span class="stadt-jahre"></span></button>
-      <button type="button" class="stadt-btn" data-stadt="aachen">Aachen <span class="stadt-jahre"></span></button>
-    </div>
+    <!-- Knöpfe je Stadt aus dem Manifest (js/main.js) -->
+    <div class="stadt-wahl" id="stadt-wahl" role="group" aria-label="Stadt"></div>
 
     <section class="legend-section" aria-labelledby="t-farbe">
       <div class="legend-section-title" id="t-farbe">Farbe nach</div>
       <div class="legend-modes" role="radiogroup" aria-labelledby="t-farbe">
         <label class="legend-chip"><input type="radio" name="metrik" value="anteil" checked /><span>Anteil zu schnell</span></label>
         <label class="legend-chip"><input type="radio" name="metrik" value="stunde" /><span>je Stunde</span></label>
+        <label class="legend-chip"><input type="radio" name="metrik" value="jekontrolle" /><span>je Kontrolle</span></label>
         <label class="legend-chip"><input type="radio" name="metrik" value="fahrverbote" /><span>Fahrverbote</span></label>
         <label class="legend-chip"><input type="radio" name="metrik" value="kontrollen" /><span>Kontrollen</span></label>
       </div>
@@ -68,7 +67,7 @@
         <div class="chips" id="f-jahre"></div>
       </div>
       <div class="filter-gruppe">
-        <div class="filter-titel">Tempolimit <span class="info-icon" data-tip="Nur Berlin nennt das Tempolimit; Aachen steht unter „unbekannt“.">i</span></div>
+        <div class="filter-titel">Tempolimit <span class="info-icon" id="tempo-tip" data-tip="">i</span></div>
         <div class="chips" id="f-tempo"></div>
       </div>
       <div class="filter-gruppe">
@@ -76,6 +75,15 @@
         <div class="chips" id="f-verortung"></div>
       </div>
       <button type="button" class="link-btn" id="filter-zurueck" hidden>Alle Filter zurücksetzen</button>
+    </section>
+
+    <section class="legend-section" id="datenlage-abschnitt" aria-labelledby="t-datenlage" hidden>
+      <div class="legend-section-divider"></div>
+      <div class="legend-section-title dl-titel" id="t-datenlage">
+        <label class="dl-schalter"><input type="checkbox" id="toggle-datenlage" /> Datenlage je Stadt</label>
+        <span class="info-icon" data-tip="Wo es solche Daten außerhalb der Karte gibt – offen, auf Anfrage herausgegeben oder abgelehnt. Ein Klick auf eine Stadt zeigt Stand, Belege und einen Anfragetext für FragDenStaat.">i</span>
+      </div>
+      <ul class="klassen" id="datenlage-legende" aria-label="Datenlage"></ul>
     </section>
 
     <div id="feature-count-wrapper">
@@ -123,6 +131,8 @@
       </button>
     </div>
   </section>
+
+  <aside id="datenlage-detail" class="detail-panel" hidden aria-label="Datenlage einer Stadt"></aside>
 
   <dialog id="methode" class="info-dialog" aria-labelledby="methode-titel">
     <div class="info-body">

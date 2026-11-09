@@ -9,6 +9,8 @@ in `messstellen.json` und `kontrollen.json` (`felder`) und die Dateinamen in
   (`BUENDEL_M`). Grobe Verortungen (nur die Straße) werden nie mit genauen gebündelt.
 - **kontrollen.json** – eine Zeile je Kontrolle, nur Zahlen und Verweise in Nachschlagelisten;
   die Karte filtert und rechnet die Messstellen daraus selbst (Jahr, Tempo, Verortung).
+- **datenlage.json** – je Stadt aus `datenlage` in sources.yaml ein Punkt mit Stand, Belegen und
+  Anfragetext; dieselben Angaben als Übersicht in docs/DATENLAGE.md.
 """
 
 from __future__ import annotations
@@ -17,6 +19,7 @@ import json
 import math
 from datetime import date
 from pathlib import Path
+from urllib.parse import quote_plus
 
 import pandas as pd
 import shapely
@@ -103,8 +106,13 @@ def baue(p: Paths) -> dict:
     _schreibe_json(p.karte / "abschnitte.geojson", _abschnitte(stellen))
     _csv(m, p.karte / "kontrollen.csv")
 
+    dl = datenlage(q, stellen, m)
+    _schreibe_json(p.karte / "datenlage.json", dl, eingerueckt=True)
     manifest = _manifest(p, q, m, stellen)
     _schreibe_json(p.karte / "manifest.json", manifest, eingerueckt=True)
+    doku = p.docs / "DATENLAGE.md"
+    doku.parent.mkdir(parents=True, exist_ok=True)
+    doku.write_text(datenlage_md(dl, manifest["stand"]), encoding="utf-8")
     return {
         "kontrollen": int(len(m)),
         "messstellen": len(stellen),
@@ -308,8 +316,6 @@ def _csv(m: pd.DataFrame, ziel: Path) -> None:
 def _manifest(p: Paths, q: dict, m: pd.DataFrame, stellen: list[dict]) -> dict:
     val_pfad = p.data_file("geokodierung_validierung.json")
     validierung = json.loads(val_pfad.read_text(encoding="utf-8")) if val_pfad.exists() else {}
-    res_pfad = p.pipeline / q["staedte"]["aachen"]["kontrollen"]["ressourcen"]
-    aachen_res = json.loads(res_pfad.read_text(encoding="utf-8")) if res_pfad.exists() else {}
     staedte = {}
     for code, cfg in q["staedte"].items():
         t = m[m["stadt"] == code]
@@ -322,17 +328,24 @@ def _manifest(p: Paths, q: dict, m: pd.DataFrame, stellen: list[dict]) -> dict:
             "herkunft_url": k["herkunft_url"],
             "lizenz": k.get("lizenz"),
             "lizenz_hinweis": k.get("lizenz_hinweis"),
+            "hinweis": k.get("hinweis"),
         }
-        if code == "aachen" and aachen_res:
+        res_pfad = p.pipeline / k["ressourcen"] if k.get("ressourcen") else None
+        res = (
+            json.loads(res_pfad.read_text(encoding="utf-8"))
+            if res_pfad and res_pfad.exists()
+            else {}
+        )
+        if res:  # Städte aus Open-Data-Katalogen: Lizenzen und Datensätze aus der Liste
             lizenzen = sorted(
-                {d.get("lizenz") for d in aachen_res.get("datensaetze", []) if d.get("lizenz")}
+                {d.get("lizenz") for d in res.get("datensaetze", []) if d.get("lizenz")}
             )
-            quelle["lizenz"] = " / ".join(lizenzen) or None
+            quelle["lizenz"] = " / ".join(lizenzen) or k.get("lizenz")
             quelle["datensaetze"] = [
                 {"titel": d["titel"], "url": d.get("url"), "lizenz": d.get("lizenz")}
-                for d in aachen_res.get("datensaetze", [])
+                for d in res.get("datensaetze", [])
             ]
-            quelle["dateien"] = len(aachen_res.get("dateien", []))
+            quelle["dateien"] = len(res.get("dateien", []))
         staedte[code] = {
             "label": cfg["label"],
             "start": cfg["start"],
@@ -340,10 +353,9 @@ def _manifest(p: Paths, q: dict, m: pd.DataFrame, stellen: list[dict]) -> dict:
             "messstellen": sum(1 for s in stellen if s["stadt"] == code),
             "zeitraum": [t["datum"].min(), t["datum"].max()] if len(t) else None,
             "jahre": sorted({int(d[:4]) for d in t["datum"].dropna()}),
-            "stufen": ["bis 20 km/h", "über 20 km/h"]
-            if code == "berlin"
-            else ["bis 15 km/h", "über 15 km/h"],
+            "stufen": _stufen(t),
             "hat_dauer": bool(t["dauer_min"].notna().any()),
+            "hat_fahrverbote": bool(t["fahrverbote"].notna().any()),
             "hat_tempo": bool(t["tempo"].notna().any()),
             "anteil_alle_gezaehlt": round(float(t["alle_gezaehlt"].mean()), 3) if len(t) else None,
             "quelle": quelle,
@@ -357,7 +369,9 @@ def _manifest(p: Paths, q: dict, m: pd.DataFrame, stellen: list[dict]) -> dict:
             "kontrollen": "kontrollen.json",
             "abschnitte": "abschnitte.geojson",
             "csv": "kontrollen.csv",
+            "datenlage": "datenlage.json",
         },
+        "datenlage_stand": STAND,
         "staedte": staedte,
         "osm": {
             "bereitsteller": o["bereitsteller"],
@@ -367,6 +381,152 @@ def _manifest(p: Paths, q: dict, m: pd.DataFrame, stellen: list[dict]) -> dict:
         "karte": q["karte"],
         "methoden": list(METHODEN),
     }
+
+
+# --- Datenlage -----------------------------------------------------------------------------
+
+STAND = {
+    "in_karte": "in der Karte",
+    "offen": "offen, noch nicht in der Karte",
+    "geliefert": "auf Anfrage herausgegeben",
+    "kandidat": "erhoben – Anfrage aussichtsreich",
+    "teilweise": "nur Summen, Standorte oder Planungen offen",
+    "abgelehnt": "Anfrage gescheitert",
+}
+FDS_SUCHE = "https://fragdenstaat.de/behoerden/?q="
+
+
+def anfrage(vorlage: dict, e: dict) -> dict:
+    """Anfragetext aus `anfrage_vorlage` (Feld „Anfrage“ auf FragDenStaat) für einen Eintrag."""
+    zusatz = " ".join((e.get("anfrage_zusatz") or "").split())
+    text = vorlage["text"].format(
+        stelle=e.get("stelle") or f"die Stadt {e['kommune']}",
+        seit=e.get("seit") or "dem 1. Januar 2019",
+        zusatz=f"\n{zusatz}\n" if zusatz else "",
+    )
+    return {"betreff": vorlage["betreff"], "text": text.strip()}
+
+
+def kontakt(roh: dict | None) -> dict | None:
+    """Kontakt über die Behördensuche von FragDenStaat (keine Namen, keine Adressen)."""
+    if not roh:
+        return None
+    out = {k: roh[k] for k in ("name", "fds") if roh.get(k)}
+    if roh.get("fds_suche"):
+        out["fds"] = FDS_SUCHE + quote_plus(roh["fds_suche"])
+        out["fds_suche"] = True
+    return out or None
+
+
+def datenlage(q: dict, stellen: list[dict], m: pd.DataFrame) -> dict:
+    """Einträge `datenlage` aus sources.yaml -> GeoJSON (ein Punkt je Stadt).
+
+    Liegt eine Stadt in der Karte (`stadt:`), kommt ihr Punkt aus der Mitte (Median) ihrer
+    Messstellen und die Zahl der Kontrollen aus den Daten; ohne Kontrollen fällt der Eintrag
+    weg, damit die Karte nichts „in der Karte“ nennt, was fehlt."""
+    vorlage, recht = q["anfrage_vorlage"], q.get("recht", {})
+    features = []
+    for e in q.get("datenlage", []):
+        if e["stand"] not in STAND:
+            raise ValueError(f"Datenlage {e['kommune']}: Stand {e['stand']!r} unbekannt")
+        lon, lat, n = e.get("lon"), e.get("lat"), None
+        if e.get("stadt"):
+            if e["stadt"] not in q["staedte"]:
+                raise ValueError(f"Datenlage {e['kommune']}: Stadt {e['stadt']!r} fehlt in staedte")
+            st = [s for s in stellen if s["stadt"] == e["stadt"]]
+            if not st:
+                continue
+            lon = round(sorted(s["lon"] for s in st)[len(st) // 2], 5)
+            lat = round(sorted(s["lat"] for s in st)[len(st) // 2], 5)
+            n = int((m["stadt"] == e["stadt"]).sum())
+        if lon is None or lat is None:
+            raise ValueError(f"Datenlage {e['kommune']}: lon/lat fehlen")
+        features.append(
+            {
+                "type": "Feature",
+                "geometry": {"type": "Point", "coordinates": [lon, lat]},
+                "properties": {
+                    "kommune": e["kommune"],
+                    "land": e.get("land"),
+                    "stand": e["stand"],
+                    "stadt": e.get("stadt"),
+                    "kontrollen": n,
+                    "was": e.get("was"),
+                    "situation": e.get("situation"),
+                    "empfehlung": e.get("empfehlung"),
+                    "weg": e.get("weg"),
+                    "kontakt": kontakt(e.get("kontakt")),
+                    "anfrage": anfrage(vorlage, e) if e.get("anfrage") else None,
+                    "recht": recht.get(e.get("land")),
+                    "links": [{"titel": t, "url": u} for t, u in e.get("links", [])],
+                },
+            }
+        )
+    return {"type": "FeatureCollection", "features": features}
+
+
+def datenlage_md(fc: dict, erzeugt: str) -> str:
+    """Übersicht für GitHub (docs/DATENLAGE.md) aus denselben Daten wie die Karte."""
+    zeilen = [
+        "# Datenlage: Geschwindigkeitskontrollen je Stadt",
+        "",
+        f"Erzeugt von `kontrollen site` am {erzeugt} aus `pipeline/config/sources.yaml` – nicht",
+        "von Hand ändern. Dieselben Angaben zeigt die Karte unter „Datenlage je Stadt“. Rechtliche",
+        "Hinweise sind keine Rechtsberatung; Kontakte über die Behördensuche von FragDenStaat.",
+        "",
+        "| Stadt | Land | Stand | Was es gibt |",
+        "|---|---|---|---|",
+    ]
+    reihenfolge = list(STAND)
+    eintraege = sorted(
+        fc["features"],
+        key=lambda f: (reihenfolge.index(f["properties"]["stand"]), f["properties"]["kommune"]),
+    )
+    for f in eintraege:
+        p = f["properties"]
+        zeilen.append(
+            f"| {p['kommune']} | {p['land'] or ''} | {STAND[p['stand']]} | {p.get('was') or ''} |"
+        )
+    for f in eintraege:
+        p = f["properties"]
+        zeilen += ["", f"## {p['kommune']} ({p['land']}) – {STAND[p['stand']]}", ""]
+        if p.get("kontrollen"):
+            zeilen += [f"{p['kontrollen']:,} Kontrollen in der Karte.".replace(",", "."), ""]
+        zeilen += [f"**Lage:** {p.get('situation') or p.get('was')}", ""]
+        if p.get("empfehlung"):
+            zeilen += [f"**Empfehlung:** {p['empfehlung']}", ""]
+        if p.get("weg"):
+            zeilen += [f"**Weg:** {p['weg']}", ""]
+        if p.get("recht"):
+            zeilen += [f"**Rechtslage im Land:** {p['recht']}", ""]
+        k = p.get("kontakt") or {}
+        if k.get("fds"):
+            zeilen += [f"**Kontakt:** [Behörde auf FragDenStaat suchen]({k['fds']})", ""]
+        if p.get("anfrage"):
+            zeilen += [
+                f"**Anfragetext** – Betreff: {p['anfrage']['betreff']}",
+                "",
+                "```text",
+                p["anfrage"]["text"],
+                "```",
+                "",
+            ]
+        if p.get("links"):
+            zeilen += [
+                "**Belege:** " + " · ".join(f"[{x['titel']}]({x['url']})" for x in p["links"]),
+                "",
+            ]
+    return "\n".join(zeilen).rstrip() + "\n"
+
+
+def _stufen(t: pd.DataFrame) -> list[str] | None:
+    """Beschriftung der beiden Stufen nach der häufigsten Grenze der Stadt (Berlin 20 km/h,
+    Aachen meist 15 km/h); ohne Stufen in den Daten None."""
+    k = t["stufe_kmh"].dropna()
+    if k.empty:
+        return None
+    g = int(k.mode().iloc[0])
+    return [f"bis {g} km/h", f"über {g} km/h"]
 
 
 def _schreibe_json(pfad: Path, obj, eingerueckt: bool = False) -> None:

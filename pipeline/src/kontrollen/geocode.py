@@ -367,13 +367,17 @@ class Gebiete:
         return cls(stadt=stadt.buffer(PUFFER_GEBIET), grenze=stadt.boundary, bezirke=bezirke)
 
     def bezirke_aus(self, teile: list[str]) -> list[str]:
-        """Abgeschnittene Bezirksnamen über den Anfang: "Charlottenburg-Wilmersd" -> ganzer Name."""
+        """Abgeschnittene Bezirksnamen über den Anfang: "Charlottenburg-Wilmersd" -> ganzer Name.
+        Ein vollständiger Name geht vor ("Lind" ist in Köln ein Stadtteil, nicht der Anfang von
+        „Lindenthal“)."""
         out = []
         for t in teile:
             k = namen.schluessel(t)
             if len(k) < 3:
                 continue
-            treffer = [n for n in self.bezirke if namen.schluessel(n).startswith(k)]
+            treffer = [n for n in self.bezirke if namen.schluessel(n) == k] or [
+                n for n in self.bezirke if namen.schluessel(n).startswith(k)
+            ]
             if len(treffer) == 1 and treffer[0] not in out:
                 out.append(treffer[0])
         return out

@@ -24,3 +24,16 @@ aachen:
   "Aachen Münchener Allee": "Aachener-und-Münchener-Allee"
   "Aachen Müncher Allee": "Aachener-und-Münchener-Allee"
   "Aachener Münchener Str.": "Aachener-und-Münchener-Allee"
+
+koeln:
+  # Abkürzungen in den Standorttabellen der Stadt (vor allem 2017–2022, das Feld ist dort auf
+  # 30 Zeichen gekürzt); gesucht wird weiter im genannten Stadtteil
+  "Ber.Gl.Str.": "Bergisch Gladbacher Straße"         # Dellbrück
+  "Bergisch Gladb.Str.": "Bergisch Gladbacher Straße" # Dellbrück
+  "Berg. Gladbacher.": "Bergisch Gladbacher Straße"   # Mülheim
+  "Berg.-Gladb.-Str.": "Bergisch Gladbacher Straße"   # Holweide, Buchheim (auch „Berg.-Gladb. Str.“)
+  "K.-Aden.-Ufer": "Konrad-Adenauer-Ufer"             # Neustadt-Nord
+  "K.Adenauer-Ufer": "Konrad-Adenauer-Ufer"           # dasselbe
+  "H.-Erpenbach-Str.": "Heinrich-Erpenbach-Straße"    # Sürth – die einzige Erpenbach-Straße in Köln
+  "Ricarda-Huch-tr.": "Ricarda-Huch-Straße"           # Stammheim, Tippfehler („tr.“ statt „Str.“)
+  "Lib.Landstr.": "Liburer Landstraße"                # Libur

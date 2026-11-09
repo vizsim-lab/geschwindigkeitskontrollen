@@ -2,12 +2,13 @@
 // permalink.js — REIN (kein DOM, kein window): Kartenzustand <-> Link-Anker.
 //
 // Format: #<zoom>/<lat>/<lon>&m=<metrik>&j=<jahre>&t=<tempo>&v=<verortung>
-//   m: anteil | stunde | fahrverbote | kontrollen (fehlt = anteil)
+//   m: anteil | stunde | jekontrolle | fahrverbote | kontrollen (fehlt = anteil)
 //   j: Jahre, Komma-getrennt (fehlt = alle)
 //   t: Tempoklassen 30,50,80,100,u (fehlt = alle)
 //   v: Verortung h,a,k,s,x = hausnummer, abschnitt, kreuzung, anschlussstelle, strasse
 //      (fehlt = alle)
 //   s: Messstelle mit offenem Fenster (ihre id, z. B. B01234)
+//   d: Ebene „Datenlage je Stadt“ an (d=1; fehlt = aus)
 // Die Kürzel sind ein Vertrag mit geteilten Links: nie umdeuten, nur ergänzen.
 
 export const VERORTUNG_KUERZEL = {
@@ -18,7 +19,7 @@ export const VERORTUNG_KUERZEL = {
   x: "strasse",
 };
 const KUERZEL_VON = Object.fromEntries(Object.entries(VERORTUNG_KUERZEL).map(([k, v]) => [v, k]));
-const METRIKEN = ["anteil", "stunde", "fahrverbote", "kontrollen"];
+const METRIKEN = ["anteil", "stunde", "jekontrolle", "fahrverbote", "kontrollen"];
 const TEMPO = ["30", "50", "80", "100", "u"];
 
 /** Zustand -> Anker (ohne „#“). Mengen als Set oder null (= alle). */
@@ -29,6 +30,7 @@ export function schreibe(z) {
   if (z.tempo) teile.push(`t=${TEMPO.filter((t) => z.tempo.has(t)).join(",")}`);
   if (z.methoden) teile.push(`v=${[...z.methoden].map((m) => KUERZEL_VON[m]).filter(Boolean).sort().join(",")}`);
   if (z.stelle) teile.push(`s=${encodeURIComponent(z.stelle)}`);
+  if (z.datenlage) teile.push("d=1");
   return teile.join("&");
 }
 
@@ -49,6 +51,7 @@ export function lies(anker) {
     if (k === "t") out.tempo = new Set(werte.filter((t) => TEMPO.includes(t)));
     if (k === "v") out.methoden = new Set(werte.map((w) => VERORTUNG_KUERZEL[w]).filter(Boolean));
     if (k === "s" && v) out.stelle = decodeURIComponent(v);
+    if (k === "d") out.datenlage = v === "1";
   }
   return out;
 }

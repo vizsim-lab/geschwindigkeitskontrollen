@@ -1,0 +1,109 @@
+{
+ "total": 2,
+ "results": {
+  "dkan_dataset/7aef589b-96e7-4b93-8f49-90cc6ec74c9e": {
+   "identifier": "7aef589b-96e7-4b93-8f49-90cc6ec74c9e",
+   "title": "Geschwindigkeitsüberwachung Köln 2025",
+   "publisher": {
+    "@type": "org:Organization",
+    "foaf_name": "Stadt Köln"
+   },
+   "distribution": [
+    {
+     "title": "Geschwindigkeitsüberwachung Köln ab 2025",
+     "downloadURL": "https://www.offenedaten-koeln.de/sites/default/files/uploaded_resources/Geschwindigkeitsueberwachung_Koeln_Gesamt_2025.csv",
+     "dct_format": "http://publications.europa.eu/resource/authority/file-type/CSV",
+     "dct_license": "http://dcat-ap.de/def/licenses/dl-zero-de/2.0",
+     "dctModified": "2026-04-30T11:19:22+00:00"
+    },
+    {
+     "title": "Standorttabelle s01",
+     "downloadURL": "https://www.offenedaten-koeln.de/sites/default/files/uploaded_resources/sloc-01_0.csv",
+     "dct_format": "http://publications.europa.eu/resource/authority/file-type/CSV",
+     "dct_license": "http://dcat-ap.de/def/licenses/dl-zero-de/2.0",
+     "dctModified": "2026-04-30T11:21:29+00:00"
+    },
+    {
+     "title": "Standorttabelle s02",
+     "downloadURL": "https://www.offenedaten-koeln.de/sites/default/files/uploaded_resources/sloc-02_0.csv",
+     "dct_format": "http://publications.europa.eu/resource/authority/file-type/CSV",
+     "dct_license": "http://dcat-ap.de/def/licenses/dl-zero-de/2.0",
+     "dctModified": "2026-04-30T11:23:16+00:00"
+    },
+    {
+     "title": "Standorttabelle s04",
+     "downloadURL": "https://www.offenedaten-koeln.de/sites/default/files/uploaded_resources/sloc-04_0.csv",
+     "dct_format": "http://publications.europa.eu/resource/authority/file-type/CSV",
+     "dct_license": "http://dcat-ap.de/def/licenses/dl-zero-de/2.0",
+     "dctModified": "2026-04-30T11:24:29+00:00"
+    },
+    {
+     "title": "Standorttabelle s11",
+     "downloadURL": "https://www.offenedaten-koeln.de/sites/default/files/uploaded_resources/sloc-11_0.csv",
+     "dct_format": "http://publications.europa.eu/resource/authority/file-type/CSV",
+     "dct_license": "http://dcat-ap.de/def/licenses/dl-zero-de/2.0",
+     "dctModified": "2026-04-30T11:25:50+00:00"
+    }
+   ]
+  },
+  "dkan_dataset/5c260f9c-f3fb-48f0-b55c-30f4dd477ab7": {
+   "identifier": "5c260f9c-f3fb-48f0-b55c-30f4dd477ab7",
+   "title": "Geschwindigkeitsüberwachung Köln 2017 bis 2022",
+   "publisher": {
+    "@type": "org:Organization",
+    "foaf_name": "Stadt Köln"
+   },
+   "distribution": [
+    {
+     "title": "Geschwindigkeitsüberwachung Köln ab 2017 bis 2022",
+     "downloadURL": "https://www.offenedaten-koeln.de/sites/default/files/distribution/Geschwindigkeit%25C3%25BCberwachung_Koeln_Gesamt_2017-2022_2.csv",
+     "dct_format": "http://publications.europa.eu/resource/authority/file-type/CSV",
+     "dct_license": "http://dcat-ap.de/def/licenses/dl-zero-de/2.0",
+     "dctModified": "2025-09-24T10:15:59+00:00"
+    },
+    {
+     "title": "Standorttabelle s01",
+     "downloadURL": "https://www.offenedaten-koeln.de/sites/default/files/distribution/s-loc-01_3.csv",
+     "dct_format": "http://publications.europa.eu/resource/authority/file-type/CSV",
+     "dct_license": "http://dcat-ap.de/def/licenses/dl-zero-de/2.0",
+     "dctModified": "2025-09-24T10:15:34+00:00"
+    },
+    {
+     "title": "Standorttabelle s02",
+     "downloadURL": "https://www.offenedaten-koeln.de/sites/default/files/distribution/s-loc-02_2.csv",
+     "dct_format": "http://publications.europa.eu/resource/authority/file-type/CSV",
+     "dct_license": "http://dcat-ap.de/def/licenses/dl-zero-de/2.0",
+     "dctModified": "2023-07-19T11:47:24+00:00"
+    },
+    {
+     "title": "Standorttabelle s04",
+     "downloadURL": "https://www.offenedaten-koeln.de/sites/default/files/distribution/s-loc-04_0.csv",
+     "dct_format": "http://publications.europa.eu/resource/authority/file-type/CSV",
+     "dct_license": "http://dcat-ap.de/def/licenses/dl-zero-de/2.0",
+     "dctModified": "2023-07-19T12:00:48+00:00"
+    },
+    {
+     "title": "Standorttabelle s11",
+     "downloadURL": "https://www.offenedaten-koeln.de/sites/default/files/distribution/s-loc-11_0.csv",
+     "dct_format": "http://publications.europa.eu/resource/authority/file-type/CSV",
+     "dct_license": "http://dcat-ap.de/def/licenses/dl-zero-de/2.0",
+     "dctModified": "2023-07-19T12:08:35+00:00"
+    },
+    {
+     "title": "Standorttabelle k03",
+     "downloadURL": "https://www.offenedaten-koeln.de/sites/default/files/distribution/k-loc-03_0.csv",
+     "dct_format": "http://publications.europa.eu/resource/authority/file-type/CSV",
+     "dct_license": "http://dcat-ap.de/def/licenses/dl-zero-de/2.0",
+     "dctModified": "2023-07-19T12:11:31+00:00"
+    },
+    {
+     "title": "Standorttabelle k04",
+     "downloadURL": "https://www.offenedaten-koeln.de/sites/default/files/distribution/k-loc-04_0.csv",
+     "dct_format": "http://publications.europa.eu/resource/authority/file-type/CSV",
+     "dct_license": "http://dcat-ap.de/def/licenses/dl-zero-de/2.0",
+     "dctModified": "2023-07-19T12:13:40+00:00"
+    }
+   ]
+  }
+ }
+}
