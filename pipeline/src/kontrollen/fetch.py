@@ -64,9 +64,10 @@ def lade(url: str, ziel: Path, pruefsumme: str | None = None, *, neu: bool = Fal
 def berlin(paths: Paths | None = None) -> list[Path]:
     """CSV 2017–2019 und die PDF-Anlagen (2020 und die Probe 2019)."""
     paths = paths or get_paths()
-    q = quellen(paths)["staedte"]["berlin"]["kontrollen"]
+    b = quellen(paths)["staedte"]["berlin"]
+    q = b["kontrollen"]
     out = [lade(q["url"], paths.data_file(q["datei"]), q["sha256"])]
-    for a in q.get("anlagen", {}).get("dateien", []):
+    for a in b.get("anlagen", {}).get("dateien", []):
         out.append(lade(a["url"], paths.data_file(a["datei"]), a.get("sha256")))
     return out
 
