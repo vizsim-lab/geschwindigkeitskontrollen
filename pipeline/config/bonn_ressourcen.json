@@ -84,8 +84,7 @@
   }
  ],
  "fehler": [
-  "https://opendata.bonn.de/api/1/: 404 Client Error: Not Found for url: https://opendata.bonn.de/api/1/search?fulltext=Bu%C3%9Fgelder+flie%C3%9Fender+Verkehr&page-size=100&page=1",
-  "https://opendata.bonn.de/sites/default/files/Geschwindigkeitsverstoesse2018_0.csv: HTTPSConnectionPool(host='opendata.bonn.de', port=443): Max retries exceeded with url: /sites/default/files/Geschwindigkeitsverstoesse2018_0.csv (Caused by NewConnectionError(\"HTTPSConnection(host='opendata.bonn.de', port=443): Failed to establish a new connection: [Errno 111] Connection refused\"))"
+  "https://opendata.bonn.de/api/1/: 404 Client Error: Not Found for url: https://opendata.bonn.de/api/1/search?fulltext=Bu%C3%9Fgelder+flie%C3%9Fender+Verkehr&page-size=100&page=1"
  ],
  "dateien": [
   {
@@ -107,6 +106,16 @@
    "datensatz": "bussgelder-fliessender-verkehr-2017",
    "datei": "bussgelder-fliessender-verkehr-2017__Bussgelder_fliessender_Verkehr_2017.csv",
    "sha256": "cee8dd11160d30fb9ba32bcd03e227b0a838ed9c20a96321b40a7875965ff002"
+  },
+  {
+   "id": "7efa7634-5d17-4e7c-b7ac-c1adeac7f6c5",
+   "name": "Bußgelder fließender Verkehr 2018",
+   "format": "CSV",
+   "url": "https://opendata.bonn.de/sites/default/files/Geschwindigkeitsverstoesse2018_0.csv",
+   "geaendert": "2026-09-19T23:15:10.560314",
+   "datensatz": "bussgelder-fliessender-verkehr-2018",
+   "datei": "bussgelder-fliessender-verkehr-2018__Bußgelder_fließender_Verkehr_2018.csv",
+   "sha256": "90057e5fbcfdb44584ecb3c62ad939a42a7834a968543b94440143ad7bb7a4bc"
   },
   {
    "id": "19a2daf3-2034-4027-b245-5a635deb3125",

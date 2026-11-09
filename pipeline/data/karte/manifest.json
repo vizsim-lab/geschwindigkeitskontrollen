@@ -198,7 +198,7 @@
     "zoom": 11.2
    },
    "kontrollen": 44633,
-   "messstellen": 1367,
+   "messstellen": 1368,
    "zeitraum": [
     "2017-01-02",
     "2025-12-19"
@@ -226,7 +226,7 @@
     "label": "Geschwindigkeitsüberwachung der Stadt Köln",
     "bereitsteller": "Stadt Köln",
     "kurz": "Stadt Köln",
-    "titel": "Geschwindigkeitsüberwachung Köln (Open Data, Einzelverstöße und Standorte)",
+    "titel": "Geschwindigkeitsüberwachung Köln – Open Data, Einzelverstöße und Standorte",
     "herkunft_url": "https://www.offenedaten-koeln.de/",
     "lizenz": "Datenlizenz Deutschland – Zero – Version 2.0",
     "lizenz_hinweis": null,
@@ -257,22 +257,22 @@
    },
    "verortung": {
     "kontrollen": 44633,
-    "verortet": 44410,
+    "verortet": 44414,
     "je_methode": {
      "hausnummer": 30303,
      "abschnitt": 0,
      "kreuzung": 555,
      "anschlussstelle": 0,
-     "strasse": 13552
+     "strasse": 13556
     },
-    "ohne_lage": 223,
+    "ohne_lage": 219,
     "je_gebiet": {
-     "bezirk": 43913,
+     "bezirk": 43917,
      "stadt": 328,
      "umgebung": 169
     },
     "hinweise": {
-     "Ortsangabe von Hand zugeordnet (config/orte.yaml)": 301,
+     "Ortsangabe von Hand zugeordnet (config/orte.yaml)": 305,
      "Ortsangabe statt Querstraße": 14
     },
     "adresse_zur_achse_m": {
@@ -288,24 +288,37 @@
     "lat": 50.71,
     "zoom": 11.8
    },
-   "kontrollen": 0,
-   "messstellen": 0,
-   "zeitraum": null,
-   "jahre": [],
+   "kontrollen": 34128,
+   "messstellen": 1517,
+   "zeitraum": [
+    "2016-01-02",
+    "2024-12-31"
+   ],
+   "jahre": [
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024
+   ],
    "stufen": null,
    "hat_dauer": false,
    "hat_fahrverbote": false,
    "hat_tempo": false,
-   "anteil_alle_gezaehlt": null,
+   "anteil_alle_gezaehlt": 0.0,
    "quelle": {
     "label": "Geschwindigkeitsverstöße der Bundesstadt Bonn",
     "bereitsteller": "Bundesstadt Bonn",
     "kurz": "Stadt Bonn",
-    "titel": "Bußgelder fließender Verkehr (Open Data, Einzelverstöße)",
+    "titel": "Bußgelder fließender Verkehr – Open Data, Einzelverstöße",
     "herkunft_url": "https://opendata.bonn.de/",
-    "lizenz": null,
+    "lizenz": "Creative Commons CC Zero (CC0)",
     "lizenz_hinweis": null,
-    "hinweis": null,
+    "hinweis": "Tatorte mit Verstößen an mehr als 250 Tagen eines Jahres gelten als feste Anlagen und bleiben draußen (B9 Mainzer Straße, Straßentunnel Bad Godesberg, Reichsstraße, Konrad-Adenauer-Damm, Ludwig-Erhard-Allee). Tempolimit und Höhe der Überschreitung nennt Bonn nicht; an der Autobahn steht meist nur der Kilometer – solche Kontrollen haben keine Lage.",
     "datensaetze": [
      {
       "titel": "Bußgelder fließender Verkehr 2022",
@@ -353,9 +366,289 @@
       "lizenz": ""
      }
     ],
-    "dateien": 8
+    "dateien": 9
    },
-   "verortung": null
+   "verortung": {
+    "kontrollen": 34128,
+    "verortet": 29471,
+    "je_methode": {
+     "hausnummer": 16825,
+     "abschnitt": 0,
+     "kreuzung": 1608,
+     "anschlussstelle": 164,
+     "strasse": 10874
+    },
+    "ohne_lage": 4657,
+    "je_gebiet": {
+     "stadt": 29471
+    },
+    "hinweise": {
+     "Straße liegt an mehreren Stellen – Punkt auf dem längsten Stück": 1030,
+     "Ortsangabe statt Querstraße": 164,
+     "auf der A 555 gefunden (Quelle: A 562)": 5,
+     "auf der A 555 gefunden (Quelle: A 565)": 2,
+     "auf der A 555 gefunden (Quelle: A 55)": 1
+    },
+    "adresse_zur_achse_m": {
+     "median": 20.4,
+     "p90": 42.9
+    }
+   }
+  },
+  "schonungen": {
+   "label": "Schonungen",
+   "start": {
+    "lon": 10.3122,
+    "lat": 50.0496,
+    "zoom": 12.2
+   },
+   "kontrollen": 123,
+   "messstellen": 31,
+   "zeitraum": [
+    "2020-05-06",
+    "2026-06-24"
+   ],
+   "jahre": [
+    2020,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026
+   ],
+   "stufen": [
+    "bis 20 km/h",
+    "über 20 km/h"
+   ],
+   "hat_dauer": true,
+   "hat_fahrverbote": false,
+   "hat_tempo": true,
+   "anteil_alle_gezaehlt": 1.0,
+   "quelle": {
+    "label": "Geschwindigkeitsmessungen in der Gemeinde Schonungen",
+    "bereitsteller": "Gemeinde Schonungen",
+    "kurz": "Gemeinde Schonungen",
+    "titel": "Verkehrsstatistik – Monatsberichte der kommunalen Verkehrsüberwachung (PDF)",
+    "herkunft_url": "https://schonungen.de/",
+    "lizenz": null,
+    "lizenz_hinweis": "ohne Lizenzangabe",
+    "hinweis": "Gemessen hat der Zweckverband Kommunale Verkehrsüberwachung Südostbayern. Je Messung Messstelle, Tag, Beginn und Ende, Tempolimit, gemessene Fahrzeuge und Verstöße nach Klassen (bis/über 20 km/h). Veröffentlicht sind die Monate seit August 2022 und der Mai 2020, nicht lückenlos.",
+    "datensaetze": [
+     {
+      "titel": "Verkehrsstatistik Juni 2026",
+      "url": "https://schonungen.de/wp-content/uploads/2026/08/Verkehrsstatistik-Juni-2026.pdf",
+      "lizenz": null
+     },
+     {
+      "titel": "Verkehrsstatistik KVÜ 2026-04 (002)",
+      "url": "https://schonungen.de/wp-content/uploads/2026/06/Verkehrsstatistik-KVUe-2026-04-002.pdf",
+      "lizenz": null
+     },
+     {
+      "titel": "Verkehrsstatistik KVÜ 2026-03",
+      "url": "https://schonungen.de/wp-content/uploads/2026/05/Verkehrsstatistik-KVUe-2026-03.pdf",
+      "lizenz": null
+     },
+     {
+      "titel": "Verkehrsstatistik KVÜ 2026-02",
+      "url": "https://schonungen.de/wp-content/uploads/2026/04/Verkehrsstatistik-KVUe-2026-02.pdf",
+      "lizenz": null
+     },
+     {
+      "titel": "Verkehrsstatistik KVÜ 2026-01",
+      "url": "https://schonungen.de/wp-content/uploads/2026/02/Verkehrsstatistik-KVUe-2026-01.pdf",
+      "lizenz": null
+     },
+     {
+      "titel": "Verkehrsstatistik KVÜ 2025-12",
+      "url": "https://schonungen.de/wp-content/uploads/2026/01/Verkehrsstatistik-KVUe-2025-12.pdf",
+      "lizenz": null
+     },
+     {
+      "titel": "Verkehrsstatistik KVÜ Okt. und Nov. 2025",
+      "url": "https://schonungen.de/wp-content/uploads/2026/01/Verkehrsstatistik-KVUe-Okt.-und-Nov.-2025.pdf",
+      "lizenz": null
+     },
+     {
+      "titel": "Verkehrsstatistik KVÜ September 2025",
+      "url": "https://schonungen.de/wp-content/uploads/2025/11/Verkehrsstatistik-KVUe-September-2025.pdf",
+      "lizenz": null
+     },
+     {
+      "titel": "Verkehrsstatistik",
+      "url": "https://schonungen.de/wp-content/uploads/2025/08/Verkehrsstatistik.pdf",
+      "lizenz": null
+     },
+     {
+      "titel": "Verkehrsstatistik KVÜ März 2025",
+      "url": "https://schonungen.de/wp-content/uploads/2025/04/Verkehrsstatistik-KVUe-Maerz-2025.pdf",
+      "lizenz": null
+     },
+     {
+      "titel": "Verkehrsstatistik KVÜ 2025-02docx",
+      "url": "https://schonungen.de/wp-content/uploads/2025/04/Verkehrsstatistik-KVUe-2025-02docx.pdf",
+      "lizenz": null
+     },
+     {
+      "titel": "Verkehrsstatistik Jan. 2025",
+      "url": "https://schonungen.de/wp-content/uploads/2025/02/Verkehrsstatistik-Jan.-2025.pdf",
+      "lizenz": null
+     },
+     {
+      "titel": "Verkehrsstatistik KVÜ 2024-06",
+      "url": "https://schonungen.de/wp-content/uploads/2024/07/Verkehrsstatistik-KVUe-2024-06.docx",
+      "lizenz": null
+     },
+     {
+      "titel": "Verkehrsstatistik KVÜ 2024-03",
+      "url": "https://schonungen.de/wp-content/uploads/2024/05/Verkehrsstatistik-KVUe-2024-03.pdf",
+      "lizenz": null
+     },
+     {
+      "titel": "Verkehrsstatistik KVÜ 2024-02",
+      "url": "https://schonungen.de/wp-content/uploads/2024/03/Verkehrsstatistik-KVUe-2024-02.pdf",
+      "lizenz": null
+     },
+     {
+      "titel": "Verkehrsstatistik KVÜ 2023-09",
+      "url": "https://schonungen.de/wp-content/uploads/2023/11/Verkehrsstatistik-KVUe-2023-09.pdf",
+      "lizenz": null
+     },
+     {
+      "titel": "Verkehrsstatistik KVÜ 2023-06",
+      "url": "https://schonungen.de/wp-content/uploads/2023/08/Verkehrsstatistik-KVUe-2023-06.pdf",
+      "lizenz": null
+     },
+     {
+      "titel": "Verkehrsstatistik KVÜ 2023-04",
+      "url": "https://schonungen.de/wp-content/uploads/2023/06/Verkehrsstatistik-KVUe-2023-04.docx",
+      "lizenz": null
+     },
+     {
+      "titel": "Verkehrsstatistik KVÜ 2022-10",
+      "url": "https://schonungen.de/wp-content/uploads/2023/05/Verkehrsstatistik-KVUe-2022-10.pdf",
+      "lizenz": null
+     },
+     {
+      "titel": "Verkehrsstatistik KVÜ 2022-11",
+      "url": "https://schonungen.de/wp-content/uploads/2023/01/Verkehrsstatistik-KVUe-2022-11.pdf",
+      "lizenz": null
+     },
+     {
+      "titel": "Verkehrsstatistik KVÜ 2022-08",
+      "url": "https://schonungen.de/wp-content/uploads/2022/09/Verkehrsstatistik-KVUe-2022-08.pdf",
+      "lizenz": null
+     },
+     {
+      "titel": "Verkehrsstatistik_mobiles_Messgeraet__Hauptstrasse_Schonungen",
+      "url": "https://schonungen.de/wp-content/uploads/2022/04/Verkehrsstatistik_mobiles_Messgeraet__Hauptstrasse_Schonungen.pdf",
+      "lizenz": null
+     },
+     {
+      "titel": "Verkehrsstatistik_Mai_2020",
+      "url": "https://schonungen.de/wp-content/uploads/2022/04/Verkehrsstatistik_Mai_2020.pdf",
+      "lizenz": null
+     }
+    ],
+    "dateien": 23
+   },
+   "verortung": {
+    "kontrollen": 123,
+    "verortet": 121,
+    "je_methode": {
+     "hausnummer": 46,
+     "abschnitt": 0,
+     "kreuzung": 34,
+     "anschlussstelle": 0,
+     "strasse": 41
+    },
+    "ohne_lage": 2,
+    "je_gebiet": {
+     "stadt": 121
+    },
+    "hinweise": {
+     "Ortsangabe von Hand zugeordnet (config/orte.yaml)": 6,
+     "Straße liegt an mehreren Stellen – Punkt auf dem längsten Stück": 4
+    },
+    "adresse_zur_achse_m": {
+     "median": 15.4,
+     "p90": 26.6
+    }
+   }
+  },
+  "oberderdingen": {
+   "label": "Oberderdingen",
+   "start": {
+    "lon": 8.8053,
+    "lat": 49.0656,
+    "zoom": 12.6
+   },
+   "kontrollen": 150,
+   "messstellen": 44,
+   "zeitraum": [
+    "2024-01-08",
+    "2026-03-31"
+   ],
+   "jahre": [
+    2024,
+    2025,
+    2026
+   ],
+   "stufen": null,
+   "hat_dauer": false,
+   "hat_fahrverbote": false,
+   "hat_tempo": true,
+   "anteil_alle_gezaehlt": 1.0,
+   "quelle": {
+    "label": "Kommunale Geschwindigkeitsmessungen in Oberderdingen",
+    "bereitsteller": "Stadt Oberderdingen",
+    "kurz": "Stadt Oberderdingen",
+    "titel": "Kommunale Geschwindigkeitsmessungen durch das Landratsamt – Quartalstabellen (PDF)",
+    "herkunft_url": "https://www.oberderdingen.de/",
+    "lizenz": null,
+    "lizenz_hinweis": "ohne Lizenzangabe",
+    "hinweis": "Gemessen hat das Landratsamt Karlsruhe. Je Messung Tag, Messstelle, Tempolimit, gemessene Fahrzeuge und Beanstandungen; Uhrzeit und Dauer fehlen. Gefunden sind drei Quartale (1/2024, 4/2025, 1/2026). Zählt das Gerät beide Richtungen zusammen (dieselbe Zahl gemessener Fahrzeuge in zwei Zeilen), ist das eine Kontrolle. Bei mehrtägigen Messungen steht mitunter an jedem Tag dieselbe Zahl (Flehinger Straße 27 im Januar 2026: 3.524, an den angebrochenen Tagen die Hälfte) – vermutlich ein Tagesschnitt; der Anteil stimmt dann nur über alle Tage zusammen.",
+    "datensaetze": [
+     {
+      "titel": "Geschwindigkeitsmessungen 1. Quartal 2024",
+      "url": "https://oberderdingen.de/resources/ecics_3985.pdf",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen 4. Quartal 2025",
+      "url": "https://www.oberderdingen.de/resources/ecics_4317.pdf",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen 1. Quartal 2026",
+      "url": "https://www.oberderdingen.de/resources/ecics_4342.pdf",
+      "lizenz": null
+     }
+    ],
+    "dateien": 3
+   },
+   "verortung": {
+    "kontrollen": 150,
+    "verortet": 150,
+    "je_methode": {
+     "hausnummer": 112,
+     "abschnitt": 0,
+     "kreuzung": 11,
+     "anschlussstelle": 0,
+     "strasse": 27
+    },
+    "ohne_lage": 0,
+    "je_gebiet": {
+     "stadt": 150
+    },
+    "hinweise": {
+     "Ortsangabe statt Querstraße": 1
+    },
+    "adresse_zur_achse_m": {
+     "median": 13.1,
+     "p90": 19.6
+    }
+   }
   }
  },
  "osm": {
@@ -373,5 +666,6 @@
   "kreuzung",
   "anschlussstelle",
   "strasse"
- ]
+ ],
+ "messstellen_naechste_id": 12372
 }

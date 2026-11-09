@@ -56,29 +56,100 @@
    "p90": 49.1
   }
  },
+ "bonn": {
+  "kontrollen": 34128,
+  "verortet": 29471,
+  "je_methode": {
+   "hausnummer": 16825,
+   "abschnitt": 0,
+   "kreuzung": 1608,
+   "anschlussstelle": 164,
+   "strasse": 10874
+  },
+  "ohne_lage": 4657,
+  "je_gebiet": {
+   "stadt": 29471
+  },
+  "hinweise": {
+   "Straße liegt an mehreren Stellen – Punkt auf dem längsten Stück": 1030,
+   "Ortsangabe statt Querstraße": 164,
+   "auf der A 555 gefunden (Quelle: A 562)": 5,
+   "auf der A 555 gefunden (Quelle: A 565)": 2,
+   "auf der A 555 gefunden (Quelle: A 55)": 1
+  },
+  "adresse_zur_achse_m": {
+   "median": 20.4,
+   "p90": 42.9
+  }
+ },
  "koeln": {
   "kontrollen": 44633,
-  "verortet": 44410,
+  "verortet": 44414,
   "je_methode": {
    "hausnummer": 30303,
    "abschnitt": 0,
    "kreuzung": 555,
    "anschlussstelle": 0,
-   "strasse": 13552
+   "strasse": 13556
   },
-  "ohne_lage": 223,
+  "ohne_lage": 219,
   "je_gebiet": {
-   "bezirk": 43913,
+   "bezirk": 43917,
    "stadt": 328,
    "umgebung": 169
   },
   "hinweise": {
-   "Ortsangabe von Hand zugeordnet (config/orte.yaml)": 301,
+   "Ortsangabe von Hand zugeordnet (config/orte.yaml)": 305,
    "Ortsangabe statt Querstraße": 14
   },
   "adresse_zur_achse_m": {
    "median": 18.2,
    "p90": 29.7
+  }
+ },
+ "oberderdingen": {
+  "kontrollen": 150,
+  "verortet": 150,
+  "je_methode": {
+   "hausnummer": 112,
+   "abschnitt": 0,
+   "kreuzung": 11,
+   "anschlussstelle": 0,
+   "strasse": 27
+  },
+  "ohne_lage": 0,
+  "je_gebiet": {
+   "stadt": 150
+  },
+  "hinweise": {
+   "Ortsangabe statt Querstraße": 1
+  },
+  "adresse_zur_achse_m": {
+   "median": 13.1,
+   "p90": 19.6
+  }
+ },
+ "schonungen": {
+  "kontrollen": 123,
+  "verortet": 121,
+  "je_methode": {
+   "hausnummer": 46,
+   "abschnitt": 0,
+   "kreuzung": 34,
+   "anschlussstelle": 0,
+   "strasse": 41
+  },
+  "ohne_lage": 2,
+  "je_gebiet": {
+   "stadt": 121
+  },
+  "hinweise": {
+   "Ortsangabe von Hand zugeordnet (config/orte.yaml)": 6,
+   "Straße liegt an mehreren Stellen – Punkt auf dem längsten Stück": 4
+  },
+  "adresse_zur_achse_m": {
+   "median": 15.4,
+   "p90": 26.6
   }
  }
 }
