@@ -1,0 +1,100 @@
+# Kartendaten neu bauen: Rohdaten und OSM-Abzüge laden, Kontrollen verorten, Kartendateien
+# schreiben – und das Ergebnis als Branch `daten/lauf-…` vorschlagen. Nie direkt auf main:
+# main ist die Live-Karte.
+#
+# Nur von Hand (Actions -> „Kartendaten neu bauen“ -> Run workflow). Neu bauen lohnt nach neuen
+# Aachener Monaten (Schalter „Aachener Katalog neu fragen“), nach Änderungen an Pipeline oder
+# config/orte.yaml – und für einen frischen OSM-Stand der Verortung.
+#
+# Der Workflow versucht, den PR selbst anzulegen. Ist „Allow GitHub Actions to create and
+# approve pull requests“ aus (empfohlen), scheitert das still: Der Branch steht trotzdem da, der
+# Lauf nennt den Link zum PR-Anlegen. Ein PR, den ein Mensch anlegt, startet auch die CI.
+# Die neuen Dateien liegen außerdem als Artefakt „kartendaten“ am Lauf (30 Tage).
+name: Kartendaten neu bauen
+
+on:
+  workflow_dispatch:
+    inputs:
+      aachen_neu:
+        description: "Aachener Katalog neu fragen (neue Monate)"
+        type: boolean
+        default: true
+
+concurrency:
+  group: kartendaten
+  cancel-in-progress: false
+
+jobs:
+  bauen:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    permissions:
+      contents: write
+      pull-requests: write
+    defaults:
+      run:
+        working-directory: pipeline
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10.1.0
+        with:
+          enable-cache: true
+          cache-dependency-glob: pipeline/uv.lock
+      - run: uv sync --locked
+      - run: uv run pytest -q
+      - name: Rohdaten laden (Berlin, Aachen, OSM-Abzüge Geofabrik)
+        run: uv run kontrollen fetch --osm ${{ inputs.aachen_neu && '--neu' || '' }}
+      - name: OSM auslesen (Straßen, Adressen, Orte, Gebiete)
+        run: uv run kontrollen osm
+      - run: uv run kontrollen build
+      - name: Verorten
+        run: uv run kontrollen geocode
+      - run: uv run kontrollen site
+      - name: Zusammenfassung
+        run: |
+          {
+            echo "### Kartendaten"
+            echo '```json'
+            jq '{stand, staedte: (.staedte | map_values({kontrollen, messstellen, zeitraum}))}' data/karte/manifest.json
+            echo '```'
+            echo "### Verortung"
+            echo '```json'
+            jq 'map_values({kontrollen, verortet, ohne_lage, je_methode, hausnummer_gegen_abschnitt})' data/geokodierung_validierung.json
+            echo '```'
+          } | tee -a "$GITHUB_STEP_SUMMARY" > "$RUNNER_TEMP/pr.md"
+      - uses: actions/upload-artifact@v7
+        with:
+          name: kartendaten
+          path: |
+            pipeline/data/karte/
+            pipeline/data/geokodierung.csv
+            pipeline/data/geokodierung_validierung.json
+            pipeline/config/aachen_ressourcen.json
+          retention-days: 30
+      - name: Als Branch (und wenn erlaubt als PR) vorschlagen
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BASIS: ${{ github.ref_name }}
+          LAUF: ${{ github.run_number }}
+          VERSUCH: ${{ github.run_attempt }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          zweig="daten/lauf-$LAUF-$VERSUCH"
+          git switch -c "$zweig"
+          git add data/karte data/geokodierung.csv data/geokodierung_validierung.json config/aachen_ressourcen.json
+          # nur das Datum im Manifest geändert -> nichts vorzuschlagen
+          manifest_gleich() {
+            [ "$(git show HEAD:pipeline/data/karte/manifest.json 2>/dev/null | jq -S 'del(.stand)')" = "$(jq -S 'del(.stand)' data/karte/manifest.json)" ]
+          }
+          if git diff --cached --quiet -- ':(top)' ':(top,exclude)pipeline/data/karte/manifest.json' && manifest_gleich; then
+            echo "Keine inhaltlichen Änderungen an den Kartendaten." | tee -a "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          git commit -q -m "data: Kartendaten neu gebaut (Lauf $LAUF.$VERSUCH)"
+          git push -u origin "$zweig"
+          if ! gh pr create --base "$BASIS" --head "$zweig" --title "Kartendaten neu gebaut (Lauf $LAUF.$VERSUCH)" --body-file "$RUNNER_TEMP/pr.md"; then
+            url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/compare/$BASIS...$zweig?expand=1"
+            echo "::notice::Branch $zweig steht bereit. PR von Hand anlegen: $url"
+            echo "PR von Hand anlegen: $url" >> "$GITHUB_STEP_SUMMARY"
+          fi

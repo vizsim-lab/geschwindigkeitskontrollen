@@ -7,27 +7,27 @@ import * as P from "../../js/permalink.js";
 
 // zwei Messstellen in Berlin (genau / nur Straße), eine in Aachen
 const STELLEN = {
-  felder: ["id", "stadt", "lon", "lat", "strasse", "methode", "lage", "osm_maxspeed"],
+  felder: ["id", "stadt", "lon", "lat", "strasse", "methode", "lage", "osm_maxspeed", "hinweis"],
   staedte: ["aachen", "berlin"],
   methoden: ["hausnummer", "abschnitt", "kreuzung", "anschlussstelle", "strasse"],
   zeilen: [
-    ["B00000", 1, 13.4, 52.5, "Hauptstraße", 0, "Nr. 10 · zw. A u. B", "50"],
-    ["B00001", 1, 13.5, 52.6, "Eckallee", 4, "", null],
-    ["A00002", 0, 6.1, 50.8, "Trierer Straße", 4, "Trierer Straße", "50"],
+    ["B00000", 1, 13.4, 52.5, "Hauptstraße", 0, "Nr. 10 · zw. A u. B", "50", null],
+    ["B00001", 1, 13.5, 52.6, "Eckallee", 4, "", null, null],
+    ["A00002", 0, 6.1, 50.8, "Trierer Straße", 4, "Trierer Straße", "50", null],
   ],
 };
 const T = (iso) => (Date.parse(iso + "T00:00:00Z") - Date.parse("2000-01-01T00:00:00Z")) / 86400000;
 const KONTROLLEN = {
-  felder: ["stelle", "tag", "beginn", "dauer", "tempo", "messungen", "ueber", "stufe1", "stufe2", "fahrverbote", "alle", "richtung", "ort"],
+  felder: ["stelle", "tag", "beginn", "dauer", "tempo", "messungen", "ueber", "stufe1", "stufe2", "fahrverbote", "alle", "richtung", "ort", "grenze"],
   tag0: "2000-01-01",
   richtungen: [""],
   orte: [""],
   zeilen: [
-    [0, T("2018-03-01"), 480, 240, 50, 1000, 100, 90, 10, 1, 1, 0, 0],
-    [0, T("2019-05-02"), 540, 120, 30, 800, 80, 70, 5, 0, 1, 0, 0],
-    [1, T("2017-07-07"), 1320, 180, 80, 200, 200, 150, 50, 10, 0, 0, 0], // nur zu schnelle erfasst
-    [2, T("2021-04-01"), null, null, null, 400, 21, 20, 1, null, 1, 0, 0],
-    [null, T("2018-02-02"), 600, 60, 30, 10, 1, 1, 0, 0, 1, 0, 0], // ohne Lage
+    [0, T("2018-03-01"), 480, 240, 50, 1000, 100, 90, 10, 1, 1, 0, 0, 20],
+    [0, T("2019-05-02"), 540, 120, 30, 800, 80, 70, 5, 0, 1, 0, 0, 20],
+    [1, T("2017-07-07"), 1320, 180, 80, 200, 200, 150, 50, 10, 0, 0, 0, 20], // nur zu schnelle erfasst
+    [2, T("2021-04-01"), null, null, null, 400, 21, 20, 1, null, 1, 0, 0, 15],
+    [null, T("2018-02-02"), 600, 60, 30, 10, 1, 1, 0, 0, 1, 0, 0, 20], // ohne Lage
   ],
 };
 const daten = D.entpacke(STELLEN, KONTROLLEN);
@@ -80,9 +80,11 @@ test("zusammenfassung zählt je Filterwert unter den übrigen Filtern", () => {
   const f = { ...ALLE, jahre: new Set([2018]) };
   const z = D.zusammenfassung(daten, D.verdichte(daten, f), "anteil", f);
   assert.equal(z.kontrollen, 1);
-  assert.equal(z.ohneLage, 1);
   assert.deepEqual(z.jeJahr, { 2017: 1, 2018: 1, 2019: 1, 2021: 1 });
   assert.equal(z.jeTempo["50"], 1);
+  const b = D.zusammenfassung(daten, D.verdichte(daten, ALLE), "anteil", ALLE, "berlin");
+  assert.deepEqual([b.messstellen, b.kontrollen, b.ohneWert], [2, 3, 1]);
+  assert.deepEqual(b.jeJahr, { 2017: 1, 2018: 1, 2019: 1 });
 });
 
 test("punkte liefert GeoJSON mit Klasse und Genauigkeit", () => {

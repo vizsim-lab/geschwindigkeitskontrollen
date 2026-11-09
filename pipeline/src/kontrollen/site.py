@@ -29,10 +29,20 @@ GENAU = ("hausnummer", "abschnitt", "kreuzung", "anschlussstelle")
 METHODEN = (*GENAU, "strasse")
 TAG0 = date(2000, 1, 1)  # Datum als Tage seit diesem Tag (kompakt, im Browser zurückgerechnet)
 
-FELDER_STELLE = ["id", "stadt", "lon", "lat", "strasse", "methode", "lage", "osm_maxspeed"]
+FELDER_STELLE = [
+    "id",
+    "stadt",
+    "lon",
+    "lat",
+    "strasse",
+    "methode",
+    "lage",
+    "osm_maxspeed",
+    "hinweis",
+]
 FELDER_KONTROLLE = [
     "stelle", "tag", "beginn", "dauer", "tempo", "messungen", "ueber", "stufe1", "stufe2",
-    "fahrverbote", "alle", "richtung", "ort",
+    "fahrverbote", "alle", "richtung", "ort", "grenze",
 ]  # fmt: skip
 
 
@@ -62,9 +72,10 @@ def baue(p: Paths) -> dict:
                 _int(r.stufe1),
                 _int(r.stufe2),
                 _int(r.fahrverbote),
-                1 if r.alle_gezaehlt is True else 0,
+                1 if r.alle_gezaehlt is not pd.NA and bool(r.alle_gezaehlt) else 0,
                 richtungen["index"][_richtung_text(r._asdict())],
                 orte["index"][_ort_text(r._asdict())],
+                _int(r.stufe_kmh),
             ]
         )
     staedte = sorted(m["stadt"].unique())
@@ -75,7 +86,7 @@ def baue(p: Paths) -> dict:
         "zeilen": [
             [
                 s["id"], staedte.index(s["stadt"]), s["lon"], s["lat"], s["strasse"],
-                METHODEN.index(s["methode"]), s["lage"], s["osm_maxspeed"],
+                METHODEN.index(s["methode"]), s["lage"], s["osm_maxspeed"], s["hinweis"],
             ]
             for s in stellen
         ],
@@ -168,6 +179,7 @@ def messstellen(m: pd.DataFrame, q: dict) -> tuple[list[dict], dict[str, int]]:
                     "methode": methode,
                     "abschnitt": seg.value_counts().index[0] if len(seg) else None,
                     "lage": _haeufigste(tg.apply(_ort_text, axis=1), None),
+                    "hinweis": _haeufigste(tg["geo_hinweis"].dropna(), None),
                     "osm_maxspeed": _haeufigste(tg["osm_maxspeed"].dropna(), None),
                 }
             )
@@ -192,15 +204,21 @@ def _abschnitte(stellen: list[dict]) -> dict:
     for i, s in enumerate(stellen):
         if not s["abschnitt"]:
             continue
-        g = shapely.from_wkt(s["abschnitt"])
+        g = shapely.from_wkt(s["abschnitt"])  # Linie, bei „nur Straße“ auch mehrteilig
+        teile = [x for x in getattr(g, "geoms", [g]) if x.geom_type == "LineString"]
+        if not teile:
+            continue
+        koord = [[[round(x, 6), round(y, 6)] for x, y in t.coords] for t in teile]
+        geom = (
+            {"type": "LineString", "coordinates": koord[0]}
+            if len(koord) == 1
+            else {"type": "MultiLineString", "coordinates": koord}
+        )
         feats.append(
             {
                 "type": "Feature",
-                "properties": {"s": i},
-                "geometry": {
-                    "type": "LineString",
-                    "coordinates": [[round(x, 6), round(y, 6)] for x, y in g.coords],
-                },
+                "properties": {"s": i, "m": METHODEN.index(s["methode"])},
+                "geometry": geom,
             }
         )
     return {"type": "FeatureCollection", "features": feats}
@@ -263,6 +281,7 @@ CSV_SPALTEN = {
     "ueberschreitungen": "ueberschreitungen",
     "stufe1": "stufe1",
     "stufe2": "stufe2",
+    "stufe_kmh": "stufen_grenze_kmh",
     "fahrverbote": "fahrverbote",
     "alle_gezaehlt": "alle_fahrzeuge_gezaehlt",
     "geo_lon": "lon",
