@@ -108,6 +108,14 @@ LIZENZEN = {  # DCAT-AP.de-Kennungen -> Namen (wie CKAN sie nennt)
 }
 
 
+def _slug(titel: str | None) -> str:
+    """ "Geschwindigkeitsüberwachung Köln 2025" -> "geschwindigkeitsueberwachung-koeln-2025"."""
+    t = (titel or "").lower()
+    for a, b in (("ä", "ae"), ("ö", "oe"), ("ü", "ue"), ("ß", "ss")):
+        t = t.replace(a, b)
+    return re.sub(r"[^0-9a-z]+", "-", t).strip("-")
+
+
 def _lizenz_id(url: str | None) -> str | None:
     """ "http://dcat-ap.de/def/licenses/dl-zero-de/2.0" -> "dl-zero-de/2.0"."""
     if not url:
@@ -137,7 +145,7 @@ def _dkan_suche(basis: str, q: str) -> list[dict]:
             out.append(
                 {
                     "id": d.get("identifier"),
-                    "name": d.get("identifier"),
+                    "name": _slug(d.get("title")) or d.get("identifier"),  # sprechende Dateinamen
                     "title": d.get("title"),
                     "organization": {"title": (d.get("publisher") or {}).get("foaf_name")},
                     "license_id": _lizenz_id(lizenz),

@@ -123,12 +123,16 @@ def test_dkan_suche_wie_ckan(monkeypatch):
     import json
     from pathlib import Path
 
-    js = json.loads((Path(__file__).parent / "fixtures" / "dkan_suche_koeln.json").read_text("utf-8"))
+    js = json.loads(
+        (Path(__file__).parent / "fixtures" / "dkan_suche_koeln.json").read_text("utf-8")
+    )
     seiten = []
     monkeypatch.setattr(
         fetch.requests, "get", lambda url, params, **kw: seiten.append(params) or _Antwort(js)
     )
-    ds = fetch._dkan_suche("https://www.offenedaten-koeln.de/api/1/", "Geschwindigkeitsüberwachung Köln")
+    ds = fetch._dkan_suche(
+        "https://www.offenedaten-koeln.de/api/1/", "Geschwindigkeitsüberwachung Köln"
+    )
     assert len(seiten) == 1  # alle Treffer auf der ersten Seite
     t = fetch.treffer(ds, KOELN, "https://www.offenedaten-koeln.de/api/1/")
     namen = {d["titel"]: len(d["ressourcen"]) for d in t}
@@ -140,6 +144,7 @@ def test_dkan_suche_wie_ckan(monkeypatch):
     assert d["lizenz_id"] == "dl-zero-de/2.0"
     assert d["lizenz"] == "Datenlizenz Deutschland – Zero – Version 2.0"
     assert d["organisation"] == "Stadt Köln"
+    assert d["name"] == "geschwindigkeitsueberwachung-koeln-2025"
     assert all(r["format"] == "CSV" for r in d["ressourcen"])
 
 

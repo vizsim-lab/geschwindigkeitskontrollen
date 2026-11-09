@@ -40,3 +40,18 @@ test("Feldnamen der Kartendaten sind die, die js/daten.js erwartet", () => {
   expect(kontrollen.felder).toEqual(["stelle", "tag", "beginn", "dauer", "tempo", "messungen", "ueber", "stufe1", "stufe2", "fahrverbote", "alle", "richtung", "ort", "grenze"]);
   expect(stellen.methoden).toEqual(["hausnummer", "abschnitt", "kreuzung", "anschlussstelle", "strasse"]);
 });
+
+test("Datenlage: jede Stadt mit Stand, den das Manifest kennt, und den Feldern für js/datenlage.js", () => {
+  const manifest = json("pipeline/data/karte/manifest.json");
+  const dl = json("pipeline/data/karte/" + manifest.dateien.datenlage);
+  expect(dl.features.length).toBeGreaterThan(5);
+  for (const f of dl.features) {
+    const p = f.properties;
+    expect(Object.keys(manifest.datenlage_stand), p.kommune).toContain(p.stand);
+    expect(Object.keys(p)).toEqual(
+      expect.arrayContaining(["kommune", "land", "stand", "stadt", "kontrollen", "was", "anfrage", "recht", "links", "kontakt"])
+    );
+    if (p.stadt) expect(manifest.staedte[p.stadt].kontrollen, p.kommune).toBe(p.kontrollen);
+  }
+  expect(existsSync(WURZEL + "docs/DATENLAGE.md")).toBe(true);
+});

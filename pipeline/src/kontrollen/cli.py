@@ -9,7 +9,7 @@ from pathlib import Path
 import pandas as pd
 import typer
 
-from kontrollen import aachen, berlin, fetch, geocode, osm, site
+from kontrollen import aachen, berlin, fetch, geocode, koeln, osm, site
 from kontrollen.config import get_paths, load_yaml, quellen
 
 app = typer.Typer(no_args_is_help=True, help="Pipeline der Karte der Geschwindigkeitskontrollen")
@@ -65,7 +65,8 @@ def fetch_cmd(
         typer.echo(f"Aachen: {len(dateien)} Dateien")
     q = quellen()["staedte"]
     for s in staedte():
-        if s in ("berlin", "aachen") or not andere or "ckan" not in q[s]["kontrollen"]:
+        k = q[s]["kontrollen"]
+        if s in ("berlin", "aachen") or not andere or not ("ckan" in k or "kataloge" in k):
             continue
         try:
             dateien = fetch.ckan_dateien(s, neu=neu)
@@ -100,9 +101,22 @@ def osm_cmd(stadt: str = typer.Option("alle", help="Stadt (berlin, aachen, …) 
         )
 
 
+def _katalogdateien(p, cfg: dict) -> list[Path]:
+    """Die Dateien einer Stadt aus den Katalogen (Liste `ressourcen`); fehlt sie, der Ordner."""
+    k = cfg["kontrollen"]
+    ordner = p.data_file(k["ordner"])
+    liste = p.pipeline / k["ressourcen"]
+    if liste.exists():
+        namen = [f["datei"] for f in json.loads(liste.read_text(encoding="utf-8"))["dateien"]]
+        dateien = [ordner / n for n in namen]
+        # im Entwicklungsauszug liegen große CSV gzip-komprimiert
+        return [d if d.exists() else d.with_name(d.name + ".gz") for d in dateien]
+    return sorted(ordner.glob("*.csv")) + sorted(ordner.glob("*.csv.gz"))
+
+
 @app.command()
 def build() -> None:
-    """Rohdaten beider Städte -> data/interim/kontrollen.parquet (gemeinsames Schema)."""
+    """Rohdaten aller Städte -> data/interim/kontrollen.parquet (gemeinsames Schema)."""
     p = get_paths()
     q = quellen(p)["staedte"]
     anlagen = [(a, p.data_file(a["datei"])) for a in q["berlin"]["kontrollen"]["anlagen"]]
@@ -111,7 +125,19 @@ def build() -> None:
     dateien = [f for f in sorted(ordner.glob("*")) if f.suffix.lower() in (".xlsx", ".xls", ".csv")]
     alt = q["aachen"]["kontrollen"].get("alt")
     a, hinweise = aachen.lies_alle(dateien, p.data_file(alt["datei"]) if alt else None)
-    df = pd.concat([b, a], ignore_index=True)
+    teile = [b, a]
+    weitere: dict[str, dict] = {}
+    for code, leser in (("koeln", koeln.lies_alle),):
+        if code not in q:
+            continue
+        fd = [f for f in _katalogdateien(p, q[code]) if f.exists()]
+        if not fd:
+            typer.echo(f"{q[code]['label']}: keine Rohdateien – übersprungen (fetch)", err=True)
+            continue
+        t, ber = leser(fd)
+        teile.append(t)
+        weitere[code] = {"kontrollen": int(len(t)), **ber}
+    df = pd.concat(teile, ignore_index=True)
     p.interim.mkdir(parents=True, exist_ok=True)
     df.to_parquet(p.interim / "kontrollen.parquet", index=False)
     bericht = {
@@ -121,13 +147,18 @@ def build() -> None:
         "aachen_dateien": len(dateien),
         "aachen_zeitraum": [a["datum"].min(), a["datum"].max()] if len(a) else None,
         "hinweise": hinweise,
+        **weitere,
     }
     (p.interim / "build_bericht.json").write_text(
         json.dumps(bericht, ensure_ascii=False, indent=1), encoding="utf-8"
     )
     typer.echo(
         json.dumps(
-            {k: v for k, v in bericht.items() if k not in ("hinweise", "berlin_anlagen")},
+            {
+                k: (v["kontrollen"] if k in weitere else v)
+                for k, v in bericht.items()
+                if k not in ("hinweise", "berlin_anlagen")
+            },
             ensure_ascii=False,
         )
     )

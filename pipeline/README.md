@@ -82,6 +82,35 @@ drei Monate** je Jahr. `fetch --neu` fragt den Katalog (sources.yaml: `ckan`, `s
 Oktober 2025 zusätzlich CSV mit langem Datum („Montag, 1. Dezember 2025“) – gibt es Excel, gilt
 Excel. Den Juni 2020 liest `lies_folium` aus den Tooltips der alten Karte.
 
+**Köln.** Je Datensatz (2017–2022, 2023, 2024, 2025) eine Datei mit **einem Verstoß je Zeile**
+und Tabellen der Standorte je Dienststelle („Standorttabelle s01“ …), alles auf
+offenedaten-koeln.de (DKAN 2: `fetch` fragt `api/1/search`, dazu GovData als Spiegel; open.nrw
+antwortet GitHub Actions nicht). Die Liste der Dateien steht in `config/koeln_ressourcen.json`;
+manche Download-Adressen sind doppelt kodiert (`%25C3%25BC`) – `fetch` versucht dann die
+einmal dekodierte. `koeln.py`:
+
+- Vorgänge: `vorfallsdatum` `10119` = 1.1.2019 (Tag ohne führende Null), `ueberschreitung` in
+  km/h, `dienststelle` = Standorttyp (`S-01` …; `K-…` = Rotlicht, bleibt draußen), `standort` =
+  Kürzel in der Standorttabelle desselben Datensatzes.
+- Standorte: Stadtteil (zum Teil mit zwei Buchstaben davor, einem anderen Code), Tatstraße mit
+  Hausnummer („Höhe Haus 20“, „ggü. Haus 65“), Fahrtrichtung, Tempolimit Pkw/Lkw.
+- **Kontrolle = alle Verstöße einer Messstelle an einem Tag.** Gemessene Fahrzeuge nennt Köln
+  nicht (`messungen` leer, `alle_gezaehlt = false`), Uhrzeit und Dauer einer Kontrolle auch nicht.
+  Stufen: bis/über 20 km/h aus der Überschreitung jedes Verstoßes.
+- Gelesen wird stückweise und gleich je Messstelle und Tag gezählt (Millionen Zeilen).
+- Id = Tag, Dienststelle, Standort (`K2019-01-01-S02-0039`).
+
+## Datenlage
+
+`datenlage` in `config/sources.yaml`: je Stadt ein Eintrag mit Stand (`in_karte`, `offen`,
+`geliefert`, `kandidat`, `teilweise`, `abgelehnt` – Texte in `site.STAND`), Lage, Empfehlung,
+Belegen (Links) und – mit `anfrage: true` – einem Anfragetext aus `anfrage_vorlage` (Platzhalter
+`{stelle}`, `{seit}`, `{zusatz}`). `recht` nennt je Land die Rechtsgrundlage, mit Beleg im
+Kommentar. `kontrollen site` schreibt daraus `data/karte/datenlage.json` (ein Punkt je Stadt;
+Städte in der Karte bekommen den Median ihrer Messstellen und die Zahl ihrer Kontrollen) und die
+Übersicht `docs/DATENLAGE.md`. `tests/test_datenlage.py` prüft jeden Eintrag (Stand, Beleg,
+Ort, Land, Platzhalter, Kontakt nur über die Behördensuche von FragDenStaat).
+
 ## Verortung
 
 `geocode.py`, Muster aus `vizsim/berlin-traffic-counts_schulwege`: Namen auf eine
@@ -140,5 +169,7 @@ cp -r /tmp/auszug/pipeline/data/raw/aachen /tmp/auszug/pipeline/data/raw/berlin 
 - **Neue Aachener Monate:** Workflow „Kartendaten neu bauen“ mit „Aachener Katalog neu
   fragen“; der PR zeigt die neuen Dateien in `config/aachen_ressourcen.json`.
 - **Neue Stadt:** Eintrag unter `staedte` in `sources.yaml` (Quelle, OSM-Abzug, `bbox`,
-  `crs_m`, `stadtgrenze`), Leser nach dem Muster von `berlin.py`/`aachen.py`, Aufruf in
-  `cli.build`; die Karte nimmt die Stadt aus dem Manifest.
+  `crs_m`, `stadtgrenze`; aus Open-Data-Katalogen mit `kataloge`, `suche`, `titel_muster`,
+  `stadt_muster`, `ressourcen`), Leser nach dem Muster von `koeln.py`/`aachen.py`, Aufruf in
+  `cli.build`; die Karte nimmt die Stadt aus dem Manifest (Knopf, Hinweise, Methode). Dazu den
+  Eintrag in `datenlage` auf `stand: in_karte` mit `stadt:` umstellen.

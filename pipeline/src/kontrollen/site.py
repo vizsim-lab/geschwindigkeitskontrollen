@@ -316,8 +316,6 @@ def _csv(m: pd.DataFrame, ziel: Path) -> None:
 def _manifest(p: Paths, q: dict, m: pd.DataFrame, stellen: list[dict]) -> dict:
     val_pfad = p.data_file("geokodierung_validierung.json")
     validierung = json.loads(val_pfad.read_text(encoding="utf-8")) if val_pfad.exists() else {}
-    res_pfad = p.pipeline / q["staedte"]["aachen"]["kontrollen"]["ressourcen"]
-    aachen_res = json.loads(res_pfad.read_text(encoding="utf-8")) if res_pfad.exists() else {}
     staedte = {}
     for code, cfg in q["staedte"].items():
         t = m[m["stadt"] == code]
@@ -330,17 +328,24 @@ def _manifest(p: Paths, q: dict, m: pd.DataFrame, stellen: list[dict]) -> dict:
             "herkunft_url": k["herkunft_url"],
             "lizenz": k.get("lizenz"),
             "lizenz_hinweis": k.get("lizenz_hinweis"),
+            "hinweis": k.get("hinweis"),
         }
-        if code == "aachen" and aachen_res:
+        res_pfad = p.pipeline / k["ressourcen"] if k.get("ressourcen") else None
+        res = (
+            json.loads(res_pfad.read_text(encoding="utf-8"))
+            if res_pfad and res_pfad.exists()
+            else {}
+        )
+        if res:  # Städte aus Open-Data-Katalogen: Lizenzen und Datensätze aus der Liste
             lizenzen = sorted(
-                {d.get("lizenz") for d in aachen_res.get("datensaetze", []) if d.get("lizenz")}
+                {d.get("lizenz") for d in res.get("datensaetze", []) if d.get("lizenz")}
             )
-            quelle["lizenz"] = " / ".join(lizenzen) or None
+            quelle["lizenz"] = " / ".join(lizenzen) or k.get("lizenz")
             quelle["datensaetze"] = [
                 {"titel": d["titel"], "url": d.get("url"), "lizenz": d.get("lizenz")}
-                for d in aachen_res.get("datensaetze", [])
+                for d in res.get("datensaetze", [])
             ]
-            quelle["dateien"] = len(aachen_res.get("dateien", []))
+            quelle["dateien"] = len(res.get("dateien", []))
         staedte[code] = {
             "label": cfg["label"],
             "start": cfg["start"],

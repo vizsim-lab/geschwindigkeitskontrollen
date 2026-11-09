@@ -240,7 +240,7 @@ function datenlageAnlegen() {
         "text-offset": [0, 0.9],
         "text-optional": true,
       },
-      paint: { "text-color": "#374151", "text-halo-color": "#ffffff", "text-halo-width": 1.3 },
+      paint: { "text-color": "#374151", "text-halo-color": "#ffffff", "text-halo-width": 1.3, "text-opacity": blende },
     });
   }
   document.getElementById("datenlage-legende").innerHTML = DL.legendeHtml(datenlage);
@@ -251,7 +251,8 @@ function datenlageAnlegen() {
     datenlageSichtbar();
     if (zustand.datenlage && map.getZoom() > 8) {
       const breit = innerWidth > 640;
-      map.fitBounds(DEUTSCHLAND, { padding: { top: 60, bottom: 40, left: 40, right: breit ? 360 : 40 }, maxZoom: 7 });
+      // rechts die Legende, am Handy unten das Blatt der Legende
+      map.fitBounds(DEUTSCHLAND, { padding: { top: 60, bottom: breit ? 40 : 140, left: 40, right: breit ? 360 : 40 }, maxZoom: 7 });
     }
     if (!zustand.datenlage) schliesseDatenlage();
     schreibeLink();

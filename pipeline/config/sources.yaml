@@ -267,7 +267,48 @@ datenlage:
     links:
       - ["Open Data Aachen", "https://offenedaten.aachen.de/"]
 
+  - kommune: Köln
+    stadt: koeln
+    land: NW
+    stand: in_karte
+    was: >-
+      jeder Verstoß der städtischen Geschwindigkeitsüberwachung seit 2017 als Open Data, mit
+      Standort, Tag, Uhrzeit und gemessener Geschwindigkeit
+    situation: >-
+      Die Stadt nennt nur die Verstöße, nicht alle gemessenen Fahrzeuge – einen Anteil gibt es
+      darum nicht. Die Karte fasst die Verstöße einer Messstelle an einem Tag zu einer Kontrolle
+      zusammen. Die Kontrollen der Polizei fehlen.
+    empfehlung: >-
+      Für den Anteil zu schneller Fahrzeuge die Zahl aller gemessenen Fahrzeuge je Messeinsatz bei
+      der Stadt anfragen; die Kontrollen der Polizei beim Polizeipräsidium Köln.
+    weg: "FragDenStaat, IFG NRW"
+    kontakt: {fds_suche: "Stadt Köln"}
+    anfrage: true
+    seit: "dem 1. Januar 2017"
+    anfrage_zusatz: >-
+      Auf Ihrem Open-Data-Portal stehen die einzelnen Verstöße mit Standort. Ich bitte ergänzend
+      um die Zahl aller gemessenen Fahrzeuge je Messeinsatz (Standort, Datum, Beginn und Ende der
+      Messung).
+    links:
+      - ["Offene Daten Köln", "https://offenedaten-koeln.de/dataset/geschwindigkeitsueberwachung-koeln-ab-2023"]
+
   # --- offen, noch nicht in der Karte ---
+  - kommune: Bonn
+    land: NW
+    lon: 7.0982
+    lat: 50.7374
+    stand: offen
+    was: >-
+      jeder Verstoß als Open Data („Bußgelder fließender Verkehr“, Jahresdateien seit 2019):
+      Tag, Uhrzeit, Tatort, Tatbestandsnummer, Bußgeld; dazu die Messstellen der mobilen
+      Überwachung
+    situation: >-
+      Gemessene Fahrzeuge fehlen, die Höhe der Überschreitung steckt nur in der
+      Tatbestandsnummer, der Tatort ist Freitext. Für die Karte fehlt noch ein Leser.
+    weg: "offen"
+    links:
+      - ["Open Data Bonn (2023)", "https://opendata.bonn.de/dataset/757e5b85-26c2-46e7-944c-f3d5cf445c4d/resource/d91a7a3e-d630-4391-b1ce-226837233b83"]
+      - ["Messstellen (open.nrw)", "https://ckan.open.nrw.de/km/dataset/messstellen-der-mobilen-geschwindigkeitsuberwachung-bn"]
   - kommune: Konstanz
     land: BW
     lon: 9.1737
