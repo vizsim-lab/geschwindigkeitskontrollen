@@ -1,0 +1,64 @@
+# Entwicklungsauszug: lädt, was die Verortung braucht (OSM Berlin + Regierungsbezirk Köln,
+# Aachener Monatsdateien), liest es in die kompakten Tabellen von `kontrollen osm` und legt
+# diese samt der Aachener Rohdateien auf den Branch `dev/auszug` (orphan, wird überschrieben).
+# Wozu: Entwickeln und Testen der Verortung ohne Netzzugang zu Geofabrik/Open-Data-Portalen –
+# `git fetch origin dev/auszug` und die Dateien nach pipeline/data/ kopieren.
+# Der Branch gehört nicht nach main und kann jederzeit gelöscht werden.
+name: Entwicklungsauszug
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ["dev/auszug-anfordern"]
+
+concurrency:
+  group: auszug
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  auszug:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    defaults:
+      run:
+        working-directory: pipeline
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10.1.0
+        with:
+          enable-cache: true
+          cache-dependency-glob: pipeline/uv.lock
+      - run: uv sync --locked
+      - name: Rohdaten laden (Berlin-CSV, Aachener Katalog neu, OSM)
+        run: uv run kontrollen fetch --osm --neu
+      - name: OSM auslesen
+        run: uv run kontrollen osm
+      - name: Einlesen (Bericht, darf scheitern)
+        run: uv run kontrollen build || echo "build gescheitert" > data/interim/build_fehlgeschlagen.txt
+      - name: Zusammenfassung
+        run: |
+          {
+            echo "### Auszug"
+            echo '```'
+            du -sh data/interim/osm/* data/raw/aachen 2>/dev/null
+            ls data/raw/aachen | head -100
+            echo '```'
+            echo '```json'
+            cat data/interim/build_bericht.json 2>/dev/null || true
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+      - name: Auf dev/auszug legen
+        working-directory: .
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch --orphan dev/auszug
+          git add -f pipeline/data/interim/osm pipeline/data/raw/aachen pipeline/config/aachen_ressourcen.json
+          for f in pipeline/data/interim/build_bericht.json pipeline/data/interim/build_fehlgeschlagen.txt; do
+            [ -f "$f" ] && git add -f "$f"
+          done
+          git commit -q -m "Entwicklungsauszug (Lauf ${{ github.run_number }})"
+          git push -f origin dev/auszug

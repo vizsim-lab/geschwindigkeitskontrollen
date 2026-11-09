@@ -1,0 +1,79 @@
+# Die EINE Quellenliste des Projekts. Speist `kontrollen fetch|build|osm|site` und
+# pipeline/data/karte/manifest.json, aus dem die Karte ihre Quellenangaben und Lizenzhinweise
+# baut – nie im Frontend nachtragen.
+#
+# Pfade: `datei` relativ zu pipeline/data/ (gitignored Rohdaten).
+
+staedte:
+  berlin:
+    label: "Berlin"
+    crs_m: "EPSG:25833"            # metrisch (UTM 33N), Ausgabe immer EPSG:4326
+    bbox: [13.08, 52.33, 13.77, 52.68]
+    start: { lon: 13.40, lat: 52.51, zoom: 10.6 }
+    kontrollen:
+      label: "Temporäre Geschwindigkeitskontrollen 2017–2019"
+      bereitsteller: "Polizei Berlin"
+      kurz: "Polizei Berlin"
+      titel: "Auszug aus der Geschwindigkeitsdatenbank (IFG-Bescheid vom 09.12.2020, Anlagen 1–3)"
+      herkunft_url: "https://fragdenstaat.de/anfrage/geschwindigkeitskontrollen-von-kfz-in-berlin/"
+      lizenz: null                  # der Bescheid nennt keine Lizenz
+      lizenz_hinweis: "Amtliche Auskunft nach IFG, ohne Lizenzangabe"
+      # Die Polizei hat PDF geliefert; die CSV ist die Aufbereitung aus vizsim/geschwindigkeitskontrollen
+      # (2017–2019, v01), auf einen Commit festgelegt.
+      aufbereitung: "vizsim/geschwindigkeitskontrollen, CSV v01"
+      url: "https://raw.githubusercontent.com/vizsim/geschwindigkeitskontrollen/47f921e01ec9aafcf9895c3b696de825a315f577/raw_data_berlin_temp_speed_17_18_19_v01.csv"
+      sha256: "bcf6c7eccef60e755c4276e6460da2cbe73be73944f72331046722e9cdd67505"
+      datei: "raw/berlin/kontrollen_2017-2019_v01.csv"
+    osm:
+      label: "Straßennetz und Adressen Berlin (Verortung)"
+      url: "https://download.geofabrik.de/europe/germany/berlin-latest.osm.pbf"
+      datei: "raw/osm/berlin-latest.osm.pbf"
+      # Verwaltungsgrenzen in OSM: 4 = Land Berlin, 9 = Bezirke, 10 = Ortsteile
+      gebiete_admin_level: ["4", "9", "10"]
+      stadtgrenze: { name: "Berlin", admin_level: ["4"] }
+      bezirk_ebene: "9"               # „Verwaltungsbezirk“ der Kontrollen grenzt die Suche ein
+
+  aachen:
+    label: "Aachen"
+    crs_m: "EPSG:25832"            # metrisch (UTM 32N)
+    bbox: [5.97, 50.63, 6.22, 50.86]
+    start: { lon: 6.09, lat: 50.77, zoom: 11.6 }
+    kontrollen:
+      label: "Geschwindigkeitskontrollen der Stadt Aachen"
+      bereitsteller: "Stadt Aachen"
+      kurz: "Stadt Aachen"
+      titel: "Geschwindigkeitskontrollen (Open Data, Monatsdateien)"
+      herkunft_url: "https://offenedaten.aachen.de/"
+      # CKAN-Kataloge, der Reihe nach probiert. Gefunden werden alle Datensätze, deren Titel
+      # zum Muster passt; jede Excel-/CSV-Ressource ist eine Monatsdatei. Was gefunden wurde,
+      # schreibt `fetch --aachen --neu` nach config/aachen_ressourcen.json (mit Prüfsummen) –
+      # ohne --neu lädt `fetch` genau diese Liste.
+      ckan:
+        - "https://offenedaten.aachen.de/api/3/action/"
+        - "https://ckan.open.nrw.de/api/3/action/"
+      suche: "Geschwindigkeitskontrollen"
+      titel_muster: "(?i)geschwindigkeitskontroll"
+      aachen_muster: "(?i)aachen"
+      formate: ["XLSX", "XLS", "CSV"]
+      ressourcen: "config/aachen_ressourcen.json"
+      ordner: "raw/aachen"
+    osm:
+      label: "Straßennetz und Adressen Aachen (Verortung)"
+      # Geofabrik hat keinen Stadt-Auszug; der Regierungsbezirk wird auf `bbox` zugeschnitten
+      url: "https://download.geofabrik.de/europe/germany/nordrhein-westfalen/koeln-regbez-latest.osm.pbf"
+      datei: "raw/osm/koeln-regbez-latest.osm.pbf"
+      # Aachen gehört seit 2009 zur StädteRegion; welche Ebene die Stadt in OSM trägt, ist hier
+      # egal: genommen wird die kleinste Fläche namens „Aachen“ auf diesen Ebenen.
+      gebiete_admin_level: ["6", "7", "8", "9", "10"]
+      stadtgrenze: { name: "Aachen", admin_level: ["6", "7", "8"] }
+      bezirk_ebene: null              # die Aachener Daten nennen keinen Bezirk
+
+osm:
+  bereitsteller: "© OpenStreetMap-Mitwirkende"
+  lizenz: "ODbL"
+  lizenz_url: "https://opendatacommons.org/licenses/odbl/"
+  herkunft_url: "https://download.geofabrik.de/"
+
+karte:
+  hintergrund: "OpenFreeMap (Positron), © OpenMapTiles, © OpenStreetMap-Mitwirkende"
+  suche: "Photon (Komoot), © OpenStreetMap-Mitwirkende"

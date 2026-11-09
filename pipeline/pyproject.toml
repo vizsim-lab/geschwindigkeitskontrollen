@@ -1,0 +1,49 @@
+[project]
+name = "kontrollen"
+version = "0.1.0"
+description = "Pipeline der Karte der Geschwindigkeitskontrollen: Rohdaten (Berlin, Aachen) → Verortung über OSM → Kartendaten"
+readme = "README.md"
+requires-python = ">=3.11,<3.14"
+license = { text = "AGPL-3.0-or-later" }
+dependencies = [
+    "pandas>=2.2",
+    "pyarrow>=16",
+    "geopandas>=1.0",
+    "shapely>=2.0",
+    "pyproj>=3.6",
+    "osmium>=4.0",     # pyosmium: OSM-PBF lesen (Straßen, Adressen, Anschlussstellen, Gebiete)
+    "openpyxl>=3.1",   # Aachen liefert Excel
+    "requests>=2.32",
+    "typer>=0.12",
+    "pyyaml>=6.0",
+]
+
+[project.scripts]
+kontrollen = "kontrollen.cli:app"
+
+[dependency-groups]
+dev = [
+    "ruff>=0.6",
+    "pytest>=8.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/kontrollen"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.ruff.lint.per-file-ignores]
+# Testdaten sind wörtliche Zeilen aus den Rohdaten
+"tests/*" = ["E501"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

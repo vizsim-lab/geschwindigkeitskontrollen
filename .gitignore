@@ -1,0 +1,16 @@
+# Pipeline: Rohdaten und Zwischenstände bleiben lokal (Kartendaten in pipeline/data/karte/ und
+# die Verortung pipeline/data/geokodierung* liegen im Git)
+pipeline/data/raw/
+pipeline/data/interim/
+pipeline/.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+
+# Frontend-Tests
+node_modules/
+test-results/
+playwright-report/
+
+.DS_Store
