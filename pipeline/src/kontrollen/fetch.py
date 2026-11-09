@@ -54,6 +54,9 @@ def lade(url: str, ziel: Path, pruefsumme: str | None = None, *, neu: bool = Fal
     if pruefsumme and sha256(tmp) != pruefsumme:
         tmp.unlink()
         raise ValueError(f"Prüfsumme stimmt nicht: {url}")
+    if ziel.suffix.lower() == ".pdf" and tmp.read_bytes()[:5] != b"%PDF-":
+        tmp.unlink()  # etwa eine Vorschauseite statt der Datei
+        raise ValueError(f"Keine PDF-Datei: {url}")
     tmp.replace(ziel)
     return ziel
 

@@ -33,18 +33,18 @@ staedte:
       dateien:
         - code: "2019"
           rolle: probe
-          url: "https://fragdenstaat.de/anfrage/geschwindigkeitskontrollen-von-kfz-in-berlin/546222/anhang/202012096IFG102.20Anlage3GeschwindigkeitskontrollenBerlin2019.pdf"
+          url: "https://media.frag-den-staat.de/files/foi/546222/202012096IFG102.20Anlage3GeschwindigkeitskontrollenBerlin2019.pdf"
           sha256: null
           datei: "raw/berlin/anlage3_2019.pdf"
         - code: "2020"
           rolle: daten
           titel: "Anlage 4 des IFG-Bescheids vom 09.12.2020 (01.01.–31.08.2020)"
-          url: "https://fragdenstaat.de/anfrage/geschwindigkeitskontrollen-von-kfz-in-berlin/546222/anhang/202012097IFG102.20Anlage4GeschwindigkeitskontrollenBerlinbis31.08.2020.pdf"
+          url: "https://media.frag-den-staat.de/files/foi/546222/202012097IFG102.20Anlage4GeschwindigkeitskontrollenBerlinbis31.08.2020.pdf"
           sha256: null
           datei: "raw/berlin/anlage4_2020.pdf"
         - code: "abhilfe"
           rolle: info
-          url: "https://fragdenstaat.de/anfrage/geschwindigkeitskontrollen-von-kfz-in-berlin/546901/anhang/202012119IFG102.20AnlageAbhilfebescheid.pdf"
+          url: "https://media.frag-den-staat.de/files/foi/546901/202012119IFG102.20AnlageAbhilfebescheid.pdf"
           sha256: null
           datei: "raw/berlin/anlage_abhilfebescheid.pdf"
     osm:
