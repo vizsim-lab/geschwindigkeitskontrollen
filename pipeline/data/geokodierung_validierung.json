@@ -1,43 +1,59 @@
 {
  "aachen": {
   "kontrollen": 3467,
-  "verortet": 0,
+  "verortet": 3467,
   "je_methode": {
    "hausnummer": 0,
    "abschnitt": 0,
    "kreuzung": 0,
    "anschlussstelle": 0,
-   "strasse": 0
+   "strasse": 3467
   },
-  "ohne_lage": 3467,
-  "je_gebiet": {}
+  "ohne_lage": 0,
+  "je_gebiet": {
+   "stadt": 3467
+  },
+  "hinweise": {
+   "Straße liegt an mehreren Stellen – Punkt auf dem längsten Stück": 127,
+   "Ortsangabe von Hand zugeordnet (config/orte.yaml)": 11
+  }
  },
  "berlin": {
   "kontrollen": 27945,
-  "verortet": 27596,
+  "verortet": 27862,
   "je_methode": {
-   "hausnummer": 20168,
-   "abschnitt": 2848,
-   "kreuzung": 3784,
-   "anschlussstelle": 392,
-   "strasse": 404
+   "hausnummer": 20310,
+   "abschnitt": 3238,
+   "kreuzung": 3526,
+   "anschlussstelle": 634,
+   "strasse": 154
   },
-  "ohne_lage": 349,
+  "ohne_lage": 83,
   "je_gebiet": {
-   "bezirk": 26972,
-   "stadt": 624
+   "bezirk": 26738,
+   "stadt": 933,
+   "umgebung": 191
+  },
+  "hinweise": {
+   "Hausnummer liegt außerhalb des Abschnitts": 270,
+   "nur eine der Querstraßen gefunden": 260,
+   "Ortsangabe statt Querstraße": 240,
+   "Ortsangabe von Hand zugeordnet (config/orte.yaml)": 167,
+   "auf der A 103 gefunden (Quelle: A 100)": 29,
+   "auf der A 111 gefunden (Quelle: A 100)": 5,
+   "auf der A 100 gefunden (Quelle: A 113)": 1
   },
   "hausnummer_gegen_abschnitt": {
-   "n": 17453,
-   "im_abschnitt": 0.545,
-   "unter_50m": 0.936,
-   "ueber_widerspruch": 0.011,
-   "median_m": 0.0,
-   "p90_m": 30.3
+   "n": 19156,
+   "im_abschnitt": 0.528,
+   "unter_50m": 0.925,
+   "ueber_widerspruch": 0.014,
+   "median_m": 0.1,
+   "p90_m": 32.8
   },
   "adresse_zur_achse_m": {
    "median": 21.5,
-   "p90": 48.9
+   "p90": 49.4
   }
  }
 }

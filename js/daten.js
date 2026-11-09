@@ -85,6 +85,7 @@ export function entpacke(stellenJson, kontrollenJson) {
     methoden: stellenJson.methoden,
     richtungen: kontrollenJson.richtungen,
     orte: kontrollenJson.orte,
+    tag0: kontrollenJson.tag0,
   };
 }
 
@@ -193,12 +194,18 @@ export function punkte(daten, agg, metrik) {
   return { type: "FeatureCollection", features };
 }
 
-/** Zusammenfassung für die Legende: Messstellen je Klasse, Summen, Zählungen je Filterwert. */
-export function zusammenfassung(daten, agg, metrik, filter) {
+/**
+ * Zusammenfassung für die Legende: Messstellen je Klasse, Summen, Zählungen je Filterwert.
+ * `stadt` (optional): nur diese Stadt zählen – die Legende spricht über die Stadt im Bild.
+ */
+export function zusammenfassung(daten, agg, metrik, filter, stadt = null) {
   const jeKlasse = [0, 0, 0, 0, 0];
   let ohneWert = 0;
   let kontrollen = 0;
-  for (const a of agg.values()) {
+  let messstellen = 0;
+  for (const [i, a] of agg) {
+    if (stadt && daten.stellen[i].stadtCode !== stadt) continue;
+    messstellen++;
     kontrollen += a.n;
     const k = klasse(wert(a, metrik), metrik);
     if (k < 0) ohneWert++;
@@ -208,18 +215,17 @@ export function zusammenfassung(daten, agg, metrik, filter) {
   const jeJahr = {};
   const jeTempo = {};
   const jeMethode = {};
-  let ohneLage = 0;
+  const ohneJahr = { ...filter, jahre: null };
+  const ohneTempo = { ...filter, tempo: null };
+  const ohneMethode = { ...filter, methoden: null };
   for (const k of daten.kontrollen) {
-    if (k.stelle == null) {
-      ohneLage++;
-      continue;
-    }
+    if (k.stelle == null || (stadt && k.stadt !== stadt)) continue;
     const m = daten.stellen[k.stelle].methodeCode;
-    if (passt(k, { ...filter, jahre: null }, daten)) jeJahr[k.jahr] = (jeJahr[k.jahr] || 0) + 1;
-    if (passt(k, { ...filter, tempo: null }, daten)) jeTempo[k.tempoKlasse] = (jeTempo[k.tempoKlasse] || 0) + 1;
-    if (passt(k, { ...filter, methoden: null }, daten)) jeMethode[m] = (jeMethode[m] || 0) + 1;
+    if (passt(k, ohneJahr, daten)) jeJahr[k.jahr] = (jeJahr[k.jahr] || 0) + 1;
+    if (passt(k, ohneTempo, daten)) jeTempo[k.tempoKlasse] = (jeTempo[k.tempoKlasse] || 0) + 1;
+    if (passt(k, ohneMethode, daten)) jeMethode[m] = (jeMethode[m] || 0) + 1;
   }
-  return { messstellen: agg.size, kontrollen, jeKlasse, ohneWert, jeJahr, jeTempo, jeMethode, ohneLage };
+  return { messstellen, kontrollen, jeKlasse, ohneWert, jeJahr, jeTempo, jeMethode };
 }
 
 /** Die Kontrollen einer Messstelle (neueste zuerst), mit `imFilter`. */

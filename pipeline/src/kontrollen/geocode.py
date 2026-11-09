@@ -58,6 +58,7 @@ MEHRDEUTIG = 400  # m: zwei gleich gute Kandidaten weiter auseinander -> keine A
 ORT_MAX = 500  # m: Ort (Platz, Anschlussstelle, Brücke) so weit von der Straße -> passt nicht
 ORT_STRASSE_MAX = 150  # m: eine genannte Straße, die die Hauptstraße nicht trifft, nur so nah
 FREMD_MAX = 100  # m: Ort auf einer anderen Autobahn als genannt – nur so nah
+UEBERLEITUNG_MAX = 800  # m: so nah kommen sich zwei Autobahnen an ihrem Dreieck/Kreuz
 LUECKE = 250  # m: Teile einer Straße mit größerer Lücke liegen an verschiedenen Orten
 PRAEFIX_MIN = 12  # Zeichen: kürzere abgeschnittene Namen nicht über den Anfang suchen
 FUZZY = 0.9  # Mindestähnlichkeit für Tippfehler, nur innerhalb des Suchgebiets
@@ -557,7 +558,12 @@ def _quer(
     ue = _UEBERLEITUNG.search(n)  # "Überleitung zur BAB 115" -> wo die A 115 anschließt
     ref = ab[0] if ab else (f"A {int(ue.group(1))}" if ue else None)
     if ref in netz.autobahn:
-        pts = treffpunkte(gx, netz.autobahn[ref].intersection(weit))
+        andere = netz.autobahn[ref].intersection(weit)
+        pts = treffpunkte(gx, andere)
+        # Überleitung: die Fahrbahnen zweier Autobahnen berühren sich am Dreieck oft nicht
+        # (dazwischen liegen nur Rampen) -> wo sie sich am nächsten kommen
+        if not pts and ue and not andere.is_empty and gx.distance(andere) <= UEBERLEITUNG_MAX:
+            pts = [nearest_points(gx, andere)[0]]
         if pts:
             return pts, hinweis
     if namen.schluessel(n) == "stadtgrenze":
@@ -634,11 +640,13 @@ def _orte(name: str, netz: Netz, gebiet) -> list[Point]:
     if len(k) < 4:
         return []
     exakt = [p for kk, _, _, p in netz.orte if kk == k and gebiet.contains(p)]
-    pts = exakt or [
-        p
-        for kk, _, _, p in netz.orte
-        if (kk.endswith(k) or k.endswith(kk)) and len(kk) >= 4 and gebiet.contains(p)
-    ]
+
+    def passt(kk: str) -> bool:  # "Funkturm" ~ "Dreieck Funkturm", "Flughafen Teg" ~ "… Tegel"
+        return len(kk) >= 4 and (
+            kk.endswith(k) or k.endswith(kk) or (len(k) >= 8 and kk.startswith(k))
+        )
+
+    pts = exakt or [p for kk, _, _, p in netz.orte if passt(kk) and gebiet.contains(p)]
     return buendel(pts, KNOTEN_BUENDEL)
 
 

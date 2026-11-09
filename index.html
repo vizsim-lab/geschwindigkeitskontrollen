@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Geschwindigkeitskontrollen – Berlin und Aachen</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+    content="Karte der Geschwindigkeitskontrollen in Berlin (2017–2019) und Aachen (seit 2020): jede Kontrolle an ihrer Messstelle, verortet über Hausnummer und Querstraßen im OpenStreetMap-Straßennetz." />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Geschwindigkeitskontrollen – Berlin und Aachen" />
+  <meta property="og:description"
+    content="Wo wurde wie oft kontrolliert, und wie viele waren zu schnell? Polizei Berlin 2017–2019, Stadt Aachen seit 2020." />
+  <meta property="og:locale" content="de_DE" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%23fff' stroke='%23d73027' stroke-width='4'/%3E%3Ctext x='16' y='21' font-family='Arial' font-size='13' font-weight='700' text-anchor='middle' fill='%23111'%3E50%3C/text%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://tiles.openfreemap.org" crossorigin>
+  <!-- MapLibre: Version und Prüfsummen nur zusammen mit package.json ändern
+       (tests/web/vertrag.spec.js prüft beides). -->
+  <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.css" integrity="sha384-uTttxo/aOKbdE5RlD/SPzSDoDmNvGlUYPjONi2MN/b7c9HPSvW07OIuyP7uL6jxK" crossorigin="anonymous" />
+  <script src="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.js" integrity="sha384-5+cfbwT0iiub6VsQAdn6yz16nr6sDiQoHx6tm4O8OVYXHYOxcffFmCJBL0dgdvGp" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <div id="map" aria-label="Karte der Messstellen"></div>
+
+  <div class="legend" id="legende">
+    <!-- Handy: zugeklappt starten, bevor das erste Bild steht (Grenze wie in style.css) -->
+    <script>if (matchMedia("(max-width: 640px)").matches) document.currentScript.parentElement.classList.add("collapsed");</script>
+
+    <div class="legend-header legend-title">
+      <div class="grow">
+        <h1 class="legend-heading">Geschwindigkeitskontrollen</h1>
+        <div class="legend-subtext"><span id="untertitel">Berlin · Aachen</span>
+          <span class="info-icon" id="quelle-tip" data-tip="">i</span></div>
+      </div>
+      <button type="button" class="toggle-arrow toggle-root open" id="legende-auf" aria-expanded="true"
+        aria-label="Legende ein-/ausklappen"></button>
+    </div>
+
+    <div class="legend-section-divider"></div>
+
+    <div class="stadt-wahl" role="group" aria-label="Stadt">
+      <button type="button" class="stadt-btn" data-stadt="berlin">Berlin <span class="stadt-jahre"></span></button>
+      <button type="button" class="stadt-btn" data-stadt="aachen">Aachen <span class="stadt-jahre"></span></button>
+    </div>
+
+    <section class="legend-section" aria-labelledby="t-farbe">
+      <div class="legend-section-title" id="t-farbe">Farbe nach</div>
+      <div class="legend-modes" role="radiogroup" aria-labelledby="t-farbe">
+        <label class="legend-chip"><input type="radio" name="metrik" value="anteil" checked /><span>Anteil zu schnell</span></label>
+        <label class="legend-chip"><input type="radio" name="metrik" value="stunde" /><span>je Stunde</span></label>
+        <label class="legend-chip"><input type="radio" name="metrik" value="fahrverbote" /><span>Fahrverbote</span></label>
+        <label class="legend-chip"><input type="radio" name="metrik" value="kontrollen" /><span>Kontrollen</span></label>
+      </div>
+      <p class="metrik-hinweis" id="metrik-hinweis"></p>
+      <ul class="klassen" id="klassen" aria-label="Farbstufen"></ul>
+      <p class="legende-fuss">Kreisgröße = Zahl der Kontrollen · blasser Kreis (≈) = nur die Straße bekannt, die
+        Linie zeigt dann die ganze Straße</p>
+    </section>
+
+    <div class="legend-section-divider"></div>
+
+    <section class="legend-section" aria-labelledby="t-filter">
+      <div class="legend-section-title" id="t-filter">Filter</div>
+      <div class="filter-gruppe">
+        <div class="filter-titel">Jahr</div>
+        <div class="chips" id="f-jahre"></div>
+      </div>
+      <div class="filter-gruppe">
+        <div class="filter-titel">Tempolimit <span class="info-icon" data-tip="Nur Berlin nennt das Tempolimit; Aachen steht unter „unbekannt“.">i</span></div>
+        <div class="chips" id="f-tempo"></div>
+      </div>
+      <div class="filter-gruppe">
+        <div class="filter-titel">Verortung</div>
+        <div class="chips" id="f-verortung"></div>
+      </div>
+      <button type="button" class="link-btn" id="filter-zurueck" hidden>Alle Filter zurücksetzen</button>
+    </section>
+
+    <div id="feature-count-wrapper">
+      <div class="fc-stats">
+        <span class="fc-stat"><b id="fc-stellen">–</b>&nbsp;Messstellen</span>
+        <span class="fc-stat"><b id="fc-kontrollen">–</b>&nbsp;Kontrollen</span>
+      </div>
+      <div class="fc-links">
+        <span class="fc-badge" data-tip="Beta: Daten und Funktionen können sich noch ändern">Beta</span>
+        <button type="button" class="fc-icon-btn" id="methode-auf" title="Methode & Quellen" aria-label="Methode und Quellen">
+          <svg viewBox="0 0 16 16" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M8 1.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm6.5-.25A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>
+        </button>
+        <a id="csv-link" href="pipeline/data/karte/kontrollen.csv" download title="Alle Kontrollen als CSV" aria-label="Alle Kontrollen als CSV herunterladen">
+          <svg viewBox="0 0 16 16" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M2.75 14A1.75 1.75 0 0 1 1 12.25v-2.5a.75.75 0 0 1 1.5 0v2.5c0 .138.112.25.25.25h10.5a.25.25 0 0 0 .25-.25v-2.5a.75.75 0 0 1 1.5 0v2.5A1.75 1.75 0 0 1 13.25 14Z"></path><path d="M7.25 7.689V2a.75.75 0 0 1 1.5 0v5.689l1.97-1.969a.749.749 0 1 1 1.06 1.06l-3.25 3.25a.749.749 0 0 1-1.06 0L4.22 6.78a.749.749 0 1 1 1.06-1.06l1.97 1.969Z"></path></svg>
+        </a>
+        <a href="https://github.com/vizsim-lab/geschwindigkeitskontrollen" target="_blank" rel="noopener" title="Quellcode auf GitHub" aria-label="Quellcode auf GitHub">
+          <svg viewBox="0 0 16 16" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"></path></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div id="bottom-left-ui-container">
+    <div id="custom-nav-control"></div>
+  </div>
+
+  <button id="map-settings-toggle" class="map-settings-toggle" type="button" aria-expanded="false"
+    aria-controls="map-settings-panel" title="Kartenauswahl">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <polygon points="1 6 8 3 16 6 23 3 23 18 16 21 8 18 1 21 1 6"></polygon>
+      <line x1="8" y1="3" x2="8" y2="18"></line><line x1="16" y1="6" x2="16" y2="21"></line>
+    </svg>
+  </button>
+
+  <section id="map-settings-panel" class="map-settings-panel is-collapsed" aria-label="Kartenauswahl">
+    <div class="basemap-grid">
+      <button class="basemap-btn selected" type="button" data-basemap="positron">
+        <span class="basemap-preview basemap-preview-positron"></span><span class="basemap-label">Positron</span>
+      </button>
+      <button class="basemap-btn" type="button" data-basemap="osm">
+        <span class="basemap-preview basemap-preview-osm"></span><span class="basemap-label">OSM Carto</span>
+      </button>
+      <button class="basemap-btn" type="button" data-basemap="satellite">
+        <span class="basemap-preview basemap-preview-satellite"></span><span class="basemap-label">Esri Imagery</span>
+      </button>
+    </div>
+  </section>
+
+  <dialog id="methode" class="info-dialog" aria-labelledby="methode-titel">
+    <div class="info-body">
+      <div class="info-kopf">
+        <h2 id="methode-titel">Methode &amp; Quellen</h2>
+        <button type="button" class="info-zu" aria-label="Schließen">×</button>
+      </div>
+      <div id="methode-inhalt"></div>
+    </div>
+  </dialog>
+
+  <div class="fehler-banner" id="fehler" role="alert" hidden></div>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+
+</html>

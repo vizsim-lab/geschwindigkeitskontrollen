@@ -1,0 +1,1033 @@
+/* SPDX-License-Identifier: AGPL-3.0-or-later
+   Karte der Geschwindigkeitskontrollen – Gestaltung nach vizsim/unfallkarte (Legende rechts,
+   Karten-Panel unten links, Photon-Suche oben links, Popup-Bausteine .pop-*). */
+
+/* ───── Grundlayout ───── */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background: #f2f3f0;
+}
+
+#map {
+  position: absolute;
+  inset: 0;
+}
+
+:root {
+  --ui-surface: #ffffff;
+  --ui-border: #e3e5e9;
+  --ui-divider: #eceef1;
+  --ui-shadow: 0 14px 40px rgba(15, 23, 42, 0.18);
+  --ui-shadow-sm: 0 6px 16px rgba(0, 0, 0, 0.12);
+  --ui-radius: 16px;
+  --ui-radius-sm: 12px;
+  --ui-text: #1f2937;
+  --ui-text-strong: #111827;
+  --ui-text-muted: #6b7280;
+  --ui-accent: #1d4ed8;
+  --ui-hover: #f3f4f6;
+}
+
+/* ───── Legende ───── */
+.legend {
+  position: absolute;
+  top: 60px;
+  right: 10px;
+  width: 330px;
+  max-width: calc(100vw - 20px);
+  max-height: calc(100dvh - 90px);
+  box-sizing: border-box;
+  background: var(--ui-surface);
+  color: var(--ui-text);
+  padding: 0 16px 14px;
+  font-size: 12px;
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius);
+  box-shadow: var(--ui-shadow);
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: #d1d5db transparent;
+  z-index: 3;
+}
+
+.legend .legend-title {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  margin: 0 -16px;
+  padding: 16px 16px 10px;
+  background: var(--ui-surface);
+  box-shadow: 0 6px 10px -8px rgba(15, 23, 42, 0.45);
+}
+
+.legend-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.legend-heading {
+  margin: 0;
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+  color: var(--ui-text-strong);
+}
+
+.legend-subtext {
+  margin-top: 3px;
+  font-size: 12px;
+  color: var(--ui-text-muted);
+}
+
+.grow {
+  flex-grow: 1;
+  min-width: 0;
+}
+
+.legend-section-divider {
+  border-top: 1px solid var(--ui-divider);
+  margin: 12px 0 10px;
+}
+
+.legend-section-title {
+  font-weight: 700;
+  font-size: 14px;
+  margin-bottom: 8px;
+  color: var(--ui-text-strong);
+}
+
+.legend.collapsed > :not(.legend-title):not(#feature-count-wrapper) {
+  display: none;
+}
+
+/* ⓘ als gezeichnetes Badge (kein Unicode-Glyph – fehlt in vielen Schriften) */
+.info-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 11px;
+  height: 11px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  font-size: 8px;
+  font-style: normal;
+  line-height: 1;
+  vertical-align: middle;
+  cursor: help;
+  color: var(--ui-text-muted);
+  user-select: none;
+}
+
+/* Pfeile (wie Unfallkarte: SVG-Maske im ::before) */
+.toggle-arrow {
+  --arrow-color: #9ca3af;
+  position: relative;
+  display: inline-block;
+  flex: none;
+  width: 24px;
+  height: 24px;
+  transform: rotate(90deg);
+  transition: transform 0.2s ease;
+  appearance: none;
+  background: none;
+  padding: 0;
+  border: 0;
+  cursor: pointer;
+}
+
+.toggle-arrow::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--arrow-color);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M4 6.5 10 12.5 16 6.5' fill='none' stroke='%23000' stroke-width='5.5' stroke-linecap='round' stroke-linejoin='miter'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M4 6.5 10 12.5 16 6.5' fill='none' stroke='%23000' stroke-width='5.5' stroke-linecap='round' stroke-linejoin='miter'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+.toggle-arrow.open {
+  transform: rotate(0deg);
+}
+
+.toggle-arrow:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 4px;
+}
+
+/* Stadt-Umschalter */
+.stadt-wahl {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.stadt-btn {
+  padding: 7px 8px;
+  border: 1px solid var(--ui-border);
+  border-radius: 10px;
+  background: #f9fafb;
+  color: var(--ui-text-strong);
+  font: inherit;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.stadt-btn:hover {
+  background: var(--ui-hover);
+}
+
+.stadt-btn.is-active {
+  border-color: var(--ui-accent);
+  background: #eef2ff;
+}
+
+.stadt-jahre {
+  display: block;
+  font-weight: 500;
+  font-size: 11px;
+  color: var(--ui-text-muted);
+}
+
+/* Chips (Modus und Filter) */
+.legend-modes,
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.legend-chip {
+  position: relative;
+  cursor: pointer;
+}
+
+.legend-chip input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  pointer-events: none;
+}
+
+.legend-chip span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px;
+  border: 1px solid var(--ui-border);
+  border-radius: 999px;
+  background: var(--ui-hover);
+  color: var(--ui-text);
+  font-size: 11.5px;
+  line-height: 1.3;
+  transition: background-color 0.15s, border-color 0.15s, opacity 0.15s;
+}
+
+.legend-chip input:checked + span {
+  border-color: var(--ui-accent);
+  background: rgba(29, 78, 216, 0.12);
+  color: var(--ui-text-strong);
+}
+
+.chips .legend-chip input:not(:checked) + span {
+  opacity: 0.55;
+  text-decoration: line-through;
+  text-decoration-color: rgba(107, 114, 128, 0.6);
+}
+
+.legend-chip input:focus-visible + span {
+  outline: 2px solid var(--ui-accent);
+  outline-offset: 2px;
+}
+
+.legend-chip .zahl {
+  font-size: 10px;
+  color: #475569;
+  font-variant-numeric: tabular-nums;
+}
+
+.legend-chip.is-leer span {
+  opacity: 0.35;
+}
+
+.metrik-hinweis {
+  margin: 8px 0 6px;
+  color: var(--ui-text-muted);
+  font-size: 11.5px;
+  line-height: 1.4;
+}
+
+/* Farbstufen */
+.klassen {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.klassen li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.klassen .punkt {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 1.5px solid #fff;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.18);
+  flex: none;
+}
+
+.klassen .text {
+  flex: 1;
+}
+
+.count-badge {
+  font-size: 10px;
+  padding: 1px 7px;
+  background: #eef2f7;
+  border-radius: 999px;
+  min-width: 24px;
+  text-align: center;
+  white-space: nowrap;
+  color: #475569;
+  font-variant-numeric: tabular-nums;
+}
+
+.legende-fuss {
+  margin: 8px 0 0;
+  color: var(--ui-text-muted);
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+.filter-gruppe + .filter-gruppe {
+  margin-top: 10px;
+}
+
+.filter-titel {
+  font-weight: 600;
+  font-size: 12px;
+  color: var(--ui-text);
+  margin-bottom: 5px;
+}
+
+.link-btn {
+  margin-top: 10px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ui-accent);
+  font: inherit;
+  cursor: pointer;
+}
+
+.link-btn:hover {
+  text-decoration: underline;
+}
+
+/* Zählerzeile mit Links */
+#feature-count-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-top: 14px;
+  padding-top: 8px;
+  border-top: 1px solid var(--ui-divider);
+}
+
+.fc-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  color: var(--ui-text);
+  font-variant-numeric: tabular-nums;
+}
+
+.fc-links {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.fc-links a,
+.fc-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #4b5563;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.fc-links a:hover,
+.fc-icon-btn:hover {
+  color: #111827;
+}
+
+.fc-badge {
+  padding: 2px 8px;
+  border: 1px solid #c7d2fe;
+  border-radius: 999px;
+  background: #eef2ff;
+  color: #3730a3;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: help;
+}
+
+/* ───── Photon-Suche oben links (Stil: vizsim/hilo_profiler) ───── */
+.geocoder {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 7;
+  width: 320px;
+  max-width: calc(100vw - 20px);
+}
+
+.geocoder-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.98);
+  border: 1px solid #d9e2ec;
+  border-radius: 12px;
+  box-shadow: 0 10px 28px rgba(15, 23, 42, 0.18);
+}
+
+.geocoder-input-wrapper:focus-within {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14), 0 10px 28px rgba(15, 23, 42, 0.18);
+}
+
+.geocoder input {
+  width: 100%;
+  padding: 11px 38px 11px 40px;
+  font-size: 14px;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #111827;
+  box-sizing: border-box;
+}
+
+.geocoder input::placeholder {
+  color: #64748b;
+}
+
+.geocoder-icon {
+  position: absolute;
+  left: 12px;
+  color: #64748b;
+  pointer-events: none;
+}
+
+.geocoder-clear {
+  position: absolute;
+  right: 8px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  color: #64748b;
+  padding: 0;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.geocoder-clear:hover {
+  background: #eef2f7;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+.geocoder-results {
+  margin-top: 4px;
+  max-height: 300px;
+  overflow-y: auto;
+  background: rgba(255, 255, 255, 0.98);
+  border: 1px solid #d9e2ec;
+  border-radius: 12px;
+  box-shadow: 0 10px 28px rgba(15, 23, 42, 0.18);
+}
+
+.geocoder-result-item {
+  padding: 10px 12px;
+  cursor: pointer;
+  border-bottom: 1px solid #d9e2ec;
+}
+
+.geocoder-result-item:last-child {
+  border-bottom: none;
+}
+
+.geocoder-result-item:hover,
+.geocoder-result-item.selected {
+  background: #eef2f7;
+}
+
+.geocoder-result-primary {
+  font-size: 14px;
+  color: #111827;
+  font-weight: 600;
+}
+
+.geocoder-result-secondary,
+.geocoder-no-results {
+  font-size: 12px;
+  color: #64748b;
+}
+
+.geocoder-no-results {
+  padding: 10px 12px;
+}
+
+/* ───── Unten links: Navigation + Karten-Panel (wie Unfallkarte) ───── */
+#bottom-left-ui-container {
+  position: absolute;
+  bottom: 64px;
+  left: 10px;
+  z-index: 2;
+}
+
+#custom-nav-control .maplibregl-ctrl-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 44px;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+#custom-nav-control .maplibregl-ctrl-group button {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: #fff;
+  border: 1px solid #e3e5e9;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+.map-settings-toggle {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  z-index: 6;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: #fff;
+  border: 1px solid #e3e5e9;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #4b5563;
+  padding: 0;
+  cursor: pointer;
+}
+
+.map-settings-toggle:hover {
+  background: #f3f4f6;
+}
+
+.map-settings-panel {
+  position: absolute;
+  left: 10px;
+  bottom: 64px;
+  width: 300px;
+  max-width: calc(100vw - 32px);
+  box-sizing: border-box;
+  background: #fff;
+  border-radius: 16px;
+  border: 1px solid #e3e5e9;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.18);
+  z-index: 5;
+  padding: 14px;
+}
+
+.map-settings-panel.is-collapsed {
+  display: none;
+}
+
+.basemap-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.basemap-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 6px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: #f9fafb;
+  cursor: pointer;
+}
+
+.basemap-btn:hover {
+  background: #f3f4f6;
+}
+
+.basemap-btn.selected {
+  border-color: #1d4ed8;
+  background: #eef2ff;
+}
+
+.basemap-preview {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 8px;
+  background-size: cover;
+  background-position: center;
+  background-color: #e5e7eb;
+}
+
+.basemap-preview-positron {
+  background-color: #eef3f7;
+  background-image: url("thumbs/thumb-standard.png");
+}
+
+.basemap-preview-osm {
+  background-color: #f5f1df;
+  background-image: url("thumbs/thumb-osm.png");
+}
+
+.basemap-preview-satellite {
+  background-color: #516146;
+  background-image: url("thumbs/thumb-satellite.png");
+}
+
+.basemap-label {
+  font-size: 11px;
+  color: #4b5563;
+}
+
+/* ───── Popups (Bausteine wie Unfallkarte) ───── */
+.maplibregl-popup-content {
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius-sm);
+  box-shadow: var(--ui-shadow);
+  padding: 12px 14px;
+  font-size: 12px;
+  line-height: 1.5;
+  font-weight: 500;
+  color: var(--ui-text-strong);
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.maplibregl-popup-close-button {
+  width: 24px;
+  height: 24px;
+  font-size: 18px;
+  line-height: 22px;
+  color: var(--ui-text-muted);
+  border-radius: 8px;
+}
+
+.maplibregl-popup-close-button:hover {
+  background: var(--ui-hover);
+  color: var(--ui-text);
+}
+
+.pop-eyebrow {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ui-text-muted);
+  margin-bottom: 3px;
+}
+
+.pop-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ui-text-strong);
+  line-height: 1.3;
+  padding-right: 18px;
+}
+
+.pop-meta {
+  color: var(--ui-text-muted);
+  font-size: 11.5px;
+  margin-top: 2px;
+}
+
+.pop-hero {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin: 9px 0 2px;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.pop-hero .pop-unit {
+  color: var(--ui-text-muted);
+  font-weight: 600;
+  font-size: 11.5px;
+}
+
+.pop-punkt {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  flex: none;
+  align-self: center;
+}
+
+.pop-table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: 8px;
+}
+
+.pop-table td {
+  padding: 2px 0;
+  vertical-align: top;
+}
+
+.pop-table td:first-child {
+  padding-right: 14px;
+  white-space: nowrap;
+  font-weight: 600;
+  color: var(--ui-text-muted);
+}
+
+.pop-table td:last-child {
+  font-variant-numeric: tabular-nums;
+}
+
+.pop-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 8px;
+}
+
+.pop-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 9px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #374151;
+  border: 1px solid var(--ui-border);
+}
+
+.pop-chip.is-grob {
+  border-style: dashed;
+}
+
+.pop-hinweis {
+  margin-top: 6px;
+  font-size: 11px;
+  color: #92400e;
+}
+
+.pop-liste {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid var(--ui-divider);
+}
+
+.pop-liste h3 {
+  margin: 0 0 4px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ui-text-strong);
+}
+
+.pop-liste table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+}
+
+.pop-liste th {
+  text-align: left;
+  font-weight: 600;
+  color: var(--ui-text-muted);
+  padding: 2px 6px 2px 0;
+  white-space: nowrap;
+}
+
+.pop-liste td {
+  padding: 3px 6px 3px 0;
+  white-space: nowrap;
+  border-top: 1px solid var(--ui-divider);
+  vertical-align: top;
+  font-variant-numeric: tabular-nums;
+}
+
+.pop-liste td.richtung {
+  white-space: normal;
+  min-width: 90px;
+}
+
+.pop-liste tr.ausser-filter td {
+  color: #9ca3af;
+}
+
+.pop-liste .rechts {
+  text-align: right;
+}
+
+.pop-mehr {
+  margin-top: 4px;
+  color: var(--ui-text-muted);
+  font-size: 11px;
+}
+
+.pop-foot {
+  margin-top: 9px;
+  padding-top: 7px;
+  border-top: 1px solid var(--ui-divider);
+  font-size: 11.5px;
+  display: flex;
+  gap: 14px;
+}
+
+.pop-foot a {
+  color: var(--ui-accent);
+  text-decoration: none;
+}
+
+.pop-foot a:hover {
+  text-decoration: underline;
+}
+
+.pop-pinhint {
+  margin-top: 8px;
+  padding-top: 6px;
+  border-top: 1px solid var(--ui-divider);
+  font-size: 11px;
+  color: var(--ui-text-muted);
+  text-align: center;
+}
+
+/* ───── Tooltip (data-tip) ───── */
+.app-tooltip {
+  position: fixed;
+  z-index: 9999;
+  pointer-events: none;
+  max-width: 260px;
+  background: #111827;
+  color: #fff;
+  font: 400 11.5px/1.35 system-ui, -apple-system, sans-serif;
+  padding: 5px 8px;
+  border-radius: 6px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+  opacity: 0;
+  transition: opacity 80ms ease;
+}
+
+.app-tooltip.is-visible {
+  opacity: 1;
+}
+
+/* ───── Methode & Quellen ───── */
+.info-dialog {
+  width: min(560px, calc(100vw - 24px));
+  max-height: calc(100dvh - 24px);
+  padding: 0;
+  border: 1px solid var(--ui-border);
+  border-radius: var(--ui-radius);
+  background: var(--ui-surface);
+  color: var(--ui-text);
+  box-shadow: var(--ui-shadow);
+}
+
+.info-dialog::backdrop {
+  background: rgba(15, 23, 42, 0.35);
+}
+
+.info-body {
+  padding: 16px 18px 18px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.info-kopf {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+
+.info-kopf h2 {
+  margin: 0;
+  font-size: 17px;
+  color: var(--ui-text-strong);
+}
+
+.info-zu {
+  padding: 0 4px;
+  border: 0;
+  background: none;
+  color: var(--ui-text-muted);
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.info-body h3 {
+  margin: 14px 0 4px;
+  font-size: 13px;
+  color: var(--ui-text-strong);
+}
+
+.info-body p,
+.info-body ul {
+  margin: 4px 0;
+}
+
+.info-body ul {
+  padding-left: 18px;
+}
+
+.info-body table {
+  border-collapse: collapse;
+  font-size: 12px;
+  margin: 4px 0;
+}
+
+.info-body td {
+  padding: 1px 12px 1px 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.info-body td:last-child {
+  text-align: right;
+}
+
+.info-body a {
+  color: var(--ui-accent);
+}
+
+/* ───── Fehler ───── */
+.fehler-banner {
+  position: absolute;
+  top: 64px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  max-width: calc(100vw - 40px);
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #991b1b;
+  font-size: 13px;
+  box-shadow: var(--ui-shadow-sm);
+}
+
+/* ───── Handy: Legende als Bottom-Sheet ───── */
+@media (max-width: 640px) {
+  .legend {
+    top: auto;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: auto;
+    max-width: none;
+    max-height: 72dvh;
+    padding: 0 14px calc(12px + env(safe-area-inset-bottom, 0px));
+    border-width: 1px 0 0;
+    border-radius: var(--ui-radius) var(--ui-radius) 0 0;
+    z-index: 6;
+    overscroll-behavior: contain;
+  }
+
+  .legend .legend-title {
+    margin: 0 -14px;
+    padding: 14px 14px 8px;
+  }
+
+  .legend .legend-title::before {
+    content: "";
+    position: absolute;
+    top: 5px;
+    left: 50%;
+    width: 34px;
+    height: 4px;
+    margin-left: -17px;
+    border-radius: 2px;
+    background: var(--ui-divider);
+  }
+
+  .legend-heading {
+    font-size: 18px;
+  }
+
+  .legend.collapsed .toggle-arrow.toggle-root {
+    transform: rotate(180deg);
+  }
+
+  #feature-count-wrapper {
+    margin-top: 6px;
+  }
+
+  .fc-stats {
+    flex-direction: row;
+    gap: 12px;
+  }
+
+  .legend-chip span {
+    padding: 5px 10px;
+  }
+
+  #bottom-left-ui-container {
+    display: none;
+  }
+
+  .map-settings-toggle {
+    top: 66px;
+    bottom: auto;
+  }
+
+  .map-settings-panel {
+    top: 118px;
+    bottom: auto;
+  }
+
+  .maplibregl-ctrl-bottom-right {
+    bottom: var(--legend-hoehe, 96px);
+  }
+}
