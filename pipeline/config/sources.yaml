@@ -72,7 +72,7 @@ staedte:
         - "https://ckan.open.nrw.de/api/3/action/"
       suche: "Geschwindigkeitskontrollen"
       titel_muster: "(?i)geschwindigkeitskontroll"
-      aachen_muster: "(?i)aachen"
+      stadt_muster: "(?i)aachen"
       formate: ["XLSX", "XLS", "CSV"]
       ressourcen: "config/aachen_ressourcen.json"
       ordner: "raw/aachen"
@@ -94,6 +94,73 @@ staedte:
       gebiete_admin_level: ["6", "7", "8", "9", "10"]
       stadtgrenze: { name: "Aachen", admin_level: ["6", "7", "8"] }
       bezirk_ebene: null              # die Aachener Daten nennen keinen Bezirk
+
+  koeln:
+    label: "Köln"
+    crs_m: "EPSG:25832"            # metrisch (UTM 32N)
+    bbox: [6.76, 50.82, 7.17, 51.09]
+    start: { lon: 6.96, lat: 50.94, zoom: 11.2 }
+    kontrollen:
+      label: "Geschwindigkeitsüberwachung der Stadt Köln"
+      bereitsteller: "Stadt Köln"
+      kurz: "Stadt Köln"
+      titel: "Geschwindigkeitsüberwachung Köln (Open Data, Einzelverstöße und Standorte)"
+      herkunft_url: "https://www.offenedaten-koeln.de/"
+      # Jahresdatensätze (2017–2022, 2023, 2024, …): je Verstoß eine Zeile, dazu Tabellen der
+      # Standorte je Dienststelle. Das Landesportal spiegelt sie nicht vollständig – darum
+      # werden beide Kataloge gefragt und die Funde vereinigt (`alle_kataloge`).
+      ckan:
+        - "https://www.offenedaten-koeln.de/api/3/action/"
+        - "https://ckan.open.nrw.de/api/3/action/"
+      alle_kataloge: true
+      suche: ["Geschwindigkeitsüberwachung Köln"]
+      titel_muster: "(?i)geschwindigkeits(ü|ue)berwachung"
+      stadt_muster: "(?i)k(ö|oe)ln"
+      formate: ["CSV"]
+      ressourcen: "config/koeln_ressourcen.json"
+      ordner: "raw/koeln"
+    osm:
+      label: "Straßennetz und Adressen Köln (Verortung)"
+      url: "https://download.geofabrik.de/europe/germany/nordrhein-westfalen/koeln-regbez-latest.osm.pbf"
+      datei: "raw/osm/koeln-regbez-latest.osm.pbf"
+      # Köln: 6 = kreisfreie Stadt, 9 = Stadtbezirke, 10 = Stadtteile
+      gebiete_admin_level: ["6", "9", "10"]
+      stadtgrenze: { name: "Köln", admin_level: ["6"] }
+      bezirk_ebene: "10"              # „Stadtteil“ der Standorte grenzt die Suche ein
+
+  bonn:
+    label: "Bonn"
+    crs_m: "EPSG:25832"            # metrisch (UTM 32N)
+    bbox: [7.01, 50.62, 7.22, 50.78]
+    start: { lon: 7.10, lat: 50.71, zoom: 11.8 }
+    kontrollen:
+      label: "Geschwindigkeitsverstöße der Bundesstadt Bonn"
+      bereitsteller: "Bundesstadt Bonn"
+      kurz: "Stadt Bonn"
+      titel: "Bußgelder fließender Verkehr (Open Data, Einzelverstöße)"
+      herkunft_url: "https://opendata.bonn.de/"
+      # Jahresdateien „Bußgelder fließender Verkehr“ (je Verstoß Tag, Uhrzeit, Tatort,
+      # Tatbestandsnummer, Bußgeld) und die Messstellen der mobilen Überwachung.
+      ckan:
+        - "https://opendata.bonn.de/api/3/action/"
+        - "https://ckan.open.nrw.de/api/3/action/"
+      alle_kataloge: true
+      suche: ["Bußgelder fließender Verkehr", "Messstellen Geschwindigkeitsüberwachung"]
+      titel_muster:
+        - "(?i)bu(ß|ss)gelder\\s+flie(ß|ss)end"
+        - "(?i)messstellen.*geschwindigkeits"
+      stadt_muster: "(?i)bonn|-bn\\b"
+      formate: ["CSV"]
+      ressourcen: "config/bonn_ressourcen.json"
+      ordner: "raw/bonn"
+    osm:
+      label: "Straßennetz und Adressen Bonn (Verortung)"
+      url: "https://download.geofabrik.de/europe/germany/nordrhein-westfalen/koeln-regbez-latest.osm.pbf"
+      datei: "raw/osm/koeln-regbez-latest.osm.pbf"
+      # Bonn: 6 = kreisfreie Stadt, 9 = Stadtbezirke, 10 = Ortsteile
+      gebiete_admin_level: ["6", "9", "10"]
+      stadtgrenze: { name: "Bonn", admin_level: ["6"] }
+      bezirk_ebene: null              # die Bonner Daten nennen keinen Bezirk
 
 osm:
   bereitsteller: "© OpenStreetMap-Mitwirkende"

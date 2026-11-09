@@ -13,14 +13,19 @@ from kontrollen import aachen, berlin, fetch, geocode, osm, site
 from kontrollen.config import get_paths, load_yaml, quellen
 
 app = typer.Typer(no_args_is_help=True, help="Pipeline der Karte der Geschwindigkeitskontrollen")
-STAEDTE = ("berlin", "aachen")
+
+
+def staedte() -> tuple[str, ...]:
+    """Alle Städte aus sources.yaml, in deren Reihenfolge."""
+    return tuple(quellen()["staedte"])
 
 
 def _staedte(stadt: str) -> tuple[str, ...]:
+    alle = staedte()
     if stadt == "alle":
-        return STAEDTE
-    if stadt not in STAEDTE:
-        raise typer.BadParameter(f"Stadt {stadt!r} unbekannt – berlin, aachen oder alle")
+        return alle
+    if stadt not in alle:
+        raise typer.BadParameter(f"Stadt {stadt!r} unbekannt – {', '.join(alle)} oder alle")
     return (stadt,)
 
 
@@ -44,22 +49,43 @@ def info() -> None:
 def fetch_cmd(
     berlin_: bool = typer.Option(True, "--berlin/--ohne-berlin"),
     aachen_: bool = typer.Option(True, "--aachen/--ohne-aachen"),
+    andere: bool = typer.Option(True, "--andere/--ohne-andere", help="Köln, Bonn, …"),
     mit_osm: bool = typer.Option(False, "--osm", help="auch die OSM-Abzüge (Geofabrik)"),
-    neu: bool = typer.Option(False, "--neu", help="Aachen: Katalog neu fragen; OSM: neu laden"),
+    neu: bool = typer.Option(False, "--neu", help="Kataloge neu fragen; OSM: neu laden"),
 ) -> None:
-    """Rohdaten laden (Berliner PDF-Anlagen, Aachener Monatsdateien, optional OSM)."""
+    """Rohdaten laden (Berliner PDF-Anlagen, Dateien der Open-Data-Kataloge, optional OSM).
+
+    Scheitert eine Stadt aus den Katalogen (Köln, Bonn, …), laufen die übrigen weiter; der
+    Befehl endet dann mit Fehlercode 1."""
+    fehler = []
     if berlin_:
         typer.echo(f"Berlin: {fetch.berlin()}")
     if aachen_:
         dateien = fetch.aachen(neu=neu)
         typer.echo(f"Aachen: {len(dateien)} Dateien")
+    q = quellen()["staedte"]
+    for s in staedte():
+        if s in ("berlin", "aachen") or not andere or "ckan" not in q[s]["kontrollen"]:
+            continue
+        try:
+            dateien = fetch.ckan_dateien(s, neu=neu)
+            typer.echo(f"{q[s]['label']}: {len(dateien)} Dateien")
+        except Exception as e:  # noqa: BLE001 – eine Stadt darf die anderen nicht aufhalten
+            fehler.append(s)
+            typer.echo(f"{q[s]['label']}: FEHLER {e}", err=True)
     if mit_osm:
-        for s in STAEDTE:
-            typer.echo(f"OSM {s}: {fetch.osm(s, neu=neu)}")
+        geladen: dict[str, Path] = {}
+        for s in staedte():
+            datei = q[s]["osm"]["datei"]
+            if datei not in geladen:  # Aachen, Köln und Bonn teilen sich einen Abzug
+                geladen[datei] = fetch.osm(s, neu=neu)
+            typer.echo(f"OSM {s}: {geladen[datei]}")
+    if fehler:
+        raise typer.Exit(1)
 
 
 @app.command("osm")
-def osm_cmd(stadt: str = typer.Option("alle", help="berlin, aachen oder alle")) -> None:
+def osm_cmd(stadt: str = typer.Option("alle", help="Stadt (berlin, aachen, …) oder alle")) -> None:
     """OSM-PBF -> data/interim/osm/{strassen,adressen,knoten,gebiete}_<stadt>.parquet"""
     p = get_paths()
     for s in _staedte(stadt):
@@ -128,7 +154,9 @@ def netz_und_gebiete(s: str, paths=None) -> tuple[geocode.Netz, geocode.Gebiete]
 
 
 @app.command("geocode")
-def geocode_cmd(stadt: str = typer.Option("alle", help="berlin, aachen oder alle")) -> None:
+def geocode_cmd(
+    stadt: str = typer.Option("alle", help="Stadt (berlin, aachen, …) oder alle"),
+) -> None:
     """Kontrollen verorten -> data/geokodierung.csv + geokodierung_validierung.json"""
     p = get_paths()
     df = pd.read_parquet(p.interim / "kontrollen.parquet")
@@ -166,7 +194,7 @@ def site_cmd() -> None:
 @app.command()
 def alles(mit_osm: bool = typer.Option(False, "--osm", help="OSM neu laden und auslesen")) -> None:
     """fetch + build + (osm, geocode) + site"""
-    fetch_cmd(True, True, mit_osm, False)
+    fetch_cmd(berlin_=True, aachen_=True, andere=True, mit_osm=mit_osm, neu=False)
     if mit_osm:
         osm_cmd("alle")
     build()
