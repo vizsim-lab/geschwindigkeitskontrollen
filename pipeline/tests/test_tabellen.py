@@ -53,3 +53,19 @@ def test_zeilen_ohne_kopf_und_ungleich_lang(tmp_path):
         ["0101", "0", "050", "AA   Riehl ", "Amsterdamer Str. 80-86", ""],
         ["0102", "6", "010", "Brück"],
     ]
+
+
+def test_mac_roman_erkannt(tmp_path):
+    # Bonn 2016: als Mac-Roman gespeichert – cp1252 ergäbe „Stra§e“
+    f = tmp_path / "bonn.csv"
+    text = (
+        "TATTAG;TATORT\n" + "01.01.2016;Bonn, Mainzer Straße Bahnüberführung FR Kölner Höhe\n" * 3
+    )
+    f.write_bytes(text.encode("mac_roman"))
+    assert tabellen.kodierung(f) == "mac_roman"
+    assert (
+        tabellen.lies(f)["tatort"].iloc[0] == "Bonn, Mainzer Straße Bahnüberführung FR Kölner Höhe"
+    )
+    g = tmp_path / "cp1252.csv"
+    g.write_bytes(text.encode("cp1252"))
+    assert tabellen.kodierung(g) == "cp1252"

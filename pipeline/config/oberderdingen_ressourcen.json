@@ -1,0 +1,65 @@
+{
+ "katalog": "https://www.oberderdingen.de/",
+ "datensaetze": [
+  {
+   "name": "geschwindigkeitsmessungen-1-quartal-2024",
+   "titel": "Geschwindigkeitsmessungen 1. Quartal 2024",
+   "organisation": "Stadt Oberderdingen",
+   "lizenz": null,
+   "lizenz_id": null,
+   "lizenz_url": null,
+   "url": "https://oberderdingen.de/resources/ecics_3985.pdf"
+  },
+  {
+   "name": "geschwindigkeitsmessungen-4-quartal-2025",
+   "titel": "Geschwindigkeitsmessungen 4. Quartal 2025",
+   "organisation": "Stadt Oberderdingen",
+   "lizenz": null,
+   "lizenz_id": null,
+   "lizenz_url": null,
+   "url": "https://www.oberderdingen.de/resources/ecics_4317.pdf"
+  },
+  {
+   "name": "geschwindigkeitsmessungen-1-quartal-2026",
+   "titel": "Geschwindigkeitsmessungen 1. Quartal 2026",
+   "organisation": "Stadt Oberderdingen",
+   "lizenz": null,
+   "lizenz_id": null,
+   "lizenz_url": null,
+   "url": "https://www.oberderdingen.de/resources/ecics_4342.pdf"
+  }
+ ],
+ "fehler": [],
+ "dateien": [
+  {
+   "id": "https://oberderdingen.de/resources/ecics_3985.pdf",
+   "name": "geschwindigkeitsmessungen-1-quartal-2024",
+   "format": "PDF",
+   "url": "https://oberderdingen.de/resources/ecics_3985.pdf",
+   "geaendert": null,
+   "datensatz": "geschwindigkeitsmessungen-1-quartal-2024",
+   "datei": "geschwindigkeitsmessungen-1-quartal-2024__geschwindigkeitsmessungen-1-quartal-2024.pdf",
+   "sha256": "036a68fc3d413f83a8082bbbcdbf2b4927e9bbab3602cc7ade045d58cc88e920"
+  },
+  {
+   "id": "https://www.oberderdingen.de/resources/ecics_4342.pdf",
+   "name": "geschwindigkeitsmessungen-1-quartal-2026",
+   "format": "PDF",
+   "url": "https://www.oberderdingen.de/resources/ecics_4342.pdf",
+   "geaendert": null,
+   "datensatz": "geschwindigkeitsmessungen-1-quartal-2026",
+   "datei": "geschwindigkeitsmessungen-1-quartal-2026__geschwindigkeitsmessungen-1-quartal-2026.pdf",
+   "sha256": "22575ba14708a2747f6f58e0ffa60b128bdc615db50a7e608369d657797880ce"
+  },
+  {
+   "id": "https://www.oberderdingen.de/resources/ecics_4317.pdf",
+   "name": "geschwindigkeitsmessungen-4-quartal-2025",
+   "format": "PDF",
+   "url": "https://www.oberderdingen.de/resources/ecics_4317.pdf",
+   "geaendert": null,
+   "datensatz": "geschwindigkeitsmessungen-4-quartal-2025",
+   "datei": "geschwindigkeitsmessungen-4-quartal-2025__geschwindigkeitsmessungen-4-quartal-2025.pdf",
+   "sha256": "f700c6d015d6813c73b8ca5f83b9ce784713df9aa3fbed51b014dc061f893ce3"
+  }
+ ]
+}

@@ -51,13 +51,18 @@ FELDER_KONTROLLE = [
 
 def baue(p: Paths) -> dict:
     df = pd.read_parquet(p.interim / "kontrollen.parquet")
-    geo = pd.read_csv(p.data_file("geokodierung.csv"), dtype={"id": str})
+    geo = pd.read_csv(p.data_file("geokodierung.csv"), dtype={"id": str, "osm_maxspeed": str})
+    # Tempolimit laut OSM als Zahl; „walk“, „signals“ und Ähnliches bleiben leer
+    geo["osm_maxspeed"] = pd.to_numeric(geo["osm_maxspeed"], errors="coerce")
     m = df.merge(geo, on="id", how="left")
     q = quellen(p)
     p.karte.mkdir(parents=True, exist_ok=True)
 
+    alt, naechste = bisherige_ids(p)  # vor dem Überschreiben lesen
     stellen, stelle_von = messstellen(m, q)
+    naechste = vergib_ids(stellen, alt, naechste)
     m["stelle"] = m["id"].map(stelle_von)
+    m["stelle_id"] = m["stelle"].map(lambda i: None if pd.isna(i) else stellen[int(i)]["id"])
 
     richtungen = _liste(m.apply(_richtung_text, axis=1))
     orte = _liste(m.apply(_ort_text, axis=1))
@@ -109,6 +114,7 @@ def baue(p: Paths) -> dict:
     dl = datenlage(q, stellen, m)
     _schreibe_json(p.karte / "datenlage.json", dl, eingerueckt=True)
     manifest = _manifest(p, q, m, stellen)
+    manifest["messstellen_naechste_id"] = naechste
     _schreibe_json(p.karte / "manifest.json", manifest, eingerueckt=True)
     doku = p.docs / "DATENLAGE.md"
     doku.parent.mkdir(parents=True, exist_ok=True)
@@ -124,8 +130,55 @@ def baue(p: Paths) -> dict:
 # --- Messstellen ---------------------------------------------------------------------------
 
 
+# Die Id einer Messstelle (Anfangsbuchstabe der Stadt und eine Nummer, „K09412“) steht in
+# geteilten Links (#…&s=K09412). Sie bleibt, solange die Messstelle bleibt: `baue` übernimmt die
+# Ids aus der bisherigen messstellen.json (gleiche Stadt, Straße, Punkt und Genauigkeit – genau
+# und „nur Straße“ können am selben Punkt liegen); neue Messstellen
+# bekommen die nächste freie Nummer (`messstellen_naechste_id` im Manifest), und keine Nummer
+# wird ein zweites Mal vergeben – ein alter Link öffnet sonst eine andere Stelle.
+
+
+def _schluessel(stadt: str, strasse: str | None, lon: float, lat: float, methode: str) -> tuple:
+    return (stadt, strasse or "", round(float(lon), 6), round(float(lat), 6), methode in GENAU)
+
+
+def bisherige_ids(p: Paths) -> tuple[dict[tuple, str], int]:
+    """Ids der letzten Kartendaten je (Stadt, Straße, Punkt) und die nächste freie Nummer."""
+    alt: dict[tuple, str] = {}
+    naechste = 0
+    pfad = p.karte / "messstellen.json"
+    if pfad.exists():
+        js = json.loads(pfad.read_text(encoding="utf-8"))
+        f = {k: i for i, k in enumerate(js["felder"])}
+        for z in js["zeilen"]:
+            stadt, methode = js["staedte"][z[f["stadt"]]], js["methoden"][z[f["methode"]]]
+            k = _schluessel(stadt, z[f["strasse"]], z[f["lon"]], z[f["lat"]], methode)
+            alt[k] = z[f["id"]]
+            naechste = max(naechste, int(z[f["id"]][1:]) + 1)
+    man = p.karte / "manifest.json"
+    if man.exists():
+        frueher = json.loads(man.read_text(encoding="utf-8")).get("messstellen_naechste_id", 0)
+        naechste = max(naechste, int(frueher))
+    return alt, naechste
+
+
+def vergib_ids(stellen: list[dict], alt: dict[tuple, str], naechste: int) -> int:
+    """Bisherige Id, wo die Messstelle schon da war, sonst eine neue Nummer -> nächste Nummer."""
+    vergeben: set[str] = set()
+    for s in stellen:
+        bisher = alt.get(_schluessel(s["stadt"], s["strasse"], s["lon"], s["lat"], s["methode"]))
+        if bisher and bisher not in vergeben:
+            s["id"] = bisher
+        else:
+            s["id"] = f"{s['stadt'][0].upper()}{naechste:05d}"
+            naechste += 1
+        vergeben.add(s["id"])
+    return naechste
+
+
 def messstellen(m: pd.DataFrame, q: dict) -> tuple[list[dict], dict[str, int]]:
-    """Verortete Kontrollen -> Messstellen (gierig gebündelt je Stadt, Straße und Genauigkeit)."""
+    """Verortete Kontrollen -> Messstellen (gierig gebündelt je Stadt, Straße und Genauigkeit).
+    Ohne Id – die vergibt `vergib_ids`."""
     stellen: list[dict] = []
     stelle_von: dict[str, int] = {}
     v = m[m["geo_lon"].notna()].copy()
@@ -179,7 +232,7 @@ def messstellen(m: pd.DataFrame, q: dict) -> tuple[list[dict], dict[str, int]]:
             idx = len(stellen)
             stellen.append(
                 {
-                    "id": f"{stadt[0].upper()}{idx:05d}",
+                    "id": None,
                     "stadt": stadt,
                     "lon": round(float(g["lon"]), 6),
                     "lat": round(float(g["lat"]), 6),
@@ -306,9 +359,7 @@ CSV_SPALTEN = {
 
 
 def _csv(m: pd.DataFrame, ziel: Path) -> None:
-    t = m.copy()
-    t["stelle_id"] = t["stelle"].map(lambda i: None if pd.isna(i) else f"{int(i)}")
-    t = t[list(CSV_SPALTEN)].rename(columns=CSV_SPALTEN)
+    t = m[list(CSV_SPALTEN)].rename(columns=CSV_SPALTEN)
     t = t.sort_values(["stadt", "datum", "beginn"], kind="stable")
     t.to_csv(ziel, index=False, encoding="utf-8")
 

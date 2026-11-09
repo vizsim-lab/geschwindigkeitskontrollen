@@ -167,3 +167,10 @@ test("Kennzahl ohne Wert in einer Stadt: Köln hat keinen Anteil, Aachen keine D
   assert.equal(D.ohneWert("anteil", berlin), false);
   assert.equal(D.ohneWert("anteil", undefined), false);
 });
+
+test("Untertitel der Legende: wenige Städte mit Jahren, viele als Zahl", () => {
+  const s = (label, jahre) => ({ label, jahre });
+  assert.equal(D.untertitel([s("Berlin", [2017, 2018, 2020]), s("Aachen", [2021])]), "Berlin 2017–2020 · Aachen 2021");
+  const viele = [s("A", [2017]), s("B", [2016, 2024]), s("C", [2020]), s("D", [2026])];
+  assert.equal(D.untertitel(viele), "4 Städte und Gemeinden · 2016–2026");
+});

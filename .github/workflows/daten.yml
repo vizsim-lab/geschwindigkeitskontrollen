@@ -3,7 +3,7 @@
 # main ist die Live-Karte.
 #
 # Nur von Hand (Actions -> „Kartendaten neu bauen“ -> Run workflow). Neu bauen lohnt nach neuen
-# Aachener Monaten (Schalter „Aachener Katalog neu fragen“), nach Änderungen an Pipeline oder
+# Aachener Monaten (Schalter „Kataloge neu fragen“), nach Änderungen an Pipeline oder
 # config/orte.yaml – und für einen frischen OSM-Stand der Verortung.
 #
 # Der Workflow versucht, den PR selbst anzulegen. Ist „Allow GitHub Actions to create and
@@ -16,7 +16,7 @@ on:
   workflow_dispatch:
     inputs:
       aachen_neu:
-        description: "Kataloge neu fragen (neue Monate in Aachen, neue Jahre in Köln und Bonn)"
+        description: "Kataloge neu fragen (neue Monate in Aachen und Schonungen, neue Jahre in Köln und Bonn)"
         type: boolean
         default: true
 
@@ -42,7 +42,7 @@ jobs:
           cache-dependency-glob: pipeline/uv.lock
       - run: uv sync --locked
       - run: uv run pytest -q
-      - name: Rohdaten laden (Berlin, Aachen, Köln, Bonn, OSM-Abzüge Geofabrik)
+      - name: Rohdaten laden (Berlin, Aachen, Köln, Bonn, Schonungen, Oberderdingen, OSM-Abzüge Geofabrik)
         run: uv run kontrollen fetch --osm ${{ inputs.aachen_neu && '--neu' || '' }}
       - name: OSM auslesen (Straßen, Adressen, Orte, Gebiete)
         run: uv run kontrollen osm

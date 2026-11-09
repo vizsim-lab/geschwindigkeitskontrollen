@@ -1,6 +1,7 @@
-# Entwicklungsauszug: lädt, was die Pipeline braucht (OSM Berlin + Regierungsbezirk Köln,
-# Berliner PDF-Anlagen, Aachener Monatsdateien, Kölner und Bonner Jahresdateien), liest OSM in
-# die kompakten Tabellen von `kontrollen osm` und legt diese samt den Rohdateien auf den Branch
+# Entwicklungsauszug: lädt, was die Pipeline braucht (OSM Berlin, Regierungsbezirk Köln,
+# Unterfranken, Regierungsbezirk Karlsruhe; Berliner PDF-Anlagen, Aachener Monatsdateien, Kölner
+# und Bonner Jahresdateien, die Berichte von Schonungen und Oberderdingen), liest OSM in die
+# kompakten Tabellen von `kontrollen osm` und legt diese samt den Rohdateien auf den Branch
 # `dev/auszug` (orphan, wird überschrieben). Große CSV-Dateien liegen dort gzip-komprimiert
 # (`gunzip` nach dem Kopieren).
 # Wozu: Entwickeln und Testen der Verortung ohne Netzzugang zu Geofabrik/Open-Data-Portalen –
@@ -54,7 +55,7 @@ jobs:
             echo '```json'
             cat data/interim/build_bericht.json 2>/dev/null || true
             echo '```'
-            for stadt in koeln bonn; do
+            for stadt in koeln bonn schonungen oberderdingen; do
               echo "### $stadt"
               echo '```'
               cat data/interim/fetch_fehlgeschlagen.txt 2>/dev/null || true
@@ -77,13 +78,15 @@ jobs:
           # die Ressourcenlisten sind auf main versioniert -> der Orphan-Branch entfernt sie
           mkdir -p "$RUNNER_TEMP/res"
           cp pipeline/config/*_ressourcen.json "$RUNNER_TEMP/res/" 2>/dev/null || true
+          # neu geschriebene, auf main versionierte Listen würden den Wechsel blockieren
+          git reset -q --hard
           git switch --orphan dev/auszug
           mkdir -p pipeline/config && cp "$RUNNER_TEMP"/res/*_ressourcen.json pipeline/config/ 2>/dev/null || true
           # große CSV-Dateien komprimiert (GitHub nimmt keine Dateien über 100 MB)
           find pipeline/data/raw/koeln pipeline/data/raw/bonn -name '*.csv' -size +1M -exec gzip -9 {} \; 2>/dev/null || true
           git add -f pipeline/data/interim/osm pipeline/data/raw/aachen pipeline/config/*_ressourcen.json
           git add -f pipeline/data/raw/berlin/*.pdf 2>/dev/null || true
-          for d in pipeline/data/raw/koeln pipeline/data/raw/bonn; do
+          for d in pipeline/data/raw/koeln pipeline/data/raw/bonn pipeline/data/raw/schonungen pipeline/data/raw/oberderdingen; do
             [ -d "$d" ] && git add -f "$d"
           done
           for f in pipeline/data/interim/build_bericht.json pipeline/data/interim/build_fehlgeschlagen.txt pipeline/data/interim/fetch_fehlgeschlagen.txt; do

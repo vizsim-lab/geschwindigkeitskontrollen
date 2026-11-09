@@ -29,7 +29,13 @@ def _probe(pfad: Path, n: int = 1 << 16) -> bytes:
         return f.read(n)
 
 
+# Mac-Roman als cp1252 gelesen: ß -> §, ü -> Ÿ, ö -> š, ä -> Š („Stra§e“, „BahnŸberfŸhrung“)
+_MAC_ROMAN = re.compile(r"[a-zäöüß][§Ÿš][a-zäöüß]|[a-z]Š[a-z]")
+
+
 def kodierung(pfad: Path) -> str:
+    """utf-8 (mit oder ohne BOM), cp1252 oder – wenn cp1252 typischen Zeichensalat ergibt
+    (Bonn 2016) – Mac-Roman."""
     probe = _probe(pfad)
     try:
         probe.decode("utf-8")
@@ -38,7 +44,9 @@ def kodierung(pfad: Path) -> str:
         # am Ende der Probe abgeschnittenes Zeichen ist kein Fehler
         if e.start >= len(probe) - 3:
             return "utf-8-sig"
-        return "cp1252"
+    if len(_MAC_ROMAN.findall(probe.decode("cp1252", errors="replace"))) >= 3:
+        return "mac_roman"
+    return "cp1252"
 
 
 def trenner(pfad: Path, enc: str | None = None) -> str:

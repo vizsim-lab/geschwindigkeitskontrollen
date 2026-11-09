@@ -37,6 +37,8 @@ def test_datum_ohne_fuehrende_null():
         ("Neusser Str. HS NR.293-325a", "Neusser Str.", "293", False, None),
         ("Lat.139 - Neusser Landstr.379", "Neusser Landstr.", "379", False, None),
         ("Wahner Str. Laterne 33-Haus 73", "Wahner Str.", "73", False, None),
+        ("Sternenburgstr. Nr.:23", "Sternenburgstr.", "23", False, None),  # Bonn
+        ("Röckumstraße unterhalb der BAB-Unterführung", "Röckumstraße", None, False, None),
         # Laternen, Lichtmasten, Kilometer und Meter sind keine Hausnummern
         ("Melatengürtel, Laterne 85-77", "Melatengürtel", None, False, None),
         ("Etzelstr. Lat.Nr.106-150", "Etzelstr.", None, False, None),
