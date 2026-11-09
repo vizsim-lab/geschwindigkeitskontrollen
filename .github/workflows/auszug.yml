@@ -45,6 +45,7 @@ jobs:
             echo '```'
             du -sh data/interim/osm/* data/raw/aachen 2>/dev/null
             ls data/raw/aachen | head -100
+            sha256sum data/raw/berlin/* 2>/dev/null
             echo '```'
             echo '```json'
             cat data/interim/build_bericht.json 2>/dev/null || true
@@ -60,6 +61,7 @@ jobs:
           git switch --orphan dev/auszug
           mkdir -p pipeline/config && cp "$RUNNER_TEMP/aachen_ressourcen.json" pipeline/config/
           git add -f pipeline/data/interim/osm pipeline/data/raw/aachen pipeline/config/aachen_ressourcen.json
+          git add -f pipeline/data/raw/berlin/*.pdf 2>/dev/null || true
           for f in pipeline/data/interim/build_bericht.json pipeline/data/interim/build_fehlgeschlagen.txt; do
             [ -f "$f" ] && git add -f "$f"
           done
