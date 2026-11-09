@@ -92,6 +92,7 @@ def lies(pfad: Path) -> pd.DataFrame:
                 "ueberschreitungen": ueber,
                 "stufe1": _zahl(r["bis 20 km/h"]),
                 "stufe2": _zahl(r["über 20 km/h"]),
+                "stufe_kmh": 20,
                 "fahrverbote": _zahl(r["Fahrverbote"]),
                 "alle_gezaehlt": (
                     messungen is not None and ueber is not None and messungen > ueber

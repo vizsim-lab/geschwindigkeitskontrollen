@@ -74,7 +74,7 @@ def lies(
     box = tuple(bbox) if bbox is not None else None
     strassen, adressen, knoten = [], [], []
 
-    filt = osmium.filter.KeyFilter("highway", "addr:housenumber")
+    filt = osmium.filter.KeyFilter("highway", "addr:housenumber", *ORT_TAGS)
     fp = osmium.FileProcessor(str(pbf)).with_locations().with_filter(filt)
     for obj in fp:
         tags = obj.tags
@@ -82,21 +82,18 @@ def lies(
             lon, lat = obj.location.lon, obj.location.lat
             if not _in_bbox(lon, lat, box):
                 continue
-            if tags.get("highway") == "motorway_junction":
-                knoten.append(
-                    {
-                        "osm_id": f"n{obj.id}",
-                        "name": tags.get("name"),
-                        "ref": tags.get("ref"),
-                        "geometry": Point(lon, lat),
-                    }
-                )
+            art = _ort_art(tags)
+            if art:
+                knoten.append(_ort(f"n{obj.id}", art, tags, Point(lon, lat)))
             if "addr:housenumber" in tags:
                 adressen.append(_adresse(f"n{obj.id}", tags, Point(lon, lat)))
         elif obj.is_way():
             pts = _coords(obj)
             if len(pts) < 2 or not any(_in_bbox(x, y, box) for x, y in pts):
                 continue
+            art = _ort_art(tags)
+            if art and pts[0] == pts[-1] and len(pts) >= 4:  # Platz als Fläche -> Mitte
+                knoten.append(_ort(f"w{obj.id}", art, tags, shapely.Polygon(pts).centroid))
             hw = tags.get("highway")
             if hw and hw not in KEINE_STRASSE and any(t in tags for t in (*NAMEN_TAGS, "ref")):
                 eintrag = {
@@ -121,9 +118,41 @@ def lies(
             ["osm_id", "highway", "ref", "maxspeed", *[t.replace(":", "_") for t in NAMEN_TAGS]],
         ),
         adressen=_gdf(adressen, ["osm_id", "strasse", "hausnummer", "plz", "ortsteil"]),
-        knoten=_gdf(knoten, ["osm_id", "name", "ref"]),
+        knoten=_gdf(knoten, ["osm_id", "art", "name", "ref"]),
         gebiete=gebiete,
     )
+
+
+# Benannte Orte, die die Polizei statt einer Querstraße nennt ("/Innsbrucker Platz",
+# "Brandenburger Tor", "AS Kaiserdamm"): Anschlussstellen, Plätze, Knotenpunkte, Bahnhöfe,
+# Denkmäler. Nur mit Namen; die Verortung nimmt sie nur nah an der Straße (ORT_MAX).
+ORT_TAGS = ("place", "junction", "railway", "historic", "tourism")
+
+
+def _ort_art(tags) -> str | None:
+    if not tags.get("name"):
+        return None
+    if tags.get("highway") == "motorway_junction":
+        return "anschlussstelle"
+    if tags.get("place") == "square":
+        return "platz"
+    if "junction" in tags and tags.get("highway") is None:
+        return "knoten"
+    if tags.get("railway") in ("station", "halt"):
+        return "bahnhof"
+    if tags.get("historic") == "monument" or tags.get("tourism") == "attraction":
+        return "sehenswuerdigkeit"
+    return None
+
+
+def _ort(osm_id: str, art: str, tags, p: Point) -> dict:
+    return {
+        "osm_id": osm_id,
+        "art": art,
+        "name": tags.get("name"),
+        "ref": tags.get("ref"),
+        "geometry": p,
+    }
 
 
 def _adresse(osm_id: str, tags, p: Point) -> dict:

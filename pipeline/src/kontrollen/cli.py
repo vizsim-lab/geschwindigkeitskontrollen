@@ -10,7 +10,7 @@ import pandas as pd
 import typer
 
 from kontrollen import aachen, berlin, fetch, geocode, osm, site
-from kontrollen.config import get_paths, quellen
+from kontrollen.config import get_paths, load_yaml, quellen
 
 app = typer.Typer(no_args_is_help=True, help="Pipeline der Karte der Geschwindigkeitskontrollen")
 STAEDTE = ("berlin", "aachen")
@@ -81,7 +81,8 @@ def build() -> None:
     b = berlin.lies(p.data_file(q["berlin"]["kontrollen"]["datei"]))
     ordner = p.data_file(q["aachen"]["kontrollen"]["ordner"])
     dateien = [f for f in sorted(ordner.glob("*")) if f.suffix.lower() in (".xlsx", ".xls", ".csv")]
-    a, hinweise = aachen.lies_alle(dateien)
+    alt = q["aachen"]["kontrollen"].get("alt")
+    a, hinweise = aachen.lies_alle(dateien, p.data_file(alt["datei"]) if alt else None)
     df = pd.concat([b, a], ignore_index=True)
     p.interim.mkdir(parents=True, exist_ok=True)
     df.to_parquet(p.interim / "kontrollen.parquet", index=False)
@@ -106,7 +107,8 @@ def netz_und_gebiete(s: str, paths=None) -> tuple[geocode.Netz, geocode.Gebiete]
     p = paths or get_paths()
     cfg = quellen(p)["staedte"][s]
     a = osm.lade(p.interim / "osm", s)
-    netz = geocode.Netz.aus_auszug(a, cfg["crs_m"])
+    ortsnamen = (load_yaml("orte.yaml", p) or {}).get(s) or {}
+    netz = geocode.Netz.aus_auszug(a, cfg["crs_m"], ortsnamen)
     gebiete = geocode.Gebiete.aus_auszug(
         a, cfg["crs_m"], {**cfg["osm"], "bbox": cfg["bbox"]}, cfg["osm"].get("bezirk_ebene")
     )

@@ -35,8 +35,9 @@ SPALTEN: dict[str, str] = {
     "tempo": "Int64",
     "messungen": "Int64",
     "ueberschreitungen": "Int64",
-    "stufe1": "Int64",  # Berlin: bis 20 km/h, Aachen: bis 15 km/h
-    "stufe2": "Int64",  # Berlin: über 20 km/h, Aachen: über 15 km/h
+    "stufe1": "Int64",  # Berlin: bis 20 km/h, Aachen 2020: bis 15 bzw. 20 km/h
+    "stufe2": "Int64",  # darüber
+    "stufe_kmh": "Int64",  # Grenze zwischen stufe1 und stufe2 (Berlin 20, Aachen 2020: 15/20)
     "fahrverbote": "Int64",
     "alle_gezaehlt": "boolean",  # Messungen = alle Fahrzeuge (sonst nur die zu schnellen)
 }

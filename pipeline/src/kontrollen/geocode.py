@@ -3,22 +3,26 @@
 
 Muster: vizsim/berlin-traffic-counts_schulwege (`geocode.py`) – Namen normalisieren, gestuft
 in Gebieten suchen, Treffpunkte von Straßen bündeln, bei Zweifel lieber keine Antwort als eine
-falsche. Neu hier sind Hausnummern und Abschnitte. Je Kontrolle, gestuft von genau nach grob:
+falsche. Neu hier sind Hausnummern und Abschnitte. Je Kontrolle, von genau nach grob:
 
 1. **hausnummer** – die OSM-Adresse (Hausnummer an der Hauptstraße) auf die Straßenachse
    gelegt. Liegen auch die Querstraßen vor, wird geprüft, ob der Punkt im Abschnitt liegt;
    mehr als `WIDERSPRUCH` m daneben -> es gilt der Abschnitt, mit Hinweis.
 2. **abschnitt** – Mitte des Stücks der Hauptstraße zwischen den Kreuzungen mit A und B,
    entlang der Straße gemessen (das Stück selbst geht als Linie in die Karte).
-3. **kreuzung** – Kreuzung mit der einen genannten Straße ("/C") oder mit dem genannten Ort
-   (Brücke, Platz).
-4. **anschlussstelle** – Autobahn: die Anschlussstelle auf der richtigen A-Nummer.
+3. **kreuzung** – Kreuzung mit der einen genannten Straße ("/C"), mit einer Autobahn, der
+   Stadtgrenze oder einem benannten Ort (Platz, Brücke, Bahnhof) nah an der Straße.
+4. **anschlussstelle** – Autobahn: Anschlussstelle, Tunnel oder Brücke auf der A-Nummer.
 5. **strasse** – nur die Straße ist bekannt: Mitte ihres längsten Stücks im Suchgebiet (in der
-   Karte blass, ≈).
+   Karte blass, ≈, mit der ganzen Straße als Linie).
 
 Gesucht wird gestuft (`Gebiete.stufen`): in den genannten Bezirken (+`PUFFER_GEBIET` m), in
-deren Umgebung (+`NACHSUCHE` m), dann in der ganzen Stadt – dort aber ohne die grobe Stufe 5,
-wenn die Straße mehrfach vorkommt.
+deren Umgebung (+`NACHSUCHE` m), dann in der ganzen Stadt. Die erste genaue Antwort (Stufen
+1–4) gewinnt; „nur die Straße“ gilt erst, wenn keine Stufe mehr findet – und stadtweit nur,
+wenn die Straße nicht an mehreren Orten liegt.
+
+Ortsnamen der Polizei, die so nicht in OSM stehen ("TRH" = Tunnel Rudower Höhe), übersetzt
+config/orte.yaml – die Verortung bekommt dann einen Hinweis.
 
 Metrisch im `crs_m` der Stadt (Berlin EPSG:25833, Aachen EPSG:25832), Ausgabe EPSG:4326.
 """
@@ -27,6 +31,7 @@ from __future__ import annotations
 
 import difflib
 import math
+import re
 from collections import defaultdict
 from dataclasses import dataclass, field
 
@@ -42,18 +47,25 @@ from kontrollen.osm import KFZ, Auszug
 
 PUFFER_GEBIET = 300  # m um Bezirke/Stadt (Grenzen laufen oft auf Straßen)
 NACHSUCHE = 2000  # m: zweite Stufe – Umgebung der genannten Bezirke
+QUER_PUFFER = 1000  # m: Querstraßen und Orte dürfen so weit über das Suchgebiet reichen
 NAH = 20  # m: Straßen, die sich knapp verfehlen (Mittelstreifen, Plätze), treffen sich
 BUENDEL = 40  # m: Treffpunkte näher als das sind dieselbe Kreuzung (Richtungsfahrbahnen)
+KNOTEN_BUENDEL = 1600  # m: Punkte einer Anschlussstelle (je Fahrtrichtung) liegen so weit
 MAX_ABSCHNITT = 3000  # m: A und B weiter auseinander -> kein Abschnitt
-ADRESSE_MAX = 150  # m: Adresse weiter von der Straße weg -> andere Straße gleichen Namens
+ADRESSE_MAX = 200  # m: Adresse weiter von der Straße weg -> andere Straße gleichen Namens
 WIDERSPRUCH = 250  # m: Hausnummer so weit außerhalb des Abschnitts -> Abschnitt gilt
 MEHRDEUTIG = 400  # m: zwei gleich gute Kandidaten weiter auseinander -> keine Antwort
-ORT_MAX = 500  # m: Ort (Anschlussstelle, Brücke) so weit von der Straße -> passt nicht
+ORT_MAX = 500  # m: Ort (Platz, Anschlussstelle, Brücke) so weit von der Straße -> passt nicht
+FREMD_MAX = 100  # m: Ort auf einer anderen Autobahn als genannt – nur so nah
 LUECKE = 250  # m: Teile einer Straße mit größerer Lücke liegen an verschiedenen Orten
 PRAEFIX_MIN = 12  # Zeichen: kürzere abgeschnittene Namen nicht über den Anfang suchen
 FUZZY = 0.9  # Mindestähnlichkeit für Tippfehler, nur innerhalb des Suchgebiets
 
 METHODEN = ("hausnummer", "abschnitt", "kreuzung", "anschlussstelle", "strasse")
+HINWEIS_AUSSERHALB = "Hausnummer liegt außerhalb des Abschnitts"
+HINWEIS_EINE = "nur eine der Querstraßen gefunden"
+HINWEIS_ORT = "Ortsangabe statt Querstraße"
+HINWEIS_ZUORDNUNG = "Ortsangabe von Hand zugeordnet (config/orte.yaml)"
 
 
 # --- Straßennetz ---------------------------------------------------------------------------
@@ -61,7 +73,7 @@ METHODEN = ("hausnummer", "abschnitt", "kreuzung", "anschlussstelle", "strasse")
 
 @dataclass
 class Netz:
-    """Straßen, Adressen und Anschlussstellen einer Stadt in metrischen Koordinaten."""
+    """Straßen, Adressen und benannte Orte einer Stadt in metrischen Koordinaten."""
 
     crs_m: str
     geom: dict[str, shapely.Geometry]  # Schlüssel -> alle Wege dieses Namens
@@ -72,13 +84,14 @@ class Netz:
     alias_geom: dict[str, shapely.Geometry]  # alter/anderer Name -> die Wege, die ihn tragen
     autobahn: dict[str, shapely.Geometry]  # "A 100" -> Autobahn-Wege mit dieser Nummer
     adressen: dict[str, dict[str, list[Point]]]  # Straßenschlüssel -> Hausnummer -> Punkte
-    knoten: list[tuple[str, str, Point]]  # (Schlüssel des Namens, Name, Punkt)
+    orte: list[tuple[str, str, str, Point]]  # (Schlüssel, Name, Art, Punkt)
+    ortsnamen: dict[str, str] = field(default_factory=dict)  # Schlüssel Polizei -> OSM-Name
     _baum: tuple | None = field(default=None, repr=False)
     _cache: dict = field(default_factory=dict, repr=False)
 
     # -- Aufbau --
     @classmethod
-    def aus_auszug(cls, a: Auszug, crs_m: str) -> Netz:
+    def aus_auszug(cls, a: Auszug, crs_m: str, ortsnamen: dict[str, str] | None = None) -> Netz:
         s = a.strassen.to_crs(crs_m)
         s = s[s.geometry.notna() & ~s.geometry.is_empty]
         geom: dict[str, list] = defaultdict(list)
@@ -117,25 +130,25 @@ class Netz:
                     if nr:
                         autobahn[nr[0]].append(g)
         einig = {k: shapely.union_all(v) for k, v in geom.items()}
-        alias = {k: z for k, z in alias_ziel.items() if k not in einig}
-        ag = {k: shapely.union_all(v) for k, v in alias_geom.items() if k not in einig}
         netz = cls(
             crs_m=crs_m,
             geom=einig,
             kfz={k: shapely.union_all(v) for k, v in kfz.items()},
             anzeige={k: max(v, key=v.get) for k, v in anzeige.items()},
             maxspeed={k: max(v, key=v.get) for k, v in speeds.items()},
-            alias=alias,
-            alias_geom=ag,
+            alias={k: z for k, z in alias_ziel.items() if k not in einig},
+            alias_geom={k: shapely.union_all(v) for k, v in alias_geom.items() if k not in einig},
             autobahn={k: shapely.union_all(v) for k, v in autobahn.items()},
             adressen={},
-            knoten=[],
+            orte=[],
+            ortsnamen={namen.schluessel(k): v for k, v in (ortsnamen or {}).items()},
         )
         netz._lade_adressen(a.adressen.to_crs(crs_m))
         kn = a.knoten.to_crs(crs_m)
-        for row in kn.itertuples(index=False):
+        arten = kn["art"] if "art" in kn else pd.Series(["anschlussstelle"] * len(kn))
+        for row, art in zip(kn.itertuples(index=False), arten, strict=True):
             if isinstance(row.name, str):
-                netz.knoten.append((namen.schluessel(row.name), row.name, row.geometry))
+                netz.orte.append((namen.schluessel(row.name), row.name, art, row.geometry))
         return netz
 
     def _lade_adressen(self, adr: gpd.GeoDataFrame) -> None:
@@ -150,9 +163,13 @@ class Netz:
 
     # -- Suche --
     def im_gebiet(self, gebiet: shapely.Geometry) -> list[str]:
+        """Schlüssel aller Straßen (und alten/anderen Namen), die das Gebiet berühren."""
         if self._baum is None:
-            keys = list(self.geom)
-            self._baum = (keys, shapely.STRtree([self.geom[k] for k in keys]))
+            keys = list(self.geom) + list(self.alias_geom)
+            geoms = [self.geom[k] for k in self.geom] + [
+                self.alias_geom[k] for k in self.alias_geom
+            ]
+            self._baum = (keys, shapely.STRtree(geoms))
         keys, baum = self._baum
         return [keys[i] for i in baum.query(gebiet, predicate="intersects")]
 
@@ -162,23 +179,26 @@ class Netz:
         if not name:
             return None
         for v in namen.schluessel_varianten(name):
-            if v in self.geom:
-                return v
-            if v in self.alias_geom:
+            if v in self.geom or v in self.alias_geom:
                 return v
         k = namen.schluessel(name)
         if gebiet is None or len(k) < 6:
             return None
+        ck = ("f", k, id(gebiet))
+        if ck in self._cache:
+            return self._cache[ck]
         nah = self.im_gebiet(gebiet)
+        treffer = None
         if len(k) >= PRAEFIX_MIN:
             anfang = sorted({n for n in nah if n.startswith(k)})
             if len(anfang) == 1:
-                return anfang[0]
-        if len(k) >= 8:
-            treffer = difflib.get_close_matches(k, nah, n=2, cutoff=FUZZY)
-            if len(treffer) == 1:
-                return treffer[0]
-        return None
+                treffer = anfang[0]
+        if treffer is None and len(k) >= 8:
+            nahe = difflib.get_close_matches(k, sorted(set(nah)), n=2, cutoff=FUZZY)
+            if len(nahe) == 1:
+                treffer = nahe[0]
+        self._cache[ck] = treffer
+        return treffer
 
     def strasse(self, k: str, gebiet: shapely.Geometry | None, nur_kfz: bool) -> shapely.Geometry:
         """Geometrie einer Straße (oder eines alten Namens), auf das Gebiet beschnitten."""
@@ -207,6 +227,16 @@ class Netz:
         if ziel and ziel != k:
             out += self.adressen.get(ziel, {}).get(hnr, [])
         return out
+
+    def ortsname(self, text: str) -> str | None:
+        """Übersetzung aus config/orte.yaml: ganzer Text oder Kürzel am Anfang ("TAG Gerosteig")."""
+        k = namen.schluessel(text)
+        if k in self.ortsnamen:
+            return self.ortsnamen[k]
+        erstes = re.match(r"^([A-ZÄÖÜ]{2,5})\b", text.strip())
+        if erstes and namen.schluessel(erstes.group(1)) in self.ortsnamen:
+            return self.ortsnamen[namen.schluessel(erstes.group(1))]
+        return None
 
 
 # --- Geometrie-Helfer ----------------------------------------------------------------------
@@ -299,9 +329,21 @@ def mehrfach(g: shapely.Geometry) -> bool:
 # --- Gebiete -------------------------------------------------------------------------------
 
 
+class Stufe:
+    """Ein Suchgebiet: `flaeche` für die Hauptstraße, `weit` für Querstraßen und Orte."""
+
+    def __init__(self, flaeche: shapely.Geometry, art: str):
+        self.flaeche = flaeche
+        self.art = art
+        self.weit = flaeche.buffer(QUER_PUFFER)
+        shapely.prepare(self.flaeche)
+        shapely.prepare(self.weit)
+
+
 @dataclass
 class Gebiete:
     stadt: shapely.Geometry  # Stadtgrenze + PUFFER_GEBIET
+    grenze: shapely.Geometry  # die Stadtgrenze als Linie ("… u. Stadtgrenze")
     bezirke: dict[str, shapely.Geometry]  # Name -> Fläche (ohne Puffer)
     _stufen: dict = field(default_factory=dict, repr=False)
 
@@ -319,7 +361,7 @@ class Gebiete:
         if bezirk_ebene:
             for row in g[g["admin_level"].astype(str) == bezirk_ebene].itertuples(index=False):
                 bezirke[row.name] = row.geometry
-        return cls(stadt=stadt.buffer(PUFFER_GEBIET), bezirke=bezirke)
+        return cls(stadt=stadt.buffer(PUFFER_GEBIET), grenze=stadt.boundary, bezirke=bezirke)
 
     def bezirke_aus(self, teile: list[str]) -> list[str]:
         """Abgeschnittene Bezirksnamen über den Anfang: "Charlottenburg-Wilmersd" -> ganzer Name."""
@@ -348,17 +390,6 @@ class Gebiete:
         return out
 
 
-class Stufe:
-    """Ein Suchgebiet: `flaeche` für die Hauptstraße, `weit` (+1 km) für Querstraßen und Orte."""
-
-    def __init__(self, flaeche: shapely.Geometry, art: str):
-        self.flaeche = flaeche
-        self.art = art
-        self.weit = flaeche.buffer(1000)
-        shapely.prepare(self.flaeche)
-        shapely.prepare(self.weit)
-
-
 # --- Verortung -----------------------------------------------------------------------------
 
 
@@ -368,11 +399,20 @@ class Ergebnis:
     methode: str
     gebiet: str
     strasse: str | None  # Name der Hauptstraße in OSM
-    abschnitt: LineString | None = None  # metrisch
+    abschnitt: shapely.Geometry | None = None  # metrisch; bei „strasse“ die ganze Straße
     abstand_adresse_m: float | None = None  # Adresse -> Straßenachse
     abstand_abschnitt_m: float | None = None  # Hausnummer-Punkt -> Abschnitt A–B
     hinweis: str | None = None
     maxspeed: str | None = None
+
+    @property
+    def rang(self) -> int:
+        """0 = genau; 1 = Kreuzung/Anschlussstelle; 2 = nur eine Querstraße; 3 = nur Straße."""
+        if self.methode in ("hausnummer", "abschnitt"):
+            return 0
+        if self.methode == "strasse":
+            return 3
+        return 2 if self.hinweis == HINWEIS_EINE else 1
 
 
 @dataclass(frozen=True)
@@ -405,15 +445,24 @@ def anfrage(row) -> Anfrage:
 
 
 def verorte(a: Anfrage, netz: Netz, gebiete: Gebiete) -> Ergebnis | None:
+    """Stufe für Stufe; die erste genaue Antwort gewinnt, sonst die beste gefundene."""
+    beste: Ergebnis | None = None
     for st in gebiete.stufen(a.bezirke):
-        e = _autobahn(a, netz, st) if a.autobahn else _strasse(a, netz, st)
-        if e is not None:
+        if a.autobahn:
+            e = _autobahn(a, netz, st, gebiete.grenze)
+        else:
+            e = _strasse(a, netz, st, gebiete.grenze)
+        if e is None:
+            continue
+        if e.rang <= 1:
             return e
-    return None
+        if beste is None or e.rang < beste.rang:
+            beste = e
+    return beste
 
 
-def _strasse(a: Anfrage, netz: Netz, st: Stufe) -> Ergebnis | None:
-    flaeche, art, weit = st.flaeche, st.art, st.weit  # weit: Querstraßen dürfen über die Grenze
+def _strasse(a: Anfrage, netz: Netz, st: Stufe, grenze) -> Ergebnis | None:
+    flaeche, art, weit = st.flaeche, st.art, st.weit
     k = netz.finde(a.strasse, flaeche)
     if not k:
         return None
@@ -422,27 +471,27 @@ def _strasse(a: Anfrage, netz: Netz, st: Stufe) -> Ergebnis | None:
         return None
     name, vmax = netz.name(k), netz.maxspeed.get(netz.alias.get(k, k))
 
-    def kreuzungen(n: str | None) -> list[Point]:
-        q = netz.finde(n, weit)
-        if not q or q == k:
-            return []
-        return treffpunkte(gx, netz.strasse(q, weit, nur_kfz=False))
-
     pa = pb = None
     seg: LineString | None = None
     kreuz: list[Point] = []
+    hinweis = None
     if a.lage_art == "zwischen":
-        ka, kb = kreuzungen(a.quer1), kreuzungen(a.quer2)
+        (ka, ha), (kb, hb) = (
+            _quer(a.quer1, k, gx, netz, weit, grenze),
+            _quer(a.quer2, k, gx, netz, weit, grenze),
+        )
         paare = sorted(((p.distance(q), p, q) for p in ka for q in kb), key=lambda t: t[0])
         if paare and paare[0][0] <= MAX_ABSCHNITT:
             _, pa, pb = paare[0]
             seg = abschnitt(gx, pa, pb)
-        else:
-            kreuz = ka or kb
+            hinweis = ha or hb
+        elif ka or kb:
+            kreuz, hinweis = (ka, ha) if ka else (kb, hb)
+            hinweis = HINWEIS_EINE
     elif a.lage_art == "kreuzung":
-        kreuz = kreuzungen(a.quer1)
+        kreuz, hinweis = _quer(a.quer1, k, gx, netz, weit, grenze)
     if a.ort and not kreuz and seg is None:
-        kreuz = _ort(a.ort, gx, netz, weit)
+        kreuz, hinweis = _ort(a.ort, gx, netz, weit)
 
     # 1. Hausnummer
     hn = _hausnummer(a, k, gx, netz, flaeche, seg, kreuz)
@@ -452,25 +501,107 @@ def _strasse(a: Anfrage, netz: Netz, st: Stufe) -> Ergebnis | None:
             d_seg = p_str.distance(seg)
             if d_seg > WIDERSPRUCH:
                 return Ergebnis(
-                    mitte(seg), "abschnitt", art, name, seg, d_adr, d_seg,
-                    f"Hausnummer liegt {d_seg:.0f} m außerhalb des Abschnitts", vmax,
-                )  # fmt: skip
+                    mitte(seg), "abschnitt", art, name, seg, d_adr, d_seg, HINWEIS_AUSSERHALB, vmax
+                )
             return Ergebnis(p_str, "hausnummer", art, name, seg, d_adr, d_seg, None, vmax)
         return Ergebnis(p_str, "hausnummer", art, name, None, d_adr, None, None, vmax)
     # 2. Abschnitt
     if seg is not None:
-        return Ergebnis(mitte(seg), "abschnitt", art, name, seg, maxspeed=vmax)
+        return Ergebnis(mitte(seg), "abschnitt", art, name, seg, hinweis=hinweis, maxspeed=vmax)
     # 3. Kreuzung
-    if kreuz:
-        if len(kreuz) > 1 and max(p.distance(kreuz[0]) for p in kreuz) > MEHRDEUTIG:
-            kreuz = []  # mehrere Kreuzungen weit auseinander -> unklar, welche
-        else:
-            hinweis = "nur eine der Querstraßen gefunden" if a.lage_art == "zwischen" else None
-            return Ergebnis(kreuz[0], "kreuzung", art, name, hinweis=hinweis, maxspeed=vmax)
+    if kreuz and (len(kreuz) == 1 or max(p.distance(kreuz[0]) for p in kreuz) <= MEHRDEUTIG):
+        return Ergebnis(kreuz[0], "kreuzung", art, name, hinweis=hinweis, maxspeed=vmax)
     # 5. nur die Straße – stadtweit nur, wenn sie nicht an mehreren Orten liegt
     if art == "stadt" and mehrfach(gx):
         return None
-    return Ergebnis(repraesentant(gx), "strasse", art, name, maxspeed=vmax)
+    return Ergebnis(repraesentant(gx), "strasse", art, name, gx, maxspeed=vmax)
+
+
+def _quer(
+    n: str | None, k: str | None, gx, netz: Netz, weit, grenze
+) -> tuple[list[Point], str | None]:
+    """Punkte auf der Hauptstraße für eine Querangabe: Straße, Autobahn ("BAB A 111"),
+    Stadtgrenze, sonst ein benannter Ort nah an der Straße. -> (Punkte, Hinweis)"""
+    if not n:
+        return [], None
+    zu = netz.ortsname(n)  # config/orte.yaml
+    hinweis = HINWEIS_ZUORDNUNG if zu else None
+    n = zu or n
+    q = netz.finde(n, weit)
+    if q and q != k:
+        pts = treffpunkte(gx, netz.strasse(q, weit, nur_kfz=False))
+        if pts:
+            return pts, hinweis
+    ab = namen.autobahn(n)
+    if ab and ab[0] in netz.autobahn:
+        pts = treffpunkte(gx, netz.autobahn[ab[0]].intersection(weit))
+        if pts:
+            return pts, hinweis
+    if namen.schluessel(n) == "stadtgrenze":
+        pts = treffpunkte(gx, grenze.intersection(weit))
+        if pts:
+            return pts, hinweis
+    pts, h = _ort(n, gx, netz, weit)
+    return pts, (hinweis or h or HINWEIS_ORT) if pts else None
+
+
+_VORSATZ = re.compile(r"^(?:Höhe|Hoehe|vor|hinter|nach|ehem\.?|Brücke|Tunnel|Zollamt)\s+", re.I)
+
+
+def _ort_namen(text: str, netz: Netz) -> list[tuple[str, str | None]]:
+    """Suchnamen für eine Ortsangabe, genaue zuerst -> [(Name, Hinweis)]."""
+    out: list[tuple[str, str | None]] = []
+    zu = netz.ortsname(text)
+    if zu:
+        out.append((zu, HINWEIS_ZUORDNUNG))
+    _, name = namen.autobahn_ort(text)  # AS/AD/AK/Ausf./Einf. weg
+    out.append((name, None))
+    ohne = _VORSATZ.sub("", name)
+    if ohne != name:
+        out.append((ohne, None))
+    if namen.schluessel(ohne).endswith("bruecke"):  # "Knobelsdorffbrücke" ~ Knobelsdorffstraße
+        out.append((re.sub(r"(?i)brücke$", "straße", ohne), None))
+    gesehen, eindeutig = set(), []
+    for n, h in out:
+        if n and n not in gesehen:
+            gesehen.add(n)
+            eindeutig.append((n, h))
+    return eindeutig
+
+
+def _ort(text: str, gx, netz: Netz, gebiet) -> tuple[list[Point], str | None]:
+    """Ort statt Querstraße ("Knobelsdorffbrücke", "AS Kaiserdamm", "/Innsbrucker Platz") ->
+    Punkte auf der Straße (höchstens `ORT_MAX` m daneben), mit Hinweis bei Zuordnung von Hand."""
+    for name, hinweis in _ort_namen(text, netz):
+        q = netz.finde(name, gebiet)
+        if q:
+            g = netz.strasse(q, gebiet, nur_kfz=False)
+            pts = treffpunkte(gx, g)
+            if not pts and not g.is_empty and g.distance(gx) <= ORT_MAX:
+                pts = [nearest_points(gx, g)[0]]
+            if pts:
+                return pts, hinweis
+        pts = _orte(name, netz, gebiet)
+        if pts:
+            nahe = [nearest_points(gx, p)[0] for p in pts if p.distance(gx) <= ORT_MAX]
+            if nahe:
+                return buendel(nahe), hinweis
+    return [], None
+
+
+def _orte(name: str, netz: Netz, gebiet) -> list[Point]:
+    """Benannte Orte (Anschlussstellen, Plätze …): "Kaiserdamm", "Dreieck Funkturm" ~ "Funkturm".
+    Punkte desselben Namens (eine Anschlussstelle je Fahrtrichtung) -> ihre Mitte."""
+    k = namen.schluessel(name)
+    if len(k) < 4:
+        return []
+    exakt = [p for kk, _, _, p in netz.orte if kk == k and gebiet.contains(p)]
+    pts = exakt or [
+        p
+        for kk, _, _, p in netz.orte
+        if (kk.endswith(k) or k.endswith(kk)) and len(kk) >= 4 and gebiet.contains(p)
+    ]
+    return buendel(pts, KNOTEN_BUENDEL)
 
 
 def _hausnummer(
@@ -493,62 +624,58 @@ def _hausnummer(
     return nearest_points(gx, p)[0], p.distance(gx)
 
 
-def _ort(text: str, gx, netz: Netz, gebiet) -> list[Point]:
-    """Ort statt Querstraße ("Knobelsdorffbrücke", "AS Kaiserdamm") -> Punkte auf der Straße."""
-    _, name = namen.autobahn_ort(text)
-    out: list[Point] = []
-    q = netz.finde(name, gebiet)
-    if q:
-        g = netz.strasse(q, gebiet, nur_kfz=False)
-        out = treffpunkte(gx, g)
-        if not out and not g.is_empty and g.distance(gx) <= ORT_MAX:
-            out = [nearest_points(gx, g)[0]]
-    if not out:
-        out = [
-            nearest_points(gx, p)[0]
-            for p in _knoten(name, netz, gebiet)
-            if p.distance(gx) <= ORT_MAX
-        ]
-    return buendel(out)
-
-
-def _knoten(name: str, netz: Netz, gebiet) -> list[Point]:
-    """Anschlussstellen, deren Name passt: "Kaiserdamm", "Dreieck Funkturm" ~ "Funkturm"."""
-    k = namen.schluessel(name)
-    if len(k) < 4:
-        return []
-    exakt = [p for kk, _, p in netz.knoten if kk == k and gebiet.contains(p)]
-    if exakt:
-        return exakt
-    return [
-        p for kk, _, p in netz.knoten if (kk.endswith(k) or k.endswith(kk)) and gebiet.contains(p)
-    ]
-
-
-def _autobahn(a: Anfrage, netz: Netz, st: Stufe) -> Ergebnis | None:
+def _autobahn(a: Anfrage, netz: Netz, st: Stufe, grenze) -> Ergebnis | None:
+    """Autobahn: Orte (Anschlussstellen, Tunnel, Brücken) auf der genannten A-Nummer; findet sich
+    dort nichts, auf einer anderen Autobahn, wenn alle Orte höchstens `FREMD_MAX` m daneben
+    liegen (die Daten nennen die A 103 in Steglitz „A 100“)."""
     if st.art != "stadt":
         return None  # Autobahnen laufen über Bezirksgrenzen: gleich in der ganzen Stadt suchen
-    flaeche, art = st.flaeche, st.art
-    g = netz.autobahn.get(a.autobahn)
-    if g is None:
-        return None
-    gx = g.intersection(flaeche)
-    if gx.is_empty:
-        return None
     orte = [o for o in (a.quer1, a.quer2, a.ort) if o]
-    punkte = []
-    for o in orte:
-        p = _ort(o, gx, netz, st.weit)
-        if len(p) > 1 and max(x.distance(p[0]) for x in p) > MEHRDEUTIG:
-            p = []
-        punkte.append(p[0] if p else None)
-    gefunden = [p for p in punkte if p is not None]
-    if len(gefunden) >= 2 and gefunden[0].distance(gefunden[1]) <= MAX_ABSCHNITT:
-        seg = abschnitt(gx, gefunden[0], gefunden[1])
-        return Ergebnis(mitte(seg), "abschnitt", art, a.autobahn, seg)
-    if gefunden:
-        return Ergebnis(gefunden[0], "anschlussstelle", art, a.autobahn)
-    return None  # nur die Nummer: eine Autobahn quer durch die Stadt ist kein Ort
+    if not orte:
+        return None  # nur die Nummer: eine Autobahn quer durch die Stadt ist kein Ort
+    refs = [a.autobahn] + sorted(r for r in netz.autobahn if r != a.autobahn)
+    for ref in refs:
+        g = netz.autobahn.get(ref)
+        if g is None:
+            continue
+        gx = g.intersection(st.flaeche)
+        if gx.is_empty:
+            continue
+        punkte, hinweise = [], []
+        for o in orte:
+            p, h = _quer(o, None, gx, netz, st.weit, grenze)
+            if h == HINWEIS_ORT:
+                h = None  # an der Autobahn ist ein Ort die normale Angabe
+            if len(p) > 1 and max(x.distance(p[0]) for x in p) > MEHRDEUTIG:
+                p = []
+            if ref != a.autobahn and p and min(_abstand_ort(o, gx, netz, st.weit)) > FREMD_MAX:
+                p = []
+            punkte.append(p[0] if p else None)
+            if h:
+                hinweise.append(h)
+        gefunden = [p for p in punkte if p is not None]
+        if ref != a.autobahn and len(gefunden) < len(orte):
+            continue
+        hinweis = hinweise[0] if hinweise else None
+        if ref != a.autobahn:
+            hinweis = f"auf der {ref} gefunden (Quelle: {a.autobahn})"
+        if len(gefunden) >= 2 and gefunden[0].distance(gefunden[1]) <= MAX_ABSCHNITT:
+            seg = abschnitt(gx, gefunden[0], gefunden[1])
+            return Ergebnis(mitte(seg), "abschnitt", st.art, ref, seg, hinweis=hinweis)
+        if gefunden:
+            return Ergebnis(gefunden[0], "anschlussstelle", st.art, ref, hinweis=hinweis)
+    return None
+
+
+def _abstand_ort(text: str, gx, netz: Netz, gebiet) -> list[float]:
+    """Abstand eines Orts zur Autobahn (für die Probe auf einer anderen A-Nummer)."""
+    out = []
+    for name, _ in _ort_namen(text, netz):
+        q = netz.finde(name, gebiet)
+        if q:
+            out.append(netz.strasse(q, gebiet, nur_kfz=False).distance(gx))
+        out += [p.distance(gx) for p in _orte(name, netz, gebiet)]
+    return out or [math.inf]
 
 
 # --- Tabelle -------------------------------------------------------------------------------
@@ -574,10 +701,11 @@ def _als_zeile(e: Ergebnis | None, nach_wgs: Transformer) -> dict:
         return {k: None for k in _FELDER}
     lon, lat = nach_wgs.transform(e.punkt.x, e.punkt.y)
     seg = None
-    if e.abschnitt is not None and e.abschnitt.length > 0:
-        xs, ys = nach_wgs.transform(*e.abschnitt.xy)
+    if e.abschnitt is not None and not e.abschnitt.is_empty and e.abschnitt.length > 0:
+        # bei „nur Straße“ die ganze Straße, gröber vereinfacht (sie ist nur Kontext)
+        vereinfacht = e.abschnitt.simplify(1.0 if e.methode != "strasse" else 8.0)
         seg = shapely.to_wkt(
-            LineString(zip(xs, ys, strict=True)).simplify(0.000005), rounding_precision=6
+            shapely.transform(vereinfacht, lambda xy: _wgs(xy, nach_wgs)), rounding_precision=6
         )
     return {
         "geo_lon": round(lon, 6),
@@ -586,12 +714,21 @@ def _als_zeile(e: Ergebnis | None, nach_wgs: Transformer) -> dict:
         "geo_gebiet": e.gebiet,
         "geo_strasse": e.strasse,
         "geo_abschnitt": seg,
-        "geo_abschnitt_m": round(e.abschnitt.length) if e.abschnitt is not None else None,
+        "geo_abschnitt_m": round(e.abschnitt.length)
+        if e.abschnitt is not None and e.methode != "strasse"
+        else None,
         "geo_abstand_adresse_m": _r(e.abstand_adresse_m),
         "geo_abstand_abschnitt_m": _r(e.abstand_abschnitt_m),
         "geo_hinweis": e.hinweis,
         "osm_maxspeed": e.maxspeed,
     }
+
+
+def _wgs(xy, nach_wgs: Transformer):
+    import numpy as np
+
+    x, y = nach_wgs.transform(xy[:, 0], xy[:, 1])
+    return np.column_stack([x, y])
 
 
 _FELDER = (
@@ -628,6 +765,7 @@ def validiere(df: pd.DataFrame, geo: pd.DataFrame) -> dict:
             "je_methode": {k: int(je.get(k, 0)) for k in METHODEN},
             "ohne_lage": int(t["geo_methode"].isna().sum()),
             "je_gebiet": {str(k): int(v) for k, v in t["geo_gebiet"].value_counts().items()},
+            "hinweise": {str(k): int(v) for k, v in t["geo_hinweis"].value_counts().items()},
         }
         if len(d):
             eintrag["hausnummer_gegen_abschnitt"] = {

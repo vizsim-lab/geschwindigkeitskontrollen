@@ -57,6 +57,14 @@ staedte:
       formate: ["XLSX", "XLS", "CSV"]
       ressourcen: "config/aachen_ressourcen.json"
       ordner: "raw/aachen"
+      # Das Portal hält je Jahr nur die letzten drei Monate. Den Juni 2020 der alten Karte gibt
+      # es dort nicht mehr – er steckt vollständig in deren HTML (Tooltips), auf einen Commit
+      # festgelegt.
+      alt:
+        label: "Juni 2020 (aus der alten Karte, Datei nicht mehr im Portal)"
+        url: "https://raw.githubusercontent.com/vizsim/geschwindigkeitskontrollen/47f921e01ec9aafcf9895c3b696de825a315f577/geschw_aachen_juni2020.html"
+        sha256: "5796c29593b8d6af817be57dffbadf2a39373951c12c0829ceb32e980f5d5967"
+        datei: "raw/aachen_alt/geschw_aachen_juni2020.html"
     osm:
       label: "Straßennetz und Adressen Aachen (Verortung)"
       # Geofabrik hat keinen Stadt-Auszug; der Regierungsbezirk wird auf `bbox` zugeschnitten

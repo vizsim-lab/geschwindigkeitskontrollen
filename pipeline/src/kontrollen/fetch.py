@@ -172,6 +172,9 @@ def aachen(paths: Paths | None = None, *, neu: bool = False) -> list[Path]:
     out = []
     for f in katalog["dateien"]:
         out.append(lade(f["url"], ordner / f["datei"], f["sha256"]))
+    if cfg.get("alt"):  # Juni 2020 aus der alten Karte
+        a = cfg["alt"]
+        out.append(lade(a["url"], paths.data_file(a["datei"]), a["sha256"]))
     return out
 
 

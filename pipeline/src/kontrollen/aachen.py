@@ -1,14 +1,24 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 """Aachen: Geschwindigkeitskontrollen der Stadt Aachen (Open Data, eine Datei je Monat).
 
-Die Dateien sind Excel (einige CSV), ihre Spalten haben sich über die Jahre verschoben. Gelesen
-wird darum über die Kopfzeile: die erste Zeile, in der „Messplatz“ (oder ähnlich) und eine
-Fahrzeugzahl stehen; die Spalten werden über Muster zugeordnet (`SPALTEN`). Was keinem Muster
-folgt, meldet `lies_alle` als Hinweis, statt es stumm zu verwerfen.
+Was das Portal liefert (Stand Herbst 2026): je Jahr ein Datensatz, darin nur die **letzten drei
+Monate** („In den vergangenen drei Monaten …“) – ältere Monate verschwinden. Im Katalog stehen
+darum Oktober–Dezember 2020 bis 2025 und Januar–September 2026. Den Juni 2020 der alten Karte
+gibt es dort nicht mehr; er wird aus deren HTML gelesen (`lies_folium`, 86 Kontrollen).
 
-Inhalt je Zeile (Stand 2020): Datum, Messplatz (Straße), Fahrtrichtung (Straße, auf die der
-Verkehr zufährt), Fahrzeuge gesamt, Verstöße bis 15 km/h und über 15 km/h. Eine Dauer, eine
-Uhrzeit und ein Tempolimit gibt es nicht – sie bleiben leer.
+Formate, die vorkommen:
+
+- 2020: Datum, Messplatz, (BA), Fahrtrichtung, Fahrzeuge gesamt, „bis 20 km/h“, „über 20 km/h“
+  (Juni 2020: Grenze 15 km/h). „BA“ ist nicht erklärt und überall 0 – ignoriert.
+- ab 2021: Datum, Messplatz, Fahrtrichtung, „Fahrzeuge gesamt“ (Zeilenumbruch in der Zelle),
+  Verstöße – ohne Aufteilung.
+- ab Oktober 2025 zusätzlich CSV mit langem Datum („Montag, 1. Dezember 2025“); die CSV vom
+  Januar 2026 hat eine Million leere Zeilen. Gibt es zu einem Monat Excel, gilt Excel.
+
+Gelesen wird über die Kopfzeile (`SPALTEN`); Spalten ohne Zuordnung meldet `lies_alle` als
+Hinweis. Messplatz = Straße der Kontrolle, Fahrtrichtung = wohin der Verkehr fährt (eine Straße,
+ein Ort wie „Innenstadt“, „Würselen“ oder „Niederlande“). Uhrzeit, Dauer und Tempolimit gibt es
+nicht – sie bleiben leer.
 """
 
 from __future__ import annotations
@@ -16,6 +26,7 @@ from __future__ import annotations
 import csv
 import datetime as dt
 import hashlib
+import html
 import io
 import re
 from pathlib import Path
@@ -25,29 +36,28 @@ import pandas as pd
 from kontrollen import namen
 from kontrollen.schema import in_schema
 
-# Zielspalte -> Muster für die Kopfzeile (klein, Umlaute ausgeschrieben, nur Buchstaben/Ziffern)
+# Zielspalte -> Muster für die Kopfzeile (Vergleichsform: klein, ohne Leerzeichen/Satzzeichen)
 SPALTEN: dict[str, list[str]] = {
     "datum": [r"^datum", r"^tag$", r"messdatum"],
-    "uhrzeit_von": [r"^(uhrzeit|zeit)?von", r"^beginn", r"^start"],
-    "uhrzeit_bis": [r"^(uhrzeit|zeit)?bis$", r"^ende"],
+    "uhrzeit_von": [r"^(uhrzeit|zeit)von", r"^beginn", r"^start"],
+    "uhrzeit_bis": [r"^(uhrzeit|zeit)bis", r"^ende"],
     "messplatz": [r"^messplatz", r"^messort", r"^messstelle", r"^standort", r"^strasse", r"^ort$"],
     "hausnummer": [r"^(haus)?nr", r"^hausnummer"],
     "fahrtrichtung": [r"^fahrtrichtung", r"^richtung"],
     "tempo": [r"^zul", r"hoechstgeschw", r"^vzul", r"^limit", r"^tempo", r"^erlaubt"],
-    "messungen": [
-        r"fahrzeugegesamt",
-        r"gemessen",
-        r"^fahrzeuge",
-        r"^anzahlfahrzeuge",
-        r"^gesamt$",
-        r"durchfahrten",
-    ],
-    "stufe1": [r"^bis15", r"bis15kmh", r"verwarn"],
-    "stufe2": [r"^ueber15", r"ueber15kmh", r"bussgeld", r"anzeige"],
+    "messungen": [r"fahrzeugegesamt", r"gemessen", r"^fahrzeuge", r"^anzahlfahrzeuge", r"^gesamt$"],
+    "stufe1": [r"^bis\d+(kmh)?$", r"verwarn"],
+    "stufe2": [r"^ueber\d+(kmh)?$", r"bussgeld", r"anzeige"],
     "ueberschreitungen": [r"^verstoesse", r"ueberschreitungen", r"beanstandet", r"^verwertbar"],
     "fahrverbote": [r"fahrverbot"],
     "dauer": [r"messdauer", r"^dauer"],
 }
+IGNORIERT = {"ba", "wochentag", "anteilverstoesse"}  # bekannt, ohne Inhalt für die Karte
+
+MONATE = {
+    "januar": 1, "februar": 2, "maerz": 3, "april": 4, "mai": 5, "juni": 6, "juli": 7,
+    "august": 8, "september": 9, "oktober": 10, "november": 11, "dezember": 12,
+}  # fmt: skip
 
 
 def _norm(s) -> str:
@@ -71,14 +81,19 @@ def zuordnen(kopf: list) -> dict[str, int]:
     return out
 
 
+def _leer(z: list) -> bool:
+    return all(v is None or (isinstance(v, float) and pd.isna(v)) or not str(v).strip() for v in z)
+
+
 def _zeilen(pfad: Path) -> list[list]:
     if pfad.suffix.lower() in (".xlsx", ".xlsm", ".xls"):
         blaetter = pd.read_excel(pfad, sheet_name=None, header=None, dtype=object)
         out = []
         for df in blaetter.values():
-            out += df.where(df.notna(), None).values.tolist()
+            out += [z for z in df.where(df.notna(), None).values.tolist() if not _leer(z)]
         return out
     roh = pfad.read_bytes()
+    text = None
     for enc in ("utf-8-sig", "cp1252", "latin-1"):
         try:
             text = roh.decode(enc)
@@ -88,7 +103,7 @@ def _zeilen(pfad: Path) -> list[list]:
     # Trenner: der häufigste in den ersten Zeilen (der Sniffer scheitert an Titelzeilen)
     probe = text[:4000]
     trenner = max(";,\t", key=probe.count)
-    return [list(r) for r in csv.reader(io.StringIO(text), delimiter=trenner)]
+    return [z for z in csv.reader(io.StringIO(text), delimiter=trenner) if not _leer(z)]
 
 
 def lies_datei(pfad: Path) -> tuple[pd.DataFrame, list[str]]:
@@ -105,13 +120,23 @@ def lies_datei(pfad: Path) -> tuple[pd.DataFrame, list[str]]:
         return in_schema(pd.DataFrame()), [f"{pfad.name}: keine Kopfzeile erkannt"]
     kopf = zeilen[kopf_i]
     unbekannt = [
-        str(k) for j, k in enumerate(kopf) if k not in (None, "") and j not in spalten.values()
+        str(k)
+        for j, k in enumerate(kopf)
+        if k not in (None, "") and j not in spalten.values() and _norm(k) not in IGNORIERT
     ]
     if unbekannt:
         hinweise.append(f"{pfad.name}: Spalten ohne Zuordnung: {unbekannt}")
+    grenze = None  # "bis 20 km/h" -> 20
+    if "stufe1" in spalten:
+        m = re.search(r"(\d+)", str(kopf[spalten["stufe1"]]))
+        grenze = int(m.group(1)) if m else None
+    return _als_schema(zeilen[kopf_i + 1 :], spalten, pfad.name, kopf_i + 2, grenze), hinweise
+
+
+def _als_schema(zeilen, spalten, quelle: str, erste_zeile: int, grenze) -> pd.DataFrame:
     daten = []
     letztes_datum = None
-    for j, z in enumerate(zeilen[kopf_i + 1 :], start=kopf_i + 2):
+    for j, z in enumerate(zeilen, start=erste_zeile):
 
         def w(feld, z=z):
             i = spalten.get(feld)
@@ -131,19 +156,17 @@ def lies_datei(pfad: Path) -> tuple[pd.DataFrame, list[str]]:
         mess = _int(w("messungen"))
         strasse, hnr = _strasse_und_nummer(str(platz), w("hausnummer"))
         lg = _lage(strasse)
-        ri = str(w("fahrtrichtung") or "").strip() or None
+        ri = re.sub(r"\s+", " ", str(w("fahrtrichtung") or "")).strip() or None
         daten.append(
             {
-                "id": "A" + hashlib.sha1(f"{pfad.name}:{j}".encode()).hexdigest()[:9],
+                "id": "A" + hashlib.sha1(f"{quelle}:{j}".encode()).hexdigest()[:9],
                 "stadt": "aachen",
-                "quelle": pfad.name,
+                "quelle": quelle,
                 "datum": datum,
                 "beginn": _uhrzeit(w("uhrzeit_von")),
                 "dauer_min": _dauer(w("uhrzeit_von"), w("uhrzeit_bis"), w("dauer")),
-                "strasse_roh": str(platz).strip(),
+                "strasse_roh": re.sub(r"\s+", " ", str(platz)).strip(),
                 "nr_roh": str(w("hausnummer") or "").strip() or None,
-                "lage_roh": None,
-                "bezirk_roh": None,
                 "richtung_roh": ri,
                 "strasse": lg[0],
                 "hausnummer": hnr,
@@ -151,33 +174,61 @@ def lies_datei(pfad: Path) -> tuple[pd.DataFrame, list[str]]:
                 "lage_art": lg[1],
                 "quer1": lg[2],
                 "quer2": lg[3],
-                "kompass": None,
                 "richtung_ziel": ri,
                 "tempo": _int(w("tempo")),
                 "messungen": mess,
                 "ueberschreitungen": ueber,
                 "stufe1": s1,
                 "stufe2": s2,
+                "stufe_kmh": grenze if s1 is not None or s2 is not None else None,
                 "fahrverbote": _int(w("fahrverbote")),
                 "alle_gezaehlt": mess is not None and ueber is not None and mess > ueber,
             }
         )
-    return in_schema(pd.DataFrame(daten)), hinweise
+    return in_schema(pd.DataFrame(daten))
 
 
-def lies_alle(dateien: list[Path]) -> tuple[pd.DataFrame, list[str]]:
+_FOLIUM = re.compile(r"bindTooltip\(\s*`<div>(.*?)</div>`", re.S)
+_FELD = re.compile(r"([^<>:]+?)\s*:\s*<b>(.*?)</b>")
+
+
+def lies_folium(pfad: Path) -> tuple[pd.DataFrame, list[str]]:
+    """Juni 2020 aus der alten Folium-Karte (vizsim/geschwindigkeitskontrollen): jede Kontrolle
+    steht dort als Tooltip ("Datum: <b>2020-06-02</b><br>Messplatz: <b>…</b>…")."""
+    text = pfad.read_text(encoding="utf-8")
+    zeilen = []
+    for tip in _FOLIUM.findall(text):
+        felder = {html.unescape(k).strip(): html.unescape(v).strip() for k, v in _FELD.findall(tip)}
+        zeilen.append(felder)
+    if not zeilen:
+        return in_schema(pd.DataFrame()), [f"{pfad.name}: keine Kontrollen gefunden"]
+    kopf = list(zeilen[0])
+    tabelle = [kopf] + [[z.get(k) for k in kopf] for z in zeilen]
+    spalten = zuordnen(tabelle[0])
+    m = re.search(r"(\d+)", str(kopf[spalten["stufe1"]])) if "stufe1" in spalten else None
+    df = _als_schema(tabelle[1:], spalten, pfad.name, 1, int(m.group(1)) if m else None)
+    return df, []
+
+
+def lies_alle(dateien: list[Path], alt: Path | None = None) -> tuple[pd.DataFrame, list[str]]:
+    """Alle Monatsdateien (Excel vor CSV, damit beim Entdoppeln Excel gilt) + alte Karte."""
     teile, hinweise = [], []
-    for p in sorted(dateien):
+    for p in sorted(dateien, key=lambda f: (f.suffix.lower() == ".csv", f.name)):
         df, h = lies_datei(p)
         teile.append(df)
         hinweise += h
+    if alt is not None and alt.exists():
+        df, h = lies_folium(alt)
+        teile.append(df)
+        hinweise += h
+    teile = [t for t in teile if len(t)]
     df = pd.concat(teile, ignore_index=True) if teile else in_schema(pd.DataFrame())
-    # dieselbe Kontrolle in zwei Dateien (Nachlieferung, XLSX und CSV) -> einmal
+    # dieselbe Kontrolle in zwei Dateien (Excel und CSV desselben Monats) -> einmal
     schluessel = ["datum", "strasse_roh", "richtung_roh", "messungen", "ueberschreitungen"]
     vorher = len(df)
     df = df.drop_duplicates(subset=schluessel, keep="first").reset_index(drop=True)
     if vorher != len(df):
-        hinweise.append(f"{vorher - len(df)} doppelte Zeilen entfernt")
+        hinweise.append(f"{vorher - len(df)} doppelte Zeilen entfernt (Excel und CSV)")
     return df, hinweise
 
 
@@ -200,7 +251,7 @@ _QUER = re.compile(r"\s*(?:/|\bEcke\b|\bH[öo]he\b|\bzw\.?\b|\bzwischen\b)\s*", 
 
 
 def _lage(strasse: str) -> tuple[str, str, str | None, str | None]:
-    """ "Trierer Straße / Höhe Haus 12" … -> (Hauptstraße, Art, Quer1, Quer2)."""
+    """ "Trierer Straße / Kalkbergstraße" … -> (Hauptstraße, Art, Quer1, Quer2)."""
     teile = [t for t in _QUER.split(strasse) if t.strip()]
     if len(teile) == 1:
         return strasse, "keine", None, None
@@ -223,6 +274,9 @@ def _int(v) -> int | None:
         return None
 
 
+_LANG = re.compile(r"(\d{1,2})\.\s*([A-Za-zÄÖÜäöüß]+)\s+(\d{4})")
+
+
 def _datum(v) -> str | None:
     if v is None or (isinstance(v, float) and pd.isna(v)):
         return None
@@ -234,6 +288,12 @@ def _datum(v) -> str | None:
                 return None
             return (pd.Timestamp("1899-12-30") + pd.Timedelta(days=float(v))).strftime("%Y-%m-%d")
         s = str(v).strip()
+        lang = _LANG.search(s)  # "Montag, 1. Dezember 2025"
+        if lang and namen.schluessel(lang.group(2)) in MONATE:
+            d = dt.date(
+                int(lang.group(3)), MONATE[namen.schluessel(lang.group(2))], int(lang.group(1))
+            )
+            return d.isoformat()
         iso = re.match(r"^\d{4}-\d{2}-\d{2}", s)  # "2020-06-02 00:00:00"
         ts = pd.to_datetime(s[:10] if iso else s, dayfirst=not iso, errors="coerce")
         return None if pd.isna(ts) else ts.strftime("%Y-%m-%d")
@@ -257,6 +317,5 @@ def _dauer(von, bis, dauer) -> int | None:
         m = re.match(r"^\s*(\d+)[:.](\d{2})", str(dauer))
         if m:
             return int(m.group(1)) * 60 + int(m.group(2))
-        z = _int(dauer)
-        return z
+        return _int(dauer)
     return None

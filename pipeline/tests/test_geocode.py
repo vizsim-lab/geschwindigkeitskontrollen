@@ -113,3 +113,45 @@ def test_autobahn(netz, gebiete):
 def test_bezirke_abgeschnitten(gebiete):
     assert gebiete.bezirke_aus(["Mit", "Pank"]) == ["Mitte", "Pankow"]
     assert gebiete.bezirke_aus(["X"]) == []
+
+
+def test_bezirk_falsch_genannt_umgebung_hilft(netz, gebiete):
+    # genannt ist Pankow, Querweg UND Nebenstraße treffen sich aber nur mit der Hauptstraße in
+    # Mitte: erst die Umgebung (+2 km) findet den Abschnitt – statt „nur Straße“ in Pankow
+    e = geocode.verorte(
+        frage("Hauptstraße", quer=("Querweg", "Nebenstraße"), bezirk="Pankow"), netz, gebiete
+    )
+    assert (e.methode, e.gebiet) == ("abschnitt", "umgebung")
+    nah(e, 13.405, 52.520)
+
+
+def test_stadtgrenze_als_querstrasse(netz, gebiete):
+    e = geocode.verorte(frage("Grenzweg", quer=("Stadtgrenze",)), netz, gebiete)
+    assert e.methode == "kreuzung"
+    nah(e, 13.430, 52.512)
+
+
+def test_autobahn_als_querstrasse(netz, gebiete):
+    e = geocode.verorte(frage("Brückenweg", quer=("BAB A 100",)), netz, gebiete)
+    assert e.methode == "kreuzung"
+    nah(e, 13.418, 52.527)
+
+
+def test_platz_statt_querstrasse(netz, gebiete):
+    e = geocode.verorte(frage("Hauptstraße", quer=("Testplatz",)), netz, gebiete)
+    assert e.methode == "kreuzung"
+    assert e.hinweis == geocode.HINWEIS_ORT
+    nah(e, 13.4125, 52.520)
+
+
+def test_ortsname_von_hand(auszug, gebiete):
+    netz = geocode.Netz.aus_auszug(auszug, "EPSG:25833", {"ICC": "Kaiserdamm"})
+    e = geocode.verorte(frage("BAB A 100", ort="ICC", autobahn="A 100"), netz, gebiete)
+    assert e.methode == "anschlussstelle"
+    assert e.hinweis == geocode.HINWEIS_ZUORDNUNG
+    nah(e, 13.410, 52.527)
+
+
+def test_nur_strasse_bringt_die_strasse_mit(netz, gebiete):
+    e = geocode.verorte(frage("Eckallee"), netz, gebiete)
+    assert e.abschnitt is not None and e.abschnitt.length == pytest.approx(445, abs=10)

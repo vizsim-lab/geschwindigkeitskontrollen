@@ -29,7 +29,7 @@ GENAU = ("hausnummer", "abschnitt", "kreuzung", "anschlussstelle")
 METHODEN = (*GENAU, "strasse")
 TAG0 = date(2000, 1, 1)  # Datum als Tage seit diesem Tag (kompakt, im Browser zurückgerechnet)
 
-FELDER_STELLE = ["id", "stadt", "lon", "lat", "strasse", "methode", "abschnitt", "osm_maxspeed"]
+FELDER_STELLE = ["id", "stadt", "lon", "lat", "strasse", "methode", "lage", "osm_maxspeed"]
 FELDER_KONTROLLE = [
     "stelle", "tag", "beginn", "dauer", "tempo", "messungen", "ueber", "stufe1", "stufe2",
     "fahrverbote", "alle", "richtung", "ort",
@@ -75,7 +75,7 @@ def baue(p: Paths) -> dict:
         "zeilen": [
             [
                 s["id"], staedte.index(s["stadt"]), s["lon"], s["lat"], s["strasse"],
-                METHODEN.index(s["methode"]), s["abschnitt"], s["osm_maxspeed"],
+                METHODEN.index(s["methode"]), s["lage"], s["osm_maxspeed"],
             ]
             for s in stellen
         ],
@@ -113,11 +113,11 @@ def messstellen(m: pd.DataFrame, q: dict) -> tuple[list[dict], dict[str, int]]:
     for stadt, t in v.groupby("stadt", sort=True):
         hin = Transformer.from_crs("EPSG:4326", q["staedte"][stadt]["crs_m"], always_xy=True)
         x, y = hin.transform(t["geo_lon"].to_numpy(), t["geo_lat"].to_numpy())
-        t = t.assign(_x=x, _y=y, _genau=t["geo_methode"].isin(GENAU))
+        t = t.assign(px=x, py=y, genau=t["geo_methode"].isin(GENAU))
         # Punkte mit den meisten Kontrollen zuerst – sie werden Mitte ihrer Messstelle
         punkte = (
-            t.groupby(["geo_strasse", "_genau", "geo_lon", "geo_lat"], dropna=False)
-            .agg(_x=("_x", "first"), _y=("_y", "first"), n=("id", "size"))
+            t.groupby(["geo_strasse", "genau", "geo_lon", "geo_lat"], dropna=False)
+            .agg(px=("px", "first"), py=("py", "first"), n=("id", "size"))
             .reset_index()
             .sort_values(["n", "geo_lon", "geo_lat"], ascending=[False, True, True])
         )
@@ -125,14 +125,14 @@ def messstellen(m: pd.DataFrame, q: dict) -> tuple[list[dict], dict[str, int]]:
         zu: dict[tuple, int] = {}
         raster: dict[tuple, list[int]] = {}
         for pt in punkte.itertuples(index=False):
-            zelle = (math.floor(pt._x / BUENDEL_M), math.floor(pt._y / BUENDEL_M))
+            zelle = (math.floor(pt.px / BUENDEL_M), math.floor(pt.py / BUENDEL_M))
             ziel = None
             for dx in (-1, 0, 1):
                 for dy in (-1, 0, 1):
                     for gi in raster.get((zelle[0] + dx, zelle[1] + dy), []):
                         g = gruppen[gi]
-                        if g["strasse"] == pt.geo_strasse and g["genau"] == pt._genau:
-                            if math.hypot(g["x"] - pt._x, g["y"] - pt._y) <= BUENDEL_M:
+                        if g["strasse"] == pt.geo_strasse and g["genau"] == pt.genau:
+                            if math.hypot(g["x"] - pt.px, g["y"] - pt.py) <= BUENDEL_M:
                                 ziel = gi
                                 break
                     if ziel is not None:
@@ -142,15 +142,15 @@ def messstellen(m: pd.DataFrame, q: dict) -> tuple[list[dict], dict[str, int]]:
             if ziel is None:
                 ziel = len(gruppen)
                 gruppen.append(
-                    {"strasse": pt.geo_strasse, "genau": pt._genau, "x": pt._x, "y": pt._y,
+                    {"strasse": pt.geo_strasse, "genau": pt.genau, "x": pt.px, "y": pt.py,
                      "lon": pt.geo_lon, "lat": pt.geo_lat}
                 )  # fmt: skip
                 raster.setdefault(zelle, []).append(ziel)
-            zu[(pt.geo_strasse, pt._genau, pt.geo_lon, pt.geo_lat)] = ziel
+            zu[(pt.geo_strasse, pt.genau, pt.geo_lon, pt.geo_lat)] = ziel
         t["_g"] = [
             zu[(s, g, lo, la)]
             for s, g, lo, la in zip(
-                t["geo_strasse"], t["_genau"], t["geo_lon"], t["geo_lat"], strict=True
+                t["geo_strasse"], t["genau"], t["geo_lon"], t["geo_lat"], strict=True
             )
         ]
         for gi, tg in t.groupby("_g", sort=True):
@@ -167,6 +167,7 @@ def messstellen(m: pd.DataFrame, q: dict) -> tuple[list[dict], dict[str, int]]:
                     "strasse": g["strasse"] if isinstance(g["strasse"], str) else None,
                     "methode": methode,
                     "abschnitt": seg.value_counts().index[0] if len(seg) else None,
+                    "lage": _haeufigste(tg.apply(_ort_text, axis=1), None),
                     "osm_maxspeed": _haeufigste(tg["osm_maxspeed"].dropna(), None),
                 }
             )
@@ -281,7 +282,7 @@ def _csv(m: pd.DataFrame, ziel: Path) -> None:
     t = m.copy()
     t["stelle_id"] = t["stelle"].map(lambda i: None if pd.isna(i) else f"{int(i)}")
     t = t[list(CSV_SPALTEN)].rename(columns=CSV_SPALTEN)
-    t.sort_values(["stadt", "datum", "beginn"], inplace=True, kind="stable")
+    t = t.sort_values(["stadt", "datum", "beginn"], kind="stable")
     t.to_csv(ziel, index=False, encoding="utf-8")
 
 

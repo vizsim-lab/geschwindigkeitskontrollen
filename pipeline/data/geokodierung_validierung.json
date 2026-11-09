@@ -1,0 +1,43 @@
+{
+ "aachen": {
+  "kontrollen": 3467,
+  "verortet": 0,
+  "je_methode": {
+   "hausnummer": 0,
+   "abschnitt": 0,
+   "kreuzung": 0,
+   "anschlussstelle": 0,
+   "strasse": 0
+  },
+  "ohne_lage": 3467,
+  "je_gebiet": {}
+ },
+ "berlin": {
+  "kontrollen": 27945,
+  "verortet": 27596,
+  "je_methode": {
+   "hausnummer": 20168,
+   "abschnitt": 2848,
+   "kreuzung": 3784,
+   "anschlussstelle": 392,
+   "strasse": 404
+  },
+  "ohne_lage": 349,
+  "je_gebiet": {
+   "bezirk": 26972,
+   "stadt": 624
+  },
+  "hausnummer_gegen_abschnitt": {
+   "n": 17453,
+   "im_abschnitt": 0.545,
+   "unter_50m": 0.936,
+   "ueber_widerspruch": 0.011,
+   "median_m": 0.0,
+   "p90_m": 30.3
+  },
+  "adresse_zur_achse_m": {
+   "median": 21.5,
+   "p90": 48.9
+  }
+ }
+}

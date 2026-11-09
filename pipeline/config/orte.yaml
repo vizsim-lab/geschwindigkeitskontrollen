@@ -1,0 +1,20 @@
+# Ortsangaben aus den Kontrolldaten, die so nicht in OSM stehen -> Name in OSM.
+#
+# Gilt nur für die Suche – die Karte zeigt die Angabe wie geliefert, und jede so verortete
+# Kontrolle trägt den Hinweis „Ortsangabe von Hand zugeordnet“. Nur eintragen, was eindeutig
+# ist; im Zweifel bleibt eine Kontrolle lieber ungenau (nur Straße) als falsch.
+# Schlüssel: die Angabe der Quelle (Groß-/Kleinschreibung und Satzzeichen egal) oder ein Kürzel
+# am Anfang der Angabe ("TAG Gerosteig" -> TAG).
+
+berlin:
+  TRH: "Tunnel Rudower Höhe"                      # A 113
+  TAG: "Tunnel Altglienicke"                      # A 113
+  ICC: "Messedamm-Süd"                            # A 100, Anschlussstelle am ICC
+  "ICC/Überleitung zur A 115": "Dreieck Funkturm" # Übergang A 100 -> A 115
+  "Höhe Eichkampsiedlung": "Eichkampstraße"       # A 115 unter der Eichkampstraße
+  "Zollamt Dreilinden": "Stadtgrenze"             # A 115 an der Landesgrenze bei Dreilinden
+  "Siegessäule": "Großer Stern"                   # die Säule steht im Kreisverkehr
+  "Brandenburger Tor": "Platz des 18. März"       # westlich des Tors
+  "Nachtigalplatz": "Manga-Bell-Platz"            # 2022 umbenannt
+
+aachen: {}

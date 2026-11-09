@@ -4,7 +4,9 @@
      „Querweg" – die Verortung muss den richtigen Bezirk nehmen. Hauptstraße (Mitte) läuft
      West-Ost auf 52,520 und wird gekreuzt von Querweg (13,403), Nebenstraße (13,407),
      Neue Straße alias „Alte Straße" (13,410) und Eckallee (13,415). Darüber die A 100 mit zwei
-     Anschlussstellen, die Charlottenburger Chaussee (für abgeschnittene Namen) und Adressen. -->
+     Anschlussstellen, die Charlottenburger Chaussee (für abgeschnittene Namen) und Adressen;
+     der Grenzweg quert die Landesgrenze (13,430), der Brückenweg die A 100 (13,418), der
+     Testplatz liegt 50 m südlich der Hauptstraße. -->
 <osm version="0.6" generator="handgeschrieben">
   <node id="1" lat="52.510" lon="13.390"/>
   <node id="2" lat="52.510" lon="13.430"/>
@@ -59,6 +61,12 @@
   <node id="81" lat="52.5195" lon="13.4065"/>
   <node id="82" lat="52.5190" lon="13.4065"/>
   <node id="83" lat="52.5190" lon="13.4055"/>
+  <node id="84" lat="52.512" lon="13.425"/>
+  <node id="85" lat="52.512" lon="13.435"/>
+  <node id="86" lat="52.525" lon="13.418"/>
+  <node id="87" lat="52.527" lon="13.418"/>
+  <node id="88" lat="52.529" lon="13.418"/>
+  <node id="89" lat="52.5195" lon="13.4125"><tag k="place" v="square"/><tag k="name" v="Testplatz"/></node>
   <way id="100"><nd ref="20"/><nd ref="21"/><nd ref="22"/><nd ref="23"/>
     <tag k="highway" v="secondary"/><tag k="name" v="Hauptstraße"/><tag k="maxspeed" v="50"/></way>
   <way id="101"><nd ref="23"/><nd ref="24"/><nd ref="25"/>
@@ -77,7 +85,7 @@
     <tag k="highway" v="residential"/><tag k="name" v="Am Rain"/></way>
   <way id="122"><nd ref="46"/><nd ref="42"/><nd ref="47"/>
     <tag k="highway" v="residential"/><tag k="name" v="Wiesendamm"/></way>
-  <way id="130"><nd ref="50"/><nd ref="51"/><nd ref="52"/><nd ref="53"/>
+  <way id="130"><nd ref="50"/><nd ref="51"/><nd ref="52"/><nd ref="87"/><nd ref="53"/>
     <tag k="highway" v="motorway"/><tag k="ref" v="A 100"/><tag k="maxspeed" v="80"/></way>
   <way id="140"><nd ref="60"/><nd ref="61"/><nd ref="62"/>
     <tag k="highway" v="residential"/><tag k="name" v="Hauptstraße"/></way>
@@ -85,6 +93,8 @@
     <tag k="highway" v="residential"/><tag k="name" v="Querweg"/></way>
   <way id="150"><nd ref="80"/><nd ref="81"/><nd ref="82"/><nd ref="83"/><nd ref="80"/>
     <tag k="building" v="yes"/><tag k="addr:street" v="Hauptstraße"/><tag k="addr:housenumber" v="20 a"/></way>
+  <way id="160"><nd ref="84"/><nd ref="85"/><tag k="highway" v="tertiary"/><tag k="name" v="Grenzweg"/></way>
+  <way id="161"><nd ref="86"/><nd ref="87"/><nd ref="88"/><tag k="highway" v="tertiary"/><tag k="name" v="Brückenweg"/></way>
   <way id="900"><nd ref="1"/><nd ref="2"/><nd ref="3"/><nd ref="4"/><nd ref="1"/></way>
   <way id="901"><nd ref="5"/><nd ref="6"/><nd ref="7"/><nd ref="8"/><nd ref="5"/></way>
   <way id="902"><nd ref="8"/><nd ref="7"/><nd ref="9"/><nd ref="10"/><nd ref="8"/></way>

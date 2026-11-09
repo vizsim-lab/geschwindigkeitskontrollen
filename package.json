@@ -1,0 +1,15 @@
+{
+  "name": "geschwindigkeitskontrollen-karte",
+  "private": true,
+  "description": "Tests der Karte (node --test für die reinen Module, Playwright gegen die statische Seite). Die Karte selbst braucht keinen Build.",
+  "license": "AGPL-3.0-or-later",
+  "type": "module",
+  "scripts": {
+    "test:unit": "node --test \"tests/unit/*.test.js\"",
+    "test:web": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.65.0",
+    "maplibre-gl": "5.24.0"
+  }
+}
