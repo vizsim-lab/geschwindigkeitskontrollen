@@ -1,0 +1,64 @@
+# VORÜBERGEHEND (vor dem PR wieder entfernen): fragt mögliche Katalog-Schnittstellen für Köln
+# und Bonn ab und legt die Antworten auf den Branch `dev/erkunden` (orphan).
+name: Kataloge erkunden (vorübergehend)
+
+on:
+  push:
+    branches: ["weitere-staedte"]
+    paths: [".github/workflows/erkunden.yml"]
+
+permissions:
+  contents: write
+
+jobs:
+  erkunden:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - name: Abfragen
+        run: |
+          mkdir -p erkunden
+          q_koeln='Geschwindigkeits%C3%BCberwachung%20K%C3%B6ln'
+          q_bonn='Bu%C3%9Fgelder%20flie%C3%9Fender%20Verkehr'
+          q_bonn2='Messstellen%20Geschwindigkeits%C3%BCberwachung'
+          i=0
+          while read -r url; do
+            [ -z "$url" ] && continue
+            i=$((i+1))
+            datei="erkunden/$(printf '%02d' $i).txt"
+            code=$(curl -sS -L --max-time 60 --connect-timeout 20 -A "vizsim-geschwindigkeitskontrollen (+https://github.com/vizsim-lab/geschwindigkeitskontrollen)" -o "$datei.body" -w "%{http_code} %{content_type} %{size_download} %{url_effective}" "$url" 2>&1) || true
+            echo "$url -> $code" | tee -a erkunden/uebersicht.txt
+            { echo "URL: $url"; echo "ERGEBNIS: $code"; } > "$datei"
+            head -c 3000000 "$datei.body" 2>/dev/null > "$datei.body.kurz" || true
+            mv "$datei.body.kurz" "$datei.body" 2>/dev/null || true
+          done <<LISTE
+          https://www.offenedaten-koeln.de/data.json
+          https://offenedaten-koeln.de/data.json
+          https://www.offenedaten-koeln.de/api/3/action/package_show?id=geschwindigkeitsueberwachung-koeln-ab-2023
+          https://www.offenedaten-koeln.de/api/1/search?fulltext=$q_koeln
+          https://offenedaten-koeln.de/dataset/geschwindigkeitsueberwachung-koeln-ab-2023
+          https://offenedaten-koeln.de/dataset/geschwindigkeitsueberwachung-koeln-2017-bis-2022
+          https://ckan.open.nrw/api/3/action/package_search?q=$q_koeln&rows=50
+          https://ckan-open-nrw.nrw.de/api/3/action/package_search?q=$q_koeln&rows=50
+          https://prod.ckan259.open.nrw.de/api/3/action/package_search?q=$q_koeln&rows=50
+          https://ckan.open.nrw.de/api/3/action/package_search?q=$q_koeln&rows=50
+          https://www.govdata.de/ckan/api/3/action/package_search?q=$q_koeln&rows=50
+          https://ckan.govdata.de/api/3/action/package_search?q=$q_koeln&rows=50
+          https://opendata.bonn.de/data.json
+          https://opendata.bonn.de/api/3/action/package_search?q=$q_bonn
+          https://opendata.bonn.de/dataset/757e5b85-26c2-46e7-944c-f3d5cf445c4d
+          https://ckan.open.nrw/api/3/action/package_search?q=$q_bonn&rows=50
+          https://ckan.open.nrw/api/3/action/package_search?q=$q_bonn2&rows=50
+          https://ckan-open-nrw.nrw.de/api/3/action/package_search?q=$q_bonn&rows=50
+          https://prod.ckan259.open.nrw.de/api/3/action/package_search?q=$q_bonn&rows=50
+          LISTE
+          ls -la erkunden | head -60
+      - name: Auf dev/erkunden legen
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch --orphan dev/erkunden
+          git add -f erkunden
+          git commit -q -m "Kataloge erkunden (Lauf ${{ github.run_number }})"
+          git push -f origin dev/erkunden
