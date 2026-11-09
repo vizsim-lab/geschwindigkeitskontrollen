@@ -48,7 +48,7 @@ jobs:
               "https://www.govdata.de/ckan/api/3/action/package_search?q=" + q("Geschwindigkeitsüberwachung Konstanz") + "&rows=50",
           ]):
               d = hole(u, f"konstanz_{i}.txt")
-              for m in set(re.findall(rb'https?://[^"\s<>]+?\.(?:csv|xlsx?|json|zip)(?=["\s<>?])', d))[:20]:
+              for m in sorted(set(re.findall(rb'https?://[^"\s<>]+?\.(?:csv|xlsx?|json|zip)(?=["\s<>?])', d)))[:20]:
                   url = m.decode()
                   if "konstanz" in url.lower() or "mobidata" in url.lower() or "geschwind" in url.lower():
                       hole(url, "konstanz_datei_" + slug(url))
