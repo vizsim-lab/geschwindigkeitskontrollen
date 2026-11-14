@@ -194,3 +194,30 @@ def test_ortsname_von_hand(auszug, gebiete):
 def test_nur_strasse_bringt_die_strasse_mit(netz, gebiete):
     e = geocode.verorte(frage("Eckallee"), netz, gebiete)
     assert e.abschnitt is not None and e.abschnitt.length == pytest.approx(445, abs=10)
+
+
+def test_strassennummer_statt_name(netz, gebiete):
+    """Bundes-, Landes- und Kreisstraßen auch über ihre Nummer – mit Namen (B 2 = Charlottenburger
+    Chaussee) und ohne (K 7)."""
+    e = geocode.verorte(frage("B2", quer=("Am Rain",)), netz, gebiete)
+    assert e.methode == "kreuzung"
+    nah(e, 13.405, 52.524)
+    e = geocode.verorte(frage("K 7", quer=("Hauptstraße",)), netz, gebiete)
+    assert (e.methode, e.strasse) == ("kreuzung", "K 7")
+    nah(e, 13.418, 52.520)
+    assert netz.finde("A 100", None) is None  # Autobahnen bleiben bei der Autobahn-Suche
+
+
+def test_stadt_aus_mehreren_gemeinden(auszug):
+    """Ein Ordnungsbehördenbezirk aus mehreren Kommunen: die Flächen aller Namen zusammen."""
+    eine = {
+        "stadtgrenze": {"name": "Mitte", "admin_level": ["9"]},
+        "bbox": [13.38, 52.50, 13.44, 52.56],
+    }
+    beide = {**eine, "stadtgrenze": {"name": ["Mitte", "Pankow"], "admin_level": ["9"]}}
+    g1 = geocode.Gebiete.aus_auszug(auszug, "EPSG:25833", eine, None)
+    g2 = geocode.Gebiete.aus_auszug(auszug, "EPSG:25833", beide, None)
+    hin = Transformer.from_crs("EPSG:4326", "EPSG:25833", always_xy=True)
+    pankow = shapely.Point(*hin.transform(13.41, 52.54))
+    assert not g1.stadt.contains(pankow) and g2.stadt.contains(pankow)
+    assert g2.stadt.area > 1.5 * g1.stadt.area

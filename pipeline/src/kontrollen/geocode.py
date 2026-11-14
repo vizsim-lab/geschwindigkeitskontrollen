@@ -22,7 +22,8 @@ deren Umgebung (+`NACHSUCHE` m), dann in der ganzen Stadt. Die erste genaue Antw
 wenn die Straße nicht an mehreren Orten liegt.
 
 Ortsnamen der Polizei, die so nicht in OSM stehen ("TRH" = Tunnel Rudower Höhe), übersetzt
-config/orte.yaml – die Verortung bekommt dann einen Hinweis.
+config/orte.yaml – die Verortung bekommt dann einen Hinweis. Bundes-, Landes- und Kreisstraßen
+findet die Suche auch über ihre Nummer („B 42“, OSM `ref`), wie einen alten Namen.
 
 Metrisch im `crs_m` der Stadt (Berlin EPSG:25833, Aachen EPSG:25832), Ausgabe EPSG:4326.
 """
@@ -64,6 +65,9 @@ PRAEFIX_MIN = 12  # Zeichen: kürzere abgeschnittene Namen nicht über den Anfan
 FUZZY = 0.9  # Mindestähnlichkeit für Tippfehler, nur innerhalb des Suchgebiets
 
 METHODEN = ("hausnummer", "abschnitt", "kreuzung", "anschlussstelle", "strasse")
+# Bundes-, Landes- und Kreisstraßen gehen auch über ihre Nummer (OSM `ref`): „B 42“, „L 3113“,
+# „K 165“ – oft ohne Namen außerorts. Autobahnen haben ihre eigene Suche (`autobahn`).
+STRASSENNUMMER = re.compile(r"^[BLK] ?\d{1,4}[a-z]?$")
 HINWEIS_AUSSERHALB = "Hausnummer liegt außerhalb des Abschnitts"
 HINWEIS_EINE = "nur eine der Querstraßen gefunden"
 HINWEIS_ORT = "Ortsangabe statt Querstraße"
@@ -89,6 +93,7 @@ class Netz:
     adressen: dict[str, dict[str, list[Point]]]  # Straßenschlüssel -> Hausnummer -> Punkte
     orte: list[tuple[str, str, str, Point]]  # (Schlüssel, Name, Art, Punkt)
     ortsnamen: dict[str, str] = field(default_factory=dict)  # Schlüssel Polizei -> OSM-Name
+    nummern: dict[str, str] = field(default_factory=dict)  # „b42“ -> „B 42“ (Wege in alias_geom)
     _baum: tuple | None = field(default=None, repr=False)
     _cache: dict = field(default_factory=dict, repr=False)
 
@@ -104,6 +109,8 @@ class Netz:
         alias_ziel: dict[str, str] = {}
         alias_geom: dict[str, list] = defaultdict(list)
         autobahn: dict[str, list] = defaultdict(list)
+        nummern: dict[str, list] = defaultdict(list)  # „b42“ -> Wege mit ref „B 42“
+        nummer_anzeige: dict[str, str] = {}
         for row in s.itertuples(index=False):
             g = row.geometry
             name = row.name if isinstance(row.name, str) else None
@@ -116,6 +123,15 @@ class Netz:
                         kfz[k].append(g)
                         if isinstance(row.maxspeed, str):
                             speeds[k][row.maxspeed] += 1
+            if row.highway in KFZ and isinstance(row.ref, str):
+                for r in row.ref.split(";"):
+                    r = " ".join(r.split())
+                    if STRASSENNUMMER.match(r):
+                        nk = namen.schluessel(r)
+                        nummern[nk].append(g)
+                        nummer_anzeige.setdefault(nk, r)
+                        if isinstance(row.maxspeed, str):
+                            speeds[nk][row.maxspeed] += 1
             for spalte in ("old_name", "alt_name", "official_name", "bridge_name", "tunnel_name"):
                 wert = getattr(row, spalte, None)
                 if not isinstance(wert, str):
@@ -133,6 +149,13 @@ class Netz:
                     if nr:
                         autobahn[nr[0]].append(g)
         einig = {k: shapely.union_all(v) for k, v in geom.items()}
+        alias_einig = {k: shapely.union_all(v) for k, v in alias_geom.items() if k not in einig}
+        # Straßennummern („B 42“, „L 3113“) wie andere Namen – außer, eine Straße heißt so
+        nummern_einig = {
+            k: shapely.union_all(v)
+            for k, v in nummern.items()
+            if k not in einig and k not in alias_einig
+        }
         netz = cls(
             crs_m=crs_m,
             geom=einig,
@@ -140,11 +163,12 @@ class Netz:
             anzeige={k: max(v, key=v.get) for k, v in anzeige.items()},
             maxspeed={k: max(v, key=v.get) for k, v in speeds.items()},
             alias={k: z for k, z in alias_ziel.items() if k not in einig},
-            alias_geom={k: shapely.union_all(v) for k, v in alias_geom.items() if k not in einig},
+            alias_geom={**alias_einig, **nummern_einig},
             autobahn={k: shapely.union_all(v) for k, v in autobahn.items()},
             adressen={},
             orte=[],
             ortsnamen={namen.schluessel(k): v for k, v in (ortsnamen or {}).items()},
+            nummern={k: nummer_anzeige[k] for k in nummern_einig},
         )
         netz._lade_adressen(a.adressen.to_crs(crs_m))
         kn = a.knoten.to_crs(crs_m)
@@ -222,7 +246,7 @@ class Netz:
         if k in self.anzeige:
             return self.anzeige[k]
         ziel = self.alias.get(k)
-        return self.anzeige.get(ziel, k) if ziel else k
+        return self.anzeige.get(ziel, k) if ziel else self.nummern.get(k, k)
 
     def adress_punkte(self, k: str, hnr: str) -> list[Point]:
         out = list(self.adressen.get(k, {}).get(hnr, []))
@@ -355,11 +379,18 @@ class Gebiete:
         g = a.gebiete.to_crs(crs_m)
         sg = cfg["stadtgrenze"]
         ebenen = [str(x) for x in sg["admin_level"]]
-        kand = g[(g["name"] == sg["name"]) & g["admin_level"].astype(str).isin(ebenen)]
-        if kand.empty:
+        # ein Name oder mehrere (Ordnungsbehördenbezirk aus vier Kommunen): je Name die kleinste
+        # Fläche dieses Namens, zusammen die „Stadt“
+        namen_ = sg["name"] if isinstance(sg["name"], list) else [sg["name"]]
+        teile = []
+        for n in namen_:
+            kand = g[(g["name"] == n) & g["admin_level"].astype(str).isin(ebenen)]
+            if not kand.empty:
+                teile.append(min(kand.geometry, key=lambda x: x.area))
+        if not teile:
             stadt = shapely.union_all(g.geometry.values) if len(g) else shapely.box(*cfg["bbox"])
         else:
-            stadt = min(kand.geometry, key=lambda x: x.area)
+            stadt = shapely.union_all(teile)
         bezirke = {}
         if bezirk_ebene:
             for row in g[g["admin_level"].astype(str) == bezirk_ebene].itertuples(index=False):

@@ -1,21 +1,25 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
-"""Rohdaten holen: Berlin (die PDF-Anlagen, mit Prüfsumme), Aachen, Köln und Bonn (alle
-passenden Dateien aus den Open-Data-Katalogen), OSM-Abzüge (Geofabrik).
+"""Rohdaten holen: Berlin (die PDF-Anlagen, mit Prüfsumme), die übrigen Städte (alle passenden
+Dateien aus ihren Katalogen), OSM-Abzüge (Geofabrik).
 
-Kataloge: `fetch --neu` fragt die CKAN-Kataloge (sources.yaml) nach den passenden Datensätzen
-der Stadt und schreibt die gefundenen Ressourcen samt Prüfsumme nach config/<stadt>_ressourcen.json.
-Ohne --neu lädt `fetch` genau diese Liste – so bleibt ein Lauf nachvollziehbar, und neue Monate
-oder Jahre kommen nur bewusst dazu.
+Kataloge: `fetch --neu` fragt die Kataloge der Stadt (sources.yaml: CKAN, DKAN, WordPress –
+Mediathek oder Beiträge –, die Links einer Seite oder eine feste Liste) nach den passenden
+Datensätzen und schreibt die gefundenen Ressourcen samt Prüfsumme nach
+config/<stadt>_ressourcen.json. Ohne --neu lädt `fetch` genau diese Liste – so bleibt ein Lauf
+nachvollziehbar, und neue Monate oder Jahre kommen nur bewusst dazu.
 """
 
 from __future__ import annotations
 
 import hashlib
+import html
 import json
 import re
 import time
+from collections import Counter
+from html.parser import HTMLParser
 from pathlib import Path
-from urllib.parse import unquote, urlparse
+from urllib.parse import unquote, urljoin, urlparse
 
 import requests
 
@@ -180,8 +184,10 @@ def _dkan_suche(basis: str, q: str) -> list[dict]:
 
 
 def _wordpress_suche(basis: str, q: str) -> list[dict]:
-    """Suche in der Mediathek einer WordPress-Seite (`wp-json/wp/v2/media`, etwa schonungen.de):
-    jede Datei ein Datensatz mit einer Ressource, in der Form von CKAN."""
+    """Suche in einer WordPress-Seite, in der Form von CKAN. Mediathek (`wp-json/wp/v2/media`,
+    etwa schonungen.de): jede Datei ein Datensatz mit einer Ressource. Beiträge
+    (`wp-json/wp/v2/posts`, etwa stadt-butzbach.de): jeder Beitrag ein Datensatz mit den Dateien,
+    auf die er verlinkt."""
     out, seite = [], 1
     while True:
         r = requests.get(
@@ -195,29 +201,131 @@ def _wordpress_suche(basis: str, q: str) -> list[dict]:
         r.raise_for_status()
         eintraege = r.json()
         for m in eintraege:
-            titel = (m.get("title") or {}).get("rendered") or m.get("slug")
-            url = m.get("source_url")
+            titel = html.unescape((m.get("title") or {}).get("rendered") or "") or m.get("slug")
+            if "source_url" in m:  # Mediathek: die Datei selbst, eine Datensatzseite gibt es nicht
+                seite_url, urls = m.get("source_url"), [m.get("source_url")]
+                if not re.search(r"\d", titel or "") and len(titel or "") < 12:
+                    # „hier“ heißen in Butzbach mehrere Dateien – der Titel ist der Schlüssel
+                    # eines Datensatzes (`katalog`), also gilt dann der Dateiname
+                    titel = Path(unquote(urlparse(seite_url or "").path)).stem or titel
+            else:  # Beitrag: die verlinkten Dateien
+                seite_url = m.get("link")
+                p = _Links(seite_url or basis)
+                p.feed((m.get("content") or {}).get("rendered") or "")
+                urls = list(dict.fromkeys(u.split("#")[0] for u, _ in p.links))
             out.append(
                 {
                     "id": m.get("id"),
                     "name": _slug(titel) or str(m.get("id")),
                     "title": titel,
-                    "seite": url,  # die Datei selbst – eine Datensatzseite gibt es nicht
+                    "seite": seite_url,
                     "organization": {"title": ""},
                     "resources": [
                         {
-                            "id": m.get("id"),
+                            "id": url if len(urls) > 1 else m.get("id"),
                             "name": Path(unquote(urlparse(url or "").path)).stem,
                             "format": Path(urlparse(url or "").path).suffix[1:].upper(),
                             "url": url,
                             "last_modified": m.get("modified"),
                         }
+                        for url in urls
                     ],
                 }
             )
         if len(eintraege) < 100:
             return out
         seite += 1
+
+
+class _Links(HTMLParser):
+    """Die Links einer HTML-Seite: (Adresse, Linktext)."""
+
+    def __init__(self, basis: str):
+        super().__init__(convert_charrefs=True)
+        self.basis, self.links = basis, []
+        self._a: str | None = None
+        self._text: list[str] = []
+
+    def handle_starttag(self, tag, attrs):
+        href = dict(attrs).get("href") if tag == "a" else None
+        if href:
+            self._a, self._text = urljoin(self.basis, href.strip()), []
+
+    def handle_data(self, data):
+        if self._a is not None:
+            self._text.append(data)
+
+    def handle_endtag(self, tag):
+        if tag == "a" and self._a is not None:
+            self.links.append((self._a, " ".join("".join(self._text).split())))
+            self._a = None
+
+
+def seiten_links(url: str) -> list[tuple[str, str]]:
+    """Alle Links einer Webseite als (Adresse, Linktext)."""
+    r = requests.get(url, timeout=(20, 90), headers=UA)
+    r.raise_for_status()
+    p = _Links(r.url)
+    p.feed(r.text)
+    return p.links
+
+
+def _seite_als_katalog(k: dict) -> list[dict]:
+    """Dateien, auf die eine Webseite verlinkt (`art: seite`) – für Städte, die ihre Tabellen
+    auf einer Seite sammeln (Weiterstadt). Jede Datei, deren Adresse zu `dateien` passt, wird ein
+    Datensatz mit einer Ressource, in der Form von CKAN; Titel: `titel` und der Linktext
+    („Januar 2025“). Mit `folge` werden zuerst die verlinkten Unterseiten geholt, deren Adresse
+    dazu passt (ein Beitrag je Monat), mit `blaettern` weitere Übersichtsseiten."""
+    dateien = re.compile(k["dateien"])
+    folge = re.compile(k["folge"]) if k.get("folge") else None
+    blaettern = re.compile(k["blaettern"]) if k.get("blaettern") else None
+    warte, gesehen = [k["url"]], set()
+    herkunft: dict[str, str] = {}  # Unterseite -> Text des Links, der zu ihr führt
+    funde: dict[str, tuple[str, str]] = {}  # Datei -> (Linktext, Seite)
+    while warte and len(gesehen) < k.get("max_seiten", 60):
+        url = warte.pop(0)
+        if url in gesehen:
+            continue
+        gesehen.add(url)
+        for href, text in seiten_links(url):
+            h = href.split("#")[0]
+            if dateien.search(h):
+                # der längste Text gewinnt: „Herunterladen“ < „… im April 2026“ (Linktext auf
+                # der Übersicht, der zum Beitrag führt)
+                text = max((text, herkunft.get(url, "")), key=len)
+                alt = funde.get(h)
+                if alt is None or len(text) > len(alt[0]):
+                    funde[h] = (text, url)
+            elif h not in gesehen and (
+                (ist_folge := bool(folge and folge.search(h)))
+                or (blaettern and blaettern.search(h))
+            ):
+                if ist_folge and len(text) > len(herkunft.get(h, "")):
+                    herkunft[h] = text
+                if h not in warte:
+                    warte.append(h)
+    out = []
+    for u, (text, seite) in funde.items():
+        titel = " ".join(x for x in (k.get("titel"), text) if x)
+        titel = titel or Path(unquote(urlparse(u).path)).stem
+        out.append(
+            {
+                "id": u,
+                "name": _slug(titel),
+                "title": titel,
+                "seite": seite,
+                "organization": {"title": k.get("bereitsteller") or ""},
+                "resources": [
+                    {
+                        "id": u,
+                        "name": Path(unquote(urlparse(u).path)).stem,
+                        "format": Path(urlparse(u).path).suffix[1:].upper(),
+                        "url": u,
+                    }
+                ],
+            }
+        )
+    return out
 
 
 def _liste_als_katalog(k: dict) -> list[dict]:
@@ -250,8 +358,13 @@ def _format(r: dict) -> str:
 
 def treffer(datensaetze: list[dict], cfg: dict, basis: str) -> list[dict]:
     """Datensätze, deren Titel zu `titel_muster` und deren Titel, Name, Organisation oder
-    Download-Adressen zur Stadt passen, mit ihren Ressourcen der gewünschten Formate."""
+    Download-Adressen zur Stadt passen, mit ihren Ressourcen der gewünschten Formate.
+
+    `datei_muster` (optional): auch Dateien, deren Adresse dazu passt, wie immer ihr Datensatz
+    heißt – in Mediatheken heißen sie mitunter nur „hier“ (Butzbach); dann zählen aus einem
+    Datensatz mit anderem Titel nur diese Dateien."""
     titel = [re.compile(m) for m in _liste(cfg["titel_muster"])]
+    datei = [re.compile(m) for m in _liste(cfg.get("datei_muster") or [])]
     stadt = re.compile(cfg.get("stadt_muster") or cfg["aachen_muster"])
     formate = {f.upper() for f in cfg["formate"]}
     out = []
@@ -259,12 +372,16 @@ def treffer(datensaetze: list[dict], cfg: dict, basis: str) -> list[dict]:
         org = (d.get("organization") or {}).get("title") or ""
         urls = [r.get("url") or "" for r in d.get("resources", [])]
         text = " ".join([d.get("title") or "", d.get("name") or "", org, *urls])
-        if not any(t.search(d.get("title") or "") for t in titel) or not stadt.search(text):
+        nach_titel = any(t.search(d.get("title") or "") for t in titel)
+        nach_datei = any(x.search(u) for x in datei for u in urls)
+        if not (nach_titel or nach_datei) or not stadt.search(text):
             continue
         res = []
         for r in d.get("resources", []):
             fmt = _format(r)
             if fmt not in formate or not r.get("url"):
+                continue
+            if not nach_titel and not any(x.search(r["url"]) for x in datei):
                 continue
             res.append(
                 {
@@ -299,7 +416,9 @@ def katalog(cfg: dict) -> dict:
 
     Standard (Aachen): der erste Katalog, der etwas findet. Mit `alle_kataloge` werden alle
     gefragt und die Funde vereinigt – derselbe Titel ist derselbe Datensatz, es zählt der Fund
-    mit den meisten Ressourcen (Landesportale spiegeln die Städte oft unvollständig)."""
+    mit den meisten Ressourcen (Landesportale spiegeln die Städte oft unvollständig). Trägt ein
+    Katalog denselben Titel mehrmals (eine Mediathek mit „sb_oa-messung-1512“ für zwei Dateien),
+    sind das verschiedene Datensätze."""
     fehler: list[str] = []
     funde: dict[str, tuple[str, dict]] = {}
     kataloge = cfg.get("kataloge") or [{"art": "ckan", "url": u} for u in cfg["ckan"]]
@@ -308,9 +427,10 @@ def katalog(cfg: dict) -> dict:
         suche = {"dkan": _dkan_suche, "wordpress": _wordpress_suche}.get(k.get("art"), _suche)
         try:
             gefunden: dict[str, dict] = {}
-            if k.get("art") == "liste":
-                gefunden = {d["id"]: d for d in _liste_als_katalog(k)}
-            for q in _liste(cfg.get("suche") or []) if k.get("art") != "liste" else []:
+            fest = {"liste": _liste_als_katalog, "seite": _seite_als_katalog}.get(k.get("art"))
+            if fest:  # feste Liste oder Links einer Seite: ohne Suchbegriffe
+                gefunden = {d["id"]: d for d in fest(k)}
+            for q in _liste(cfg.get("suche") or []) if not fest else []:
                 for d in suche(basis, q):
                     gefunden.setdefault(d.get("id") or d.get("name"), d)
         except (requests.RequestException, RuntimeError, ValueError) as e:
@@ -320,8 +440,11 @@ def katalog(cfg: dict) -> dict:
         if not t:
             fehler.append(f"{basis}: keine passenden Datensätze ({len(gefunden)} gesucht)")
             continue
+        mehrfach = Counter(_titel_schluessel(d) for d in t)
         for d in t:
             k = _titel_schluessel(d)
+            if mehrfach[k] > 1:
+                k += "|" + " ".join(sorted(r["url"] for r in d["ressourcen"]))
             if k not in funde or len(d["ressourcen"]) > len(funde[k][1]["ressourcen"]):
                 funde[k] = (basis, d)
         if not cfg.get("alle_kataloge"):
@@ -373,13 +496,15 @@ def ckan_dateien(stadt: str, paths: Paths | None = None, *, neu: bool = False) -
     ordner = paths.data_file(cfg["ordner"])
     if neu or not liste.exists():
         kat = katalog(cfg)
-        dateien, namen = [], set()
+        dateien, namen, adressen = [], set(), set()
         for d in kat["datensaetze"]:
             for r in d["ressourcen"]:
                 name = _dateiname(d["name"], r)
-                if name in namen:  # dieselbe Ressource in zwei Katalogen
+                # dieselbe Ressource in zwei Katalogen, dieselbe Datei in Beitrag und Mediathek
+                if name in namen or r["url"] in adressen:
                     continue
                 namen.add(name)
+                adressen.add(r["url"])
                 ziel, letzter = None, None
                 for url in url_varianten(r["url"]):
                     try:
@@ -395,6 +520,8 @@ def ckan_dateien(stadt: str, paths: Paths | None = None, *, neu: bool = False) -
                     continue
                 dateien.append({**r, "datensatz": d["name"], "datei": name, "sha256": sha256(ziel)})
         kat["dateien"] = sorted(dateien, key=lambda x: x["datei"])
+        genutzt = {f["datensatz"] for f in dateien}  # Datensätze, aus denen Dateien kommen
+        kat["datensaetze"] = [d for d in kat["datensaetze"] if d["name"] in genutzt]
         for d in kat["datensaetze"]:
             d.pop("ressourcen", None)
         liste.write_text(json.dumps(kat, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")

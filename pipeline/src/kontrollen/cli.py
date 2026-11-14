@@ -13,6 +13,7 @@ from kontrollen import (
     aachen,
     berlin,
     bonn,
+    butzbach,
     fetch,
     geocode,
     koeln,
@@ -20,6 +21,7 @@ from kontrollen import (
     osm,
     schonungen,
     site,
+    weiterstadt,
 )  # fmt: skip
 from kontrollen.config import get_paths, load_yaml, quellen
 
@@ -89,7 +91,7 @@ def fetch_cmd(
         geladen: dict[str, Path] = {}
         for s in staedte():
             datei = q[s]["osm"]["datei"]
-            if datei not in geladen:  # Aachen, Köln und Bonn teilen sich einen Abzug
+            if datei not in geladen:  # Aachen, Köln und Bonn teilen sich einen Abzug, ebenso Hessen
                 geladen[datei] = fetch.osm(s, neu=neu)
             typer.echo(f"OSM {s}: {geladen[datei]}")
     if fehler:
@@ -131,6 +133,8 @@ LESER = {
     "bonn": bonn.lies_alle,
     "schonungen": schonungen.lies_alle,
     "oberderdingen": oberderdingen.lies_alle,
+    "butzbach": butzbach.lies_alle,
+    "weiterstadt": weiterstadt.lies_alle,
 }
 
 

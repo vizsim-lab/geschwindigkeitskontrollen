@@ -1,6 +1,7 @@
 # Entwicklungsauszug: lädt, was die Pipeline braucht (OSM Berlin, Regierungsbezirk Köln,
-# Unterfranken, Regierungsbezirk Karlsruhe; Berliner PDF-Anlagen, Aachener Monatsdateien, Kölner
-# und Bonner Jahresdateien, die Berichte von Schonungen und Oberderdingen), liest OSM in die
+# Unterfranken, Regierungsbezirk Karlsruhe, Hessen; Berliner PDF-Anlagen, Aachener Monatsdateien,
+# Kölner und Bonner Jahresdateien, die Berichte von Schonungen, Oberderdingen, Butzbach und
+# Weiterstadt), liest OSM in die
 # kompakten Tabellen von `kontrollen osm` und legt diese samt den Rohdateien auf den Branch
 # `dev/auszug` (orphan, wird überschrieben). Große CSV-Dateien liegen dort gzip-komprimiert
 # (`gunzip` nach dem Kopieren).
@@ -55,7 +56,7 @@ jobs:
             echo '```json'
             cat data/interim/build_bericht.json 2>/dev/null || true
             echo '```'
-            for stadt in koeln bonn schonungen oberderdingen; do
+            for stadt in koeln bonn schonungen oberderdingen butzbach weiterstadt; do
               echo "### $stadt"
               echo '```'
               cat data/interim/fetch_fehlgeschlagen.txt 2>/dev/null || true
@@ -86,7 +87,7 @@ jobs:
           find pipeline/data/raw/koeln pipeline/data/raw/bonn -name '*.csv' -size +1M -exec gzip -9 {} \; 2>/dev/null || true
           git add -f pipeline/data/interim/osm pipeline/data/raw/aachen pipeline/config/*_ressourcen.json
           git add -f pipeline/data/raw/berlin/*.pdf 2>/dev/null || true
-          for d in pipeline/data/raw/koeln pipeline/data/raw/bonn pipeline/data/raw/schonungen pipeline/data/raw/oberderdingen; do
+          for d in pipeline/data/raw/koeln pipeline/data/raw/bonn pipeline/data/raw/schonungen pipeline/data/raw/oberderdingen pipeline/data/raw/butzbach pipeline/data/raw/weiterstadt; do
             [ -d "$d" ] && git add -f "$d"
           done
           for f in pipeline/data/interim/build_bericht.json pipeline/data/interim/build_fehlgeschlagen.txt pipeline/data/interim/fetch_fehlgeschlagen.txt; do

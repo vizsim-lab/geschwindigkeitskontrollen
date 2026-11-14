@@ -258,6 +258,87 @@ staedte:
       stadtgrenze: { name: "Oberderdingen", admin_level: ["8"] }
       bezirk_ebene: null              # Flehingen und Großvillars stehen nur im Text
 
+  butzbach:
+    label: "Butzbach"
+    crs_m: "EPSG:25832"            # metrisch (UTM 32N)
+    bbox: [8.50, 50.33, 8.92, 50.52]
+    start: { lon: 8.71, lat: 50.43, zoom: 11.0 }
+    kontrollen:
+      label: "Geschwindigkeitsmessungen im Ordnungsbehördenbezirk Butzbach"
+      bereitsteller: "Stadt Butzbach"
+      kurz: "Stadt Butzbach"
+      titel: >-
+        Geschwindigkeitsmessungen – Monatstabellen des gemeinsamen Ordnungsbehördenbezirks
+        Butzbach/Münzenberg/Rockenberg/Wölfersheim (PDF)
+      herkunft_url: "https://stadt-butzbach.de/themen/geschwindigkeitsmessungen/"
+      lizenz_hinweis: "ohne Lizenzangabe"
+      hinweis: >-
+        Gemessen hat der gemeinsame Ordnungsbehördenbezirk der Städte Butzbach und Münzenberg und
+        der Gemeinden Rockenberg und Wölfersheim. Je Messung Tag, Beginn und Ende, gemessene
+        Fahrzeuge, Verwarnungen und Bußgelder (zusammen die Überschreitungen); das Tempolimit
+        nennen die Tabellen nicht.
+      # Je Monat ein Beitrag mit der Tabelle als PDF (WordPress, `wp-json/wp/v2/posts`); ältere
+      # Tabellen ohne Beitrag stehen nur noch in der Mediathek (`…/media`), oft mit dem Titel
+      # „hier“ – darum auch `datei_muster`. Die Dateinamen („sb_oa-messung-1502-1.pdf“ enthält
+      # den Februar 2020) sagen nichts über den Monat; es gilt das Datum in der Tabelle.
+      kataloge:
+        - { art: wordpress, url: "https://stadt-butzbach.de/wp-json/wp/v2/posts" }
+        - { art: wordpress, url: "https://stadt-butzbach.de/wp-json/wp/v2/media" }
+      alle_kataloge: true
+      suche: ["Geschwindigkeitsmessungen", "messung"]
+      titel_muster: "(?i)^geschwindigkeitsmessungen im"
+      datei_muster: "(?i)/(?:sb_oa-messung|geschwindigkeitsmessungen)[^/]*\\.pdf$"
+      stadt_muster: "(?i)butzbach"
+      formate: ["PDF"]
+      ressourcen: "config/butzbach_ressourcen.json"
+      ordner: "raw/butzbach"
+    osm:
+      label: "Straßennetz und Adressen Butzbach, Münzenberg, Rockenberg, Wölfersheim (Verortung)"
+      url: "https://download.geofabrik.de/europe/germany/hessen-latest.osm.pbf"
+      datei: "raw/osm/hessen-latest.osm.pbf"
+      gebiete_admin_level: ["8", "9", "10", "11"]
+      # die vier Kommunen des Ordnungsbehördenbezirks zusammen
+      stadtgrenze: { name: ["Butzbach", "Münzenberg", "Rockenberg", "Wölfersheim"], admin_level: ["8"] }
+      bezirk_ebene: "8"
+
+  weiterstadt:
+    label: "Weiterstadt"
+    crs_m: "EPSG:25832"            # metrisch (UTM 32N)
+    bbox: [8.50, 49.86, 8.68, 49.98]
+    start: { lon: 8.595, lat: 49.917, zoom: 12.3 }
+    kontrollen:
+      label: "Mobile Geschwindigkeitskontrollen in Weiterstadt"
+      bereitsteller: "Stadt Weiterstadt"
+      kurz: "Stadt Weiterstadt"
+      titel: "Geschwindigkeitskontrollen – Monatstabellen der Kommunalen Bußgeldstelle (PDF)"
+      herkunft_url: "https://www.weiterstadt.de/wirtschaft-umwelt-verkehr/umwelt-verkehr/geschwindigkeitsmessungen/index.php"
+      lizenz_hinweis: "ohne Lizenzangabe"
+      hinweis: >-
+        Gemessen hat die Kommunale Bußgeldstelle der Stadt, mobil – die festen Anlagen stehen
+        nicht in den Tabellen. Je Messung Tag, Ort mit Fahrtrichtung, Tempolimit, durchfahrene
+        Fahrzeuge und davon zu schnelle; Uhrzeit und Dauer fehlen. Veröffentlicht sind die Monate
+        seit Januar 2025.
+      # Die Monatstabellen („Statistik_GemOBB_<Monat>_<Jahr>.pdf“) liegen in verschiedenen
+      # Ordnern des CMS; verlinkt sind alle auf einer Seite (`art: seite`, Linktext = Monat).
+      kataloge:
+        - art: seite
+          url: "https://www.weiterstadt.de/wirtschaft-umwelt-verkehr/umwelt-verkehr/geschwindigkeitsmessungen/index.php"
+          dateien: "(?i)/Statistik_GemOBB_[^/]*\\.pdf"
+          titel: "Geschwindigkeitskontrollen"
+          bereitsteller: "Stadt Weiterstadt"
+      titel_muster: "(?i)^geschwindigkeitskontrollen"
+      stadt_muster: "(?i)weiterstadt"
+      formate: ["PDF"]
+      ressourcen: "config/weiterstadt_ressourcen.json"
+      ordner: "raw/weiterstadt"
+    osm:
+      label: "Straßennetz und Adressen Weiterstadt (Verortung)"
+      url: "https://download.geofabrik.de/europe/germany/hessen-latest.osm.pbf"
+      datei: "raw/osm/hessen-latest.osm.pbf"
+      gebiete_admin_level: ["8", "9", "10", "11"]
+      stadtgrenze: { name: "Weiterstadt", admin_level: ["8"] }
+      bezirk_ebene: null              # die Tabellen nennen keinen Stadtteil
+
 osm:
   bereitsteller: "© OpenStreetMap-Mitwirkende"
   lizenz: "ODbL"
