@@ -1,0 +1,68 @@
+﻿Standortkürzel;erlaubte Geschw. PKW;erlaubte Geschw. LKW;tadtteil Tatort (tw. beginnend mit zwei Buchstaben = alternativ Standortcode);Tatstraße mit Hausnummer;Fahrtrichtung
+1;50;50;01   Bundesstraße 55a         ;Frankfurter Straße vor Tunnel ;in Fahrtrichtung Deutz
+2;80;80;02   Bundesstraße 55a         ;Höhe Waldecker Straße         ;in Fahrtrichtung Zoobrücke
+3;80;80;03   Zoobrücke                ;Höhe Auenweg                  ;in Fahrtrichtung linksrheinisch
+4;80;80;04   Zoobrücke                ;Strommitte                    ;in Fahrtrichtung linksrheinisch
+5;60;60;05   Zoobrücke                ;Höhe Amsterdamer Straße       ;in Fahrtrichtung Nippes
+6;50;50;06   Innere Kanalstraße       ;Höhe Finanzamt Köln-Nord      ;in Fahrtrichtung Ehrenfeld
+7;50;50;07   Innere Kanalstraße       ;Höhe Escher Straße / Hornstr. ;in Fahrtrichtung Süden
+8;50;50;08   Innere Kanalstraße       ;Höhe Hornstr. / Escher Straße ;in Fahrtrichtung Zoobrücke
+9;50;50;09   Innere Kanalstraße       ;Höhe Finanzamt Köln-Nord      ;in Fahrtrichtung Zoobrücke
+10;50;50;10   Innere Kanalstraße       ;in Höhe Lentstraße            ;in Fahrtrichtung Zoobrücke
+11;50;50;11   Severinsbrücke           ;                              ;in Fahrtrichtung Deutz
+12;80;80;12   Zoobrücke                ;Höhe Strommitte               ;in Fahrtrichtung Kalk
+13;80;80;13   Zoobrücke                ;Höhe Auenweg                  ;in Fahrtrichtung Kalk
+14;50;50;14   Riehl                    ;An der Schanz, Höhe Haus Nr.2 ;in Fahrtrichtung Norden
+15;50;50;15   Bundesstraße 55 a        ;Abfahrt Köln-Kalk             ;in Fahrtrichtung BAB Kreuz Ost
+16;50;50;16   Aachener Straße          ;Höhe Aachener Weiher geg.130  ;in Fahrtrichtung stadtauswärts
+17;50;50;17   Aachener Straße          ;Höhe Aachener Weiher          ;in Fahrtrichtung stadteinwärts
+23;30;30;23   Chorweiler               ;Willi-Suth-Allee              ;in Fahrtrichtung Bezirksportanlage
+24;30;30;24   Chorweiler               ;Willi-Suth-Allee              ;in Fahrtrichtung Autobahn 57
+25;50;50;25   Riehl                    ;Boltensternstraße in Höhe SBK ;in Fahrtrichtung Barbarastraße
+26;50;50;26   Riehl                    ;Boltensternstraße in Höhe SBK ;in Fahrtrichtung An der Schanz
+27;30;30;27   Bilderstöckchen          ;Escher Straße Höhe Haus-Nr.154;in Fahrtrichtung Parkgürtel
+28;30;30;28   Bilderstöckchen          ;Escher Straße ggü. Haus-Nr.146;in Fahrtrichtung Geldernstraße
+29;50;50;29   Holweide                 ;Bergisch Gladbacher Straße    ;Höhe Steyler Str., in FR. Mülheim
+30;50;50;30   Godorf                   ;Godorfer Hauptstr., Höhe Otto-;Hahn-Str., in FR. Immendorfer Str.
+31;30;30;31   Holweide                 ;Neufelder Straße              ;Höhe Krankenhaus in FR. Schwabstr.
+32;30;30;32   Müngersdorf              ;Wendelinstraße, Höhe Schule   ;in Fahrtrichtung Vitalisstraße
+33;30;30;33   Neubrück                 ;Europaring, Höhe Haus Nr.7    ;in Fahrtrichtung Ernst-Reuter-Str.
+34;70;70;34   Zollstock                ;Militärringstraße             ;Höhe Am Eifeltor, in FR. Marienburg
+35;50;50;35   Raderthal                ;Raderthalgürtel, Höhe Lat.28  ;in Fahrtrichtung Vorgebirgstraße
+36;30;30;36   Höhenhaus                ;Honschaftsstraße, Höhe Schule ;in Fahrtrichtung Am Pfropfbusch
+37;30;30;37   Bilderstöckchen          ;Schiefersburger Weg ggü. Hs 40;in Fahrtrichtung Longericher Straße
+38;30;30;38   Vogelsang                ;Vogelsanger Straße            ;Höhe Grundschule in FR. Bickendorf
+39;30;30;39   Brück                    ;Brücker Mauspfad              ;Höhe BAB-Brücke, in FR. Porz
+40;30;30;40   Bilderstöckchen          ;Schiefersburger Weg ggü. Hs 40;in Fahrtrichtung Escher Straße
+41;30;30;41   Dellbrück                ;Paffrather Str. Höhe Hs-Nr. 34;in Fahrtrichtung Waltherstr.
+42;30;30;42   Dellbrück                ;Paffrather Str. Höhe Hs-Nr. 34;in FR. Bergisch Gladbach-Hand
+43;50;50;43   Buchheim                 ;Herler Ring Höhe Laterne Nr.15;in Fahrtrichtung Berg.Gladb.Straße
+44;50;50;44   Buchheim                 ;Herler Ring Höhe Laterne Nr.15;in Fahrtrichtung Höhenberg
+45;50;50;45   Dellbrück                ;Berg.-Gladbacher Str. 837-835 ;in Fahrtrichtung Stadtauswärts
+46;50;50;46   Dellbrück                ;Berg.-Gladbacher Str. 837-835 ;in Fahrtrichtung Stadteinwärts
+47;30;30;47   Bilderstöckchen          ;Geldernstraße 63 Laterne Nr.42;in Fahrtrichtung Parkgürtel
+48;30;30;48   Bilderstöckchen          ;Geldernstraße 63 Laterne Nr.42;in Fahrtrichtung Escher Straße
+49;50;50;49   Neuehrenfeld             ;Äußere Kanalstraße, Laterne 88;in Fahrtrichtung Iltisstraße
+50;50;50;50   Neuehrenfeld             ;Äußere Kanalstraße, Laterne 88;in Fahrtrichtung Subbelrather Str.
+51;30;30;51   Bilderstöckchen          ;Escher Straße Haus-Nr. 152-154;in Fahrtrichtung Parkgürtel
+52;30;30;52   Bilderstöckchen          ;Escher Straße Haus-Nr. 152-154;in Fahrtrichtung Geldernstraße
+53;30;30;53   Bilderstöckchen          ;Schiefersburger Weg 40        ;in Fahrtrichtung Escher Straße
+54;30;30;54   Bilderstöckchen          ;Schiefersburger Weg 40        ;in Fahrtrichtung Longericher Straße
+55;60;60;55   Eil                      ;Heumarer Mauspf.Höhe Hirschgr.;in Fahrtrichtung Rath/Heumar
+56;60;60;56   Eil                      ;Heumarer Mauspf.Höhe Hirschgr.;in Fahrtrichtung Grengel
+57;50;50;57   Gremberghoven            ;Frankfurter Straße Höhe S-Bahn;in Fahrtrichtung Porz
+58;50;50;58   Gremberghoven            ;Frankfurter Straße Höhe S-Bahn;in Fahrtrichtung Ostheim
+60;30;30;60   Neustadt/Nord            ;Kaiser-Wilhelm-Ring 17-21     ;in Fahrtrichtung Rudolfplatz
+61;30;30;61   Neustadt/Nord            ;Kaiser-Wilhelm-Ring 27-29     ;in Fahrtrichtung Ebertplatz
+62;30;30;62   Neustadt/Nord            ;Hansaring 52                  ;in Fahrtrichtung Ebertplatz
+63;30;30;63   Mülheim                  ;Auenweg 173                   ;Fahrtrichtung Deutz-Mülheimer Str.
+64;30;30;64   Mülheim                  ;Auenweg 173                   ;in Fahrtrichtung Deutz
+97;60;60;97   BAB 1, km 407,075 (MQ1)  ;Rheinbrücke                   ;in Fahrtrichtung Dortmund
+98;60;60;98   BAB 1, km 406,750 (MQ2)  ;Rheinbrücke, Strommitte       ;in Fahrtrichtung Dortmund
+99;0;0;99   BAB 3, km 0,85           ;AS Königsforst / AK Köln-Ost  ;in Fahrtrichtung Oberhausen
+971;60;60;971  BAB 1, km 407,075 (MQ1)  ;Rheinbrücke in Höhe Rheinauen ;in Fahrtrichtung Dortmund
+972;60;60;972  BAB 1, km 407,075 (MQ1)  ;Rheinbrücke in Höhe Rheinauen ;in Fahrtrichtung Dortmund
+973;60;60;973  BAB 1, km 407,075 (MQ1)  ;Rheinbrücke in Höhe Rheinauen ;in Fahrtrichtung Dortmund
+981;60;60;981  BAB 1, km 406,750 (MQ2)  ;Rheinbrücke, Strommitte       ;in Fahrtrichtung Dortmund
+982;60;60;982  BAB 1, km 406,750 (MQ2)  ;Rheinbrücke, Strommitte       ;in Fahrtrichtung Dortmund
+983;60;60;983  BAB 1, km 406,750 (MQ2)  ;Rheinbrücke, Strommitte       ;in Fahrtrichtung Dortmund

@@ -1,0 +1,14 @@
+Standortkürzel;erlaubte Geschw. PKW;erlaubte Geschw. LKW;tadtteil Tatort (tw. beginnend mit zwei Buchstaben = alternativ Standortcode);Tatstraße mit Hausnummer;Fahrtrichtung;
+0;50;50;     Riehler Straße           ;Kreuzung Elsa-Brändström-Str. ;in Fahrtrichtung Riehl             ;   
+0;50;50;     Riehler Straße           ;Kreuzung Elsa-Brändström-Str. ;in Fahrtrichtung Ebertplatz        ;   
+0;50;50;     Amsterdamer Straße       ;Kreuzung Riehler Straße       ;Fahrtrichtung Elsa-Brändström-Str. ;   
+0;50;50;     Elsa-Brändström-Straße   ;Kreuzung Riehler Straße       ;in Fahrtrichtung AS Zoobrücke      ;   
+0;50;50;     Boltensternstraße        ;in Höhe Barbarastr.,Köln-Riehl;in Fahrtrichtung Industriestraße   ;   
+3;70;70;     Venloer Straße (B59)     ;Anschlussstelle BAB 1         ;in Fahrtrichtung Koblenz           ;   
+3;70;60;     Venloer Straße (B59)     ;Anschlussstelle BAB 1         ;in Fahrtrichtung Pulheim           ;   
+3;70;60;     Venloer Straße (B59)     ;Anschlussstelle BAB 1         ;in Fahrtrichtung Köln              ;   
+0;50;50;     Boltensternstraße        ;in Höhe Barbarastr.,Köln-Riehl;in Fahrtrichtung An der Schanz     ;   
+3;70;60;     Düsseldorfer Straße (B8) ;ggü. Haus Nr.491, Stammheim   ;in Fahrtr.Friedrich-Ebert-Str.(Lev);   
+3;70;60;     Düsseldorfer Straße (B8) ;in Höhe Haus Nr.491, Stammheim;in Fahrtrichtung Clevischer Ring   ;   
+3;50;50;     Stammheimer Ring         ;in Höhe Haus Nr.17, Stammheim ;in Fahrtr. Dünnwalder Kommunalweg  ;   
+3;50;50;     Dünnw. Kommunalweg (L101);gegenüber Haus Nr.6, Stammheim;in Fahrtrichtung Stammheimer Ring  ;   

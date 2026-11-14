@@ -1,0 +1,1376 @@
+{
+ "berlin": 33401,
+ "berlin_anlagen": [
+  {
+   "datei": "anlage1_2017.pdf",
+   "seiten": 162,
+   "zeilen": 9540,
+   "uebersprungen": 0,
+   "uebersprungen_beispiele": [],
+   "geteilte_zellen": 0,
+   "farbige_zeilen": 138,
+   "farbig_beispiele": [
+    "S. 1, Abschnittsbereich: 33",
+    "S. 3, Abschnittsbereich: 33",
+    "S. 3, Abschnittsbereich: 33",
+    "S. 3, Abschnittsbereich: 21",
+    "S. 3, Abschnittsbereich: 66",
+    "S. 4, Abschnittsbereich: 33",
+    "S. 5, Messungen: 1.309",
+    "S. 6, Abschnittsbereich: 54",
+    "S. 7, Abschnittsbereich: 33",
+    "S. 10, bis 20 km/h: 47"
+   ],
+   "fehler": 0,
+   "fehler_beispiele": [],
+   "jahr": 2017,
+   "andere_jahre": 0
+  },
+  {
+   "datei": "anlage2_2018.pdf",
+   "seiten": 63,
+   "zeilen": 9255,
+   "uebersprungen": 0,
+   "uebersprungen_beispiele": [],
+   "geteilte_zellen": 0,
+   "farbige_zeilen": 144,
+   "farbig_beispiele": [
+    "S. 1, Verwaltungsbezirk: Spandau",
+    "S. 1, Richtung: Südwesten/Gatower Str.",
+    "S. 1, Direktionsbereich: 2",
+    "S. 1, Abschnittsbereich: 21",
+    "S. 1, Straßenname: Altstädter Ring",
+    "S. 1, zwischen: Jüdenstr.",
+    "S. 1, Verwaltungsbezirk: Spandau",
+    "S. 1, Richtung: Nordosten/Falkenseer Platz",
+    "S. 1, erlaubte Geschwindigkeit: 50",
+    "S. 1, Datum: 05.01.2018"
+   ],
+   "fehler": 0,
+   "fehler_beispiele": [],
+   "jahr": 2018,
+   "andere_jahre": 0
+  },
+  {
+   "datei": "anlage3_2019.pdf",
+   "seiten": 52,
+   "zeilen": 9150,
+   "uebersprungen": 0,
+   "uebersprungen_beispiele": [],
+   "geteilte_zellen": 0,
+   "farbige_zeilen": 2,
+   "farbig_beispiele": [
+    "S. 1, über 20 km/h: 1",
+    "S. 1, über 20 km/h: 0"
+   ],
+   "fehler": 0,
+   "fehler_beispiele": [],
+   "jahr": 2019,
+   "andere_jahre": 0
+  },
+  {
+   "datei": "anlage4_2020.pdf",
+   "seiten": 11,
+   "zeilen": 5456,
+   "uebersprungen": 1,
+   "uebersprungen_beispiele": [
+    "S. 11: Stand: 05.10.2020"
+   ],
+   "geteilte_zellen": 0,
+   "farbige_zeilen": 1,
+   "farbig_beispiele": [
+    "S. 11, Straßenname: Stand: 05.10.2020"
+   ],
+   "fehler": 0,
+   "fehler_beispiele": [],
+   "jahr": 2020,
+   "andere_jahre": 0
+  }
+ ],
+ "aachen": 3467,
+ "aachen_dateien": 38,
+ "aachen_zeitraum": [
+  "2020-06-02",
+  "2026-09-30"
+ ],
+ "hinweise": [
+  "1510 doppelte Zeilen entfernt (Excel und CSV)"
+ ],
+ "koeln": {
+  "kontrollen": 44633,
+  "dateien": [
+   {
+    "datei": "geschwindigkeitsueberwachung-koeln-2017-bis-2022__Geschwindigkeitsüberwachung_Köln_ab_2017_bis_2022.csv",
+    "zeilen": 3550692,
+    "mobil": 1361405,
+    "fest": 1979836,
+    "kreuzung": 104648,
+    "unbekannt": 104788,
+    "unlesbar": 15,
+    "kontrollen": 29009
+   },
+   {
+    "datei": "geschwindigkeitsueberwachung-koeln-2023__Geschwindigkeitsüberwachung_Köln_ab_2023.csv",
+    "zeilen": 470238,
+    "mobil": 209239,
+    "fest": 232830,
+    "kreuzung": 27626,
+    "unbekannt": 0,
+    "unlesbar": 543,
+    "kontrollen": 5120
+   },
+   {
+    "datei": "geschwindigkeitsueberwachung-koeln-2024__Geschwindigkeitsüberwachung_Köln_ab_2024.csv",
+    "zeilen": 414643,
+    "mobil": 218318,
+    "fest": 175045,
+    "kreuzung": 21222,
+    "unbekannt": 0,
+    "unlesbar": 58,
+    "kontrollen": 5406
+   },
+   {
+    "datei": "geschwindigkeitsueberwachung-koeln-2025__Geschwindigkeitsüberwachung_Köln_ab_2025.csv",
+    "zeilen": 451735,
+    "mobil": 202074,
+    "fest": 226668,
+    "kreuzung": 17024,
+    "unbekannt": 0,
+    "unlesbar": 5969,
+    "kontrollen": 5098
+   }
+  ],
+  "hinweise": [
+   "geschwindigkeitsueberwachung-koeln-2023 S-01: Tabelle ohne Kürzel – 55 von 55 Zeilen über den Text aus anderen Jahren zugeordnet",
+   "geschwindigkeitsueberwachung-koeln-2023 S-02: Tabelle ohne Kürzel – 2377 von 2377 Zeilen über den Text aus anderen Jahren zugeordnet",
+   "geschwindigkeitsueberwachung-koeln-2023 S-04: Tabelle ohne Kürzel – 13 von 13 Zeilen über den Text aus anderen Jahren zugeordnet",
+   "geschwindigkeitsueberwachung-koeln-2023 S-11: Tabelle ohne Kürzel – 6 von 6 Zeilen über den Text aus anderen Jahren zugeordnet",
+   "geschwindigkeitsueberwachung-koeln-2017-bis-2022: 175 Kontrollen an 31 Standorten ohne Eintrag in der Standorttabelle (ohne Lage)"
+  ]
+ },
+ "bonn": {
+  "kontrollen": 34128,
+  "dateien": [
+   {
+    "datei": "bussgelder-fliessender-verkehr-2016__Bußgelder_fließender_Verkehr_2016.csv",
+    "kodierung": "mac_roman",
+    "zeilen": 156880
+   },
+   {
+    "datei": "bussgelder-fliessender-verkehr-2017__Bussgelder_fliessender_Verkehr_2017.csv",
+    "kodierung": "cp1252",
+    "zeilen": 180755
+   },
+   {
+    "datei": "bussgelder-fliessender-verkehr-2018__Bußgelder_fließender_Verkehr_2018.csv",
+    "kodierung": "cp1252",
+    "zeilen": 169854
+   },
+   {
+    "datei": "bussgelder-fliessender-verkehr-2019__Bußgelder_fließender_Verkehr_2019.csv",
+    "kodierung": "cp1252",
+    "zeilen": 142979
+   },
+   {
+    "datei": "bussgelder-fliessender-verkehr-20206ac11__Bußgelder_fließender_Verkehr_2020.csv",
+    "kodierung": "utf-8-sig",
+    "zeilen": 173822
+   },
+   {
+    "datei": "bussgelder-fliessender-verkehr-2021__Bußgelder_fließender_Verkehr_2021.csv",
+    "kodierung": "cp1252",
+    "zeilen": 168348
+   },
+   {
+    "datei": "bussgelder-fliessender-verkehr-2022b723d__Bußgelder_fließender_Verkehr_2022.csv",
+    "kodierung": "cp1252",
+    "zeilen": 209370
+   },
+   {
+    "datei": "bussgelder-fliessender-verkehr-2023__Bußgelder_fließender_Verkehr_2023.csv",
+    "kodierung": "cp1252",
+    "zeilen": 215751
+   },
+   {
+    "datei": "bussgelder-fliessender-verkehr-2024__Bußgelder_fließender_Verkehr_2024.csv",
+    "kodierung": "utf-8-sig",
+    "zeilen": 181845
+   }
+  ],
+  "hinweise": [],
+  "unlesbar": 0,
+  "feste_anlagen": [
+   "Bonn, B9 Mainzer Straße Bahnüberführung FR Mehlem",
+   "Bonn, B9 Mainzer Straße Höhe KfW FR Bad Godesberg",
+   "Bonn, Bad Godesberger Straßentunnel FR Bonn (Norden)",
+   "Bonn, Bad Godesberger Straßentunnel FR Mehlem (Süden)",
+   "Bonn, Konrad-Adenauer-Damm Höhe Lichtmast Nr. 86 Fahrtrichtung Derlestraße",
+   "Bonn, L261 Reichsstraße Höhe Hubertusstraße FR Lengsdorf",
+   "Bonn, L261 Reichsstraße Höhe Hubertusstraße FR Röttgen",
+   "Bonn, Ludwig-Erhard-Allee Höhe Herbert-Wehner-Platz Fahrtrichtung BAB 562",
+   "Bonn, Ludwig-Erhard-Allee Höhe Herbert-Wehner-Platz Fahrtrichtung Kennedyallee"
+  ],
+  "verstoesse_fest": 526379,
+  "verstoesse_mobil": 1073225
+ },
+ "schonungen": {
+  "kontrollen": 123,
+  "dateien": [
+   {
+    "datei": "verkehrsstatistik-jan-2025__Verkehrsstatistik-Jan_-2025.pdf",
+    "messungen": 5,
+    "doppelt": 0
+   },
+   {
+    "datei": "verkehrsstatistik-juni-2026__Verkehrsstatistik-Juni-2026.pdf",
+    "messungen": 4,
+    "doppelt": 0
+   },
+   {
+    "datei": "verkehrsstatistik-kvue-2022-08__Verkehrsstatistik-KVUe-2022-08.docx",
+    "messungen": 6,
+    "doppelt": 0
+   },
+   {
+    "datei": "verkehrsstatistik-kvue-2022-08__Verkehrsstatistik-KVUe-2022-08.pdf",
+    "messungen": 0,
+    "doppelt": 6
+   },
+   {
+    "datei": "verkehrsstatistik-kvue-2022-10__Verkehrsstatistik-KVUe-2022-10.pdf",
+    "messungen": 7,
+    "doppelt": 0
+   },
+   {
+    "datei": "verkehrsstatistik-kvue-2022-11__Verkehrsstatistik-KVUe-2022-11.pdf",
+    "messungen": 4,
+    "doppelt": 0
+   },
+   {
+    "datei": "verkehrsstatistik-kvue-2023-04__Verkehrsstatistik-KVUe-2023-04.docx",
+    "messungen": 6,
+    "doppelt": 0
+   },
+   {
+    "datei": "verkehrsstatistik-kvue-2023-06__Verkehrsstatistik-KVUe-2023-06.pdf",
+    "messungen": 6,
+    "doppelt": 0
+   },
+   {
+    "datei": "verkehrsstatistik-kvue-2023-09__Verkehrsstatistik-KVUe-2023-09.pdf",
+    "messungen": 5,
+    "doppelt": 0
+   },
+   {
+    "datei": "verkehrsstatistik-kvue-2024-02__Verkehrsstatistik-KVUe-2024-02.pdf",
+    "messungen": 5,
+    "doppelt": 0
+   },
+   {
+    "datei": "verkehrsstatistik-kvue-2024-03__Verkehrsstatistik-KVUe-2024-03.pdf",
+    "messungen": 7,
+    "doppelt": 0
+   },
+   {
+    "datei": "verkehrsstatistik-kvue-2024-06__Verkehrsstatistik-KVUe-2024-06.docx",
+    "messungen": 4,
+    "doppelt": 0
+   },
+   {
+    "datei": "verkehrsstatistik-kvue-2025-02docx__Verkehrsstatistik-KVUe-2025-02docx.pdf",
+    "messungen": 5,
+    "doppelt": 0
+   },
+   {
+    "datei": "verkehrsstatistik-kvue-2025-12__Verkehrsstatistik-KVUe-2025-12.pdf",
+    "messungen": 5,
+    "doppelt": 0
+   },
+   {
+    "datei": "verkehrsstatistik-kvue-2026-01__Verkehrsstatistik-KVUe-2026-01.pdf",
+    "messungen": 3,
+    "doppelt": 0
+   },
+   {
+    "datei": "verkehrsstatistik-kvue-2026-02__Verkehrsstatistik-KVUe-2026-02.pdf",
+    "messungen": 4,
+    "doppelt": 0
+   },
+   {
+    "datei": "verkehrsstatistik-kvue-2026-03__Verkehrsstatistik-KVUe-2026-03.pdf",
+    "messungen": 6,
+    "doppelt": 0
+   },
+   {
+    "datei": "verkehrsstatistik-kvue-2026-04-002__Verkehrsstatistik-KVUe-2026-04-002.pdf",
+    "messungen": 6,
+    "doppelt": 0
+   },
+   {
+    "datei": "verkehrsstatistik-kvue-maerz-2025__Verkehrsstatistik-KVUe-Maerz-2025.pdf",
+    "messungen": 5,
+    "doppelt": 0
+   },
+   {
+    "datei": "verkehrsstatistik-kvue-okt-und-nov-2025__Verkehrsstatistik-KVUe-Okt_-und-Nov_-2025.pdf",
+    "messungen": 9,
+    "doppelt": 0
+   },
+   {
+    "datei": "verkehrsstatistik-kvue-september-2025__Verkehrsstatistik-KVUe-September-2025.pdf",
+    "messungen": 4,
+    "doppelt": 0
+   },
+   {
+    "datei": "verkehrsstatistik-mai-2020__Verkehrsstatistik_Mai_2020.pdf",
+    "messungen": 12,
+    "doppelt": 0
+   },
+   {
+    "datei": "verkehrsstatistik-mobiles-messgeraet-hauptstrasse-schonungen__Verkehrsstatistik_mobiles_Messgeraet__Hauptstrasse_Schonungen.pdf",
+    "messungen": 0,
+    "doppelt": 0
+   },
+   {
+    "datei": "verkehrsstatistik__Verkehrsstatistik.pdf",
+    "messungen": 5,
+    "doppelt": 0
+   }
+  ],
+  "hinweise": [
+   "verkehrsstatistik-kvue-2022-10__Verkehrsstatistik-KVUe-2022-10.pdf: Klassen passen nicht zu 1 Verstößen (Schonungen, Schrotberg/Bereich Hs.-Nr. 1, 01.03.2023) – ohne Stufen",
+   "verkehrsstatistik-kvue-september-2025__Verkehrsstatistik-KVUe-September-2025.pdf: Klassen passen nicht zu 6 Verstößen (Forst, Blumenstraße / Bereich ggü. Hs.-N, 19.09.2025) – ohne Stufen"
+  ]
+ },
+ "oberderdingen": {
+  "kontrollen": 150,
+  "dateien": [
+   {
+    "datei": "geschwindigkeitsmessungen-1-quartal-2024__geschwindigkeitsmessungen-1-quartal-2024.pdf",
+    "zeilen": 57
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-1-quartal-2026__geschwindigkeitsmessungen-1-quartal-2026.pdf",
+    "zeilen": 57
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-4-quartal-2025__geschwindigkeitsmessungen-4-quartal-2025.pdf",
+    "zeilen": 43
+   }
+  ],
+  "hinweise": [],
+  "beide_richtungen": 7
+ },
+ "butzbach": {
+  "kontrollen": 1393,
+  "dateien": [
+   {
+    "datei": "geschwindigkeitsmessungen-2018-august__Geschwindigkeitsmessungen-2018-August.pdf",
+    "kontrollen": 9
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-2018-juni__Geschwindigkeitsmessungen-2018-Juni.pdf",
+    "kontrollen": 14
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-2018-september__Geschwindigkeitsmessungen-2018-August-1.pdf",
+    "kontrollen": 0
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-april-2021__sb_oa-messung-2104_pdf.pdf",
+    "kontrollen": 14
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-april-2022__sb_oa-messung-2204.pdf",
+    "kontrollen": 10
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-april-2023__sb_oa-messung-2304.pdf",
+    "kontrollen": 5
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-april-2024__sb_oa-messung-2404.pdf",
+    "kontrollen": 9
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-april-2025__sb_oa-messung-2504.pdf",
+    "kontrollen": 13
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-april-2026__sb_oa-messung-2604.pdf",
+    "kontrollen": 16
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-august-2019__sb_oa-messung-1508.pdf",
+    "kontrollen": 12
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-august-2020__sb_oa-messung-1508-1.pdf",
+    "kontrollen": 17
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-august-2021__sb_oa-messung-2108.pdf",
+    "kontrollen": 8
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-august-2022__August-22.pdf",
+    "kontrollen": 8
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-august-2024__sb_oa-messung-2408.pdf",
+    "kontrollen": 11
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-august-2025__sb_oa-messung-2508.pdf",
+    "kontrollen": 5
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-august-2026__sb_oa-messung-2608.pdf",
+    "kontrollen": 0
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-dezember-2019__sb_oa-messung-1512-1.pdf",
+    "kontrollen": 22
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-dezember-2020__sb_oa-messung-1512_pdf.pdf",
+    "kontrollen": 9
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-dezember-2021__sb_oa-messung-2112.pdf",
+    "kontrollen": 16
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-dezember-2022__sb_oa-messung-2212.pdf",
+    "kontrollen": 2
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-dezember-2023__sb_oa-messung-2312.pdf",
+    "kontrollen": 5
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-dezember-2024__sb_oa-messung-24012.pdf",
+    "kontrollen": 8
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-dezember-2025__sb_oa-messung-2512.pdf",
+    "kontrollen": 4
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-februar-2020__sb_oa-messung-1502-1.pdf",
+    "kontrollen": 32
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-februar-2021__sb_oa-messung-2102_pdf.pdf",
+    "kontrollen": 7
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-februar-2022__sb_oa-messung-2202.pdf",
+    "kontrollen": 19
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-februar-2023__sb_oa-messung-2302.pdf",
+    "kontrollen": 1
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-februar-2024__sb_oa-messung-2402.pdf",
+    "kontrollen": 10
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-februar-2025__sb_oa-messung-2502.pdf",
+    "kontrollen": 8
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-februar-2026__sb_oa-messung-2602.pdf",
+    "kontrollen": 8
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-januar-2022__sb_oa-messung-2201.pdf",
+    "kontrollen": 20
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-januar-2023__sb_oa-messung-2301.pdf",
+    "kontrollen": 5
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-januar-2024__sb_oa-messung-2401.pdf",
+    "kontrollen": 7
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-januar-2025__sb_oa-messung-2501.pdf",
+    "kontrollen": 16
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-januar-2026__sb_oa-messung-2601.pdf",
+    "kontrollen": 10
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-juli-2019__sb_oa-messung-1507.pdf",
+    "kontrollen": 3
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-juli-2021__sb_oa-messung-2107.pdf",
+    "kontrollen": 11
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-juli-2022__Juli-22.pdf",
+    "kontrollen": 21
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-juli-2023__sb_oa-messung-2307.pdf",
+    "kontrollen": 11
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-juli-2024__sb_oa-messung-2407.pdf",
+    "kontrollen": 11
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-juli-2025__sb_oa-messung-2507.pdf",
+    "kontrollen": 0
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-juli-2026__sb_oa-messung-2607.pdf",
+    "kontrollen": 5
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-juni-2019__sb_oa-messung-1506.pdf",
+    "kontrollen": 9
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-juni-2021__sb_oa-messung-2106.pdf",
+    "kontrollen": 11
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-juni-2022__Juni-22.pdf",
+    "kontrollen": 12
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-juni-2023__sb_oa-messung-2306.pdf",
+    "kontrollen": 18
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-juni-2024__sb_oa-messung-2406.pdf",
+    "kontrollen": 12
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-juni-2025__sb_oa-messung-2506.pdf",
+    "kontrollen": 3
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-juni-2026__sb_oa-messung-2606.pdf",
+    "kontrollen": 4
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-maerz-2020__sb_oa-messung-1503-1.pdf",
+    "kontrollen": 15
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-maerz-2022__sb_oa-messung-2203.pdf",
+    "kontrollen": 17
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-maerz-2024__sb_oa-messung-2403.pdf",
+    "kontrollen": 0
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-maerz-2025__sb_oa-messung-2503.pdf",
+    "kontrollen": 17
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-maerz-2026__sb_oa-messung-2603.pdf",
+    "kontrollen": 19
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-mai-2019__sb_oa-messung-1505.pdf",
+    "kontrollen": 12
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-mai-2021__sb_oa-messung-2105.pdf",
+    "kontrollen": 4
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-mai-2022__Mai-22.pdf",
+    "kontrollen": 25
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-mai-2023__sb_oa-messung-2305.pdf",
+    "kontrollen": 22
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-mai-2024__sb_oa-messung-2405.pdf",
+    "kontrollen": 3
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-mai-2025__sb_oa-messung-2505.pdf",
+    "kontrollen": 19
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-mai-2026__sb_oa-messung-2605.pdf",
+    "kontrollen": 6
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-november-2019__sb_oa-messung-1511-1.pdf",
+    "kontrollen": 31
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-november-2020__sb_oa-messung-1511_pdf.pdf",
+    "kontrollen": 19
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-november-2021__sb_oa-messung-2111.pdf",
+    "kontrollen": 8
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-november-2022__sb_oa-messung-2211.pdf",
+    "kontrollen": 15
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-november-2023__sb_oa-messung-2311.pdf",
+    "kontrollen": 11
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-november-2024__sb_oa-messung-24011.pdf",
+    "kontrollen": 19
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-november-2025__sb_oa-messung-2511.pdf",
+    "kontrollen": 8
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-oktober-2019__sb_oa-messung-1510-1.pdf",
+    "kontrollen": 18
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-oktober-2020__sb_oa-messung-1510_pdf.pdf",
+    "kontrollen": 19
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-oktober-2021__sb_oa-messung-2110.pdf",
+    "kontrollen": 3
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-oktober-2022__sb_oa-messung-2210.pdf",
+    "kontrollen": 4
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-oktober-2024__sb_oa-messung-24010.pdf",
+    "kontrollen": 16
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-oktober-2025__sb_oa-messung-2510.pdf",
+    "kontrollen": 19
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-september-2019__sb_oa-messung-1509-1.pdf",
+    "kontrollen": 13
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-september-2020__sb_oa-messung-1509-2.pdf",
+    "kontrollen": 19
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-september-2021__sb_oa-messung-2109.pdf",
+    "kontrollen": 7
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-september-2022__sb_oa-messung-2209.pdf",
+    "kontrollen": 8
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-september-2024__sb_oa-messung-2409.pdf",
+    "kontrollen": 16
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-september-2025__sb_oa-messung-2509.pdf",
+    "kontrollen": 18
+   },
+   {
+    "datei": "geschwindigkeitsmessungen-im-september-2026__sb_oa-messung-2609.pdf",
+    "kontrollen": 15
+   },
+   {
+    "datei": "sb-oa-messung-1501__sb_oa-messung-1501.pdf",
+    "kontrollen": 2
+   },
+   {
+    "datei": "sb-oa-messung-1502__sb_oa-messung-1502.pdf",
+    "kontrollen": 28
+   },
+   {
+    "datei": "sb-oa-messung-1503__sb_oa-messung-1503.pdf",
+    "kontrollen": 25
+   },
+   {
+    "datei": "sb-oa-messung-1509__sb_oa-messung-1509.pdf",
+    "kontrollen": 15
+   },
+   {
+    "datei": "sb-oa-messung-1510-pdf__Geschwindigkeitsmessungen-Oktober-2018.pdf",
+    "kontrollen": 18
+   },
+   {
+    "datei": "sb-oa-messung-1510__sb_oa-messung-1510.pdf",
+    "kontrollen": 24
+   },
+   {
+    "datei": "sb-oa-messung-1511-pdf__Geschwindigkeitsmessungen-November-2018.pdf",
+    "kontrollen": 23
+   },
+   {
+    "datei": "sb-oa-messung-1511__sb_oa-messung-1511.pdf",
+    "kontrollen": 25
+   },
+   {
+    "datei": "sb-oa-messung-1512__Geschwindigkeitsmessungen-Dezember-2018.pdf",
+    "kontrollen": 0
+   },
+   {
+    "datei": "sb-oa-messung-1512__sb_oa-messung-1512.pdf",
+    "kontrollen": 6
+   },
+   {
+    "datei": "sb-oa-messung-1601__sb_oa-messung-1601.pdf",
+    "kontrollen": 12
+   },
+   {
+    "datei": "sb-oa-messung-1602__sb_oa-messung-1602.pdf",
+    "kontrollen": 15
+   },
+   {
+    "datei": "sb-oa-messung-1603__sb_oa-messung-1603.pdf",
+    "kontrollen": 14
+   },
+   {
+    "datei": "sb-oa-messung-1604__sb_oa-messung-1604-1.pdf",
+    "kontrollen": 28
+   },
+   {
+    "datei": "sb-oa-messung-1604__sb_oa-messung-1604.pdf",
+    "kontrollen": 0
+   },
+   {
+    "datei": "sb-oa-messung-1605__sb_oa-messung-1605.pdf",
+    "kontrollen": 25
+   },
+   {
+    "datei": "sb-oa-messung-1606__sb_oa-messung-1606.pdf",
+    "kontrollen": 24
+   },
+   {
+    "datei": "sb-oa-messung-1607__sb_oa-messung-1607.pdf",
+    "kontrollen": 12
+   },
+   {
+    "datei": "sb-oa-messung-1608__sb_oa-messung-1608.pdf",
+    "kontrollen": 11
+   },
+   {
+    "datei": "sb-oa-messung-1609__sb_oa-messung-1609.pdf",
+    "kontrollen": 19
+   },
+   {
+    "datei": "sb-oa-messung-1610__sb_oa-messung-1610.pdf",
+    "kontrollen": 15
+   },
+   {
+    "datei": "sb-oa-messung-1611__sb_oa-messung-1611.pdf",
+    "kontrollen": 19
+   },
+   {
+    "datei": "sb-oa-messung-1612__sb_oa-messung-1612.pdf",
+    "kontrollen": 6
+   },
+   {
+    "datei": "sb-oa-messung-1701__sb_oa-messung-1701.pdf",
+    "kontrollen": 2
+   },
+   {
+    "datei": "sb-oa-messung-1703__sb_oa-messung-1703.pdf",
+    "kontrollen": 16
+   },
+   {
+    "datei": "sb-oa-messung-1704__sb_oa-messung-1704.pdf",
+    "kontrollen": 10
+   },
+   {
+    "datei": "sb-oa-messung-1705__sb_oa-messung-1705.pdf",
+    "kontrollen": 24
+   },
+   {
+    "datei": "sb-oa-messung-1706__sb_oa-messung-1706.pdf",
+    "kontrollen": 12
+   },
+   {
+    "datei": "sb-oa-messung-1707__sb_oa-messung-1707.pdf",
+    "kontrollen": 7
+   },
+   {
+    "datei": "sb-oa-messung-1708__sb_oa-messung-1708.pdf",
+    "kontrollen": 20
+   }
+  ],
+  "hinweise": [
+   "geschwindigkeitsmessungen-im-april-2021: Verwarnungen/Bußgelder fehlen (Trais-Münzenberg, Wetterstraße)",
+   "geschwindigkeitsmessungen-im-april-2021: Verwarnungen/Bußgelder fehlen (Rockenberg, Alexander-Weitzel-Sr.)",
+   "geschwindigkeitsmessungen-im-april-2021: Verwarnungen/Bußgelder fehlen (Butzbach, Küchengartenweg)",
+   "geschwindigkeitsmessungen-im-april-2021: Verwarnungen/Bußgelder fehlen (Butzbach, Ludwigstr.)",
+   "geschwindigkeitsmessungen-im-april-2021: Verwarnungen/Bußgelder fehlen (Oppershofen, Steinfurther Str.)",
+   "geschwindigkeitsmessungen-im-april-2021: Verwarnungen/Bußgelder fehlen (Butzbach, J.-F.-Kennedy Str.)",
+   "geschwindigkeitsmessungen-im-april-2021: Verwarnungen/Bußgelder fehlen (Butzbach, Hoch-Weiseler Str.)",
+   "geschwindigkeitsmessungen-im-april-2021: Verwarnungen/Bußgelder fehlen (Gambach, Butzbacher Str.)",
+   "geschwindigkeitsmessungen-im-april-2021: Verwarnungen/Bußgelder fehlen (Rockenberg, Untergasse)",
+   "geschwindigkeitsmessungen-im-april-2021: Verwarnungen/Bußgelder fehlen (Butzbach, Tepler Str.)",
+   "geschwindigkeitsmessungen-im-april-2021: Verwarnungen/Bußgelder fehlen (Rockenberg, Bad Nauheimer Str.)",
+   "geschwindigkeitsmessungen-im-april-2022: Verwarnungen/Bußgelder fehlen (Wölfersheim, Hauptstr.)",
+   "geschwindigkeitsmessungen-im-april-2022: Verwarnungen/Bußgelder fehlen (Wölfersheim, Hauptstraße)",
+   "geschwindigkeitsmessungen-im-april-2022: Verwarnungen/Bußgelder fehlen (Butzbach, Taunusstr.)",
+   "geschwindigkeitsmessungen-im-april-2022: Verwarnungen/Bußgelder fehlen (Oppershofen, Steinfurther Str.)",
+   "geschwindigkeitsmessungen-im-april-2022: Verwarnungen/Bußgelder fehlen (Oppershofen, Södeler Str.)",
+   "geschwindigkeitsmessungen-im-april-2023: Verwarnungen/Bußgelder fehlen (Wohnbach, L3136)",
+   "geschwindigkeitsmessungen-im-august-2019: Verwarnungen/Bußgelder fehlen (Butzbach, Hausener Str. / Kinderheim)",
+   "geschwindigkeitsmessungen-im-august-2019: Verwarnungen/Bußgelder fehlen (Oppershofen, Södeler Str. / Ecke Roßenst)",
+   "geschwindigkeitsmessungen-im-august-2019: Verwarnungen/Bußgelder fehlen (Rockenberg, Münzenberger Str. / Ecke Am )",
+   "geschwindigkeitsmessungen-im-august-2019: Verwarnungen/Bußgelder fehlen (Butzbach, L 3134)",
+   "geschwindigkeitsmessungen-im-august-2019: Verwarnungen/Bußgelder fehlen (Münzenberg, Steinbergstr.)",
+   "geschwindigkeitsmessungen-im-august-2019: Verwarnungen/Bußgelder fehlen (Gambach, Nelkenweg)",
+   "geschwindigkeitsmessungen-im-august-2019: Verwarnungen/Bußgelder fehlen (Hoch-Weisel, Backhausstr. / Höhe Erlenwe)",
+   "geschwindigkeitsmessungen-im-august-2019: Verwarnungen/Bußgelder fehlen (Butzbach, Tepler Str.)",
+   "geschwindigkeitsmessungen-im-august-2020: Verwarnungen/Bußgelder fehlen (Oppershofen / Hauptstraße BHS)",
+   "geschwindigkeitsmessungen-im-august-2020: Verwarnungen/Bußgelder fehlen (Trais Münzenberg / Wetterstr.)",
+   "geschwindigkeitsmessungen-im-august-2020: Verwarnungen/Bußgelder fehlen (Gambach / Brückfeldstr. 10)",
+   "geschwindigkeitsmessungen-im-august-2020: Verwarnungen/Bußgelder fehlen (Nieder-Weisel / Butzbacher Str. BHS)",
+   "geschwindigkeitsmessungen-im-august-2020: Verwarnungen/Bußgelder fehlen (Butzbach / Wilhelm-Leuchner-Str. 22)",
+   "geschwindigkeitsmessungen-im-august-2020: Verwarnungen/Bußgelder fehlen (Butzbach / Ovid-Str.)",
+   "geschwindigkeitsmessungen-im-august-2020: Verwarnungen/Bußgelder fehlen (Nieder-Weisel / Am Waldhof - Kinderheim)",
+   "geschwindigkeitsmessungen-im-august-2020: Verwarnungen/Bußgelder fehlen (Butzbach / Küchengartenweg - Schule)",
+   "geschwindigkeitsmessungen-im-august-2020: Verwarnungen/Bußgelder fehlen (Rockenberg / Alexander-Weitzel-Str.)",
+   "geschwindigkeitsmessungen-im-august-2020: Verwarnungen/Bußgelder fehlen (Butzbach / Bismarckstr.)",
+   "geschwindigkeitsmessungen-im-august-2020: Verwarnungen/Bußgelder fehlen (Oppershofen / Steinfurther Str.)",
+   "geschwindigkeitsmessungen-im-august-2020: Verwarnungen/Bußgelder fehlen (Trais Münzenberg / Wetterstr.)",
+   "geschwindigkeitsmessungen-im-august-2021: Verwarnungen/Bußgelder fehlen (Pohl-Göns, Gönser Str.)",
+   "geschwindigkeitsmessungen-im-august-2021: Verwarnungen/Bußgelder fehlen (Butzbach, Griedeler Str.)",
+   "geschwindigkeitsmessungen-im-august-2021: Verwarnungen/Bußgelder fehlen (Rockenberg, Münzenberger Str. / Am Dresc)",
+   "geschwindigkeitsmessungen-im-august-2021: Verwarnungen/Bußgelder fehlen (Rockenberg, Untergasse)",
+   "geschwindigkeitsmessungen-im-august-2021: Verwarnungen/Bußgelder fehlen (Butzbach, Tepler Str. / Seedammweg)",
+   "geschwindigkeitsmessungen-im-august-2021: Verwarnungen/Bußgelder fehlen (Butzbach, Hoch-Weiseler Str.)",
+   "geschwindigkeitsmessungen-im-august-2022: Verwarnungen/Bußgelder fehlen (Berstadt, L 3136)",
+   "geschwindigkeitsmessungen-im-august-2022: Verwarnungen/Bußgelder fehlen (Butzbach, Weiseler Str.)",
+   "geschwindigkeitsmessungen-im-august-2022: Verwarnungen/Bußgelder fehlen (Butzbach, Küchengartenweg)",
+   "geschwindigkeitsmessungen-im-august-2022: Verwarnungen/Bußgelder fehlen (Rockenberg, Griedeler Str.)",
+   "geschwindigkeitsmessungen-im-august-2022: Verwarnungen/Bußgelder fehlen (Oppershofen, Steinfurther Str.)",
+   "geschwindigkeitsmessungen-im-august-2022: Verwarnungen/Bußgelder fehlen (Gambach, Brückfeldstr.)",
+   "geschwindigkeitsmessungen-im-august-2026__sb_oa-messung-2608.pdf: keine Tabellenzeilen",
+   "geschwindigkeitsmessungen-im-dezember-2019: Verwarnungen/Bußgelder fehlen (Butzbach - Tepler Str.)",
+   "geschwindigkeitsmessungen-im-dezember-2019: Verwarnungen/Bußgelder fehlen (Butzbach - Taunusstr.)",
+   "geschwindigkeitsmessungen-im-dezember-2019: Verwarnungen/Bußgelder fehlen (Butzbach - Gutenbergstr.)",
+   "geschwindigkeitsmessungen-im-dezember-2019: Verwarnungen/Bußgelder fehlen (Butzbach - Unterer Prinzenweg)",
+   "geschwindigkeitsmessungen-im-dezember-2019: Verwarnungen/Bußgelder fehlen (Pohl Göns - Gießener Str.)",
+   "geschwindigkeitsmessungen-im-dezember-2019: Verwarnungen/Bußgelder fehlen (Oppershofen - Södeler Str./ Höhenweg)",
+   "geschwindigkeitsmessungen-im-dezember-2019: Verwarnungen/Bußgelder fehlen (Rockenberg - Bad Nauheimer Str./BHS)",
+   "geschwindigkeitsmessungen-im-dezember-2019: Verwarnungen/Bußgelder fehlen (Butzbach - Hoch Weiseler Str.)",
+   "geschwindigkeitsmessungen-im-dezember-2019: Verwarnungen/Bußgelder fehlen (Münzenberg - Falkensteiner Str.)",
+   "geschwindigkeitsmessungen-im-dezember-2019: Verwarnungen/Bußgelder fehlen (Gambach - Brückfeldstr.)",
+   "geschwindigkeitsmessungen-im-dezember-2019: Verwarnungen/Bußgelder fehlen (Nieder Weisel - Zum Bahnhof)",
+   "geschwindigkeitsmessungen-im-dezember-2019: Verwarnungen/Bußgelder fehlen (Hausen - An der Landstr.)",
+   "geschwindigkeitsmessungen-im-dezember-2019: Verwarnungen/Bußgelder fehlen (Oppershofen - Steinfurther Str.)",
+   "geschwindigkeitsmessungen-im-dezember-2019: Verwarnungen/Bußgelder fehlen (Ober Hörgern - Licher Str.)",
+   "geschwindigkeitsmessungen-im-dezember-2019: Verwarnungen/Bußgelder fehlen (Pohl Göns - Bahnhofstr.)",
+   "geschwindigkeitsmessungen-im-dezember-2019: Verwarnungen/Bußgelder fehlen (Butzbach - Pohlgönser Str.)",
+   "geschwindigkeitsmessungen-im-dezember-2020: Verwarnungen/Bußgelder fehlen (Oppershofen, Schillerstr. / Ecke Tannenb)",
+   "geschwindigkeitsmessungen-im-dezember-2020: Verwarnungen/Bußgelder fehlen (Trais-Münzenberg, Wetterstr.)",
+   "geschwindigkeitsmessungen-im-dezember-2020: Verwarnungen/Bußgelder fehlen (Gambach, Butzbacher Str. / BHS)",
+   "geschwindigkeitsmessungen-im-dezember-2020: Verwarnungen/Bußgelder fehlen (Nieder-Weisel, Butzbacher Str. / BHS)",
+   "geschwindigkeitsmessungen-im-dezember-2020: Verwarnungen/Bußgelder fehlen (Butzbach, Tepler Str. / Seedammweg)",
+   "geschwindigkeitsmessungen-im-dezember-2020: Verwarnungen/Bußgelder fehlen (Butzbach, Breslauer Str.)",
+   "geschwindigkeitsmessungen-im-dezember-2020: Verwarnungen/Bußgelder fehlen (Butzbach, Kirchplatz)",
+   "geschwindigkeitsmessungen-im-dezember-2020: Verwarnungen/Bußgelder fehlen (Butzbach, J.-F.-Kennedy Str.)",
+   "geschwindigkeitsmessungen-im-dezember-2020: Verwarnungen/Bußgelder fehlen (Butzbach, Küchengartenweg)",
+   "geschwindigkeitsmessungen-im-dezember-2021: Verwarnungen/Bußgelder fehlen (Pohl-Göns, Gönser Str.)",
+   "geschwindigkeitsmessungen-im-dezember-2021: Verwarnungen/Bußgelder fehlen (Pohl-Göns, Gießener Str.)",
+   "geschwindigkeitsmessungen-im-dezember-2021: Verwarnungen/Bußgelder fehlen (Wölfersheim, Steingasse)",
+   "geschwindigkeitsmessungen-im-dezember-2021: Verwarnungen/Bußgelder fehlen (Münzenberg, Falkensteier Str.)",
+   "geschwindigkeitsmessungen-im-dezember-2021: Verwarnungen/Bußgelder fehlen (Gambach, Brückfeldstr. /BHS)",
+   "geschwindigkeitsmessungen-im-dezember-2021: Verwarnungen/Bußgelder fehlen (Oppershofen, Steinfurther Str.)",
+   "geschwindigkeitsmessungen-im-dezember-2021: Verwarnungen/Bußgelder fehlen (Rockenberg, Bad Nauheimer Str. / BHS)",
+   "geschwindigkeitsmessungen-im-dezember-2021: Verwarnungen/Bußgelder fehlen (Geisenheim, Seestr. / B455)",
+   "geschwindigkeitsmessungen-im-dezember-2021: Verwarnungen/Bußgelder fehlen (Berstadt, L3136 / BHS)",
+   "geschwindigkeitsmessungen-im-dezember-2022: Verwarnungen/Bußgelder fehlen (Wohnbach, L3136)",
+   "geschwindigkeitsmessungen-im-dezember-2023: Verwarnungen/Bußgelder fehlen (Gambach, Brückfeldstr.)",
+   "geschwindigkeitsmessungen-im-dezember-2023: Verwarnungen/Bußgelder fehlen (Rockenberg, Bad Nauheimerstr. / BHS)",
+   "geschwindigkeitsmessungen-im-februar-2020: Verwarnungen/Bußgelder fehlen (Nieder - Weisel / Zum Bahnhof)",
+   "geschwindigkeitsmessungen-im-februar-2020: Verwarnungen/Bußgelder fehlen (Fauerbach / Am Limes)",
+   "geschwindigkeitsmessungen-im-februar-2020: Verwarnungen/Bußgelder fehlen (Oppershofen / Södeler Str. Ecke Höhenweg)",
+   "geschwindigkeitsmessungen-im-februar-2020: Verwarnungen/Bußgelder fehlen (Rockenberg / Münzenberger Str.)",
+   "geschwindigkeitsmessungen-im-februar-2020: Verwarnungen/Bußgelder fehlen (Butzbach / Taunusstr. Ecke Hassiastr.)",
+   "geschwindigkeitsmessungen-im-februar-2020: Verwarnungen/Bußgelder fehlen (Nieder - Weisel / Butzbacher Str. BHS)",
+   "geschwindigkeitsmessungen-im-februar-2020: Verwarnungen/Bußgelder fehlen (Ober-Hörgern / Licher Str.)",
+   "geschwindigkeitsmessungen-im-februar-2020: Verwarnungen/Bußgelder fehlen (Gambach / Brückfeldstr.)",
+   "geschwindigkeitsmessungen-im-februar-2020: Verwarnungen/Bußgelder fehlen (Münzenberg / Steinweg)",
+   "geschwindigkeitsmessungen-im-februar-2020: Verwarnungen/Bußgelder fehlen (Butzbach / Hunnenburgweg)",
+   "geschwindigkeitsmessungen-im-februar-2020: Verwarnungen/Bußgelder fehlen (Butzbach / Hoch-Weiseler Str.)",
+   "geschwindigkeitsmessungen-im-februar-2020: Verwarnungen/Bußgelder fehlen (Butzbach / Pohlgönserstr.)",
+   "geschwindigkeitsmessungen-im-februar-2020: Verwarnungen/Bußgelder fehlen (Griedel / Alte Hauptstr.)",
+   "geschwindigkeitsmessungen-im-februar-2020: Verwarnungen/Bußgelder fehlen (Butzbach / Mozartstr.)",
+   "geschwindigkeitsmessungen-im-februar-2020: Verwarnungen/Bußgelder fehlen (Hoch - Weisel / Zum Hausbergturm)",
+   "geschwindigkeitsmessungen-im-februar-2020: Verwarnungen/Bußgelder fehlen (Gambach / Butzbacher Str. BHS)",
+   "geschwindigkeitsmessungen-im-februar-2020: Verwarnungen/Bußgelder fehlen (Butzbach / Taunusstr.)",
+   "geschwindigkeitsmessungen-im-februar-2020: Verwarnungen/Bußgelder fehlen (Pohl - Göns / Gießener Str.)",
+   "geschwindigkeitsmessungen-im-februar-2020: Verwarnungen/Bußgelder fehlen (Butzbach / Weiseler Str.)",
+   "geschwindigkeitsmessungen-im-februar-2021: Verwarnungen/Bußgelder fehlen (Kirch-Göns, Bahnhofstr.)",
+   "geschwindigkeitsmessungen-im-februar-2021: Verwarnungen/Bußgelder fehlen (Butzbach, Hunnenburgweg)",
+   "geschwindigkeitsmessungen-im-februar-2021: Verwarnungen/Bußgelder fehlen (Kirch-Göns, Bahnhofstr.)",
+   "geschwindigkeitsmessungen-im-februar-2021: Verwarnungen/Bußgelder fehlen (Nieder-Weisel, Butzbacher Str.)",
+   "geschwindigkeitsmessungen-im-februar-2021: Verwarnungen/Bußgelder fehlen (Kirch-Göns, Bahnhofstr.)",
+   "geschwindigkeitsmessungen-im-februar-2021: Verwarnungen/Bußgelder fehlen (Griedel, Wetterstr.)",
+   "geschwindigkeitsmessungen-im-februar-2022: Verwarnungen/Bußgelder fehlen (Rockenberg, Griedeler Str.)",
+   "geschwindigkeitsmessungen-im-februar-2022: Verwarnungen/Bußgelder fehlen (Oppershofen, Hauptstr. / BHS)",
+   "geschwindigkeitsmessungen-im-februar-2022: Verwarnungen/Bußgelder fehlen (Münzenberg, Holzheimer Str.)",
+   "geschwindigkeitsmessungen-im-februar-2022: Verwarnungen/Bußgelder fehlen (Butzbach, Ludwigstr.)",
+   "geschwindigkeitsmessungen-im-februar-2022: Verwarnungen/Bußgelder fehlen (Trais-Münzenberg, Wetterstr.)",
+   "geschwindigkeitsmessungen-im-februar-2022: Verwarnungen/Bußgelder fehlen (Gambach, Brückfeldstr. / BHS)",
+   "geschwindigkeitsmessungen-im-februar-2022: Verwarnungen/Bußgelder fehlen (Oppershofen, Rosenstr.)",
+   "geschwindigkeitsmessungen-im-februar-2022: Verwarnungen/Bußgelder fehlen (Oppershofen, Bahnhofstr.)",
+   "geschwindigkeitsmessungen-im-februar-2022: Verwarnungen/Bußgelder fehlen (Griedel, Alte Hauptstr.)",
+   "geschwindigkeitsmessungen-im-februar-2022: Verwarnungen/Bußgelder fehlen (Butzbach, Ovid-Str.)",
+   "geschwindigkeitsmessungen-im-februar-2022: Verwarnungen/Bußgelder fehlen (Trais-Münzenberg, Wetterstr.)",
+   "geschwindigkeitsmessungen-im-februar-2022: Verwarnungen/Bußgelder fehlen (Gambach, Brückfeldstr. / BHS)",
+   "geschwindigkeitsmessungen-im-februar-2023: Verwarnungen/Bußgelder fehlen (Butzbach, Tepler Str.)",
+   "geschwindigkeitsmessungen-im-februar-2024: Verwarnungen/Bußgelder fehlen (Rockenberg, Bad Nauheimerstr. / BHS)",
+   "geschwindigkeitsmessungen-im-februar-2024: Verwarnungen/Bußgelder fehlen (Münzenberg, Falkensteiner Str.)",
+   "geschwindigkeitsmessungen-im-februar-2024: Verwarnungen/Bußgelder fehlen (Münzenberg / Gambach, Butzbacher Str. / )",
+   "geschwindigkeitsmessungen-im-februar-2024: Verwarnungen/Bußgelder fehlen (Rockenberg, / Oppershofen, Steinfurther )",
+   "geschwindigkeitsmessungen-im-februar-2024: Verwarnungen/Bußgelder fehlen (Wölfersheim / Södel, Hungener Str.)",
+   "geschwindigkeitsmessungen-im-januar-2022: Verwarnungen/Bußgelder fehlen (Butzbach, B3 / Schule)",
+   "geschwindigkeitsmessungen-im-januar-2022: Verwarnungen/Bußgelder fehlen (Butzbach, Oberer Lachenweg)",
+   "geschwindigkeitsmessungen-im-januar-2022: Verwarnungen/Bußgelder fehlen (Trais-Münzenberg, Wetterstr.)",
+   "geschwindigkeitsmessungen-im-januar-2022: Verwarnungen/Bußgelder fehlen (Gambach, Butzbacher Str. / BHS)",
+   "geschwindigkeitsmessungen-im-januar-2022: Verwarnungen/Bußgelder fehlen (Rockenberg, Untergasse)",
+   "geschwindigkeitsmessungen-im-januar-2022: Verwarnungen/Bußgelder fehlen (Rockenberg, Münzenberger Str.)",
+   "geschwindigkeitsmessungen-im-januar-2022: Verwarnungen/Bußgelder fehlen (Rockenberg, Mühlgasse)",
+   "geschwindigkeitsmessungen-im-januar-2022: Verwarnungen/Bußgelder fehlen (Oppershofen, Schillerstr.)",
+   "geschwindigkeitsmessungen-im-januar-2022: Verwarnungen/Bußgelder fehlen (Münzenberg, Falkensteiner Str.)",
+   "geschwindigkeitsmessungen-im-januar-2022: Verwarnungen/Bußgelder fehlen (Butzbach, Oberer Lachenweg)",
+   "geschwindigkeitsmessungen-im-januar-2022: Verwarnungen/Bußgelder fehlen (Butzbach, Pohlgönser Str.)",
+   "geschwindigkeitsmessungen-im-januar-2022: Verwarnungen/Bußgelder fehlen (Geisenheim, B455 / Seestr.)",
+   "geschwindigkeitsmessungen-im-januar-2022: Verwarnungen/Bußgelder fehlen (Wohnbach, L3136)",
+   "geschwindigkeitsmessungen-im-januar-2022: Verwarnungen/Bußgelder fehlen (Butzbach, Hoch-Weiseler Str.)",
+   "geschwindigkeitsmessungen-im-januar-2022: Verwarnungen/Bußgelder fehlen (Nieder-Weisel, Butzbacher Str.)",
+   "geschwindigkeitsmessungen-im-januar-2022: Verwarnungen/Bußgelder fehlen (Griedel, Wetterstr.)",
+   "geschwindigkeitsmessungen-im-januar-2023: Verwarnungen/Bußgelder fehlen (Griedel, Alte Hauptstr.)",
+   "geschwindigkeitsmessungen-im-januar-2024: Verwarnungen/Bußgelder fehlen (Wölfersheim, Hauptstraße / Kiga)",
+   "geschwindigkeitsmessungen-im-januar-2024: Verwarnungen/Bußgelder fehlen (Gambach, Brückfeldstr. / BHS)",
+   "geschwindigkeitsmessungen-im-januar-2024: Verwarnungen/Bußgelder fehlen (Oppershofen, Steinfurther Str.)",
+   "geschwindigkeitsmessungen-im-juli-2019: Verwarnungen/Bußgelder fehlen (Oppershofen, Södeler Str.)",
+   "geschwindigkeitsmessungen-im-juli-2019: Verwarnungen/Bußgelder fehlen (Butzbach, Hoch-Weiseler-Str.)",
+   "geschwindigkeitsmessungen-im-juli-2019: Verwarnungen/Bußgelder fehlen (Butzbach, Wilhelm-Leuchner-Str.)",
+   "geschwindigkeitsmessungen-im-juli-2021: Verwarnungen/Bußgelder fehlen (Butzbach, Bismarckstr.)",
+   "geschwindigkeitsmessungen-im-juli-2021: Verwarnungen/Bußgelder fehlen (Münzenberg, Steinbergstr.)",
+   "geschwindigkeitsmessungen-im-juli-2021: Verwarnungen/Bußgelder fehlen (Rockenberg, Untergasse)",
+   "geschwindigkeitsmessungen-im-juli-2021: Verwarnungen/Bußgelder fehlen (Münzenberg, Falkensteiner Str.)",
+   "geschwindigkeitsmessungen-im-juli-2021: Verwarnungen/Bußgelder fehlen (Nieder-Weisel, Butzbacher Str.)",
+   "geschwindigkeitsmessungen-im-juli-2021: Verwarnungen/Bußgelder fehlen (Butzbach, Oberer-Lachenweg)",
+   "geschwindigkeitsmessungen-im-juli-2021: Verwarnungen/Bußgelder fehlen (Oppershofen, Hauptstr. / BHS)",
+   "geschwindigkeitsmessungen-im-juli-2021: Verwarnungen/Bußgelder fehlen (Rockenberg, Bad Nauheimer Str. / BHS)",
+   "geschwindigkeitsmessungen-im-juli-2022: Verwarnungen/Bußgelder fehlen (Nieder-Weisel, Zum Bahnhof)",
+   "geschwindigkeitsmessungen-im-juli-2022: Verwarnungen/Bußgelder fehlen (Wohnbach, Berstädter Str.)",
+   "geschwindigkeitsmessungen-im-juli-2022: Verwarnungen/Bußgelder fehlen (Oppershofen, Södeler Str.)",
+   "geschwindigkeitsmessungen-im-juli-2022: Verwarnungen/Bußgelder fehlen (Oppershofen, Hauptstraße / BHS)",
+   "geschwindigkeitsmessungen-im-juli-2022: Verwarnungen/Bußgelder fehlen (Trais Münzenberg, Wetterstr.)",
+   "geschwindigkeitsmessungen-im-juli-2022: Verwarnungen/Bußgelder fehlen (Münzenberg, Falkensteiner Str.)",
+   "geschwindigkeitsmessungen-im-juli-2022: Verwarnungen/Bußgelder fehlen (Butzbach, Hoch-Weiseler Str.)",
+   "geschwindigkeitsmessungen-im-juli-2022: Verwarnungen/Bußgelder fehlen (Butzbach, Taunusstr. / Ecke Hassia-Str.)",
+   "geschwindigkeitsmessungen-im-juli-2022: Verwarnungen/Bußgelder fehlen (Butzbach, Taunusstr.)",
+   "geschwindigkeitsmessungen-im-juli-2022: Verwarnungen/Bußgelder fehlen (Wölfersheim, Heyenheimer Weg)",
+   "geschwindigkeitsmessungen-im-juli-2022: Verwarnungen/Bußgelder fehlen (Butzbach, Ostumgehung)",
+   "geschwindigkeitsmessungen-im-juli-2023: Verwarnungen/Bußgelder fehlen (Pohl-Göns, Rechtenbacher Str.)",
+   "geschwindigkeitsmessungen-im-juli-2023: Verwarnungen/Bußgelder fehlen (Pohl-Göns, Windhofstraße)",
+   "geschwindigkeitsmessungen-im-juli-2023: Verwarnungen/Bußgelder fehlen (Pohl-Göns, Rechtenbacher Str.)",
+   "geschwindigkeitsmessungen-im-juli-2023: Verwarnungen/Bußgelder fehlen ()",
+   "geschwindigkeitsmessungen-im-juli-2023: Verwarnungen/Bußgelder fehlen ()",
+   "geschwindigkeitsmessungen-im-juli-2023: Verwarnungen/Bußgelder fehlen ()",
+   "geschwindigkeitsmessungen-im-juli-2023: Verwarnungen/Bußgelder fehlen ()",
+   "geschwindigkeitsmessungen-im-juli-2023: Verwarnungen/Bußgelder fehlen ()",
+   "geschwindigkeitsmessungen-im-juli-2023: Verwarnungen/Bußgelder fehlen ()",
+   "geschwindigkeitsmessungen-im-juli-2025__sb_oa-messung-2507.pdf: keine Tabellenzeilen",
+   "geschwindigkeitsmessungen-im-juni-2019: Verwarnungen/Bußgelder fehlen (Trais-Münzenberg, Wetterstr.)",
+   "geschwindigkeitsmessungen-im-juni-2019: Verwarnungen/Bußgelder fehlen (Oppershofen, Steinfurther Str.)",
+   "geschwindigkeitsmessungen-im-juni-2019: Verwarnungen/Bußgelder fehlen (Butzbach, Taunusstr.)",
+   "geschwindigkeitsmessungen-im-juni-2019: Verwarnungen/Bußgelder fehlen (Butzbach, Alte Hauptstr.)",
+   "geschwindigkeitsmessungen-im-juni-2019: Verwarnungen/Bußgelder fehlen (Münzenberg, Steinbergstr.)",
+   "geschwindigkeitsmessungen-im-juni-2019: Verwarnungen/Bußgelder fehlen (Münzenberg, Butzbacher Str.)",
+   "geschwindigkeitsmessungen-im-juni-2021: Verwarnungen/Bußgelder fehlen (Oppershofen, Hauptstraße / BHS)",
+   "geschwindigkeitsmessungen-im-juni-2021: Verwarnungen/Bußgelder fehlen (Rockenberg, Münzenberger Str.)",
+   "geschwindigkeitsmessungen-im-juni-2021: Verwarnungen/Bußgelder fehlen (Griedel, Am Helgenhaus)",
+   "geschwindigkeitsmessungen-im-juni-2021: Verwarnungen/Bußgelder fehlen (Griedel, Wetterstraße)",
+   "geschwindigkeitsmessungen-im-juni-2021: Verwarnungen/Bußgelder fehlen (Trais-Münzenberg, Römerstr.)",
+   "geschwindigkeitsmessungen-im-juni-2021: Verwarnungen/Bußgelder fehlen (Gambach, Brückfeldstr. / BHS)",
+   "geschwindigkeitsmessungen-im-juni-2021: Verwarnungen/Bußgelder fehlen (Oppershofen, Steinfurther Str.)",
+   "geschwindigkeitsmessungen-im-juni-2021: Verwarnungen/Bußgelder fehlen (Rockenberg, Mühlgasse)",
+   "geschwindigkeitsmessungen-im-juni-2021: Verwarnungen/Bußgelder fehlen (Butzbach, Weidigstr.)",
+   "geschwindigkeitsmessungen-im-juni-2021: Verwarnungen/Bußgelder fehlen (Butzbach, Hoch-Weiseler Str.)",
+   "geschwindigkeitsmessungen-im-juni-2022: Verwarnungen/Bußgelder fehlen (Berstadt, L 3136)",
+   "geschwindigkeitsmessungen-im-juni-2022: Verwarnungen/Bußgelder fehlen (Butzbach, Ludwigstr.)",
+   "geschwindigkeitsmessungen-im-juni-2022: Verwarnungen/Bußgelder fehlen (Butzbach, Hunnenburgweg)",
+   "geschwindigkeitsmessungen-im-juni-2022: Verwarnungen/Bußgelder fehlen (Gambach, Butzbacher Str.)",
+   "geschwindigkeitsmessungen-im-juni-2022: Verwarnungen/Bußgelder fehlen (Wölfersheim, Wingertstr. / Schule)",
+   "geschwindigkeitsmessungen-im-juni-2023: Verwarnungen/Bußgelder fehlen ()",
+   "geschwindigkeitsmessungen-im-juni-2023: Verwarnungen/Bußgelder fehlen (Butzbach, B3 / Große Wendelstraße)",
+   "geschwindigkeitsmessungen-im-juni-2023: Verwarnungen/Bußgelder fehlen (Trais Münzenberg, Wetterstr.)",
+   "geschwindigkeitsmessungen-im-juni-2023: Verwarnungen/Bußgelder fehlen ()",
+   "geschwindigkeitsmessungen-im-juni-2023: Verwarnungen/Bußgelder fehlen ()",
+   "geschwindigkeitsmessungen-im-juni-2023: Verwarnungen/Bußgelder fehlen ()",
+   "geschwindigkeitsmessungen-im-juni-2023: Verwarnungen/Bußgelder fehlen ()",
+   "geschwindigkeitsmessungen-im-juni-2023: Verwarnungen/Bußgelder fehlen ()",
+   "geschwindigkeitsmessungen-im-juni-2023: Verwarnungen/Bußgelder fehlen ()",
+   "geschwindigkeitsmessungen-im-maerz-2020: Verwarnungen/Bußgelder fehlen (Gambach / Brückfeldstr.)",
+   "geschwindigkeitsmessungen-im-maerz-2020: Verwarnungen/Bußgelder fehlen (Butzbach / J.-F.-Kennedy Str.)",
+   "geschwindigkeitsmessungen-im-maerz-2020: Verwarnungen/Bußgelder fehlen (Butzbach / Taunusstr. Ecke Hassia-Str.)",
+   "geschwindigkeitsmessungen-im-maerz-2020: Verwarnungen/Bußgelder fehlen (Griedel / Alte Hauptstr.)",
+   "geschwindigkeitsmessungen-im-maerz-2020: Verwarnungen/Bußgelder fehlen (Butzbach / Oberer Lachenweg)",
+   "geschwindigkeitsmessungen-im-maerz-2020: Verwarnungen/Bußgelder fehlen (Rockenberg / Mühlgasse)",
+   "geschwindigkeitsmessungen-im-maerz-2020: Verwarnungen/Bußgelder fehlen (Oppershofen / Steinfurther Str.)",
+   "geschwindigkeitsmessungen-im-maerz-2020: Verwarnungen/Bußgelder fehlen (Butzbach / Hunnenburgweg)",
+   "geschwindigkeitsmessungen-im-maerz-2020: Verwarnungen/Bußgelder fehlen (Nieder Weisel / Butzbacher Str. BHS)",
+   "geschwindigkeitsmessungen-im-maerz-2020: Verwarnungen/Bußgelder fehlen (Pohl-Göns / Gießener Str.)",
+   "geschwindigkeitsmessungen-im-maerz-2022: Verwarnungen/Bußgelder fehlen (Butzbach, Sudeten Str.)",
+   "geschwindigkeitsmessungen-im-maerz-2022: Verwarnungen/Bußgelder fehlen (Butzbach, Taunusstr.)",
+   "geschwindigkeitsmessungen-im-maerz-2022: Verwarnungen/Bußgelder fehlen (Wölfersheim, Schulstr.)",
+   "geschwindigkeitsmessungen-im-maerz-2022: Verwarnungen/Bußgelder fehlen (Butzbach, Ludwigstr.)",
+   "geschwindigkeitsmessungen-im-maerz-2022: Verwarnungen/Bußgelder fehlen (Butzbach, John-F.-Kennedy-Str.)",
+   "geschwindigkeitsmessungen-im-maerz-2022: Verwarnungen/Bußgelder fehlen (Münzenberg, Falkensteiner Str.)",
+   "geschwindigkeitsmessungen-im-maerz-2022: Verwarnungen/Bußgelder fehlen (Gambach, Butzbacher Str. / BHS)",
+   "geschwindigkeitsmessungen-im-maerz-2022: Verwarnungen/Bußgelder fehlen (Oppershofen, Rosenstr.)",
+   "geschwindigkeitsmessungen-im-maerz-2022: Verwarnungen/Bußgelder fehlen (Oppershofen, Bahnhofstr.)",
+   "geschwindigkeitsmessungen-im-maerz-2022: Verwarnungen/Bußgelder fehlen (Berstadt, Butzbacher Str.)",
+   "geschwindigkeitsmessungen-im-maerz-2022: Verwarnungen/Bußgelder fehlen (Pohl-Göns, Gießener Str.)",
+   "geschwindigkeitsmessungen-im-maerz-2022: Verwarnungen/Bußgelder fehlen (Butzbach, Bismarckstr.)",
+   "geschwindigkeitsmessungen-im-mai-2019: Verwarnungen/Bußgelder fehlen (Rockenberg, Hauptstraße)",
+   "geschwindigkeitsmessungen-im-mai-2019: Verwarnungen/Bußgelder fehlen (Rockenberg, Münzenberger Str.)",
+   "geschwindigkeitsmessungen-im-mai-2019: Verwarnungen/Bußgelder fehlen (Münzenberg, Steinbergstr.)",
+   "geschwindigkeitsmessungen-im-mai-2019: Verwarnungen/Bußgelder fehlen (Gambach, Nelkenweg)",
+   "geschwindigkeitsmessungen-im-mai-2019: Verwarnungen/Bußgelder fehlen (Butzbach, Ovid Str.)",
+   "geschwindigkeitsmessungen-im-mai-2019: Verwarnungen/Bußgelder fehlen (Griedel, Alte Hauptstr.)",
+   "geschwindigkeitsmessungen-im-mai-2019: Verwarnungen/Bußgelder fehlen (Butzbach, J.-F.-Kennedy-Str.)",
+   "geschwindigkeitsmessungen-im-mai-2019: Verwarnungen/Bußgelder fehlen (Hoch-Weisel, Backhausstr.)",
+   "geschwindigkeitsmessungen-im-mai-2021: Verwarnungen/Bußgelder fehlen (Pohl-Göns, Rechtenbacher Str.)",
+   "geschwindigkeitsmessungen-im-mai-2021: Verwarnungen/Bußgelder fehlen (Pohl-Göns, Rechtenbacher Str.)",
+   "geschwindigkeitsmessungen-im-mai-2021: Verwarnungen/Bußgelder fehlen (Butzbach, Küchengartenweg)",
+   "geschwindigkeitsmessungen-im-mai-2022: Verwarnungen/Bußgelder fehlen (Berstadt, L3136)",
+   "geschwindigkeitsmessungen-im-mai-2022: Verwarnungen/Bußgelder fehlen (Wölfersheim, Im Grund)",
+   "geschwindigkeitsmessungen-im-mai-2022: Verwarnungen/Bußgelder fehlen (Butzbach, Küchengartenweg)",
+   "geschwindigkeitsmessungen-im-mai-2022: Verwarnungen/Bußgelder fehlen (Gambach, Am Bürgerplatz / KiGa)",
+   "geschwindigkeitsmessungen-im-mai-2022: Verwarnungen/Bußgelder fehlen (Rockenberg, Bad Nauheimer Str. / BHS)",
+   "geschwindigkeitsmessungen-im-mai-2022: Verwarnungen/Bußgelder fehlen (Rockenberg, Untergasse)",
+   "geschwindigkeitsmessungen-im-mai-2022: Verwarnungen/Bußgelder fehlen (Butzbach, Tepler Str.)",
+   "geschwindigkeitsmessungen-im-mai-2022: Verwarnungen/Bußgelder fehlen (Trais Münzenberg, Wetterstr.)",
+   "geschwindigkeitsmessungen-im-mai-2022: Verwarnungen/Bußgelder fehlen (Münzenberg, Falkensteiner Str.)",
+   "geschwindigkeitsmessungen-im-mai-2022: Verwarnungen/Bußgelder fehlen (Rockenberg, Münzenberger Str.)",
+   "geschwindigkeitsmessungen-im-mai-2022: Verwarnungen/Bußgelder fehlen (Rockenberg, Wohnbacher Weg)",
+   "geschwindigkeitsmessungen-im-mai-2022: Verwarnungen/Bußgelder fehlen (Griedel, L 3053)",
+   "geschwindigkeitsmessungen-im-mai-2022: Verwarnungen/Bußgelder fehlen (Nieder Weisel, Butzbacher Str. / BHS)",
+   "geschwindigkeitsmessungen-im-mai-2022: Verwarnungen/Bußgelder fehlen (Wölfersheim, Hauptstraße / KiGa)",
+   "geschwindigkeitsmessungen-im-mai-2022: Verwarnungen/Bußgelder fehlen (Rockenberg, Mühlgasse)",
+   "geschwindigkeitsmessungen-im-mai-2022: Verwarnungen/Bußgelder fehlen (Oppershofen, Södeler Str.)",
+   "geschwindigkeitsmessungen-im-mai-2022: Verwarnungen/Bußgelder fehlen (Butzbach, Küchengartenweg)",
+   "geschwindigkeitsmessungen-im-mai-2022: Verwarnungen/Bußgelder fehlen (Gambach, Brückfeldstr. / BHS)",
+   "geschwindigkeitsmessungen-im-mai-2023: Verwarnungen/Bußgelder fehlen (Pohl-Göns, Rechtenbacher Str.)",
+   "geschwindigkeitsmessungen-im-mai-2023: Verwarnungen/Bußgelder fehlen (Pohl-Göns, Windhofstraße)",
+   "geschwindigkeitsmessungen-im-mai-2023: Verwarnungen/Bußgelder fehlen (Geisenheim, B455 / Seestr. BHS)",
+   "geschwindigkeitsmessungen-im-mai-2023: Verwarnungen/Bußgelder fehlen (Rockenberg, Untergasse)",
+   "geschwindigkeitsmessungen-im-mai-2023: Verwarnungen/Bußgelder fehlen (Oppershofen, Hauptstraße / BHS)",
+   "geschwindigkeitsmessungen-im-mai-2023: Verwarnungen/Bußgelder fehlen (Södel, Oppershofener Str.)",
+   "geschwindigkeitsmessungen-im-mai-2023: Verwarnungen/Bußgelder fehlen (Gambach, Bahnhofstr.)",
+   "geschwindigkeitsmessungen-im-mai-2023: Verwarnungen/Bußgelder fehlen (Rockenberg, Bad Nauheimer Str. / BHS)",
+   "geschwindigkeitsmessungen-im-mai-2023: Verwarnungen/Bußgelder fehlen (Oppershofen, Södeler Str. / Pfarrheim)",
+   "geschwindigkeitsmessungen-im-november-2019: Verwarnungen/Bußgelder fehlen (Rockenberg - Münzenberger Str./Am Dresch)",
+   "geschwindigkeitsmessungen-im-november-2019: Verwarnungen/Bußgelder fehlen (Butzbach - Tepler Str.)",
+   "geschwindigkeitsmessungen-im-november-2019: Verwarnungen/Bußgelder fehlen (Kirch Göns - Bahnhofstr.)",
+   "geschwindigkeitsmessungen-im-november-2019: Verwarnungen/Bußgelder fehlen (Butzbach - Taunusstr.)",
+   "geschwindigkeitsmessungen-im-november-2019: Verwarnungen/Bußgelder fehlen (Butzbach - Unterer Prinzenweg)",
+   "geschwindigkeitsmessungen-im-november-2019: Verwarnungen/Bußgelder fehlen (Butzbach - Römerstr.)",
+   "geschwindigkeitsmessungen-im-november-2019: Verwarnungen/Bußgelder fehlen (Nieder Weisel - Butzbacher Str.)",
+   "geschwindigkeitsmessungen-im-november-2019: Verwarnungen/Bußgelder fehlen (Hoch Weisel - Backhausstr.)",
+   "geschwindigkeitsmessungen-im-november-2019: Verwarnungen/Bußgelder fehlen (Griedel - Alte Hauptstr.)",
+   "geschwindigkeitsmessungen-im-november-2019: Verwarnungen/Bußgelder fehlen (Trais Mzb. - Wetterstr.)",
+   "geschwindigkeitsmessungen-im-november-2019: Verwarnungen/Bußgelder fehlen (Nieder Weisel - Butzbacher Str.)",
+   "geschwindigkeitsmessungen-im-november-2019: Verwarnungen/Bußgelder fehlen (Butzbach - Weiseler Str./B3)",
+   "geschwindigkeitsmessungen-im-november-2019: Verwarnungen/Bußgelder fehlen (Rockenberg - Untergasse)",
+   "geschwindigkeitsmessungen-im-november-2019: Verwarnungen/Bußgelder fehlen (Butzbach - Ovid Str.)",
+   "geschwindigkeitsmessungen-im-november-2019: Verwarnungen/Bußgelder fehlen (Gambach - Brückfeldstr.)",
+   "geschwindigkeitsmessungen-im-november-2019: Verwarnungen/Bußgelder fehlen (Gambach - Butzbacher Str.)",
+   "geschwindigkeitsmessungen-im-november-2020: Verwarnungen/Bußgelder fehlen (Butzbach, Ovid-Str.)",
+   "geschwindigkeitsmessungen-im-november-2020: Verwarnungen/Bußgelder fehlen (Butzbach, Gutenbergstr.)",
+   "geschwindigkeitsmessungen-im-november-2020: Verwarnungen/Bußgelder fehlen (Butzbach, Stresemannstr. / BHS)",
+   "geschwindigkeitsmessungen-im-november-2020: Verwarnungen/Bußgelder fehlen (Pohl-Göns, Gießener Str.)",
+   "geschwindigkeitsmessungen-im-november-2020: Verwarnungen/Bußgelder fehlen (Fauerbach, Am Limes)",
+   "geschwindigkeitsmessungen-im-november-2020: Verwarnungen/Bußgelder fehlen (Münzenberg, Steinbergstr.)",
+   "geschwindigkeitsmessungen-im-november-2020: Verwarnungen/Bußgelder fehlen (Gambach, Am Bürgerplatz / KiGa)",
+   "geschwindigkeitsmessungen-im-november-2020: Verwarnungen/Bußgelder fehlen (Trais-Münzenberg, Wetterstr.)",
+   "geschwindigkeitsmessungen-im-november-2020: Verwarnungen/Bußgelder fehlen (Gambach, Brückfeldstr. / BHS)",
+   "geschwindigkeitsmessungen-im-november-2020: Verwarnungen/Bußgelder fehlen (Hoch-Weisel, Backhausstr. / BHS)",
+   "geschwindigkeitsmessungen-im-november-2020: Verwarnungen/Bußgelder fehlen (Butzbach, Emil-Vogt-Str.)",
+   "geschwindigkeitsmessungen-im-november-2020: Verwarnungen/Bußgelder fehlen (Butzbach, Bismarckstr.)",
+   "geschwindigkeitsmessungen-im-november-2021: Verwarnungen/Bußgelder fehlen (Pohl-Göns, Gießener Str.)",
+   "geschwindigkeitsmessungen-im-november-2021: Verwarnungen/Bußgelder fehlen (Rockenberg, Mühlgasse)",
+   "geschwindigkeitsmessungen-im-november-2021: Verwarnungen/Bußgelder fehlen (Oppershofen, Steinfurther Str.)",
+   "geschwindigkeitsmessungen-im-november-2021: Verwarnungen/Bußgelder fehlen (Butzbach, Oberer Lachenweg)",
+   "geschwindigkeitsmessungen-im-november-2021: Verwarnungen/Bußgelder fehlen (Butzbach, Küchengartenweg)",
+   "geschwindigkeitsmessungen-im-november-2022: Verwarnungen/Bußgelder fehlen (Rockenberg, Untergasse)",
+   "geschwindigkeitsmessungen-im-november-2022: Verwarnungen/Bußgelder fehlen (Hoch-Weisel, Fauerbacher Str.)",
+   "geschwindigkeitsmessungen-im-november-2022: Verwarnungen/Bußgelder fehlen (Pohl-Göns, B3 / Windhofkurve)",
+   "geschwindigkeitsmessungen-im-november-2022: Verwarnungen/Bußgelder fehlen (Pohl-Göns, Rechtenbacher Str.)",
+   "geschwindigkeitsmessungen-im-november-2023: Verwarnungen/Bußgelder fehlen (Münzenberg, Kettermühlen Str.)",
+   "geschwindigkeitsmessungen-im-november-2023: Verwarnungen/Bußgelder fehlen ()",
+   "geschwindigkeitsmessungen-im-november-2023: Verwarnungen/Bußgelder fehlen ()",
+   "geschwindigkeitsmessungen-im-november-2023: Verwarnungen/Bußgelder fehlen (Butzbach, John.-F.-Kennedy Straße 5-11)",
+   "geschwindigkeitsmessungen-im-november-2023: Verwarnungen/Bußgelder fehlen (Butzbach, Sudeten Str. 17)",
+   "geschwindigkeitsmessungen-im-oktober-2019: Verwarnungen/Bußgelder fehlen (Butzbach, Taunusstr.)",
+   "geschwindigkeitsmessungen-im-oktober-2019: Verwarnungen/Bußgelder fehlen (Nieder Weisel, Butzbacher Str.)",
+   "geschwindigkeitsmessungen-im-oktober-2019: Verwarnungen/Bußgelder fehlen (Butzbach, Sudetenstr.)",
+   "geschwindigkeitsmessungen-im-oktober-2019: Verwarnungen/Bußgelder fehlen (Butzbach, Alte Wetzlarer Str.)",
+   "geschwindigkeitsmessungen-im-oktober-2019: Verwarnungen/Bußgelder fehlen (Rockenberg, Untergasse)",
+   "geschwindigkeitsmessungen-im-oktober-2019: Verwarnungen/Bußgelder fehlen (Trais-Münzenberg, Wetterstr.)",
+   "geschwindigkeitsmessungen-im-oktober-2019: Verwarnungen/Bußgelder fehlen (Münzenberg, Steinbergstr.)",
+   "geschwindigkeitsmessungen-im-oktober-2019: Verwarnungen/Bußgelder fehlen (Butzbach, Wilhelm-Leuchner-Str.)",
+   "geschwindigkeitsmessungen-im-oktober-2019: Verwarnungen/Bußgelder fehlen (Butzbach, Gutenbergstr.)",
+   "geschwindigkeitsmessungen-im-oktober-2019: Verwarnungen/Bußgelder fehlen (Fauerbach, Am Limes)",
+   "geschwindigkeitsmessungen-im-oktober-2019: Verwarnungen/Bußgelder fehlen (Nieder Weisel, Zum Bahnhof)",
+   "geschwindigkeitsmessungen-im-oktober-2020: Verwarnungen/Bußgelder fehlen (Butzbach, Ovid-Str.)",
+   "geschwindigkeitsmessungen-im-oktober-2020: Verwarnungen/Bußgelder fehlen (Trais-Münzenberg, Wetterstr.)",
+   "geschwindigkeitsmessungen-im-oktober-2020: Verwarnungen/Bußgelder fehlen (Münzenberg, Freiherr-vom-Stein-Str.)",
+   "geschwindigkeitsmessungen-im-oktober-2020: Verwarnungen/Bußgelder fehlen (Münzenberg, Kuno-von-Hagen-Str.)",
+   "geschwindigkeitsmessungen-im-oktober-2020: Verwarnungen/Bußgelder fehlen (Butzbach, Bahnhofsallee)",
+   "geschwindigkeitsmessungen-im-oktober-2020: Verwarnungen/Bußgelder fehlen (Butzbach, Hoch-Weiseler-Str.)",
+   "geschwindigkeitsmessungen-im-oktober-2020: Verwarnungen/Bußgelder fehlen (Butzbach, Küchengartenweg)",
+   "geschwindigkeitsmessungen-im-oktober-2020: Verwarnungen/Bußgelder fehlen (Butzbach, Unterer Prinzenweg)",
+   "geschwindigkeitsmessungen-im-oktober-2020: Verwarnungen/Bußgelder fehlen (Butzbach, Sudetenstr.)",
+   "geschwindigkeitsmessungen-im-oktober-2020: Verwarnungen/Bußgelder fehlen (Oppershofen, Lattwiesenweg)",
+   "geschwindigkeitsmessungen-im-oktober-2020: Verwarnungen/Bußgelder fehlen (Oppershofen, Steinfurther Str.)",
+   "geschwindigkeitsmessungen-im-oktober-2021: Verwarnungen/Bußgelder fehlen (Ostheim, Bahnhofsallee)",
+   "geschwindigkeitsmessungen-im-oktober-2021: Verwarnungen/Bußgelder fehlen (Södel, Södeler Str.)",
+   "geschwindigkeitsmessungen-im-oktober-2021: Verwarnungen/Bußgelder fehlen (Wohnbach, Berstädter Str. / BHS)",
+   "geschwindigkeitsmessungen-im-oktober-2022: Verwarnungen/Bußgelder fehlen (Nieder-Weisel, Zum Bahnhof)",
+   "geschwindigkeitsmessungen-im-september-2019: Verwarnungen/Bußgelder fehlen (Hausen, An der Landstr. / Kirschweg)",
+   "geschwindigkeitsmessungen-im-september-2019: Verwarnungen/Bußgelder fehlen (Butzbach, Oberer Lachenweg)",
+   "geschwindigkeitsmessungen-im-september-2019: Verwarnungen/Bußgelder fehlen (Butzbach, Alte Hauptstr.)",
+   "geschwindigkeitsmessungen-im-september-2019: Verwarnungen/Bußgelder fehlen (Bodenrod, Usinger Str.)",
+   "geschwindigkeitsmessungen-im-september-2019: Verwarnungen/Bußgelder fehlen (Nieder Weisel, Zum Bahnhof)",
+   "geschwindigkeitsmessungen-im-september-2020: Verwarnungen/Bußgelder fehlen (Butzbach / Tepler Str.)",
+   "geschwindigkeitsmessungen-im-september-2020: Verwarnungen/Bußgelder fehlen (Pohl-Göns / Gießener Str.)",
+   "geschwindigkeitsmessungen-im-september-2020: Verwarnungen/Bußgelder fehlen (Butzbach / Küchengartenweg)",
+   "geschwindigkeitsmessungen-im-september-2020: Verwarnungen/Bußgelder fehlen (Oppershofen / Södeler Str.)",
+   "geschwindigkeitsmessungen-im-september-2020: Verwarnungen/Bußgelder fehlen (Butzbach / Kirchplatz)",
+   "geschwindigkeitsmessungen-im-september-2020: Verwarnungen/Bußgelder fehlen (Griedel / Alte Hauptstr.)",
+   "geschwindigkeitsmessungen-im-september-2020: Verwarnungen/Bußgelder fehlen (Gambach / Brückfeldstr.)",
+   "geschwindigkeitsmessungen-im-september-2020: Verwarnungen/Bußgelder fehlen (Butzbach / Mozartstr.)",
+   "geschwindigkeitsmessungen-im-september-2020: Verwarnungen/Bußgelder fehlen (Butzbach / Küchengartenweg)",
+   "geschwindigkeitsmessungen-im-september-2020: Verwarnungen/Bußgelder fehlen (Butzbach / Bismarckstr.)",
+   "geschwindigkeitsmessungen-im-september-2020: Verwarnungen/Bußgelder fehlen (Trais Münzenberg / Trais-Münzenberger-St)",
+   "geschwindigkeitsmessungen-im-september-2020: Verwarnungen/Bußgelder fehlen (Nieder-Weisel / Butzbacher Str. BHS)",
+   "geschwindigkeitsmessungen-im-september-2020: Verwarnungen/Bußgelder fehlen (Hoch-Weisel / Fauerbacher Str.)",
+   "geschwindigkeitsmessungen-im-september-2020: Verwarnungen/Bußgelder fehlen (Butzbach / Kirchplatz)",
+   "geschwindigkeitsmessungen-im-september-2021: Verwarnungen/Bußgelder fehlen (Nieder-Weisel, Zum Bahnhof)",
+   "geschwindigkeitsmessungen-im-september-2021: Verwarnungen/Bußgelder fehlen (Kirch-Göns, Bahnhofstr.)",
+   "geschwindigkeitsmessungen-im-september-2021: Verwarnungen/Bußgelder fehlen (Nieder-Weisel, Goethestraße)",
+   "geschwindigkeitsmessungen-im-september-2021: Verwarnungen/Bußgelder fehlen (Nieder-Weisel, Goethestraße)",
+   "geschwindigkeitsmessungen-im-september-2021: Verwarnungen/Bußgelder fehlen (Nieder-Weisel, Goethestraße)",
+   "geschwindigkeitsmessungen-im-september-2021: Verwarnungen/Bußgelder fehlen (Nieder-Weisel, Goethestraße)",
+   "geschwindigkeitsmessungen-im-september-2022: Verwarnungen/Bußgelder fehlen (Oppershofen, Södeler Str.)",
+   "geschwindigkeitsmessungen-im-september-2022: Verwarnungen/Bußgelder fehlen (Wölfersheim, Wingertstraße)",
+   "sb-oa-messung-1501: Verwarnungen/Bußgelder fehlen (Butzbach/Nieder-Weisel/Butzbacher Str./N)",
+   "sb-oa-messung-1501: Verwarnungen/Bußgelder fehlen (Butzbach/J.-F.-Kennedy-Str. 5-11)",
+   "sb-oa-messung-1509: Verwarnungen/Bußgelder fehlen (Rockenberg, Mühlgasse)",
+   "sb-oa-messung-1509: Verwarnungen/Bußgelder fehlen (Butzbach, Am Waldhof / Kinderheim)",
+   "sb-oa-messung-1509: Verwarnungen/Bußgelder fehlen (Gambach, Butzbacher Str.)",
+   "sb-oa-messung-1509: Verwarnungen/Bußgelder fehlen (Hoch-Weisel, Backhausstr / BHS)",
+   "sb-oa-messung-1509: Verwarnungen/Bußgelder fehlen (Nieder-Weisel, Butzbacher Str. / BHS)",
+   "sb-oa-messung-1509: Verwarnungen/Bußgelder fehlen (Butzbach, Ovid Str.)",
+   "sb-oa-messung-1512__Geschwindigkeitsmessungen-Dezember-2018.pdf: keine Tabellenzeilen",
+   "sb-oa-messung-1601: Verwarnungen/Bußgelder fehlen (Oppershofen/Am Wingert)",
+   "sb-oa-messung-1601: Verwarnungen/Bußgelder fehlen (Rockenberg/Bad Nauheimer Str./Bushaltest)",
+   "sb-oa-messung-1601: Verwarnungen/Bußgelder fehlen (Butzbach/L3134 gegenüber Rockenberger St)",
+   "sb-oa-messung-1601: Verwarnungen/Bußgelder fehlen (Butzbach/Hunnenburgweg 32)",
+   "sb-oa-messung-1601: Verwarnungen/Bußgelder fehlen (Butzbach/Am Waldhof 14a)",
+   "sb-oa-messung-1601: Verwarnungen/Bußgelder fehlen (Butzbach/Hausen/Forsthausstr./Ecke Butzb)",
+   "sb-oa-messung-1601: Verwarnungen/Bußgelder fehlen (Butzbach/Pohlgönser Str./Chattenstr.)",
+   "sb-oa-messung-1601: Verwarnungen/Bußgelder fehlen (Münzenberg/Steinbergstr.)",
+   "sb-oa-messung-1601: Verwarnungen/Bußgelder fehlen (Münzenberg/Gambach/Brüpckfeldstr./Bushal)",
+   "sb-oa-messung-1601: Verwarnungen/Bußgelder fehlen (Butzbach/Fauerbach/Ostheimer Str./Ecke F)",
+   "sb-oa-messung-1601: Verwarnungen/Bußgelder fehlen (Butzbach/Kirch Göns/Bahnhofstr.)",
+   "sb-oa-messung-1601: Verwarnungen/Bußgelder fehlen (Butzbach/Römerstr. 15)",
+   "sb-oa-messung-1604: Verwarnungen/Bußgelder fehlen (Butzbach/Ebersgöns/K18 NK 5517032)",
+   "sb-oa-messung-1604: Verwarnungen/Bußgelder fehlen (Butzbach/Nieder-Weisel/Butzbacher Str./N)",
+   "sb-oa-messung-1604: Verwarnungen/Bußgelder fehlen (Butzbach/John-F.-Kennedy.-Str.5-11)",
+   "sb-oa-messung-1604: Verwarnungen/Bußgelder fehlen (Butzbach/Am Waldhof 14a)",
+   "sb-oa-messung-1604: Verwarnungen/Bußgelder fehlen (Münzenberg/Gambach/Bahnhofstr. 53)",
+   "sb-oa-messung-1604: Verwarnungen/Bußgelder fehlen (Münzenberg/Gambach/Butzbacher Str. 7)",
+   "sb-oa-messung-1604: Verwarnungen/Bußgelder fehlen (Münzenberg/Steinbergstr.)",
+   "sb-oa-messung-1604: Verwarnungen/Bußgelder fehlen (Rockenberg/Mühlgasse 37)",
+   "sb-oa-messung-1604: Verwarnungen/Bußgelder fehlen (Rockenberg/Bad Nauheimer Str./Bushaltest)",
+   "sb-oa-messung-1604: Verwarnungen/Bußgelder fehlen (Rockenberg/Münzenberger Str./Höhe Am Dre)",
+   "sb-oa-messung-1604: Verwarnungen/Bußgelder fehlen (Butzbach/Hunnenburgweg 32)",
+   "sb-oa-messung-1604: Verwarnungen/Bußgelder fehlen (Butzbach/Griedel/Wetterstr.)",
+   "sb-oa-messung-1604: Verwarnungen/Bußgelder fehlen (Butzbach/Nieder-Weisel/B3 Höhe Grundstüc)",
+   "sb-oa-messung-1604: Verwarnungen/Bußgelder fehlen (Butzbach/Fauerbach/Am Limes/Fohlenweide8)",
+   "sb-oa-messung-1604: Verwarnungen/Bußgelder fehlen (Butzbach/Griedel/Alte Hauptstr./Höhe Bür)",
+   "sb-oa-messung-1604: Verwarnungen/Bußgelder fehlen (Butzbach/Butzbacher Str./NordeckeGrundst)",
+   "sb-oa-messung-1604: Verwarnungen/Bußgelder fehlen (Butzbach/Nieder-Weisel/Butzbacher Str.)",
+   "sb-oa-messung-1604: Verwarnungen/Bußgelder fehlen (Butzbach/B3/Höhe Abfahrt Pohl-Göns)",
+   "sb-oa-messung-1604: Verwarnungen/Bußgelder fehlen (Butzbach/John-F.-Kennedy.-Str.21-31)",
+   "sb-oa-messung-1604: Verwarnungen/Bußgelder fehlen (Butzbach/Pohlgönser Str./Chattenstr.)",
+   "sb-oa-messung-1604: Verwarnungen/Bußgelder fehlen (Butzbach/B3/August-Storch-Str.)",
+   "sb-oa-messung-1604: Verwarnungen/Bußgelder fehlen (Butzbach/Oberer Lachenweg/Höhe Viriginia)",
+   "sb-oa-messung-1604: Verwarnungen/Bußgelder fehlen (Münzenberg/Gambach/Butzbacher Str./Bocke)",
+   "sb-oa-messung-1604: Verwarnungen/Bußgelder fehlen (Münzenberg/Trais/Römerstr. 20)",
+   "sb-oa-messung-1604: Verwarnungen/Bußgelder fehlen (Münzenberg/Gambach/Butzbacher Str. 7)",
+   "sb-oa-messung-1604: Verwarnungen/Bußgelder fehlen (Rockenberg/Griedeler Str./Bushaltestelle)",
+   "sb-oa-messung-1604: Verwarnungen/Bußgelder fehlen (Butzbach/L3134 gegü. Rockenberger Str.)",
+   "sb-oa-messung-1604: Verwarnungen/Bußgelder fehlen (Rockenberg/Oppershofen/Steinfurther Str.)",
+   "sb-oa-messung-1605: Verwarnungen/Bußgelder fehlen (Butzbach/Am Waldhof 2/Kinderheim/Bushalt)",
+   "sb-oa-messung-1605: Verwarnungen/Bußgelder fehlen (Butzbach/John-F.-Kennedy-Str.21-31)",
+   "sb-oa-messung-1605: Verwarnungen/Bußgelder fehlen (Butzbach/Nieder-Weisel/B3 Ampel Höhe Opp)",
+   "sb-oa-messung-1605: Verwarnungen/Bußgelder fehlen (Rockenberg/Oppershofen/Södeler Str./Höhe)",
+   "sb-oa-messung-1605: Verwarnungen/Bußgelder fehlen (Rockenberg/Münzenberger Str./Höhe Am Dre)",
+   "sb-oa-messung-1605: Verwarnungen/Bußgelder fehlen (Rockenberg/Bad Nauheimer Str.)",
+   "sb-oa-messung-1605: Verwarnungen/Bußgelder fehlen (Butzbach/Griedel/Wetterstr.)",
+   "sb-oa-messung-1605: Verwarnungen/Bußgelder fehlen (Butzbach/Hoch-Weisel/Backhausstr./Höhe E)",
+   "sb-oa-messung-1605: Verwarnungen/Bußgelder fehlen (Münzenberg/Ketermühlenstr. 7)",
+   "sb-oa-messung-1605: Verwarnungen/Bußgelder fehlen (Münzenberg/Gambach/Butzbacher Str. 7)",
+   "sb-oa-messung-1605: Verwarnungen/Bußgelder fehlen (Butzbach/Hausen Oes/Forsthausstr. / Ecke)",
+   "sb-oa-messung-1605: Verwarnungen/Bußgelder fehlen (Butzbach/Taunusstr. 45)",
+   "sb-oa-messung-1605: Verwarnungen/Bußgelder fehlen (Butzbach/Nieder-Weisel/B3/Höhe Grundstüc)",
+   "sb-oa-messung-1605: Verwarnungen/Bußgelder fehlen (Butzbach/Ebersgöns/K18 NK 5517032)",
+   "sb-oa-messung-1605: Verwarnungen/Bußgelder fehlen (Butzbach/Pohl-Göns/Gießener Str. 51)",
+   "sb-oa-messung-1605: Verwarnungen/Bußgelder fehlen (Butzbach/B3/August-Storch-Str.)",
+   "sb-oa-messung-1605: Verwarnungen/Bußgelder fehlen (Butzbach/Pohl-Göns/Gießener Str. 31)",
+   "sb-oa-messung-1605: Verwarnungen/Bußgelder fehlen (Butzbach/Alte Wetzlarer Str. 18)",
+   "sb-oa-messung-1605: Verwarnungen/Bußgelder fehlen (Butzbach/Am Waldhof 2/Kinderheim/Bushalt)",
+   "sb-oa-messung-1605: Verwarnungen/Bußgelder fehlen (Rockenberg/Wohnbacher Weg)",
+   "sb-oa-messung-1605: Verwarnungen/Bußgelder fehlen (Rockenberg/Mühlgasse 37)",
+   "sb-oa-messung-1605: Verwarnungen/Bußgelder fehlen (Rockenberg/Bad Nauheimer Str./Bushaltest)",
+   "sb-oa-messung-1605: Verwarnungen/Bußgelder fehlen (Münzenberg/Steinbergstr.)",
+   "sb-oa-messung-1605: Verwarnungen/Bußgelder fehlen (Münzenberg/Falkensteiner Str. 32)",
+   "sb-oa-messung-1605: Verwarnungen/Bußgelder fehlen (Münzenberg/Ober-Hörgern/Licher Str.)",
+   "sb-oa-messung-1701: Verwarnungen/Bußgelder fehlen (Butzbach/Hausen/An der Landstr./Ecke Kir)",
+   "sb-oa-messung-1701: Verwarnungen/Bußgelder fehlen (Butzbach/Pohl Göns/Gießener Str.)",
+   "sb-oa-messung-1704: Verwarnungen/Bußgelder fehlen (Butzbach/Griedel/Oberpforte/Ecke Rosenst)",
+   "sb-oa-messung-1704: Verwarnungen/Bußgelder fehlen (Butzbach/Oberer Lachenweg/Gerald-Ford-St)",
+   "sb-oa-messung-1704: Verwarnungen/Bußgelder fehlen (Butzbach/Alte Hauptstr./Ecke Bettlerpfad)",
+   "sb-oa-messung-1704: Verwarnungen/Bußgelder fehlen (Butzbach/B3/August-Storch-Str.)",
+   "sb-oa-messung-1704: Verwarnungen/Bußgelder fehlen (Münzenberg/Gambach/Butzbacher Str. 7)",
+   "sb-oa-messung-1704: Verwarnungen/Bußgelder fehlen (Münzenberg/Ober-Hörgern/Licher Str.)",
+   "sb-oa-messung-1704: Verwarnungen/Bußgelder fehlen (Rockenberg/Mühlgasse 37)",
+   "sb-oa-messung-1704: Verwarnungen/Bußgelder fehlen (Rockenberg/Münzenberger Str./Höhe Am Dre)",
+   "sb-oa-messung-1704: Verwarnungen/Bußgelder fehlen (Butzbach/Am Waldhof 2/Bushaltestelle)",
+   "sb-oa-messung-1704: Verwarnungen/Bußgelder fehlen (Münzenberg/Gambach/Butzbacher Str. 7)",
+   "sb-oa-messung-1705: Verwarnungen/Bußgelder fehlen (Butzbach/Ostumgehung/Rockenberger Weg)",
+   "sb-oa-messung-1705: Verwarnungen/Bußgelder fehlen (Butzbach/Römerstr. 15)",
+   "sb-oa-messung-1705: Verwarnungen/Bußgelder fehlen (Butzbach/Am Waldhof 14a)",
+   "sb-oa-messung-1705: Verwarnungen/Bußgelder fehlen (Rockenberg/Münzenberger Str./Höhe Am Dre)",
+   "sb-oa-messung-1705: Verwarnungen/Bußgelder fehlen (Rockenberg/Mühlgasse 37)",
+   "sb-oa-messung-1705: Verwarnungen/Bußgelder fehlen (Butzbach/L3134/ gegenüber Rockenberger S)",
+   "sb-oa-messung-1705: Verwarnungen/Bußgelder fehlen (Münzenberg/Gambach/Butzbacher Str./Bocke)",
+   "sb-oa-messung-1705: Verwarnungen/Bußgelder fehlen (Münzenberg/Gambach/Holzheimer Str./Walds)",
+   "sb-oa-messung-1705: Verwarnungen/Bußgelder fehlen (Münzenberg/Gambach/Brückfeldstr./Bushalt)",
+   "sb-oa-messung-1705: Verwarnungen/Bußgelder fehlen (Butzbachd/Kirch-Göns/Bahnhofstr.)",
+   "sb-oa-messung-1705: Verwarnungen/Bußgelder fehlen (Butzbach/Nieder-Weisel/Bdutzbacher Str./)",
+   "sb-oa-messung-1705: Verwarnungen/Bußgelder fehlen (Butzbach/Nieder Weisel/Butzbacher Str.)",
+   "sb-oa-messung-1705: Verwarnungen/Bußgelder fehlen (Butzbach/Tepler Str./Seedammweg)",
+   "sb-oa-messung-1705: Verwarnungen/Bußgelder fehlen (Münzenberg/Gambach/Butzbacher Str./Edeka)",
+   "sb-oa-messung-1705: Verwarnungen/Bußgelder fehlen (Münzenberg/Steinbergstr.)",
+   "sb-oa-messung-1705: Verwarnungen/Bußgelder fehlen (Münzenberg/Falkensteiner Str. 32)",
+   "sb-oa-messung-1705: Verwarnungen/Bußgelder fehlen (Butzbach/Griedel/B488/Wetterstr./NK 5518)",
+   "sb-oa-messung-1705: Verwarnungen/Bußgelder fehlen (Butzbach/Nieder-Weisel/Butzbacher Str.)",
+   "sb-oa-messung-1705: Verwarnungen/Bußgelder fehlen (Butzbach/Nieder-Weisel/B3/Höhe Grundst. )",
+   "sb-oa-messung-1705: Verwarnungen/Bußgelder fehlen (Butzbach/Am Waldhof 2/Bushalatestelle/Ki)",
+   "sb-oa-messung-1705: Verwarnungen/Bußgelder fehlen (Butzbach/Odberer Lachenweg/Gerald-Ford-S)",
+   "sb-oa-messung-1705: Verwarnungen/Bußgelder fehlen (Butzbach/Alte Wetzlarer Str. 18)",
+   "sb-oa-messung-1705: Verwarnungen/Bußgelder fehlen (Butzbach/L3134/ gegenüber Rockenberger S)",
+   "sb-oa-messung-1705: Verwarnungen/Bußgelder fehlen (Butzbach/Nieder-Weisel/Butzbacher Str./B)"
+  ],
+  "doppelt": 48
+ },
+ "weiterstadt": {
+  "kontrollen": 173,
+  "dateien": [
+   {
+    "datei": "geschwindigkeitskontrollen-april-2025__Statistik_GemOBB_April_2025.pdf",
+    "zeilen": 13
+   },
+   {
+    "datei": "geschwindigkeitskontrollen-april-2026__Statistik_GemOBB_April_2026-1.pdf",
+    "zeilen": 12
+   },
+   {
+    "datei": "geschwindigkeitskontrollen-august-2025__Statistik_GemOBB_August_2025.pdf",
+    "zeilen": 9
+   },
+   {
+    "datei": "geschwindigkeitskontrollen-dezember-2025__Statistik_GemOBB_Dezember_2025.pdf",
+    "zeilen": 5
+   },
+   {
+    "datei": "geschwindigkeitskontrollen-februar-2025__Statistik_GemOBB_Februar_2025.pdf",
+    "zeilen": 7
+   },
+   {
+    "datei": "geschwindigkeitskontrollen-februar-2026__Statistik_GemOBB_Februar_2026.pdf",
+    "zeilen": 11
+   },
+   {
+    "datei": "geschwindigkeitskontrollen-januar-2025__Statistik_GemOBB_Januar_2025.pdf",
+    "zeilen": 11
+   },
+   {
+    "datei": "geschwindigkeitskontrollen-januar-2026__Statistik_GemOBB_Januar_2026.pdf",
+    "zeilen": 5
+   },
+   {
+    "datei": "geschwindigkeitskontrollen-juli-2025__Statistik_GemOBB_Juli_2025.pdf",
+    "zeilen": 11
+   },
+   {
+    "datei": "geschwindigkeitskontrollen-juli-2026__Statistik_GemOBB_Juli_2026-1.pdf",
+    "zeilen": 5
+   },
+   {
+    "datei": "geschwindigkeitskontrollen-juni-2025__Statistik_GemOBB_Juni_2025.pdf",
+    "zeilen": 10
+   },
+   {
+    "datei": "geschwindigkeitskontrollen-juni-2026__Statistik_GemOBB_Juni_2026-2.pdf",
+    "zeilen": 11
+   },
+   {
+    "datei": "geschwindigkeitskontrollen-maerz-2025__Statistik_GemOBB_Maerz_2025.pdf",
+    "zeilen": 13
+   },
+   {
+    "datei": "geschwindigkeitskontrollen-maerz-2026__Statistik_GemOBB_Maerz_2026.pdf",
+    "zeilen": 8
+   },
+   {
+    "datei": "geschwindigkeitskontrollen-mai-2025__Statistik_GemOBB_Mai_2025.pdf",
+    "zeilen": 8
+   },
+   {
+    "datei": "geschwindigkeitskontrollen-mai-2026__Statistik_GemOBB_Mai_2026-2.pdf",
+    "zeilen": 10
+   },
+   {
+    "datei": "geschwindigkeitskontrollen-november-2025__Statistik_GemOBB_November_2025.pdf",
+    "zeilen": 8
+   },
+   {
+    "datei": "geschwindigkeitskontrollen-oktober-2025__Statistik_GemOBB_Oktober_2025.pdf",
+    "zeilen": 7
+   },
+   {
+    "datei": "geschwindigkeitskontrollen-september-2025__Statistik_GemOBB_September_2025.pdf",
+    "zeilen": 9
+   }
+  ],
+  "hinweise": [],
+  "doppelt": 0
+ }
+}

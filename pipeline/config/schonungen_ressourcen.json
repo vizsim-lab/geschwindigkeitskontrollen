@@ -1,0 +1,473 @@
+{
+ "katalog": "https://schonungen.de/wp-json/wp/v2/media",
+ "datensaetze": [
+  {
+   "name": "verkehrsstatistik-juni-2026",
+   "titel": "Verkehrsstatistik Juni 2026",
+   "organisation": "",
+   "lizenz": null,
+   "lizenz_id": null,
+   "lizenz_url": null,
+   "url": "https://schonungen.de/wp-content/uploads/2026/08/Verkehrsstatistik-Juni-2026.pdf"
+  },
+  {
+   "name": "verkehrsstatistik-kvue-2026-04-002",
+   "titel": "Verkehrsstatistik KVÜ 2026-04 (002)",
+   "organisation": "",
+   "lizenz": null,
+   "lizenz_id": null,
+   "lizenz_url": null,
+   "url": "https://schonungen.de/wp-content/uploads/2026/06/Verkehrsstatistik-KVUe-2026-04-002.pdf"
+  },
+  {
+   "name": "verkehrsstatistik-kvue-2026-03",
+   "titel": "Verkehrsstatistik KVÜ 2026-03",
+   "organisation": "",
+   "lizenz": null,
+   "lizenz_id": null,
+   "lizenz_url": null,
+   "url": "https://schonungen.de/wp-content/uploads/2026/05/Verkehrsstatistik-KVUe-2026-03.pdf"
+  },
+  {
+   "name": "verkehrsstatistik-kvue-2026-02",
+   "titel": "Verkehrsstatistik KVÜ 2026-02",
+   "organisation": "",
+   "lizenz": null,
+   "lizenz_id": null,
+   "lizenz_url": null,
+   "url": "https://schonungen.de/wp-content/uploads/2026/04/Verkehrsstatistik-KVUe-2026-02.pdf"
+  },
+  {
+   "name": "verkehrsstatistik-kvue-2026-01",
+   "titel": "Verkehrsstatistik KVÜ 2026-01",
+   "organisation": "",
+   "lizenz": null,
+   "lizenz_id": null,
+   "lizenz_url": null,
+   "url": "https://schonungen.de/wp-content/uploads/2026/02/Verkehrsstatistik-KVUe-2026-01.pdf"
+  },
+  {
+   "name": "verkehrsstatistik-kvue-2025-12",
+   "titel": "Verkehrsstatistik KVÜ 2025-12",
+   "organisation": "",
+   "lizenz": null,
+   "lizenz_id": null,
+   "lizenz_url": null,
+   "url": "https://schonungen.de/wp-content/uploads/2026/01/Verkehrsstatistik-KVUe-2025-12.pdf"
+  },
+  {
+   "name": "verkehrsstatistik-kvue-okt-und-nov-2025",
+   "titel": "Verkehrsstatistik KVÜ Okt. und Nov. 2025",
+   "organisation": "",
+   "lizenz": null,
+   "lizenz_id": null,
+   "lizenz_url": null,
+   "url": "https://schonungen.de/wp-content/uploads/2026/01/Verkehrsstatistik-KVUe-Okt.-und-Nov.-2025.pdf"
+  },
+  {
+   "name": "verkehrsstatistik-kvue-september-2025",
+   "titel": "Verkehrsstatistik KVÜ September 2025",
+   "organisation": "",
+   "lizenz": null,
+   "lizenz_id": null,
+   "lizenz_url": null,
+   "url": "https://schonungen.de/wp-content/uploads/2025/11/Verkehrsstatistik-KVUe-September-2025.pdf"
+  },
+  {
+   "name": "verkehrsstatistik",
+   "titel": "Verkehrsstatistik",
+   "organisation": "",
+   "lizenz": null,
+   "lizenz_id": null,
+   "lizenz_url": null,
+   "url": "https://schonungen.de/wp-content/uploads/2025/08/Verkehrsstatistik.pdf"
+  },
+  {
+   "name": "verkehrsstatistik-kvue-maerz-2025",
+   "titel": "Verkehrsstatistik KVÜ März 2025",
+   "organisation": "",
+   "lizenz": null,
+   "lizenz_id": null,
+   "lizenz_url": null,
+   "url": "https://schonungen.de/wp-content/uploads/2025/04/Verkehrsstatistik-KVUe-Maerz-2025.pdf"
+  },
+  {
+   "name": "verkehrsstatistik-kvue-2025-02docx",
+   "titel": "Verkehrsstatistik KVÜ 2025-02docx",
+   "organisation": "",
+   "lizenz": null,
+   "lizenz_id": null,
+   "lizenz_url": null,
+   "url": "https://schonungen.de/wp-content/uploads/2025/04/Verkehrsstatistik-KVUe-2025-02docx.pdf"
+  },
+  {
+   "name": "verkehrsstatistik-kvue-2025-02docx",
+   "titel": "Verkehrsstatistik KVÜ 2025-02docx",
+   "organisation": "",
+   "lizenz": null,
+   "lizenz_id": null,
+   "lizenz_url": null,
+   "url": "https://schonungen.de/wp-content/uploads/2025/03/Verkehrsstatistik-KVUe-2025-02docx.pdf"
+  },
+  {
+   "name": "verkehrsstatistik-jan-2025",
+   "titel": "Verkehrsstatistik Jan. 2025",
+   "organisation": "",
+   "lizenz": null,
+   "lizenz_id": null,
+   "lizenz_url": null,
+   "url": "https://schonungen.de/wp-content/uploads/2025/02/Verkehrsstatistik-Jan.-2025.pdf"
+  },
+  {
+   "name": "verkehrsstatistik-kvue-2024-06",
+   "titel": "Verkehrsstatistik KVÜ 2024-06",
+   "organisation": "",
+   "lizenz": null,
+   "lizenz_id": null,
+   "lizenz_url": null,
+   "url": "https://schonungen.de/wp-content/uploads/2024/07/Verkehrsstatistik-KVUe-2024-06.docx"
+  },
+  {
+   "name": "verkehrsstatistik-kvue-2024-03",
+   "titel": "Verkehrsstatistik KVÜ 2024-03",
+   "organisation": "",
+   "lizenz": null,
+   "lizenz_id": null,
+   "lizenz_url": null,
+   "url": "https://schonungen.de/wp-content/uploads/2024/05/Verkehrsstatistik-KVUe-2024-03.pdf"
+  },
+  {
+   "name": "verkehrsstatistik-kvue-2024-02",
+   "titel": "Verkehrsstatistik KVÜ 2024-02",
+   "organisation": "",
+   "lizenz": null,
+   "lizenz_id": null,
+   "lizenz_url": null,
+   "url": "https://schonungen.de/wp-content/uploads/2024/03/Verkehrsstatistik-KVUe-2024-02.pdf"
+  },
+  {
+   "name": "verkehrsstatistik-kvue-2023-09",
+   "titel": "Verkehrsstatistik KVÜ 2023-09",
+   "organisation": "",
+   "lizenz": null,
+   "lizenz_id": null,
+   "lizenz_url": null,
+   "url": "https://schonungen.de/wp-content/uploads/2023/11/Verkehrsstatistik-KVUe-2023-09.pdf"
+  },
+  {
+   "name": "verkehrsstatistik-kvue-2023-06",
+   "titel": "Verkehrsstatistik KVÜ 2023-06",
+   "organisation": "",
+   "lizenz": null,
+   "lizenz_id": null,
+   "lizenz_url": null,
+   "url": "https://schonungen.de/wp-content/uploads/2023/08/Verkehrsstatistik-KVUe-2023-06.pdf"
+  },
+  {
+   "name": "verkehrsstatistik-kvue-2023-04",
+   "titel": "Verkehrsstatistik KVÜ 2023-04",
+   "organisation": "",
+   "lizenz": null,
+   "lizenz_id": null,
+   "lizenz_url": null,
+   "url": "https://schonungen.de/wp-content/uploads/2023/06/Verkehrsstatistik-KVUe-2023-04.docx"
+  },
+  {
+   "name": "verkehrsstatistik-kvue-2022-10",
+   "titel": "Verkehrsstatistik KVÜ 2022-10",
+   "organisation": "",
+   "lizenz": null,
+   "lizenz_id": null,
+   "lizenz_url": null,
+   "url": "https://schonungen.de/wp-content/uploads/2023/05/Verkehrsstatistik-KVUe-2022-10.pdf"
+  },
+  {
+   "name": "verkehrsstatistik-kvue-2022-11",
+   "titel": "Verkehrsstatistik KVÜ 2022-11",
+   "organisation": "",
+   "lizenz": null,
+   "lizenz_id": null,
+   "lizenz_url": null,
+   "url": "https://schonungen.de/wp-content/uploads/2023/01/Verkehrsstatistik-KVUe-2022-11.pdf"
+  },
+  {
+   "name": "verkehrsstatistik-kvue-2022-08",
+   "titel": "Verkehrsstatistik KVÜ 2022-08",
+   "organisation": "",
+   "lizenz": null,
+   "lizenz_id": null,
+   "lizenz_url": null,
+   "url": "https://schonungen.de/wp-content/uploads/2022/09/Verkehrsstatistik-KVUe-2022-08.pdf"
+  },
+  {
+   "name": "verkehrsstatistik-kvue-2022-08",
+   "titel": "Verkehrsstatistik KVÜ 2022-08",
+   "organisation": "",
+   "lizenz": null,
+   "lizenz_id": null,
+   "lizenz_url": null,
+   "url": "https://schonungen.de/wp-content/uploads/2022/09/Verkehrsstatistik-KVUe-2022-08.docx"
+  },
+  {
+   "name": "verkehrsstatistik-mobiles-messgeraet-hauptstrasse-schonungen",
+   "titel": "Verkehrsstatistik_mobiles_Messgeraet__Hauptstrasse_Schonungen",
+   "organisation": "",
+   "lizenz": null,
+   "lizenz_id": null,
+   "lizenz_url": null,
+   "url": "https://schonungen.de/wp-content/uploads/2022/04/Verkehrsstatistik_mobiles_Messgeraet__Hauptstrasse_Schonungen.pdf"
+  },
+  {
+   "name": "verkehrsstatistik-mai-2020",
+   "titel": "Verkehrsstatistik_Mai_2020",
+   "organisation": "",
+   "lizenz": null,
+   "lizenz_id": null,
+   "lizenz_url": null,
+   "url": "https://schonungen.de/wp-content/uploads/2022/04/Verkehrsstatistik_Mai_2020.pdf"
+  }
+ ],
+ "fehler": [],
+ "dateien": [
+  {
+   "id": 16514,
+   "name": "Verkehrsstatistik-Jan.-2025",
+   "format": "PDF",
+   "url": "https://schonungen.de/wp-content/uploads/2025/02/Verkehrsstatistik-Jan.-2025.pdf",
+   "geaendert": "2025-02-25T12:01:35",
+   "datensatz": "verkehrsstatistik-jan-2025",
+   "datei": "verkehrsstatistik-jan-2025__Verkehrsstatistik-Jan_-2025.pdf",
+   "sha256": "7fcebde32f9091371994682bf8d8f38e99399ae41aab266abfa1714e7b072e27"
+  },
+  {
+   "id": 17938,
+   "name": "Verkehrsstatistik-Juni-2026",
+   "format": "PDF",
+   "url": "https://schonungen.de/wp-content/uploads/2026/08/Verkehrsstatistik-Juni-2026.pdf",
+   "geaendert": "2026-08-14T07:41:35",
+   "datensatz": "verkehrsstatistik-juni-2026",
+   "datei": "verkehrsstatistik-juni-2026__Verkehrsstatistik-Juni-2026.pdf",
+   "sha256": "40719372165a2947a365cbb4c0dcae9db07eb62c8132186a0ff19fe46d7513e2"
+  },
+  {
+   "id": 12193,
+   "name": "Verkehrsstatistik-KVUe-2022-08",
+   "format": "DOCX",
+   "url": "https://schonungen.de/wp-content/uploads/2022/09/Verkehrsstatistik-KVUe-2022-08.docx",
+   "geaendert": "2022-09-27T14:13:04",
+   "datensatz": "verkehrsstatistik-kvue-2022-08",
+   "datei": "verkehrsstatistik-kvue-2022-08__Verkehrsstatistik-KVUe-2022-08.docx",
+   "sha256": "ad28680caba7c4cb111a18e1eef23eec56607cd89595c52cd709de39ee898796"
+  },
+  {
+   "id": 12197,
+   "name": "Verkehrsstatistik-KVUe-2022-08",
+   "format": "PDF",
+   "url": "https://schonungen.de/wp-content/uploads/2022/09/Verkehrsstatistik-KVUe-2022-08.pdf",
+   "geaendert": "2022-09-27T14:15:08",
+   "datensatz": "verkehrsstatistik-kvue-2022-08",
+   "datei": "verkehrsstatistik-kvue-2022-08__Verkehrsstatistik-KVUe-2022-08.pdf",
+   "sha256": "1aa53d0cac80df3fb46a9f32413e885b32bf52cadf6657fc974f8e644f1b16e3"
+  },
+  {
+   "id": 13795,
+   "name": "Verkehrsstatistik-KVUe-2022-10",
+   "format": "PDF",
+   "url": "https://schonungen.de/wp-content/uploads/2023/05/Verkehrsstatistik-KVUe-2022-10.pdf",
+   "geaendert": "2023-05-17T08:55:26",
+   "datensatz": "verkehrsstatistik-kvue-2022-10",
+   "datei": "verkehrsstatistik-kvue-2022-10__Verkehrsstatistik-KVUe-2022-10.pdf",
+   "sha256": "8e9d9eced6c406a10ab7d8a0048979b4fca0ee61b559016635d8ee85f3c85658"
+  },
+  {
+   "id": 12943,
+   "name": "Verkehrsstatistik-KVUe-2022-11",
+   "format": "PDF",
+   "url": "https://schonungen.de/wp-content/uploads/2023/01/Verkehrsstatistik-KVUe-2022-11.pdf",
+   "geaendert": "2023-01-12T10:04:04",
+   "datensatz": "verkehrsstatistik-kvue-2022-11",
+   "datei": "verkehrsstatistik-kvue-2022-11__Verkehrsstatistik-KVUe-2022-11.pdf",
+   "sha256": "21c00c60cfdf9ca2155e65f7c4af9b3bdc9870290ee242f0ded53520489ca804"
+  },
+  {
+   "id": 13862,
+   "name": "Verkehrsstatistik-KVUe-2023-04",
+   "format": "DOCX",
+   "url": "https://schonungen.de/wp-content/uploads/2023/06/Verkehrsstatistik-KVUe-2023-04.docx",
+   "geaendert": "2023-06-15T15:00:40",
+   "datensatz": "verkehrsstatistik-kvue-2023-04",
+   "datei": "verkehrsstatistik-kvue-2023-04__Verkehrsstatistik-KVUe-2023-04.docx",
+   "sha256": "aeba4cbe1b18db72dde47570cb6cbb0b58e781ef876c74f71f136a749483308e"
+  },
+  {
+   "id": 14049,
+   "name": "Verkehrsstatistik-KVUe-2023-06",
+   "format": "PDF",
+   "url": "https://schonungen.de/wp-content/uploads/2023/08/Verkehrsstatistik-KVUe-2023-06.pdf",
+   "geaendert": "2023-08-03T15:35:58",
+   "datensatz": "verkehrsstatistik-kvue-2023-06",
+   "datei": "verkehrsstatistik-kvue-2023-06__Verkehrsstatistik-KVUe-2023-06.pdf",
+   "sha256": "b2e0b9882fe12d17fe590f693d00f7c37b36b02400e343a38300d38ced1b4c02"
+  },
+  {
+   "id": 14545,
+   "name": "Verkehrsstatistik-KVUe-2023-09",
+   "format": "PDF",
+   "url": "https://schonungen.de/wp-content/uploads/2023/11/Verkehrsstatistik-KVUe-2023-09.pdf",
+   "geaendert": "2023-11-14T09:51:51",
+   "datensatz": "verkehrsstatistik-kvue-2023-09",
+   "datei": "verkehrsstatistik-kvue-2023-09__Verkehrsstatistik-KVUe-2023-09.pdf",
+   "sha256": "78a593567da999415c443a1aa1a7183b839d8ded96e1b0325e4029b12c757e36"
+  },
+  {
+   "id": 14961,
+   "name": "Verkehrsstatistik-KVUe-2024-02",
+   "format": "PDF",
+   "url": "https://schonungen.de/wp-content/uploads/2024/03/Verkehrsstatistik-KVUe-2024-02.pdf",
+   "geaendert": "2024-03-26T20:15:03",
+   "datensatz": "verkehrsstatistik-kvue-2024-02",
+   "datei": "verkehrsstatistik-kvue-2024-02__Verkehrsstatistik-KVUe-2024-02.pdf",
+   "sha256": "e5c4ddc72b97811a717ec4781e577289fa4aaef7fab599c24ee5dcedb61aee7f"
+  },
+  {
+   "id": 15150,
+   "name": "Verkehrsstatistik-KVUe-2024-03",
+   "format": "PDF",
+   "url": "https://schonungen.de/wp-content/uploads/2024/05/Verkehrsstatistik-KVUe-2024-03.pdf",
+   "geaendert": "2024-05-24T12:00:46",
+   "datensatz": "verkehrsstatistik-kvue-2024-03",
+   "datei": "verkehrsstatistik-kvue-2024-03__Verkehrsstatistik-KVUe-2024-03.pdf",
+   "sha256": "9db73471c8c9c6706c5dabac04970fb137051677e65d04ccb379d38ffcd65a56"
+  },
+  {
+   "id": 15750,
+   "name": "Verkehrsstatistik-KVUe-2024-06",
+   "format": "DOCX",
+   "url": "https://schonungen.de/wp-content/uploads/2024/07/Verkehrsstatistik-KVUe-2024-06.docx",
+   "geaendert": "2024-07-30T10:52:30",
+   "datensatz": "verkehrsstatistik-kvue-2024-06",
+   "datei": "verkehrsstatistik-kvue-2024-06__Verkehrsstatistik-KVUe-2024-06.docx",
+   "sha256": "0799cd13e577fd3f3fc305c9b6d3a77ec6803c84ff6d205aa64eb6d0bc490543"
+  },
+  {
+   "id": 16725,
+   "name": "Verkehrsstatistik-KVUe-2025-02docx",
+   "format": "PDF",
+   "url": "https://schonungen.de/wp-content/uploads/2025/04/Verkehrsstatistik-KVUe-2025-02docx.pdf",
+   "geaendert": "2025-04-29T10:01:54",
+   "datensatz": "verkehrsstatistik-kvue-2025-02docx",
+   "datei": "verkehrsstatistik-kvue-2025-02docx__Verkehrsstatistik-KVUe-2025-02docx.pdf",
+   "sha256": "8489ada05f947053f156916bfc05fc58cd730c58aabcbd44b803ef9266f0d7d2"
+  },
+  {
+   "id": 17446,
+   "name": "Verkehrsstatistik-KVUe-2025-12",
+   "format": "PDF",
+   "url": "https://schonungen.de/wp-content/uploads/2026/01/Verkehrsstatistik-KVUe-2025-12.pdf",
+   "geaendert": "2026-01-27T07:46:46",
+   "datensatz": "verkehrsstatistik-kvue-2025-12",
+   "datei": "verkehrsstatistik-kvue-2025-12__Verkehrsstatistik-KVUe-2025-12.pdf",
+   "sha256": "d1d1fc2bb6c1e08cb72f0408da12d77fdf0e1419827e22d017c102cd8ac4a468"
+  },
+  {
+   "id": 17507,
+   "name": "Verkehrsstatistik-KVUe-2026-01",
+   "format": "PDF",
+   "url": "https://schonungen.de/wp-content/uploads/2026/02/Verkehrsstatistik-KVUe-2026-01.pdf",
+   "geaendert": "2026-02-25T08:04:52",
+   "datensatz": "verkehrsstatistik-kvue-2026-01",
+   "datei": "verkehrsstatistik-kvue-2026-01__Verkehrsstatistik-KVUe-2026-01.pdf",
+   "sha256": "ed2173f831692789aba6d982c2d8a6dadca3151f498b660071c43ee2baf5291f"
+  },
+  {
+   "id": 17611,
+   "name": "Verkehrsstatistik-KVUe-2026-02",
+   "format": "PDF",
+   "url": "https://schonungen.de/wp-content/uploads/2026/04/Verkehrsstatistik-KVUe-2026-02.pdf",
+   "geaendert": "2026-04-02T14:20:04",
+   "datensatz": "verkehrsstatistik-kvue-2026-02",
+   "datei": "verkehrsstatistik-kvue-2026-02__Verkehrsstatistik-KVUe-2026-02.pdf",
+   "sha256": "df06608d20c82bde49611b4818debec4adead7ea2f7440c9d2144a0ae04a1f61"
+  },
+  {
+   "id": 17668,
+   "name": "Verkehrsstatistik-KVUe-2026-03",
+   "format": "PDF",
+   "url": "https://schonungen.de/wp-content/uploads/2026/05/Verkehrsstatistik-KVUe-2026-03.pdf",
+   "geaendert": "2026-05-04T12:10:49",
+   "datensatz": "verkehrsstatistik-kvue-2026-03",
+   "datei": "verkehrsstatistik-kvue-2026-03__Verkehrsstatistik-KVUe-2026-03.pdf",
+   "sha256": "9add1e93f9ab5907cd489288a1eb4e91de055f6c1489c3115167e87e81208091"
+  },
+  {
+   "id": 17806,
+   "name": "Verkehrsstatistik-KVUe-2026-04-002",
+   "format": "PDF",
+   "url": "https://schonungen.de/wp-content/uploads/2026/06/Verkehrsstatistik-KVUe-2026-04-002.pdf",
+   "geaendert": "2026-06-12T08:42:31",
+   "datensatz": "verkehrsstatistik-kvue-2026-04-002",
+   "datei": "verkehrsstatistik-kvue-2026-04-002__Verkehrsstatistik-KVUe-2026-04-002.pdf",
+   "sha256": "94151aa8cc119ee648bb8e4185ce8649fcba768ab39d12d19376198bcd0c1471"
+  },
+  {
+   "id": 16727,
+   "name": "Verkehrsstatistik-KVUe-Maerz-2025",
+   "format": "PDF",
+   "url": "https://schonungen.de/wp-content/uploads/2025/04/Verkehrsstatistik-KVUe-Maerz-2025.pdf",
+   "geaendert": "2025-04-29T10:03:57",
+   "datensatz": "verkehrsstatistik-kvue-maerz-2025",
+   "datei": "verkehrsstatistik-kvue-maerz-2025__Verkehrsstatistik-KVUe-Maerz-2025.pdf",
+   "sha256": "ed5bdd5e3a7bf6984aa0ce9070dc9b115cf11f9c79fc6d686a5e1c5d0d7efcf0"
+  },
+  {
+   "id": 17407,
+   "name": "Verkehrsstatistik-KVUe-Okt.-und-Nov.-2025",
+   "format": "PDF",
+   "url": "https://schonungen.de/wp-content/uploads/2026/01/Verkehrsstatistik-KVUe-Okt.-und-Nov.-2025.pdf",
+   "geaendert": "2026-01-14T10:03:21",
+   "datensatz": "verkehrsstatistik-kvue-okt-und-nov-2025",
+   "datei": "verkehrsstatistik-kvue-okt-und-nov-2025__Verkehrsstatistik-KVUe-Okt_-und-Nov_-2025.pdf",
+   "sha256": "880c28fd024176c46d499a74d7c22bdf37d6c75bd5fd07086b7d92938960e3ac"
+  },
+  {
+   "id": 17309,
+   "name": "Verkehrsstatistik-KVUe-September-2025",
+   "format": "PDF",
+   "url": "https://schonungen.de/wp-content/uploads/2025/11/Verkehrsstatistik-KVUe-September-2025.pdf",
+   "geaendert": "2025-11-20T12:05:10",
+   "datensatz": "verkehrsstatistik-kvue-september-2025",
+   "datei": "verkehrsstatistik-kvue-september-2025__Verkehrsstatistik-KVUe-September-2025.pdf",
+   "sha256": "9d8e80fdb44f505f1ac91d21626cad008118e274d4a98cccd79a832e4cccc87a"
+  },
+  {
+   "id": 10616,
+   "name": "Verkehrsstatistik_Mai_2020",
+   "format": "PDF",
+   "url": "https://schonungen.de/wp-content/uploads/2022/04/Verkehrsstatistik_Mai_2020.pdf",
+   "geaendert": "2022-04-02T15:53:01",
+   "datensatz": "verkehrsstatistik-mai-2020",
+   "datei": "verkehrsstatistik-mai-2020__Verkehrsstatistik_Mai_2020.pdf",
+   "sha256": "2d7eb674de4ffc85ce55994d86d5c399608e95d6855ee5597812a0c0f5c48381"
+  },
+  {
+   "id": 10615,
+   "name": "Verkehrsstatistik_mobiles_Messgeraet__Hauptstrasse_Schonungen",
+   "format": "PDF",
+   "url": "https://schonungen.de/wp-content/uploads/2022/04/Verkehrsstatistik_mobiles_Messgeraet__Hauptstrasse_Schonungen.pdf",
+   "geaendert": "2022-04-02T15:53:01",
+   "datensatz": "verkehrsstatistik-mobiles-messgeraet-hauptstrasse-schonungen",
+   "datei": "verkehrsstatistik-mobiles-messgeraet-hauptstrasse-schonungen__Verkehrsstatistik_mobiles_Messgeraet__Hauptstrasse_Schonungen.pdf",
+   "sha256": "4177b1c44d23b4aebc93b269a51281460802a40e6387b8c08a7ec73ed9a55a41"
+  },
+  {
+   "id": 17046,
+   "name": "Verkehrsstatistik",
+   "format": "PDF",
+   "url": "https://schonungen.de/wp-content/uploads/2025/08/Verkehrsstatistik.pdf",
+   "geaendert": "2025-08-28T13:34:34",
+   "datensatz": "verkehrsstatistik",
+   "datei": "verkehrsstatistik__Verkehrsstatistik.pdf",
+   "sha256": "7d00d95c5d1a286efe99f0762824ba71cd2a181f38c3b3cb920b5add829e6ed7"
+  }
+ ]
+}

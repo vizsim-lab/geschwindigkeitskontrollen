@@ -1,0 +1,451 @@
+{
+ "katalog": "https://offenedaten.aachen.de/api/3/action/",
+ "datensaetze": [
+  {
+   "name": "geschwindigkeitskontrollen-2021",
+   "titel": "Geschwindigkeitskontrollen 2021",
+   "organisation": "Stadt Aachen",
+   "lizenz": "Datenlizenz Deutschland - Namensnennung - Version 2.0",
+   "lizenz_id": "dl-de-by-2.0",
+   "lizenz_url": "https://www.govdata.de/dl-de/by-2-0",
+   "url": "https://offenedaten.aachen.de/dataset/geschwindigkeitskontrollen-2021"
+  },
+  {
+   "name": "geschwindigkeitskontrollen",
+   "titel": "Geschwindigkeitskontrollen 2020",
+   "organisation": "Stadt Aachen",
+   "lizenz": "Datenlizenz Deutschland - Namensnennung - Version 2.0",
+   "lizenz_id": "dl-de-by-2.0",
+   "lizenz_url": "https://www.govdata.de/dl-de/by-2-0",
+   "url": "https://offenedaten.aachen.de/dataset/geschwindigkeitskontrollen"
+  },
+  {
+   "name": "geschwindigkeitskontrollen-der-stadt-aachen-2025",
+   "titel": "Geschwindigkeitskontrollen der Stadt Aachen 2025",
+   "organisation": "Stadt Aachen",
+   "lizenz": "Datenlizenz Deutschland - Namensnennung - Version 2.0",
+   "lizenz_id": "dl-de-by-2.0",
+   "lizenz_url": "https://www.govdata.de/dl-de/by-2-0",
+   "url": "https://offenedaten.aachen.de/dataset/geschwindigkeitskontrollen-der-stadt-aachen-2025"
+  },
+  {
+   "name": "geschwindigkeitskontrollen-der-stadt-aachen-2024",
+   "titel": "Geschwindigkeitskontrollen der Stadt Aachen 2024",
+   "organisation": "Stadt Aachen",
+   "lizenz": "Datenlizenz Deutschland - Namensnennung - Version 2.0",
+   "lizenz_id": "dl-de-by-2.0",
+   "lizenz_url": "https://www.govdata.de/dl-de/by-2-0",
+   "url": "https://offenedaten.aachen.de/dataset/geschwindigkeitskontrollen-der-stadt-aachen-2024"
+  },
+  {
+   "name": "geschwindigkeitskontrollen-der-stadt-aachen-2023",
+   "titel": "Geschwindigkeitskontrollen der Stadt Aachen 2023",
+   "organisation": "Stadt Aachen",
+   "lizenz": "Datenlizenz Deutschland - Namensnennung - Version 2.0",
+   "lizenz_id": "dl-de-by-2.0",
+   "lizenz_url": "https://www.govdata.de/dl-de/by-2-0",
+   "url": "https://offenedaten.aachen.de/dataset/geschwindigkeitskontrollen-der-stadt-aachen-2023"
+  },
+  {
+   "name": "geschwindigkeitskontrollen-der-stadt-aachen-2022",
+   "titel": "Geschwindigkeitskontrollen der Stadt Aachen 2022",
+   "organisation": "Stadt Aachen",
+   "lizenz": "Datenlizenz Deutschland - Namensnennung - Version 2.0",
+   "lizenz_id": "dl-de-by-2.0",
+   "lizenz_url": "https://www.govdata.de/dl-de/by-2-0",
+   "url": "https://offenedaten.aachen.de/dataset/geschwindigkeitskontrollen-der-stadt-aachen-2022"
+  },
+  {
+   "name": "geschwindigkeitskontrollen-der-stadt-aachen-2026",
+   "titel": "Geschwindigkeitskontrollen der Stadt Aachen 2026",
+   "organisation": "Stadt Aachen",
+   "lizenz": "Datenlizenz Deutschland - Namensnennung - Version 2.0",
+   "lizenz_id": "dl-de-by-2.0",
+   "lizenz_url": "https://www.govdata.de/dl-de/by-2-0",
+   "url": "https://offenedaten.aachen.de/dataset/geschwindigkeitskontrollen-der-stadt-aachen-2026"
+  }
+ ],
+ "fehler": [],
+ "dateien": [
+  {
+   "id": "2a39f3f4-8b05-4de2-99e4-7ef9c4a49bdb",
+   "name": "Geschwindigkeitskontrollen Dezember 2021",
+   "format": "CSV",
+   "url": "https://offenedaten.aachen.de/dataset/6cbe0cbe-b1d6-4755-9e76-b1cec04bd857/resource/2a39f3f4-8b05-4de2-99e4-7ef9c4a49bdb/download/2021_dezember.csv",
+   "geaendert": "2022-01-13T12:40:55.227479",
+   "datensatz": "geschwindigkeitskontrollen-2021",
+   "datei": "geschwindigkeitskontrollen-2021__Geschwindigkeitskontrollen_Dezember_2021.csv",
+   "sha256": "97e993fce522d97f38307ab4dcdea86a3037b3ff058fca182e3d96653c95f76c"
+  },
+  {
+   "id": "24b698d1-a72d-464d-8887-5cafec653ca8",
+   "name": "Geschwindigkeitskontrollen November 2021",
+   "format": "CSV",
+   "url": "https://offenedaten.aachen.de/dataset/6cbe0cbe-b1d6-4755-9e76-b1cec04bd857/resource/24b698d1-a72d-464d-8887-5cafec653ca8/download/2021_november.csv",
+   "geaendert": "2022-01-12T08:31:09.888263",
+   "datensatz": "geschwindigkeitskontrollen-2021",
+   "datei": "geschwindigkeitskontrollen-2021__Geschwindigkeitskontrollen_November_2021.csv",
+   "sha256": "5c4e5b3b6ec5805f3d1dec222f62b5ba248e39f341619c0c364251aceb3061b4"
+  },
+  {
+   "id": "4b469326-297d-4329-b0fd-3f55114c4ffb",
+   "name": "Geschwindigkeitskontrollen Oktober 2021",
+   "format": "CSV",
+   "url": "https://offenedaten.aachen.de/dataset/6cbe0cbe-b1d6-4755-9e76-b1cec04bd857/resource/4b469326-297d-4329-b0fd-3f55114c4ffb/download/2021_oktober.csv",
+   "geaendert": "2021-11-15T08:41:05.489220",
+   "datensatz": "geschwindigkeitskontrollen-2021",
+   "datei": "geschwindigkeitskontrollen-2021__Geschwindigkeitskontrollen_Oktober_2021.csv",
+   "sha256": "17ed86f82746cccd1aa53dd6391d4c491fa3d6c23c18c8eb9154b451e558b592"
+  },
+  {
+   "id": "2808af54-b8d4-481e-a6b9-277076c9bda5",
+   "name": "Dezember 2022",
+   "format": "XLSX",
+   "url": "https://offenedaten.aachen.de/dataset/d09d1a37-551c-45de-a9e4-f0c1cca2c7d2/resource/2808af54-b8d4-481e-a6b9-277076c9bda5/download/2022_dezember.xlsx",
+   "geaendert": "2023-01-27T11:28:19.095143",
+   "datensatz": "geschwindigkeitskontrollen-der-stadt-aachen-2022",
+   "datei": "geschwindigkeitskontrollen-der-stadt-aachen-2022__Dezember_2022.xlsx",
+   "sha256": "b64106735427e13c28b0991d1b06b495cefe1b5844a816dfdc773d19272136b5"
+  },
+  {
+   "id": "d15cd1b2-342f-4b77-8960-253f3dd3c9cc",
+   "name": "November 2022",
+   "format": "XLSX",
+   "url": "https://offenedaten.aachen.de/dataset/d09d1a37-551c-45de-a9e4-f0c1cca2c7d2/resource/d15cd1b2-342f-4b77-8960-253f3dd3c9cc/download/2022_november.xlsx",
+   "geaendert": "2023-01-27T11:27:48.432412",
+   "datensatz": "geschwindigkeitskontrollen-der-stadt-aachen-2022",
+   "datei": "geschwindigkeitskontrollen-der-stadt-aachen-2022__November_2022.xlsx",
+   "sha256": "1e342728fafc15fbf8e129b340d8b7f9dcce2e954a5dd7c967e0d70c396bdc7b"
+  },
+  {
+   "id": "da12e832-7352-477b-b1c8-d0c93a2ddaa0",
+   "name": "Oktober 2022",
+   "format": "XLSX",
+   "url": "https://offenedaten.aachen.de/dataset/d09d1a37-551c-45de-a9e4-f0c1cca2c7d2/resource/da12e832-7352-477b-b1c8-d0c93a2ddaa0/download/2022_oktober.xlsx",
+   "geaendert": "2022-11-21T14:43:06.044656",
+   "datensatz": "geschwindigkeitskontrollen-der-stadt-aachen-2022",
+   "datei": "geschwindigkeitskontrollen-der-stadt-aachen-2022__Oktober_2022.xlsx",
+   "sha256": "7eb93131ee78fc5f8718f84f982f19003eabb9178b08f874a60bb73474107b46"
+  },
+  {
+   "id": "1b71f3b7-4fbf-4839-878f-e660eb083d97",
+   "name": "Dezember 2023",
+   "format": "XLSX",
+   "url": "https://offenedaten.aachen.de/dataset/a54b4387-17f8-47b4-a371-92786d844299/resource/1b71f3b7-4fbf-4839-878f-e660eb083d97/download/dezember_2023.xlsx",
+   "geaendert": "2024-01-30T09:37:58.896460",
+   "datensatz": "geschwindigkeitskontrollen-der-stadt-aachen-2023",
+   "datei": "geschwindigkeitskontrollen-der-stadt-aachen-2023__Dezember_2023.xlsx",
+   "sha256": "3281ee1718b5fdddee9ff045b2eb51b3b7cb343c9fc4063ce11be5e95aa16a30"
+  },
+  {
+   "id": "df304027-a8bf-4803-ba80-08dba51c86a1",
+   "name": "November 2023",
+   "format": "XLSX",
+   "url": "https://offenedaten.aachen.de/dataset/a54b4387-17f8-47b4-a371-92786d844299/resource/df304027-a8bf-4803-ba80-08dba51c86a1/download/november_2023.xlsx",
+   "geaendert": "2024-01-30T09:37:35.850509",
+   "datensatz": "geschwindigkeitskontrollen-der-stadt-aachen-2023",
+   "datei": "geschwindigkeitskontrollen-der-stadt-aachen-2023__November_2023.xlsx",
+   "sha256": "3f7ba22f5ef52a240844b12637bc623cfd768efb907d9f467fc647f6d0c6b34d"
+  },
+  {
+   "id": "4abd765d-3ecd-4b7a-88c6-2142db37edad",
+   "name": "Oktober 2023",
+   "format": "XLSX",
+   "url": "https://offenedaten.aachen.de/dataset/a54b4387-17f8-47b4-a371-92786d844299/resource/4abd765d-3ecd-4b7a-88c6-2142db37edad/download/2023_oktober.xlsx",
+   "geaendert": "2024-01-30T09:37:03.180926",
+   "datensatz": "geschwindigkeitskontrollen-der-stadt-aachen-2023",
+   "datei": "geschwindigkeitskontrollen-der-stadt-aachen-2023__Oktober_2023.xlsx",
+   "sha256": "f7812a76feffc87d38e3ca7ea822be195c5c46a1eeacf36240d07d796d2115a2"
+  },
+  {
+   "id": "485b2445-1691-41f2-a8c1-6ffd156a9b5c",
+   "name": "Dezember 2024",
+   "format": "XLSX",
+   "url": "https://offenedaten.aachen.de/dataset/6e496f95-b1be-43b1-82dd-5604b8c94ed2/resource/485b2445-1691-41f2-a8c1-6ffd156a9b5c/download/2024_dezember.xlsx",
+   "geaendert": "2025-01-28T10:41:09.239803",
+   "datensatz": "geschwindigkeitskontrollen-der-stadt-aachen-2024",
+   "datei": "geschwindigkeitskontrollen-der-stadt-aachen-2024__Dezember_2024.xlsx",
+   "sha256": "412aa97bc6ee3b447087b4cbb9864d715798a02f881c3cf10b8c26d8609633e9"
+  },
+  {
+   "id": "3b9ebaee-9c18-4d6a-b133-d50a74813d3a",
+   "name": "November 2024",
+   "format": "XLSX",
+   "url": "https://offenedaten.aachen.de/dataset/6e496f95-b1be-43b1-82dd-5604b8c94ed2/resource/3b9ebaee-9c18-4d6a-b133-d50a74813d3a/download/2024_november.xlsx",
+   "geaendert": "2024-12-10T13:50:34.398098",
+   "datensatz": "geschwindigkeitskontrollen-der-stadt-aachen-2024",
+   "datei": "geschwindigkeitskontrollen-der-stadt-aachen-2024__November_2024.xlsx",
+   "sha256": "811bfff3e2f65c0e7e2151c8b4c383ce17ab5f49af5a32deb172e9308976537c"
+  },
+  {
+   "id": "6d272c84-9a55-4814-8ed2-c1b78d74d497",
+   "name": "Oktober 2024",
+   "format": "XLSX",
+   "url": "https://offenedaten.aachen.de/dataset/6e496f95-b1be-43b1-82dd-5604b8c94ed2/resource/6d272c84-9a55-4814-8ed2-c1b78d74d497/download/2024_oktober.xlsx",
+   "geaendert": "2024-12-10T13:49:46.431719",
+   "datensatz": "geschwindigkeitskontrollen-der-stadt-aachen-2024",
+   "datei": "geschwindigkeitskontrollen-der-stadt-aachen-2024__Oktober_2024.xlsx",
+   "sha256": "f1dfd86361f7d429f6349b92a3086d6c78f02ae889f4dd61bde0f7c7386b512c"
+  },
+  {
+   "id": "fc21aa3b-ea45-4bf7-9242-70efbadf67f1",
+   "name": "Dezember 2025 (CSV)",
+   "format": "CSV",
+   "url": "https://offenedaten.aachen.de/dataset/f551ccf0-c296-4a9c-8ed1-7311977de0ba/resource/fc21aa3b-ea45-4bf7-9242-70efbadf67f1/download/32-110_12_2025.csv",
+   "geaendert": "2026-01-22T10:08:40.205930",
+   "datensatz": "geschwindigkeitskontrollen-der-stadt-aachen-2025",
+   "datei": "geschwindigkeitskontrollen-der-stadt-aachen-2025__Dezember_2025_CSV.csv",
+   "sha256": "88ebace39873552efed4ed76e7a997e89cb2fdaec29edaac8c456eef2a04af05"
+  },
+  {
+   "id": "52327b41-fbbc-4494-9a02-5671b376704c",
+   "name": "Dezember 2025 (XLS)",
+   "format": "XLSX",
+   "url": "https://offenedaten.aachen.de/dataset/f551ccf0-c296-4a9c-8ed1-7311977de0ba/resource/52327b41-fbbc-4494-9a02-5671b376704c/download/32-110_12_2025.xlsx",
+   "geaendert": "2026-01-22T10:13:07.371922",
+   "datensatz": "geschwindigkeitskontrollen-der-stadt-aachen-2025",
+   "datei": "geschwindigkeitskontrollen-der-stadt-aachen-2025__Dezember_2025_XLS.xlsx",
+   "sha256": "b37fe51ddc0476fa6638418bb6494a3244a7c29c7a8147f48dff686c5ab2c204"
+  },
+  {
+   "id": "b9a1216b-68e7-4e89-a16d-9290437c4a72",
+   "name": "November 2025 (CSV)",
+   "format": "CSV",
+   "url": "https://offenedaten.aachen.de/dataset/f551ccf0-c296-4a9c-8ed1-7311977de0ba/resource/b9a1216b-68e7-4e89-a16d-9290437c4a72/download/32-110_11_2025.csv",
+   "geaendert": "2026-01-22T10:08:13.074379",
+   "datensatz": "geschwindigkeitskontrollen-der-stadt-aachen-2025",
+   "datei": "geschwindigkeitskontrollen-der-stadt-aachen-2025__November_2025_CSV.csv",
+   "sha256": "96805083d032a1ca460ccdba03bede4ccf6c74493788cc7350854d94cdb98dcd"
+  },
+  {
+   "id": "fa7c590c-1faa-4277-af9e-116974a2eca6",
+   "name": "November 2025 (XLS)",
+   "format": "XLSX",
+   "url": "https://offenedaten.aachen.de/dataset/f551ccf0-c296-4a9c-8ed1-7311977de0ba/resource/fa7c590c-1faa-4277-af9e-116974a2eca6/download/32-110_11_2025.xlsx",
+   "geaendert": "2026-01-22T10:12:46.083941",
+   "datensatz": "geschwindigkeitskontrollen-der-stadt-aachen-2025",
+   "datei": "geschwindigkeitskontrollen-der-stadt-aachen-2025__November_2025_XLS.xlsx",
+   "sha256": "2d6c310032fa654c267ba5dff3028206bbee63bed3323938b61d428a200424a6"
+  },
+  {
+   "id": "93531fe3-bcbb-4a0b-898e-b0c393e8d309",
+   "name": "Oktober 2025 (XLS)",
+   "format": "XLSX",
+   "url": "https://offenedaten.aachen.de/dataset/f551ccf0-c296-4a9c-8ed1-7311977de0ba/resource/93531fe3-bcbb-4a0b-898e-b0c393e8d309/download/32-110_10_2025.xlsx",
+   "geaendert": "2025-11-19T10:36:58.633811",
+   "datensatz": "geschwindigkeitskontrollen-der-stadt-aachen-2025",
+   "datei": "geschwindigkeitskontrollen-der-stadt-aachen-2025__Oktober_2025_XLS.xlsx",
+   "sha256": "266176035405c094a372069198f7b3fe9d366808db605db210f29631740c7920"
+  },
+  {
+   "id": "2d7ed388-ec72-49f7-a786-4456ed7e5813",
+   "name": "April 2026 (CSV)",
+   "format": "CSV",
+   "url": "https://offenedaten.aachen.de/dataset/98ed8b5e-0ee1-4916-b925-ebaa00836b3a/resource/2d7ed388-ec72-49f7-a786-4456ed7e5813/download/32-110_04_2026.csv",
+   "geaendert": "2026-06-23T14:43:12.292352",
+   "datensatz": "geschwindigkeitskontrollen-der-stadt-aachen-2026",
+   "datei": "geschwindigkeitskontrollen-der-stadt-aachen-2026__April_2026_CSV.csv",
+   "sha256": "a7cd6766702859a7804ddc3258ca4322d2b1ab553c21dd655ba8403fce12f8e6"
+  },
+  {
+   "id": "78b83794-3c38-44e4-94d5-a971ee4cd275",
+   "name": "April 2026 (XLS)",
+   "format": "XLS",
+   "url": "https://offenedaten.aachen.de/dataset/98ed8b5e-0ee1-4916-b925-ebaa00836b3a/resource/78b83794-3c38-44e4-94d5-a971ee4cd275/download/32-110_04_2026.xlsx",
+   "geaendert": "2026-06-23T14:33:06.191348",
+   "datensatz": "geschwindigkeitskontrollen-der-stadt-aachen-2026",
+   "datei": "geschwindigkeitskontrollen-der-stadt-aachen-2026__April_2026_XLS.xlsx",
+   "sha256": "e42f614549e161bb410f0a0fccf13bf31c8ab6e97e192cade43d8d45042503de"
+  },
+  {
+   "id": "751de8a7-b228-4aaa-8327-c9c2db88bfc0",
+   "name": "August 2026 (CSV)",
+   "format": "CSV",
+   "url": "https://offenedaten.aachen.de/dataset/98ed8b5e-0ee1-4916-b925-ebaa00836b3a/resource/751de8a7-b228-4aaa-8327-c9c2db88bfc0/download/32-110_08_2026.csv",
+   "geaendert": "2026-10-13T14:40:19.900279",
+   "datensatz": "geschwindigkeitskontrollen-der-stadt-aachen-2026",
+   "datei": "geschwindigkeitskontrollen-der-stadt-aachen-2026__August_2026_CSV.csv",
+   "sha256": "2a1de23a0c82c8b1ddc381eed890b6a962ab745464633ec494589266c1aad129"
+  },
+  {
+   "id": "1fa04a71-4ac8-491b-8774-0eccbc7ae9af",
+   "name": "August 2026 (XLS)",
+   "format": "XLSX",
+   "url": "https://offenedaten.aachen.de/dataset/98ed8b5e-0ee1-4916-b925-ebaa00836b3a/resource/1fa04a71-4ac8-491b-8774-0eccbc7ae9af/download/32-110_08_2026.xlsx",
+   "geaendert": "2026-10-05T09:58:59.353701",
+   "datensatz": "geschwindigkeitskontrollen-der-stadt-aachen-2026",
+   "datei": "geschwindigkeitskontrollen-der-stadt-aachen-2026__August_2026_XLS.xlsx",
+   "sha256": "868370572c884929dbcdbef40cc263095279c39de2e0e0697a331da62f84821a"
+  },
+  {
+   "id": "ad565523-aba5-402a-a6c8-e1cc6221a492",
+   "name": "Februar 2026 (CSV)",
+   "format": "CSV",
+   "url": "https://offenedaten.aachen.de/dataset/98ed8b5e-0ee1-4916-b925-ebaa00836b3a/resource/ad565523-aba5-402a-a6c8-e1cc6221a492/download/32-110_02_2026.csv",
+   "geaendert": "2026-04-20T08:33:13.314491",
+   "datensatz": "geschwindigkeitskontrollen-der-stadt-aachen-2026",
+   "datei": "geschwindigkeitskontrollen-der-stadt-aachen-2026__Februar_2026_CSV.csv",
+   "sha256": "ed5204cf1cec2d2b6040044494ea879497709cd393608eb670cabd37d20aa0da"
+  },
+  {
+   "id": "4892d62f-2552-477c-9984-b018e98d8099",
+   "name": "Februar 2026 (XLS)",
+   "format": "XLSX",
+   "url": "https://offenedaten.aachen.de/dataset/98ed8b5e-0ee1-4916-b925-ebaa00836b3a/resource/4892d62f-2552-477c-9984-b018e98d8099/download/32-110_02_2026.xlsx",
+   "geaendert": "2026-04-20T08:34:50.370039",
+   "datensatz": "geschwindigkeitskontrollen-der-stadt-aachen-2026",
+   "datei": "geschwindigkeitskontrollen-der-stadt-aachen-2026__Februar_2026_XLS.xlsx",
+   "sha256": "3417a570c0d54299e322b5009b7669fe9aa270663c14ba5399abb31acf38b2c7"
+  },
+  {
+   "id": "5c3480ca-f630-4457-85a0-ed845937b4bd",
+   "name": "Januar 2026 (CSV)",
+   "format": "CSV",
+   "url": "https://offenedaten.aachen.de/dataset/98ed8b5e-0ee1-4916-b925-ebaa00836b3a/resource/5c3480ca-f630-4457-85a0-ed845937b4bd/download/32-110_01_2026.csv",
+   "geaendert": "2026-03-06T10:22:59.288979",
+   "datensatz": "geschwindigkeitskontrollen-der-stadt-aachen-2026",
+   "datei": "geschwindigkeitskontrollen-der-stadt-aachen-2026__Januar_2026_CSV.csv",
+   "sha256": "bf55bb00f9b3f77df3564f75f9e26858c6257373fa59449038e4612b734c6ada"
+  },
+  {
+   "id": "c2634275-1b6f-4ee8-bf9b-8303bfe8aabb",
+   "name": "Januar 2026 (XLS)",
+   "format": "XLSX",
+   "url": "https://offenedaten.aachen.de/dataset/98ed8b5e-0ee1-4916-b925-ebaa00836b3a/resource/c2634275-1b6f-4ee8-bf9b-8303bfe8aabb/download/32-110_01_2026.xlsx",
+   "geaendert": "2026-03-06T10:16:49.083545",
+   "datensatz": "geschwindigkeitskontrollen-der-stadt-aachen-2026",
+   "datei": "geschwindigkeitskontrollen-der-stadt-aachen-2026__Januar_2026_XLS.xlsx",
+   "sha256": "0676b1cdac58834ef3c6aba7bedeff4f09fc121cd40992a6cfc3963bb0ddbfc8"
+  },
+  {
+   "id": "96305bc9-983d-408d-89c8-141cd1ff70c4",
+   "name": "Juli 2026 (CSV)",
+   "format": "CSV",
+   "url": "https://offenedaten.aachen.de/dataset/98ed8b5e-0ee1-4916-b925-ebaa00836b3a/resource/96305bc9-983d-408d-89c8-141cd1ff70c4/download/32-110_07_2026.csv",
+   "geaendert": "2026-10-13T14:41:18.887065",
+   "datensatz": "geschwindigkeitskontrollen-der-stadt-aachen-2026",
+   "datei": "geschwindigkeitskontrollen-der-stadt-aachen-2026__Juli_2026_CSV.csv",
+   "sha256": "65d47ba41953b3c5e17935d444d3716890bc5d42ee4286d1236e31ea70d64d1c"
+  },
+  {
+   "id": "b82f9b25-cc33-4a0e-9496-d7cf6f68bc82",
+   "name": "Juli 2026 (XLS)",
+   "format": "XLSX",
+   "url": "https://offenedaten.aachen.de/dataset/98ed8b5e-0ee1-4916-b925-ebaa00836b3a/resource/b82f9b25-cc33-4a0e-9496-d7cf6f68bc82/download/32-110_07_2026.xlsx",
+   "geaendert": "2026-10-05T09:58:04.963686",
+   "datensatz": "geschwindigkeitskontrollen-der-stadt-aachen-2026",
+   "datei": "geschwindigkeitskontrollen-der-stadt-aachen-2026__Juli_2026_XLS.xlsx",
+   "sha256": "7e9aad529d292af1fd28b1027ebe19294e2eefb38a908364363f71030e20807c"
+  },
+  {
+   "id": "4bc6dd31-7535-453b-92a2-45444f213c1b",
+   "name": "Juni 2026 (CSV)",
+   "format": "CSV",
+   "url": "https://offenedaten.aachen.de/dataset/98ed8b5e-0ee1-4916-b925-ebaa00836b3a/resource/4bc6dd31-7535-453b-92a2-45444f213c1b/download/32-110_06_2026.csv",
+   "geaendert": "2026-08-04T10:37:43.345974",
+   "datensatz": "geschwindigkeitskontrollen-der-stadt-aachen-2026",
+   "datei": "geschwindigkeitskontrollen-der-stadt-aachen-2026__Juni_2026_CSV.csv",
+   "sha256": "d3659fee18d1b426f602024b651547a6685e82b1f91dd67c3102937aefdf9063"
+  },
+  {
+   "id": "97a7602b-433e-46e7-8cdf-c88407d5d257",
+   "name": "Juni 2026 (XLS)",
+   "format": "XLSX",
+   "url": "https://offenedaten.aachen.de/dataset/98ed8b5e-0ee1-4916-b925-ebaa00836b3a/resource/97a7602b-433e-46e7-8cdf-c88407d5d257/download/32-110_06_2026.xlsx",
+   "geaendert": "2026-08-04T10:28:47.177971",
+   "datensatz": "geschwindigkeitskontrollen-der-stadt-aachen-2026",
+   "datei": "geschwindigkeitskontrollen-der-stadt-aachen-2026__Juni_2026_XLS.xlsx",
+   "sha256": "a1e75cc310a132d9d05872f7c1a5839864221b8f0d5b61ace5fbc428cd5f18f3"
+  },
+  {
+   "id": "33fd0ec2-850d-4bd1-99fe-b602a2ce46d3",
+   "name": "Mai 2026 (CSV)",
+   "format": "CSV",
+   "url": "https://offenedaten.aachen.de/dataset/98ed8b5e-0ee1-4916-b925-ebaa00836b3a/resource/33fd0ec2-850d-4bd1-99fe-b602a2ce46d3/download/32-110_05_2026.csv",
+   "geaendert": "2026-06-23T14:44:01.964925",
+   "datensatz": "geschwindigkeitskontrollen-der-stadt-aachen-2026",
+   "datei": "geschwindigkeitskontrollen-der-stadt-aachen-2026__Mai_2026_CSV.csv",
+   "sha256": "60c0c200a49324aebb2d8f449328276b68e05cdb0f5f2af2da127f5130836463"
+  },
+  {
+   "id": "d2149ba6-8602-4a04-8340-0e053996b1a2",
+   "name": "Mai 2026 (XLS)",
+   "format": "XLS",
+   "url": "https://offenedaten.aachen.de/dataset/98ed8b5e-0ee1-4916-b925-ebaa00836b3a/resource/d2149ba6-8602-4a04-8340-0e053996b1a2/download/32-110_05_2026.xlsx",
+   "geaendert": "2026-06-23T14:33:48.935474",
+   "datensatz": "geschwindigkeitskontrollen-der-stadt-aachen-2026",
+   "datei": "geschwindigkeitskontrollen-der-stadt-aachen-2026__Mai_2026_XLS.xlsx",
+   "sha256": "f8850a80597041d349f7051cd1293fc8e571e0f37bfb2b848d26cf2fee61a9c5"
+  },
+  {
+   "id": "c6df6e7b-f002-4f82-972b-5aa71238b818",
+   "name": "März 2026 (CSV)",
+   "format": "CSV",
+   "url": "https://offenedaten.aachen.de/dataset/98ed8b5e-0ee1-4916-b925-ebaa00836b3a/resource/c6df6e7b-f002-4f82-972b-5aa71238b818/download/32-110_03_2026.csv",
+   "geaendert": "2026-04-20T08:35:19.654521",
+   "datensatz": "geschwindigkeitskontrollen-der-stadt-aachen-2026",
+   "datei": "geschwindigkeitskontrollen-der-stadt-aachen-2026__März_2026_CSV.csv",
+   "sha256": "3bdc1618e0c5143c71fe2f20fb128674119ddfadae717e90f78065b08a2fd353"
+  },
+  {
+   "id": "b9a8276b-5bfa-4a82-9476-ed8cc8b382d0",
+   "name": "März 2026 (XLS)",
+   "format": "XLSX",
+   "url": "https://offenedaten.aachen.de/dataset/98ed8b5e-0ee1-4916-b925-ebaa00836b3a/resource/b9a8276b-5bfa-4a82-9476-ed8cc8b382d0/download/32-110_03_2026.xlsx",
+   "geaendert": "2026-04-20T08:35:51.023307",
+   "datensatz": "geschwindigkeitskontrollen-der-stadt-aachen-2026",
+   "datei": "geschwindigkeitskontrollen-der-stadt-aachen-2026__März_2026_XLS.xlsx",
+   "sha256": "1d2f8cad997203e778259053a05af7905938f3fb2bb3036708300b358bc544b6"
+  },
+  {
+   "id": "819ebb10-f0d9-477c-9cf9-10fd7a496f8c",
+   "name": "September 2026 (CSV)",
+   "format": "CSV",
+   "url": "https://offenedaten.aachen.de/dataset/98ed8b5e-0ee1-4916-b925-ebaa00836b3a/resource/819ebb10-f0d9-477c-9cf9-10fd7a496f8c/download/32-110_09_2026.csv",
+   "geaendert": "2026-10-13T14:38:38.122241",
+   "datensatz": "geschwindigkeitskontrollen-der-stadt-aachen-2026",
+   "datei": "geschwindigkeitskontrollen-der-stadt-aachen-2026__September_2026_CSV.csv",
+   "sha256": "a8429f3d45cd2eb09d968e15fa2ea2e71ecd3e4eb6a8a38e0c4eb421840dc6af"
+  },
+  {
+   "id": "9afcdb25-870b-4a55-8c9f-d5a823824339",
+   "name": "September 2026 (XLS)",
+   "format": "XLSX",
+   "url": "https://offenedaten.aachen.de/dataset/98ed8b5e-0ee1-4916-b925-ebaa00836b3a/resource/9afcdb25-870b-4a55-8c9f-d5a823824339/download/32-110_09_2026.xlsx",
+   "geaendert": "2026-10-13T13:35:55.174382",
+   "datensatz": "geschwindigkeitskontrollen-der-stadt-aachen-2026",
+   "datei": "geschwindigkeitskontrollen-der-stadt-aachen-2026__September_2026_XLS.xlsx",
+   "sha256": "ce6b21e95823d7a22fa60bc80dded71e9b01ced8c147c7f9232896ac609c60ab"
+  },
+  {
+   "id": "e94c7218-419c-4387-bd38-78136bf04bf9",
+   "name": "Geschwindigkeitskontrollen Dezember 2020",
+   "format": "XLSX",
+   "url": "https://offenedaten.aachen.de/dataset/b621bd10-5f01-4f05-9c2f-317fe0eb48e0/resource/e94c7218-419c-4387-bd38-78136bf04bf9/download/pfb11-400it-managementopendatadatenfb32geschwindigkeitskontrollen2020_dezember.xlsx",
+   "geaendert": "2021-01-19T09:21:03.437730",
+   "datensatz": "geschwindigkeitskontrollen",
+   "datei": "geschwindigkeitskontrollen__Geschwindigkeitskontrollen_Dezember_2020.xlsx",
+   "sha256": "416d5c697a967c362ddf6e2c16acdd3cb3fbf65e14ddab7146c86b1783c7314a"
+  },
+  {
+   "id": "32d22136-608a-4dfa-b7fa-4de42125d92c",
+   "name": "Geschwindigkeitskontrollen November 2020",
+   "format": "XLSX",
+   "url": "https://offenedaten.aachen.de/dataset/b621bd10-5f01-4f05-9c2f-317fe0eb48e0/resource/32d22136-608a-4dfa-b7fa-4de42125d92c/download/pfb11-400it-managementopendatadatenfb32geschwindigkeitskontrollen2020_november.xlsx",
+   "geaendert": "2020-12-07T09:08:17.711086",
+   "datensatz": "geschwindigkeitskontrollen",
+   "datei": "geschwindigkeitskontrollen__Geschwindigkeitskontrollen_November_2020.xlsx",
+   "sha256": "065c110c02fd47c77717a1568535cdaa074a772441bae1dc9e89bcd92f772d9c"
+  },
+  {
+   "id": "58696a35-dc11-4c69-b579-65abf8538ec2",
+   "name": "Geschwindigkeitskontrollen Oktober 2020",
+   "format": "XLSX",
+   "url": "https://offenedaten.aachen.de/dataset/b621bd10-5f01-4f05-9c2f-317fe0eb48e0/resource/58696a35-dc11-4c69-b579-65abf8538ec2/download/pfb11-400it-managementopendatadatenfb32geschwindigkeitskontrollen2020_oktober.xlsx",
+   "geaendert": "2020-11-12T14:39:58.264498",
+   "datensatz": "geschwindigkeitskontrollen",
+   "datei": "geschwindigkeitskontrollen__Geschwindigkeitskontrollen_Oktober_2020.xlsx",
+   "sha256": "d019a9d672d4b3756dd13c0be91997a84414b2920d547863199b11541177f164"
+  }
+ ]
+}
