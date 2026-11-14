@@ -3,6 +3,7 @@
 Weiterstadt (Monatstabellen „Statistik GemOBB“, mit Tempo, ohne Uhrzeit); dazu der Katalog
 `art: seite` (Links einer Webseite)."""
 
+import pandas as pd
 import pytest
 
 from kontrollen import butzbach, dokumente, fetch, weiterstadt
@@ -87,11 +88,31 @@ KOPF = ["Tag", "von…", "…bis", "Gesamtstun\nden", "Gesamt\nFahrzeuge", "Verw
         ("Wölfersheim, Hauptstraße / Kiga Löwenherz", "Wölfersheim", "Hauptstraße", None, "Kiga Löwenherz"),
         ("Butzbach, Ludwigstr. Ecke Kleeberger Str. 6", "Butzbach", "Ludwigstr.", None, "Kleeberger Str"),
         ("Butzbach/Fauerbach, Ostheimer Str. ggü Weidbrunnenstraße 2A",
-         "Fauerbach", "Ostheimer Str.", None, "Weidbrunnenstraße"),
+         "Fauerbach vor der Höhe", "Ostheimer Str.", None, "Weidbrunnenstraße"),
         ("Butzbach, Tepler Str. / Seedammweg", "Butzbach", "Tepler Str.", None, "Seedammweg"),
-        ("Wölfersheim/Geisenheim, B455 / Seestr. In Höhe 60-62", "Geisenheim", "B 455", None, "Seestr"),
+        # die Straße mit Hausnummer gilt, nicht ihre Nummer; Geisenheim liegt im Ortsteil Wölfersheim
+        ("Wölfersheim/Geisenheim, B455 / Seestr. In Höhe 60-62", "Wölfersheim", "Seestr.", "60", None),
         ("Butzbach/Pohl-Göns, Windhofstraße Höhe Hs. Nr. 21", "Pohl-Göns", "Windhofstraße", "21", None),
-        ("Münzenberg/Trais, Wetterstr. 21", "Trais", "Wetterstr.", "21", None),
+        ("Münzenberg/Trais, Wetterstr. 21", "Treis", "Wetterstr.", "21", None),  # so in OSM
+        ("Rockenberg, / Oppershofen, Hauptstr. 5", "Oppershofen", "Hauptstr.", "5", None),
+        ("Butzbach/L3134 gegenüber Rockenberger Str.", "Butzbach", "L 3134", None, "Rockenberger Str"),
+        ("Butzbach/L3134/ geg. Rockenberger Str.", "Butzbach", "L 3134", None, "Rockenberger Str"),
+        ("Butzbach-Oes, L 3053 / Höhe Am Oesberg", "Hausen-Oes", "L 3053", None, "Am Oesberg"),
+        ("Butzbach/Hausen/'An der Landstr.l 6a", "Hausen-Oes", "An der Landstr.", "6a", None),
+        # die Ecke eines Grundstücks: dessen Adresse, sonst die Querstraße; „Nordecke“ allein: nichts
+        ("Butzbach/Nieder-Weisel/Nordecke Anwesen Büchnerstr. 6", "Nieder-Weisel", "Büchnerstr.", "6", None),
+        ("Butzbach/Butzbacher Str./NordeckeGrundstück Büchnerstr.6",
+         "Butzbach", "Butzbacher Str.", None, "Büchnerstr"),
+        ("Butzbach/Nieder-Weisel/Butzbacher Str./Nordecke", "Nieder-Weisel", "Butzbacher Str.", None, None),
+        ("Butzbach/Nieder Weisel/B3-Höhe Grundstück Wiesengrund 19", "Nieder-Weisel", "B 3", None, "Wiesengrund"),
+        ("Butzbach/Nieder Weisel/B3Höe Grundstück/Wiesengrund 19", "Nieder-Weisel", "B 3", None, "Wiesengrund"),
+        ("Münzenberg/Gambach/Holzheimer Str./Grundstück Waldstr.", "Gambach", "Holzheimer Str.", None, "Waldstr"),
+        ("Münzenberg/Steinbergstr.gegü: Haus-Nr. 23", "Münzenberg", "Steinbergstr.", "23", None),
+        ("Münzenberg/Gambach/Butzbacher Str. bei EDEKA", "Gambach", "Butzbacher Str.", None, "EDEKA"),
+        ("Butzbach/Waldsiedlung/Stettiner Str. 3a", "Butzbach", "Stettiner Str.", "3a", None),
+        ("Rockenberg/Schillerstr./CD war nicht auswertbar", "Rockenberg", "Schillerstr.", None, None),
+        ("Butzbachd/Kirch-Göns/Bahnhofstr.", "Kirch-Göns", "Bahnhofstr.", None, None),
+        ("Wölfersheim/Mehlbach, Hungener Str. 25", "Melbach", "Hungener Str.", "25", None),
     ],
 )  # fmt: skip
 def test_butzbach_messstelle(text, bezirk, strasse, nr, quer):
@@ -112,6 +133,9 @@ def test_butzbach_tabelle(monkeypatch, tmp_path):
         ["09.04..2026", "11:50", "13:45", "01:55", "307", "27", "1", "9,1%",
          "Butzbach, Ludwigstr. Ecke Kleeberger Str. 6"],
         ["21.04.2026", "22:30", "01:10", "", "1.226", "8", "3", "4,9%", "Butzbach, Taunustr 45"],
+        # Tippfehler im Jahr; Messung ohne Auswertung
+        ["24.04.2025", "05:56", "08:15", "2:19:00", "70", "0", "0", "0,00",
+         "Rockenberg/Schillerstr./CD war nicht auswertbar"],
         ["", "", "", "00:00", "", "0", "0", "#DIV/0!", ""],  # leere Vorlagezeile
         [None, None, None, "54:06", "13.348", "555", "46", "", None],  # Summe
     ]  # fmt: skip
@@ -119,14 +143,19 @@ def test_butzbach_tabelle(monkeypatch, tmp_path):
     f = tmp_path / "geschwindigkeitsmessungen-im-april-2026__sb_oa-messung-2604.pdf"
     f.write_bytes(b"%PDF-")
     df, b = butzbach.lies_alle([f])
-    assert len(df) == 3 and df["id"].is_unique
-    assert df["datum"].tolist() == ["2026-04-01", "2026-04-09", "2026-04-21"]
-    assert df["beginn"].tolist() == ["06:45", "11:50", "22:30"]
-    assert df["dauer_min"].tolist() == [205, 115, 160]  # ohne Gesamtstunden: über Mitternacht
-    assert df["messungen"].tolist() == [953, 307, 1226]
-    assert df["ueberschreitungen"].tolist() == [42, 28, 11]  # Verwarnungen + Bußgelder
-    assert df["alle_gezaehlt"].all() and df["tempo"].isna().all()
+    assert len(df) == 4 and df["id"].is_unique
+    assert df["datum"].tolist() == ["2026-04-01", "2026-04-09", "2026-04-21", "2026-04-24"]
+    assert df["beginn"].tolist() == ["06:45", "11:50", "22:30", "05:56"]
+    # ohne Gesamtstunden: über Mitternacht
+    assert df["dauer_min"].tolist() == [205, 115, 160, 139]
+    assert df["messungen"].tolist() == [953, 307, 1226, 70]
+    # Verwarnungen + Bußgelder; nicht ausgewertet: leer, nicht 0
+    assert df["ueberschreitungen"].tolist()[:3] == [42, 28, 11]
+    assert pd.isna(df["ueberschreitungen"].iloc[3])
+    assert df["alle_gezaehlt"].tolist() == [True, True, True, False]
+    assert df["tempo"].isna().all()
     assert df["id"].iloc[0].startswith("U2026-04-01-0645-")
+    assert b["ohne_ueberschreitungen"] == 1
 
 
 # --- Katalog: Links einer Seite --------------------------------------------------------------

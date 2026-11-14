@@ -276,7 +276,9 @@ staedte:
         Gemessen hat der gemeinsame Ordnungsbehördenbezirk der Städte Butzbach und Münzenberg und
         der Gemeinden Rockenberg und Wölfersheim. Je Messung Tag, Beginn und Ende, gemessene
         Fahrzeuge, Verwarnungen und Bußgelder (zusammen die Überschreitungen); das Tempolimit
-        nennen die Tabellen nicht.
+        nennen die Tabellen nicht. Veröffentlicht sind die Monate seit Januar 2015, nicht
+        lückenlos. Die Messstelle steht als Ortsteil und Straße, oft ohne Hausnummer – verortet
+        wird nur in diesem Ortsteil und seiner Kommune, sonst bleibt die Kontrolle ohne Lage.
       # Je Monat ein Beitrag mit der Tabelle als PDF (WordPress, `wp-json/wp/v2/posts`); ältere
       # Tabellen ohne Beitrag stehen nur noch in der Mediathek (`…/media`), oft mit dem Titel
       # „hier“ – darum auch `datei_muster`. Die Dateinamen („sb_oa-messung-1502-1.pdf“ enthält
@@ -299,7 +301,12 @@ staedte:
       gebiete_admin_level: ["8", "9", "10", "11"]
       # die vier Kommunen des Ordnungsbehördenbezirks zusammen
       stadtgrenze: { name: ["Butzbach", "Münzenberg", "Rockenberg", "Wölfersheim"], admin_level: ["8"] }
-      bezirk_ebene: "8"
+      # Stadt- und Ortsteile: Butzbach und Münzenberg auf 9, Rockenberg und Wölfersheim auf 10
+      bezirk_ebene: ["9", "10"]
+      # nur im genannten Ortsteil, dann in seiner Kommune – nicht in den Nachbardörfern, die oft
+      # gleichnamige Straßen haben (Rosenstraße in Oppershofen und Steinfurth); nennt die Tabelle
+      # nur die Kommune, zuerst ihr Kernort
+      bezirk_streng: true
 
   weiterstadt:
     label: "Weiterstadt"
@@ -525,7 +532,134 @@ datenlage:
       - ["1. Quartal 2024 (PDF)", "https://oberderdingen.de/resources/ecics_3985.pdf"]
       - ["4. Quartal 2025 (PDF)", "https://www.oberderdingen.de/resources/ecics_4317.pdf"]
       - ["1. Quartal 2026 (PDF)", "https://www.oberderdingen.de/resources/ecics_4342.pdf"]
+  - kommune: Butzbach
+    stadt: butzbach
+    land: HE
+    stand: in_karte
+    was: >-
+      Monatstabellen des gemeinsamen Ordnungsbehördenbezirks
+      Butzbach/Münzenberg/Rockenberg/Wölfersheim mit jeder Messung (Tag, Beginn und Ende,
+      gemessene Fahrzeuge, Verwarnungen, Bußgelder, Messstelle) als PDF, seit 2015 fast jeden
+      Monat
+    situation: >-
+      Die Stadt Butzbach stellt jeden Monat einen Beitrag mit der Tabelle auf ihre Seite; ältere
+      Tabellen stehen nur noch in ihrer Mediathek, einige Monate fehlen. Das Tempolimit fehlt,
+      die Messstelle nennt oft nur Ortsteil und Straße.
+    weg: "offen"
+    links:
+      - ["Geschwindigkeitsmessungen (Übersicht)", "https://stadt-butzbach.de/themen/geschwindigkeitsmessungen/"]
+      - ["April 2026 (PDF)", "https://stadt-butzbach.de/wp-content/uploads/sb_oa-messung-2604.pdf"]
+  - kommune: Weiterstadt
+    stadt: weiterstadt
+    land: HE
+    stand: in_karte
+    was: >-
+      Monatstabellen der Kommunalen Bußgeldstelle mit jeder mobilen Kontrolle (Datum, Ort mit
+      Fahrtrichtung, Tempolimit, durchfahrene Fahrzeuge, davon zu schnell) als PDF, seit Januar
+      2025
+    situation: >-
+      Uhrzeit und Dauer der Messungen fehlen; die festen Anlagen stehen nicht in den Tabellen.
+    weg: "offen"
+    links:
+      - ["Geschwindigkeitsmessungen (Seite der Stadt)", "https://www.weiterstadt.de/wirtschaft-umwelt-verkehr/umwelt-verkehr/geschwindigkeitsmessungen/index.php"]
 
+  # --- veröffentlicht, noch nicht in der Karte ---
+  # Hessen: Funde der Suche nach Verkehrszählungen für die Zählkarte (Issue #5, November 2026)
+  - kommune: Naumburg (Hessen)
+    land: HE
+    lon: 9.1654
+    lat: 51.2475
+    stand: offen
+    was: >-
+      fünf Kontrollen 2023 des Ordnungsbehördenbezirks Habichtswald, je Kontrolle eine
+      „Tages-Statistik“ (Messpunkt, Zeit, gemessene Fahrzeuge, Überschreitungen nach Stufen,
+      Fahrverbote) als PDF an einer Meldung der Stadt
+    situation: >-
+      Der Ordnungsbehördenbezirk misst für Habichtswald, Breuna, Bad Emstal, Naumburg und
+      Zierenberg, laut der Stadt Gudensberg auch dort. Veröffentlicht sind einzelne Meldungen –
+      für eine eigene Stadt in der Karte zu wenig.
+    empfehlung: >-
+      Weitere Meldungen der Mitgliedskommunen sammeln oder beim Ordnungsbehördenbezirk alle
+      Tages-Statistiken erfragen.
+    links:
+      - ["Meldung 2023 mit den PDFs", "https://www.naumburg.eu/stadt-buergerservice/service/nachrichtenarchiv/2023-1-quartal-bis-4-quartal/geschwindigkeitsmessung-in-naumburg/"]
+      - ["Ordnungsbehördenbezirk", "https://www.habichtswald.de/rathaus-politik/verwaltung/ordnungsbehoerdenbezirk/"]
+  - kommune: Gudensberg
+    land: HE
+    lon: 9.3675
+    lat: 51.1768
+    stand: offen
+    was: >-
+      eine Kontrolle 2024 des Ordnungsbehördenbezirks Habichtswald in einer Meldung der Stadt:
+      Messpunkt, Zeit, gemessene Fahrzeuge, verfolgbare Überschreitungen nach Stufen
+    links:
+      - ["Meldung Oktober 2024", "https://www.gudensberg.de/rathaus-und-buergerservice/aktuelles/neuigkeiten/2024/oktober/geschwindigkeitsmessung/"]
+  - kommune: Niedernhausen
+    land: HE
+    lon: 8.2931
+    lat: 50.1732
+    stand: offen
+    was: >-
+      Ordnungspolizei: Ergebnisse einzelner Kontrollen in Meldungen der Gemeinde (Ort, Tag,
+      Dauer, kontrollierte Fahrzeuge, Überschreitungen, Verwarnungen, Anzeigen)
+    situation: >-
+      Gefunden ist eine Meldung: September 2023, Platter Straße (20er-Zone), 634 Fahrzeuge in gut
+      sieben Stunden, 193 Verwarnungen und 52 Anzeigen.
+    links:
+      - ["Meldung September 2023", "https://www.niedernhausen.de/verwaltung-politik/aktuelles/news/ergebnisse-der-geschwindigkeitsmessungen-zu-schulbeginn/"]
+  - kommune: Biebertal
+    land: HE
+    lon: 8.5714
+    lat: 50.6529
+    stand: offen
+    was: >-
+      Seite „Geschwindigkeitsmessungen“: die letzten Messungen je Standort mit gemessenen
+      Fahrzeugen und Verstößen
+    situation: >-
+      Die Liste liegt hinter einem Link der Seite und ließ sich beim Abruf (November 2026) nicht
+      auslesen – nicht weiter geprüft.
+    links:
+      - ["Geschwindigkeitsmessungen", "https://www.biebertal.de/infos-tipps/weitere-tipps-infos/geschwindigkeitsmessungen/geschwindigkeitsmessungen.html"]
+  - kommune: Königstein im Taunus
+    land: HE
+    lon: 8.4636
+    lat: 50.1831
+    stand: offen
+    was: >-
+      Ergebnisse der mobilen Kontrollen der letzten zwei Wochen je Stadtteil (Königstein,
+      Schneidhain, Mammolshain, Falkenstein)
+    situation: >-
+      Ältere Ergebnisse verschwinden von der Seite – eine Reihe entstünde nur durch regelmäßiges
+      Abrufen.
+    links:
+      - ["Geschwindigkeitsmessungen", "https://www.koenigstein.de/rathaus-politik/sicherheit-ordnung/geschwindigkeitsmessungen/"]
+  - kommune: Rodenbach (Main-Kinzig-Kreis)
+    land: HE
+    lon: 9.0407
+    lat: 50.1429
+    stand: offen
+    was: >-
+      Seite „Radar Kontrolle“: Messwerte des gemeindeeigenen Messgeräts (mit Anzeige oder verdeckt)
+      grafisch aufbereitet, dazu Daten polizeilicher Messungen
+    situation: >-
+      Das Gerät der Gemeinde ahndet nicht – Auffälligkeiten gibt die Gemeinde an die Polizei. Die
+      Ergebnisse stehen als Grafik, nicht als Tabelle.
+    links:
+      - ["Radar Kontrolle", "https://www.rodenbach.de/Rodenbach/Aktuell-informiert/Radar-Kontrolle/"]
+      - ["Ankündigung", "https://www.rodenbach.de/Rodenbach/Aktuell-informiert/Aktuelles/-Geschwindigkeitsmessung-aktuelle-Informationen-jetzt-auch-auf-der-Homepage-der-Gemeinde-Rodenbach-.php?ModID=255&FID=2161.8061.1"]
+  - kommune: Schlitz
+    land: HE
+    lon: 9.5609
+    lat: 50.6736
+    stand: offen
+    was: >-
+      Meldungen 2018 mit den Ergebnissen der städtischen Messungen je Ort (gemessene Fahrzeuge,
+      zu schnelle); gemessen hat eine beauftragte Firma, 18 Messungen im Jahr
+    situation: >-
+      Datum und Uhrzeit der einzelnen Messungen fehlen; neuere Meldungen sind nicht gefunden.
+    links:
+      - ["Meldung Juli 2018 (Schlitz)", "https://www.schlitz.de/nachrichten-startseite/2018/geschwindigkeitsmessungen-in-schlitz/"]
+      - ["Meldung Juli 2018 (Stadtteile)", "https://www.schlitz.de/nachrichten-startseite/2018/geschwindigkeitsmessungen-in-den-stadtteilen/"]
 
   # --- auf Anfrage herausgegeben ---
   - kommune: Krefeld
@@ -649,6 +783,25 @@ datenlage:
       Den Bericht anfragen; ob die Stadt das HDSIG per Satzung eingeführt hat, ist zu prüfen.
     links:
       - ["Ratsinformationssystem", "https://piwi.wiesbaden.de/dokument/v/3118284"]
+  - kommune: Solms
+    land: HE
+    lon: 8.4149
+    lat: 50.5502
+    stand: kandidat
+    was: >-
+      Messprotokolle der Kontrollen an der L 3451 (Oberndorf) liegen beim Ordnungsbehördenbezirk
+      Solms-Braunfels; die Stadt Solms nannte 2024 für die Aufbereitung rund 200 Euro
+    situation: >-
+      Die Anfrage (2024, nach der Informationsfreiheitssatzung der Stadt Solms) ist eingeschlafen.
+      Für die Protokolle ist laut Antwort die federführende Stadt Braunfels zuständig.
+    empfehlung: >-
+      Anfrage an die Stadt Braunfels nach allen Kontrollen des Ordnungsbehördenbezirks.
+    weg: "FragDenStaat"
+    stelle: "die Stadt Braunfels für den Ordnungsbehördenbezirk Solms-Braunfels"
+    kontakt: {fds_suche: "Stadt Braunfels"}
+    anfrage: true
+    links:
+      - ["FragDenStaat 2024", "https://fragdenstaat.de/anfrage/akteneinsicht-geschwindigkeitsmessprotokolle-der-letzten-3-jahre/"]
 
   # --- nur Summen, Standorte oder Planungen ---
   - kommune: Konstanz
@@ -791,6 +944,67 @@ datenlage:
     anfrage: true
     links:
       - ["Jahresbericht (PDF)", "https://www.stadt-brandenburg.de/fileadmin/pdf/36/Verkehrsueberwachung_Rueckblick-Ausblick_2025-2026_1.pdf"]
+  - kommune: Kirchhain
+    land: HE
+    lon: 8.9200
+    lat: 50.8209
+    stand: teilweise
+    was: >-
+      Jahresrückblick 2024 des gemeinsamen Ordnungsbehördenbezirks Kirchhain, Rauschenberg,
+      Wohratal und Neustadt: 48 Messtage an rund 40 Messstellen, 4.056 Verstöße
+    situation: >-
+      Die Messstellen kündigt die Stadt laut Rückblick häufig in sozialen Medien und der Presse an;
+      Ergebnisse je Kontrolle veröffentlicht sie nicht.
+    empfehlung: >-
+      Anfrage nach den Kontrollen je Ort und Tag.
+    weg: "FragDenStaat"
+    kontakt: {fds_suche: "Stadt Kirchhain"}
+    anfrage: true
+    links:
+      - ["Rückblick 2024", "https://www.kirchhain.de/Verwaltung-Politik/Verwaltung/Aktuelles/R%C3%BCckblick-Geschwindigkeitsmessung-2024.php?ModID=255&FID=2848.37749.1"]
+  - kommune: Limburg an der Lahn
+    land: HE
+    lon: 8.0635
+    lat: 50.3880
+    stand: teilweise
+    was: >-
+      Meldungen mit Summen: Juli bis September 2020 108 mobile Kontrollen mit rund 47.000
+      Fahrzeugen, davon rund 3.500 zu schnell; dazu sechs feste Anlagen
+    empfehlung: >-
+      Anfrage nach den mobilen Kontrollen je Ort und Tag.
+    weg: "FragDenStaat"
+    kontakt: {fds_suche: "Stadt Limburg an der Lahn"}
+    anfrage: true
+    links:
+      - ["Mobile Anlage (2020)", "https://www.limburg.de/Rathaus-Leben/Aktuelles/Stadt-setzt-auf-mobile-Geschwindigkeitsmessanlage.php?ModID=255&FID=3252.4239.1"]
+      - ["Feste Anlagen (2024)", "https://www.limburg.de/Rathaus-Leben/Aktuelles/Neue-Anlage-zur-Geschwindigkeitsmessung.php?ModID=255&FID=3252.27114.1"]
+  - kommune: Darmstadt
+    land: HE
+    lon: 8.6512
+    lat: 49.8728
+    stand: teilweise
+    was: >-
+      auf eine Anfrage (2026) Summen für eine Stelle – Schöfferstraße 2024–2026: vier Kontrollen,
+      571 Fahrzeuge, 46 zu schnell – und stadtweit 0,1 bis 0,7 % Verstöße je Jahr 2020–2025
+    situation: >-
+      Die stadtweite Quote trennt laut Antwort nicht zwischen festen und mobilen Messungen.
+    empfehlung: >-
+      Anfrage nach den mobilen Kontrollen je Ort und Tag.
+    weg: "FragDenStaat"
+    stelle: "die Wissenschaftsstadt Darmstadt"
+    kontakt: {fds_suche: "Wissenschaftsstadt Darmstadt"}
+    anfrage: true
+    links:
+      - ["FragDenStaat 2026", "https://fragdenstaat.de/a/371577"]
+  - kommune: Kaufungen
+    land: HE
+    lon: 9.6198
+    lat: 51.2836
+    stand: teilweise
+    was: >-
+      Meldung 2018 zu einer Kontrolle der Gemeinde an der B 7: rund 2.300 Verstöße in neun Stunden
+    links:
+      - ["Meldung 2018", "https://www.kaufungen.eu/Rathaus-B%C3%BCrgerservice/Aktuelles/Mitteilungen/Geschwindigkeitsmessung-auf-B7.php?ModID=255&FID=2655.677.1"]
 
   # --- Anfrage gescheitert ---
   - kommune: Dresden
@@ -866,3 +1080,20 @@ datenlage:
       Für die ganze Stadt kaum Aussicht; Anfragen zu einzelnen Straßen können gelingen.
     links:
       - ["FragDenStaat 2018", "https://fragdenstaat.de/anfrage/daten-zu-geschwindigkeitsmessanlagen/"]
+  - kommune: Mühltal
+    land: HE
+    lon: 8.6941
+    lat: 49.8077
+    stand: abgelehnt
+    was: >-
+      2022 abgelehnt: keine Pflicht, für einzelne Bürger Verkehrsdaten zusammenzustellen; ältere
+      Mess- und Kontrollergebnisse aufzuarbeiten, sei personell nicht zu leisten
+    situation: >-
+      Seitdem veröffentlicht die Gemeinde Berichte ihrer Verkehrsmessungen – Messgeräte ohne
+      Ahndung, keine Kontrollen.
+    empfehlung: >-
+      Nicht nach einer Zusammenstellung fragen, sondern nach den vorhandenen Protokollen der
+      Kontrollen.
+    links:
+      - ["FragDenStaat 2022", "https://fragdenstaat.de/anfrage/veroffentlichung-verkehrsrelevanter-messergebnisse-und-blitzaktionen-der-gemeinde-muhltal/"]
+      - ["Bericht einer Verkehrsmessung (2022)", "https://www.muehltal.de/muehltal/artikel/presseartikel/2022/kw35-verkehrsdatenerhebung-kirchstr/"]

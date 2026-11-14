@@ -1,7 +1,9 @@
 """Verortung am ausgedachten Ausschnitt tests/fixtures/mini.osm (Beschreibung dort)."""
 
 import math
+from types import SimpleNamespace
 
+import geopandas as gpd
 import pytest
 import shapely
 from pyproj import Transformer
@@ -205,6 +207,9 @@ def test_strassennummer_statt_name(netz, gebiete):
     e = geocode.verorte(frage("K 7", quer=("Hauptstraße",)), netz, gebiete)
     assert (e.methode, e.strasse) == ("kreuzung", "K 7")
     nah(e, 13.418, 52.520)
+    # das Stück mit name=„K 7“ in Pankow verdrängt die Nummer nicht, beide gehören zusammen
+    assert "k7" in netz.nummern
+    assert netz.strasse("k7", None, nur_kfz=True).length > 1000
     assert netz.finde("A 100", None) is None  # Autobahnen bleiben bei der Autobahn-Suche
 
 
@@ -221,3 +226,85 @@ def test_stadt_aus_mehreren_gemeinden(auszug):
     pankow = shapely.Point(*hin.transform(13.41, 52.54))
     assert not g1.stadt.contains(pankow) and g2.stadt.contains(pankow)
     assert g2.stadt.area > 1.5 * g1.stadt.area
+
+
+def test_bezirke_auf_mehreren_ebenen():
+    """Butzbach: Stadtteile auf Ebene 9, die Ortsteile zweier Nachbarkommunen auf 10. Derselbe
+    Name auf zwei Ebenen -> die kleinere Fläche; andere Ebenen zählen nicht."""
+    flaechen = gpd.GeoDataFrame(
+        {
+            "name": ["Kommune", "Altdorf", "Altdorf", "Neudorf", "Weiler"],
+            "admin_level": ["8", "9", "10", "10", "11"],
+        },
+        geometry=[
+            shapely.box(0, 0, 9000, 9000),
+            shapely.box(0, 0, 4000, 4000),
+            shapely.box(0, 0, 2000, 2000),
+            shapely.box(5000, 5000, 9000, 9000),
+            shapely.box(100, 100, 200, 200),
+        ],
+        crs="EPSG:25832",
+    )
+    cfg = {"stadtgrenze": {"name": "Kommune", "admin_level": ["8"]}, "bbox": [0, 0, 1, 1]}
+    g = geocode.Gebiete.aus_auszug(
+        SimpleNamespace(gebiete=flaechen), "EPSG:25832", cfg, ["9", "10"]
+    )
+    assert sorted(g.bezirke) == ["Altdorf", "Neudorf"]
+    assert g.bezirke["Altdorf"].area == pytest.approx(2000 * 2000)
+    assert [s.art for s in g.stufen(("Neudorf",))] == ["bezirk", "umgebung", "stadt"]
+    eine = geocode.Gebiete.aus_auszug(SimpleNamespace(gebiete=flaechen), "EPSG:25832", cfg, "9")
+    assert eine.bezirke["Altdorf"].area == pytest.approx(4000 * 4000)
+
+
+@pytest.fixture(scope="module")
+def streng(auszug):
+    """Wie Butzbach: Ortsteile (Mitte, Pankow) einer Kommune (Berlin), strenge Suche."""
+    cfg = {
+        "stadtgrenze": {"name": "Berlin", "admin_level": ["4"]},
+        "bbox": [13.38, 52.50, 13.44, 52.56],
+    }
+    return geocode.Gebiete.aus_auszug(auszug, "EPSG:25833", cfg, "9", streng=True)
+
+
+def test_streng_die_strasse_im_ortsteil_gilt(netz, gebiete, streng):
+    """Die Hausnummer 99 hat nur die gleichnamige Hauptstraße im Nachbarort: sonst zieht sie die
+    Kontrolle dorthin, streng gilt die Straße im genannten Ortsteil."""
+    q = frage("Hauptstraße", "99", bezirk="Pankow")
+    e = geocode.verorte(q, netz, gebiete)
+    assert (e.methode, e.gebiet) == ("hausnummer", "umgebung")
+    nah(e, 13.418, 52.520)
+    e = geocode.verorte(q, netz, streng)
+    assert (e.methode, e.gebiet) == ("strasse", "bezirk")
+    nah(e, 13.410, 52.538)
+    assert [s.art for s in streng.stufen(("Pankow",))] == ["bezirk", "kommune"]
+    assert [s.art for s in streng.stufen(())] == ["stadt"]
+
+
+def test_streng_nur_in_der_eigenen_kommune(auszug, netz, streng):
+    """Nicht im Ortsteil: in seiner Kommune, nicht darüber hinaus; passt dort die genannte
+    Querstraße nicht, ist es wohl eine andere Straße gleichen Namens."""
+    e = geocode.verorte(frage("Charlottenburger Chaussee", bezirk="Pankow"), netz, streng)
+    assert (e.methode, e.gebiet) == ("strasse", "kommune")
+    q = frage("Charlottenburger Chaussee", quer=("Querweg",), bezirk="Pankow")
+    assert geocode.verorte(q, netz, streng) is None
+    # Mitte und Pankow als zwei Kommunen: die Straße in Mitte liegt außerhalb
+    cfg = {
+        "stadtgrenze": {"name": ["Mitte", "Pankow"], "admin_level": ["9"]},
+        "bbox": [13.38, 52.50, 13.44, 52.56],
+    }
+    zwei = geocode.Gebiete.aus_auszug(auszug, "EPSG:25833", cfg, "9", streng=True)
+    assert geocode.verorte(frage("Charlottenburger Chaussee", bezirk="Pankow"), netz, zwei) is None
+
+
+def test_strassennummer_der_hauptstrasse_ist_keine_kreuzung(netz, gebiete):
+    """„Kirchhainer Damm zw. B96 u. …“: die Nummer ist die Hauptstraße selbst – kein Punkt in der
+    Mitte des gemeinsamen Stücks, sondern wie ohne diese Angabe."""
+    for strasse, quer in (
+        ("Charlottenburger Chaussee", "B 2"),
+        ("B 2", "Charlottenburger Chaussee"),
+    ):
+        e = geocode.verorte(frage(strasse, quer=(quer,)), netz, gebiete)
+        assert e.methode == "strasse", (strasse, quer)
+    e = geocode.verorte(frage("Charlottenburger Chaussee", quer=("B 2", "Am Rain")), netz, gebiete)
+    assert (e.methode, e.hinweis) == ("kreuzung", geocode.HINWEIS_EINE)
+    nah(e, 13.405, 52.524)

@@ -127,7 +127,7 @@
     "type": "Point",
     "coordinates": [
      7.12347,
-     50.72206
+     50.72204
     ]
    },
    "properties": {
@@ -225,6 +225,292 @@
      {
       "titel": "1. Quartal 2026 (PDF)",
       "url": "https://www.oberderdingen.de/resources/ecics_4342.pdf"
+     }
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     8.68271,
+     50.43297
+    ]
+   },
+   "properties": {
+    "kommune": "Butzbach",
+    "land": "HE",
+    "stand": "in_karte",
+    "stadt": "butzbach",
+    "kontrollen": 1380,
+    "was": "Monatstabellen des gemeinsamen Ordnungsbehördenbezirks Butzbach/Münzenberg/Rockenberg/Wölfersheim mit jeder Messung (Tag, Beginn und Ende, gemessene Fahrzeuge, Verwarnungen, Bußgelder, Messstelle) als PDF, seit 2015 fast jeden Monat",
+    "situation": "Die Stadt Butzbach stellt jeden Monat einen Beitrag mit der Tabelle auf ihre Seite; ältere Tabellen stehen nur noch in ihrer Mediathek, einige Monate fehlen. Das Tempolimit fehlt, die Messstelle nennt oft nur Ortsteil und Straße.",
+    "empfehlung": null,
+    "weg": "offen",
+    "kontakt": null,
+    "anfrage": null,
+    "recht": "Hessisches Datenschutz- und Informationsfreiheitsgesetz (HDSIG) – für Kommunen nur, wenn sie es per Satzung einführen",
+    "links": [
+     {
+      "titel": "Geschwindigkeitsmessungen (Übersicht)",
+      "url": "https://stadt-butzbach.de/themen/geschwindigkeitsmessungen/"
+     },
+     {
+      "titel": "April 2026 (PDF)",
+      "url": "https://stadt-butzbach.de/wp-content/uploads/sb_oa-messung-2604.pdf"
+     }
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     8.5969,
+     49.91336
+    ]
+   },
+   "properties": {
+    "kommune": "Weiterstadt",
+    "land": "HE",
+    "stand": "in_karte",
+    "stadt": "weiterstadt",
+    "kontrollen": 173,
+    "was": "Monatstabellen der Kommunalen Bußgeldstelle mit jeder mobilen Kontrolle (Datum, Ort mit Fahrtrichtung, Tempolimit, durchfahrene Fahrzeuge, davon zu schnell) als PDF, seit Januar 2025",
+    "situation": "Uhrzeit und Dauer der Messungen fehlen; die festen Anlagen stehen nicht in den Tabellen.",
+    "empfehlung": null,
+    "weg": "offen",
+    "kontakt": null,
+    "anfrage": null,
+    "recht": "Hessisches Datenschutz- und Informationsfreiheitsgesetz (HDSIG) – für Kommunen nur, wenn sie es per Satzung einführen",
+    "links": [
+     {
+      "titel": "Geschwindigkeitsmessungen (Seite der Stadt)",
+      "url": "https://www.weiterstadt.de/wirtschaft-umwelt-verkehr/umwelt-verkehr/geschwindigkeitsmessungen/index.php"
+     }
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     9.1654,
+     51.2475
+    ]
+   },
+   "properties": {
+    "kommune": "Naumburg (Hessen)",
+    "land": "HE",
+    "stand": "offen",
+    "stadt": null,
+    "kontrollen": null,
+    "was": "fünf Kontrollen 2023 des Ordnungsbehördenbezirks Habichtswald, je Kontrolle eine „Tages-Statistik“ (Messpunkt, Zeit, gemessene Fahrzeuge, Überschreitungen nach Stufen, Fahrverbote) als PDF an einer Meldung der Stadt",
+    "situation": "Der Ordnungsbehördenbezirk misst für Habichtswald, Breuna, Bad Emstal, Naumburg und Zierenberg, laut der Stadt Gudensberg auch dort. Veröffentlicht sind einzelne Meldungen – für eine eigene Stadt in der Karte zu wenig.",
+    "empfehlung": "Weitere Meldungen der Mitgliedskommunen sammeln oder beim Ordnungsbehördenbezirk alle Tages-Statistiken erfragen.",
+    "weg": null,
+    "kontakt": null,
+    "anfrage": null,
+    "recht": "Hessisches Datenschutz- und Informationsfreiheitsgesetz (HDSIG) – für Kommunen nur, wenn sie es per Satzung einführen",
+    "links": [
+     {
+      "titel": "Meldung 2023 mit den PDFs",
+      "url": "https://www.naumburg.eu/stadt-buergerservice/service/nachrichtenarchiv/2023-1-quartal-bis-4-quartal/geschwindigkeitsmessung-in-naumburg/"
+     },
+     {
+      "titel": "Ordnungsbehördenbezirk",
+      "url": "https://www.habichtswald.de/rathaus-politik/verwaltung/ordnungsbehoerdenbezirk/"
+     }
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     9.3675,
+     51.1768
+    ]
+   },
+   "properties": {
+    "kommune": "Gudensberg",
+    "land": "HE",
+    "stand": "offen",
+    "stadt": null,
+    "kontrollen": null,
+    "was": "eine Kontrolle 2024 des Ordnungsbehördenbezirks Habichtswald in einer Meldung der Stadt: Messpunkt, Zeit, gemessene Fahrzeuge, verfolgbare Überschreitungen nach Stufen",
+    "situation": null,
+    "empfehlung": null,
+    "weg": null,
+    "kontakt": null,
+    "anfrage": null,
+    "recht": "Hessisches Datenschutz- und Informationsfreiheitsgesetz (HDSIG) – für Kommunen nur, wenn sie es per Satzung einführen",
+    "links": [
+     {
+      "titel": "Meldung Oktober 2024",
+      "url": "https://www.gudensberg.de/rathaus-und-buergerservice/aktuelles/neuigkeiten/2024/oktober/geschwindigkeitsmessung/"
+     }
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     8.2931,
+     50.1732
+    ]
+   },
+   "properties": {
+    "kommune": "Niedernhausen",
+    "land": "HE",
+    "stand": "offen",
+    "stadt": null,
+    "kontrollen": null,
+    "was": "Ordnungspolizei: Ergebnisse einzelner Kontrollen in Meldungen der Gemeinde (Ort, Tag, Dauer, kontrollierte Fahrzeuge, Überschreitungen, Verwarnungen, Anzeigen)",
+    "situation": "Gefunden ist eine Meldung: September 2023, Platter Straße (20er-Zone), 634 Fahrzeuge in gut sieben Stunden, 193 Verwarnungen und 52 Anzeigen.",
+    "empfehlung": null,
+    "weg": null,
+    "kontakt": null,
+    "anfrage": null,
+    "recht": "Hessisches Datenschutz- und Informationsfreiheitsgesetz (HDSIG) – für Kommunen nur, wenn sie es per Satzung einführen",
+    "links": [
+     {
+      "titel": "Meldung September 2023",
+      "url": "https://www.niedernhausen.de/verwaltung-politik/aktuelles/news/ergebnisse-der-geschwindigkeitsmessungen-zu-schulbeginn/"
+     }
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     8.5714,
+     50.6529
+    ]
+   },
+   "properties": {
+    "kommune": "Biebertal",
+    "land": "HE",
+    "stand": "offen",
+    "stadt": null,
+    "kontrollen": null,
+    "was": "Seite „Geschwindigkeitsmessungen“: die letzten Messungen je Standort mit gemessenen Fahrzeugen und Verstößen",
+    "situation": "Die Liste liegt hinter einem Link der Seite und ließ sich beim Abruf (November 2026) nicht auslesen – nicht weiter geprüft.",
+    "empfehlung": null,
+    "weg": null,
+    "kontakt": null,
+    "anfrage": null,
+    "recht": "Hessisches Datenschutz- und Informationsfreiheitsgesetz (HDSIG) – für Kommunen nur, wenn sie es per Satzung einführen",
+    "links": [
+     {
+      "titel": "Geschwindigkeitsmessungen",
+      "url": "https://www.biebertal.de/infos-tipps/weitere-tipps-infos/geschwindigkeitsmessungen/geschwindigkeitsmessungen.html"
+     }
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     8.4636,
+     50.1831
+    ]
+   },
+   "properties": {
+    "kommune": "Königstein im Taunus",
+    "land": "HE",
+    "stand": "offen",
+    "stadt": null,
+    "kontrollen": null,
+    "was": "Ergebnisse der mobilen Kontrollen der letzten zwei Wochen je Stadtteil (Königstein, Schneidhain, Mammolshain, Falkenstein)",
+    "situation": "Ältere Ergebnisse verschwinden von der Seite – eine Reihe entstünde nur durch regelmäßiges Abrufen.",
+    "empfehlung": null,
+    "weg": null,
+    "kontakt": null,
+    "anfrage": null,
+    "recht": "Hessisches Datenschutz- und Informationsfreiheitsgesetz (HDSIG) – für Kommunen nur, wenn sie es per Satzung einführen",
+    "links": [
+     {
+      "titel": "Geschwindigkeitsmessungen",
+      "url": "https://www.koenigstein.de/rathaus-politik/sicherheit-ordnung/geschwindigkeitsmessungen/"
+     }
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     9.0407,
+     50.1429
+    ]
+   },
+   "properties": {
+    "kommune": "Rodenbach (Main-Kinzig-Kreis)",
+    "land": "HE",
+    "stand": "offen",
+    "stadt": null,
+    "kontrollen": null,
+    "was": "Seite „Radar Kontrolle“: Messwerte des gemeindeeigenen Messgeräts (mit Anzeige oder verdeckt) grafisch aufbereitet, dazu Daten polizeilicher Messungen",
+    "situation": "Das Gerät der Gemeinde ahndet nicht – Auffälligkeiten gibt die Gemeinde an die Polizei. Die Ergebnisse stehen als Grafik, nicht als Tabelle.",
+    "empfehlung": null,
+    "weg": null,
+    "kontakt": null,
+    "anfrage": null,
+    "recht": "Hessisches Datenschutz- und Informationsfreiheitsgesetz (HDSIG) – für Kommunen nur, wenn sie es per Satzung einführen",
+    "links": [
+     {
+      "titel": "Radar Kontrolle",
+      "url": "https://www.rodenbach.de/Rodenbach/Aktuell-informiert/Radar-Kontrolle/"
+     },
+     {
+      "titel": "Ankündigung",
+      "url": "https://www.rodenbach.de/Rodenbach/Aktuell-informiert/Aktuelles/-Geschwindigkeitsmessung-aktuelle-Informationen-jetzt-auch-auf-der-Homepage-der-Gemeinde-Rodenbach-.php?ModID=255&FID=2161.8061.1"
+     }
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     9.5609,
+     50.6736
+    ]
+   },
+   "properties": {
+    "kommune": "Schlitz",
+    "land": "HE",
+    "stand": "offen",
+    "stadt": null,
+    "kontrollen": null,
+    "was": "Meldungen 2018 mit den Ergebnissen der städtischen Messungen je Ort (gemessene Fahrzeuge, zu schnelle); gemessen hat eine beauftragte Firma, 18 Messungen im Jahr",
+    "situation": "Datum und Uhrzeit der einzelnen Messungen fehlen; neuere Meldungen sind nicht gefunden.",
+    "empfehlung": null,
+    "weg": null,
+    "kontakt": null,
+    "anfrage": null,
+    "recht": "Hessisches Datenschutz- und Informationsfreiheitsgesetz (HDSIG) – für Kommunen nur, wenn sie es per Satzung einführen",
+    "links": [
+     {
+      "titel": "Meldung Juli 2018 (Schlitz)",
+      "url": "https://www.schlitz.de/nachrichten-startseite/2018/geschwindigkeitsmessungen-in-schlitz/"
+     },
+     {
+      "titel": "Meldung Juli 2018 (Stadtteile)",
+      "url": "https://www.schlitz.de/nachrichten-startseite/2018/geschwindigkeitsmessungen-in-den-stadtteilen/"
      }
     ]
    }
@@ -473,6 +759,42 @@
      {
       "titel": "Ratsinformationssystem",
       "url": "https://piwi.wiesbaden.de/dokument/v/3118284"
+     }
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     8.4149,
+     50.5502
+    ]
+   },
+   "properties": {
+    "kommune": "Solms",
+    "land": "HE",
+    "stand": "kandidat",
+    "stadt": null,
+    "kontrollen": null,
+    "was": "Messprotokolle der Kontrollen an der L 3451 (Oberndorf) liegen beim Ordnungsbehördenbezirk Solms-Braunfels; die Stadt Solms nannte 2024 für die Aufbereitung rund 200 Euro",
+    "situation": "Die Anfrage (2024, nach der Informationsfreiheitssatzung der Stadt Solms) ist eingeschlafen. Für die Protokolle ist laut Antwort die federführende Stadt Braunfels zuständig.",
+    "empfehlung": "Anfrage an die Stadt Braunfels nach allen Kontrollen des Ordnungsbehördenbezirks.",
+    "weg": "FragDenStaat",
+    "kontakt": {
+     "fds": "https://fragdenstaat.de/behoerden/?q=Stadt+Braunfels",
+     "fds_suche": true
+    },
+    "anfrage": {
+     "betreff": "Geschwindigkeitskontrollen – Ort, Zeit und Ergebnis je Kontrolle",
+     "text": "Bitte übermitteln Sie mir eine Aufstellung aller Geschwindigkeitskontrollen (mobil und teilstationär), die die Stadt Braunfels für den Ordnungsbehördenbezirk Solms-Braunfels seit dem 1. Januar 2019 durchgeführt hat. Je Kontrolle bitte:\n\n1. den Ort: Straße mit Hausnummer oder den Querstraßen, Fahrtrichtung,\n2. Datum, Beginn und Ende der Messung,\n3. die zulässige Höchstgeschwindigkeit,\n4. die Zahl der gemessenen Fahrzeuge und der Überschreitungen (wenn vorhanden nach Stufen der Überschreitung) sowie die Zahl der Fahrverbote.\n\nEs geht nur um abgeschlossene Kontrollen, nicht um künftige Messorte. Personenbezogene Daten (Kennzeichen, Namen) brauche ich nicht.\n\nBitte schicken Sie die Daten in dem maschinenlesbaren Format, in dem sie bei Ihnen vorliegen (z. B. CSV, XLSX oder Export der Messsoftware); eine Aufbereitung ist nicht nötig.\n\nBitte nennen Sie mir außerdem, unter welchen Bedingungen ich die Daten weiterverwenden und veröffentlichen darf – am liebsten unter einer offenen Lizenz wie der Datenlizenz Deutschland – Namensnennung 2.0."
+    },
+    "recht": "Hessisches Datenschutz- und Informationsfreiheitsgesetz (HDSIG) – für Kommunen nur, wenn sie es per Satzung einführen",
+    "links": [
+     {
+      "titel": "FragDenStaat 2024",
+      "url": "https://fragdenstaat.de/anfrage/akteneinsicht-geschwindigkeitsmessprotokolle-der-letzten-3-jahre/"
      }
     ]
    }
@@ -802,6 +1124,148 @@
    "geometry": {
     "type": "Point",
     "coordinates": [
+     8.92,
+     50.8209
+    ]
+   },
+   "properties": {
+    "kommune": "Kirchhain",
+    "land": "HE",
+    "stand": "teilweise",
+    "stadt": null,
+    "kontrollen": null,
+    "was": "Jahresrückblick 2024 des gemeinsamen Ordnungsbehördenbezirks Kirchhain, Rauschenberg, Wohratal und Neustadt: 48 Messtage an rund 40 Messstellen, 4.056 Verstöße",
+    "situation": "Die Messstellen kündigt die Stadt laut Rückblick häufig in sozialen Medien und der Presse an; Ergebnisse je Kontrolle veröffentlicht sie nicht.",
+    "empfehlung": "Anfrage nach den Kontrollen je Ort und Tag.",
+    "weg": "FragDenStaat",
+    "kontakt": {
+     "fds": "https://fragdenstaat.de/behoerden/?q=Stadt+Kirchhain",
+     "fds_suche": true
+    },
+    "anfrage": {
+     "betreff": "Geschwindigkeitskontrollen – Ort, Zeit und Ergebnis je Kontrolle",
+     "text": "Bitte übermitteln Sie mir eine Aufstellung aller Geschwindigkeitskontrollen (mobil und teilstationär), die die Stadt Kirchhain seit dem 1. Januar 2019 durchgeführt hat. Je Kontrolle bitte:\n\n1. den Ort: Straße mit Hausnummer oder den Querstraßen, Fahrtrichtung,\n2. Datum, Beginn und Ende der Messung,\n3. die zulässige Höchstgeschwindigkeit,\n4. die Zahl der gemessenen Fahrzeuge und der Überschreitungen (wenn vorhanden nach Stufen der Überschreitung) sowie die Zahl der Fahrverbote.\n\nEs geht nur um abgeschlossene Kontrollen, nicht um künftige Messorte. Personenbezogene Daten (Kennzeichen, Namen) brauche ich nicht.\n\nBitte schicken Sie die Daten in dem maschinenlesbaren Format, in dem sie bei Ihnen vorliegen (z. B. CSV, XLSX oder Export der Messsoftware); eine Aufbereitung ist nicht nötig.\n\nBitte nennen Sie mir außerdem, unter welchen Bedingungen ich die Daten weiterverwenden und veröffentlichen darf – am liebsten unter einer offenen Lizenz wie der Datenlizenz Deutschland – Namensnennung 2.0."
+    },
+    "recht": "Hessisches Datenschutz- und Informationsfreiheitsgesetz (HDSIG) – für Kommunen nur, wenn sie es per Satzung einführen",
+    "links": [
+     {
+      "titel": "Rückblick 2024",
+      "url": "https://www.kirchhain.de/Verwaltung-Politik/Verwaltung/Aktuelles/R%C3%BCckblick-Geschwindigkeitsmessung-2024.php?ModID=255&FID=2848.37749.1"
+     }
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     8.0635,
+     50.388
+    ]
+   },
+   "properties": {
+    "kommune": "Limburg an der Lahn",
+    "land": "HE",
+    "stand": "teilweise",
+    "stadt": null,
+    "kontrollen": null,
+    "was": "Meldungen mit Summen: Juli bis September 2020 108 mobile Kontrollen mit rund 47.000 Fahrzeugen, davon rund 3.500 zu schnell; dazu sechs feste Anlagen",
+    "situation": null,
+    "empfehlung": "Anfrage nach den mobilen Kontrollen je Ort und Tag.",
+    "weg": "FragDenStaat",
+    "kontakt": {
+     "fds": "https://fragdenstaat.de/behoerden/?q=Stadt+Limburg+an+der+Lahn",
+     "fds_suche": true
+    },
+    "anfrage": {
+     "betreff": "Geschwindigkeitskontrollen – Ort, Zeit und Ergebnis je Kontrolle",
+     "text": "Bitte übermitteln Sie mir eine Aufstellung aller Geschwindigkeitskontrollen (mobil und teilstationär), die die Stadt Limburg an der Lahn seit dem 1. Januar 2019 durchgeführt hat. Je Kontrolle bitte:\n\n1. den Ort: Straße mit Hausnummer oder den Querstraßen, Fahrtrichtung,\n2. Datum, Beginn und Ende der Messung,\n3. die zulässige Höchstgeschwindigkeit,\n4. die Zahl der gemessenen Fahrzeuge und der Überschreitungen (wenn vorhanden nach Stufen der Überschreitung) sowie die Zahl der Fahrverbote.\n\nEs geht nur um abgeschlossene Kontrollen, nicht um künftige Messorte. Personenbezogene Daten (Kennzeichen, Namen) brauche ich nicht.\n\nBitte schicken Sie die Daten in dem maschinenlesbaren Format, in dem sie bei Ihnen vorliegen (z. B. CSV, XLSX oder Export der Messsoftware); eine Aufbereitung ist nicht nötig.\n\nBitte nennen Sie mir außerdem, unter welchen Bedingungen ich die Daten weiterverwenden und veröffentlichen darf – am liebsten unter einer offenen Lizenz wie der Datenlizenz Deutschland – Namensnennung 2.0."
+    },
+    "recht": "Hessisches Datenschutz- und Informationsfreiheitsgesetz (HDSIG) – für Kommunen nur, wenn sie es per Satzung einführen",
+    "links": [
+     {
+      "titel": "Mobile Anlage (2020)",
+      "url": "https://www.limburg.de/Rathaus-Leben/Aktuelles/Stadt-setzt-auf-mobile-Geschwindigkeitsmessanlage.php?ModID=255&FID=3252.4239.1"
+     },
+     {
+      "titel": "Feste Anlagen (2024)",
+      "url": "https://www.limburg.de/Rathaus-Leben/Aktuelles/Neue-Anlage-zur-Geschwindigkeitsmessung.php?ModID=255&FID=3252.27114.1"
+     }
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     8.6512,
+     49.8728
+    ]
+   },
+   "properties": {
+    "kommune": "Darmstadt",
+    "land": "HE",
+    "stand": "teilweise",
+    "stadt": null,
+    "kontrollen": null,
+    "was": "auf eine Anfrage (2026) Summen für eine Stelle – Schöfferstraße 2024–2026: vier Kontrollen, 571 Fahrzeuge, 46 zu schnell – und stadtweit 0,1 bis 0,7 % Verstöße je Jahr 2020–2025",
+    "situation": "Die stadtweite Quote trennt laut Antwort nicht zwischen festen und mobilen Messungen.",
+    "empfehlung": "Anfrage nach den mobilen Kontrollen je Ort und Tag.",
+    "weg": "FragDenStaat",
+    "kontakt": {
+     "fds": "https://fragdenstaat.de/behoerden/?q=Wissenschaftsstadt+Darmstadt",
+     "fds_suche": true
+    },
+    "anfrage": {
+     "betreff": "Geschwindigkeitskontrollen – Ort, Zeit und Ergebnis je Kontrolle",
+     "text": "Bitte übermitteln Sie mir eine Aufstellung aller Geschwindigkeitskontrollen (mobil und teilstationär), die die Wissenschaftsstadt Darmstadt seit dem 1. Januar 2019 durchgeführt hat. Je Kontrolle bitte:\n\n1. den Ort: Straße mit Hausnummer oder den Querstraßen, Fahrtrichtung,\n2. Datum, Beginn und Ende der Messung,\n3. die zulässige Höchstgeschwindigkeit,\n4. die Zahl der gemessenen Fahrzeuge und der Überschreitungen (wenn vorhanden nach Stufen der Überschreitung) sowie die Zahl der Fahrverbote.\n\nEs geht nur um abgeschlossene Kontrollen, nicht um künftige Messorte. Personenbezogene Daten (Kennzeichen, Namen) brauche ich nicht.\n\nBitte schicken Sie die Daten in dem maschinenlesbaren Format, in dem sie bei Ihnen vorliegen (z. B. CSV, XLSX oder Export der Messsoftware); eine Aufbereitung ist nicht nötig.\n\nBitte nennen Sie mir außerdem, unter welchen Bedingungen ich die Daten weiterverwenden und veröffentlichen darf – am liebsten unter einer offenen Lizenz wie der Datenlizenz Deutschland – Namensnennung 2.0."
+    },
+    "recht": "Hessisches Datenschutz- und Informationsfreiheitsgesetz (HDSIG) – für Kommunen nur, wenn sie es per Satzung einführen",
+    "links": [
+     {
+      "titel": "FragDenStaat 2026",
+      "url": "https://fragdenstaat.de/a/371577"
+     }
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     9.6198,
+     51.2836
+    ]
+   },
+   "properties": {
+    "kommune": "Kaufungen",
+    "land": "HE",
+    "stand": "teilweise",
+    "stadt": null,
+    "kontrollen": null,
+    "was": "Meldung 2018 zu einer Kontrolle der Gemeinde an der B 7: rund 2.300 Verstöße in neun Stunden",
+    "situation": null,
+    "empfehlung": null,
+    "weg": null,
+    "kontakt": null,
+    "anfrage": null,
+    "recht": "Hessisches Datenschutz- und Informationsfreiheitsgesetz (HDSIG) – für Kommunen nur, wenn sie es per Satzung einführen",
+    "links": [
+     {
+      "titel": "Meldung 2018",
+      "url": "https://www.kaufungen.eu/Rathaus-B%C3%BCrgerservice/Aktuelles/Mitteilungen/Geschwindigkeitsmessung-auf-B7.php?ModID=255&FID=2655.677.1"
+     }
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
      13.7373,
      51.0504
     ]
@@ -937,6 +1401,40 @@
      {
       "titel": "FragDenStaat 2018",
       "url": "https://fragdenstaat.de/anfrage/daten-zu-geschwindigkeitsmessanlagen/"
+     }
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     8.6941,
+     49.8077
+    ]
+   },
+   "properties": {
+    "kommune": "Mühltal",
+    "land": "HE",
+    "stand": "abgelehnt",
+    "stadt": null,
+    "kontrollen": null,
+    "was": "2022 abgelehnt: keine Pflicht, für einzelne Bürger Verkehrsdaten zusammenzustellen; ältere Mess- und Kontrollergebnisse aufzuarbeiten, sei personell nicht zu leisten",
+    "situation": "Seitdem veröffentlicht die Gemeinde Berichte ihrer Verkehrsmessungen – Messgeräte ohne Ahndung, keine Kontrollen.",
+    "empfehlung": "Nicht nach einer Zusammenstellung fragen, sondern nach den vorhandenen Protokollen der Kontrollen.",
+    "weg": null,
+    "kontakt": null,
+    "anfrage": null,
+    "recht": "Hessisches Datenschutz- und Informationsfreiheitsgesetz (HDSIG) – für Kommunen nur, wenn sie es per Satzung einführen",
+    "links": [
+     {
+      "titel": "FragDenStaat 2022",
+      "url": "https://fragdenstaat.de/anfrage/veroffentlichung-verkehrsrelevanter-messergebnisse-und-blitzaktionen-der-gemeinde-muhltal/"
+     },
+     {
+      "titel": "Bericht einer Verkehrsmessung (2022)",
+      "url": "https://www.muehltal.de/muehltal/artikel/presseartikel/2022/kw35-verkehrsdatenerhebung-kirchstr/"
      }
     ]
    }

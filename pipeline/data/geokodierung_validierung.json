@@ -58,20 +58,20 @@
  },
  "bonn": {
   "kontrollen": 34128,
-  "verortet": 29471,
+  "verortet": 29877,
   "je_methode": {
    "hausnummer": 16825,
    "abschnitt": 0,
-   "kreuzung": 1608,
+   "kreuzung": 1687,
    "anschlussstelle": 164,
-   "strasse": 10874
+   "strasse": 11201
   },
-  "ohne_lage": 4657,
+  "ohne_lage": 4251,
   "je_gebiet": {
-   "stadt": 29471
+   "stadt": 29877
   },
   "hinweise": {
-   "Straße liegt an mehreren Stellen – Punkt auf dem längsten Stück": 1030,
+   "Straße liegt an mehreren Stellen – Punkt auf dem längsten Stück": 1035,
    "Ortsangabe statt Querstraße": 164,
    "auf der A 555 gefunden (Quelle: A 562)": 5,
    "auf der A 555 gefunden (Quelle: A 565)": 2,
@@ -80,6 +80,31 @@
   "adresse_zur_achse_m": {
    "median": 20.4,
    "p90": 42.9
+  }
+ },
+ "butzbach": {
+  "kontrollen": 1380,
+  "verortet": 1369,
+  "je_methode": {
+   "hausnummer": 306,
+   "abschnitt": 0,
+   "kreuzung": 256,
+   "anschlussstelle": 0,
+   "strasse": 807
+  },
+  "ohne_lage": 11,
+  "je_gebiet": {
+   "bezirk": 1347,
+   "kommune": 20,
+   "stadt": 2
+  },
+  "hinweise": {
+   "Ortsangabe statt Querstraße": 58,
+   "Ortsangabe von Hand zugeordnet (config/orte.yaml)": 12
+  },
+  "adresse_zur_achse_m": {
+   "median": 18.0,
+   "p90": 56.8
   }
  },
  "koeln": {
@@ -150,6 +175,29 @@
   "adresse_zur_achse_m": {
    "median": 15.4,
    "p90": 26.6
+  }
+ },
+ "weiterstadt": {
+  "kontrollen": 173,
+  "verortet": 173,
+  "je_methode": {
+   "hausnummer": 33,
+   "abschnitt": 0,
+   "kreuzung": 54,
+   "anschlussstelle": 0,
+   "strasse": 86
+  },
+  "ohne_lage": 0,
+  "je_gebiet": {
+   "stadt": 173
+  },
+  "hinweise": {
+   "Ortsangabe von Hand zugeordnet (config/orte.yaml)": 22,
+   "Straße liegt an mehreren Stellen – Punkt auf dem längsten Stück": 2
+  },
+  "adresse_zur_achse_m": {
+   "median": 15.5,
+   "p90": 20.8
   }
  }
 }

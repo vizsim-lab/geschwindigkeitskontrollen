@@ -90,7 +90,8 @@ export function methodeHtml(m) {
 
     <h3>Verortung</h3>
     <p>Gesucht wird im Straßennetz von OpenStreetMap (Geofabrik-Abzug), für Berlin im genannten
-    Bezirk, für Köln im genannten Stadtteil: zuerst die <b>Hausnummer</b> an der Straße, sonst die Mitte des <b>Abschnitts</b>
+    Bezirk, für Köln im genannten Stadtteil, für Butzbach im genannten Ortsteil und seiner Kommune
+    (Bundes-, Landes- und Kreisstraßen auch über ihre Nummer): zuerst die <b>Hausnummer</b> an der Straße, sonst die Mitte des <b>Abschnitts</b>
     zwischen den beiden Querstraßen, sonst die <b>Kreuzung</b> oder <b>Anschlussstelle</b>.
     Bleibt nur der Straßenname, steht der Kreis blass (≈) in der Mitte der Straße, und die
     gestrichelte Linie zeigt die ganze Straße.</p>

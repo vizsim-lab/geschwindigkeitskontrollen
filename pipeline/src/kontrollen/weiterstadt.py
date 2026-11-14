@@ -32,6 +32,15 @@ _DATUM = re.compile(r"^\s*(\d{1,2})\.(\d{1,2})\.(\d{4})\s*$")
 _FR = re.compile(r"(?:,\s*|\s+)(?:FR|Fr)\b\.?\s*(?P<ziel>[^,]+?)\s*$")
 # Straßennummer vorn: „B42“, „L 3113“, „K 165“ (Bundes-, Landes-, Kreisstraße)
 _NUMMER = re.compile(r"^(?P<art>[BLK])\s?(?P<nr>\d{1,4})$")
+_NUMMER_ORT = re.compile(
+    r"^(?P<nr>[BLK]\s?\d{1,4})\s+(?!(?:H(?:ö|oe)he|vor|hinter|bei|zwischen)\b)(?P<ort>\S.*)$",
+    re.I,
+)
+_HH_NR = re.compile(r"\bHH\s*Nr\b\.?")
+_HH = re.compile(r"\bHH\b")
+_EINMUENDUNG = re.compile(
+    r"(?i)^(?:(?:hinter|vor)\s+(?:der\s+)?)?(?:einm(?:ü|ue)ndung|kreuzung)\s+"
+)
 
 
 def _zahl(s: str | None) -> int | None:
@@ -71,20 +80,25 @@ def strassennummer(text: str | None) -> str | None:
 def messstelle(text: str) -> dict:
     """ "L3113, Höhe Weiterstädter Weg, FR Mörfelden-Walldorf" -> Straße, Nummer, Kreuzung,
     Richtung."""
-    t = " ".join(text.split())
+    t = " ".join(re.sub(r"\([^)]*\)", " ", text).split())  # „Vor den Löserbecken (JVA)“
     richtung = None
     if fr := _FR.search(t):
         richtung = fr.group("ziel").strip(" .")
         t = t[: fr.start()]
+    t = _HH_NR.sub("Hausnr.", t)  # „HH Nr. 55“ = Hausnummer
+    t = _HH.sub("Höhe", t)  # „R.-Diesel-Straße HH Feuerwehr“
+    if m := _NUMMER_ORT.match(t):  # „B42 BAB5 Anschlussstelle SW“: ein Ort ohne „Höhe“
+        t = f"{m['nr']} Höhe {m['ort']}"
     a = adresse(t)
     strasse = strassennummer(a.strasse) or a.strasse
+    quer = _EINMUENDUNG.sub("", a.quer).strip() or None if a.quer else None
     return {
         "richtung_roh": richtung,
         "strasse": strasse,
         "hausnummer": a.hausnummer,
         "gegenueber": a.gegenueber,
-        "lage_art": "kreuzung" if a.quer else "keine",
-        "quer1": a.quer,
+        "lage_art": "kreuzung" if quer else "keine",
+        "quer1": quer,
     }
 
 

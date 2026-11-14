@@ -1,5 +1,5 @@
 {
- "stand": "2026-11-09",
+ "stand": "2026-11-14",
  "dateien": {
   "messstellen": "messstellen.json",
   "kontrollen": "kontrollen.json",
@@ -289,7 +289,7 @@
     "zoom": 11.8
    },
    "kontrollen": 34128,
-   "messstellen": 1517,
+   "messstellen": 1531,
    "zeitraum": [
     "2016-01-02",
     "2024-12-31"
@@ -370,20 +370,20 @@
    },
    "verortung": {
     "kontrollen": 34128,
-    "verortet": 29471,
+    "verortet": 29877,
     "je_methode": {
      "hausnummer": 16825,
      "abschnitt": 0,
-     "kreuzung": 1608,
+     "kreuzung": 1687,
      "anschlussstelle": 164,
-     "strasse": 10874
+     "strasse": 11201
     },
-    "ohne_lage": 4657,
+    "ohne_lage": 4251,
     "je_gebiet": {
-     "stadt": 29471
+     "stadt": 29877
     },
     "hinweise": {
-     "Straße liegt an mehreren Stellen – Punkt auf dem längsten Stück": 1030,
+     "Straße liegt an mehreren Stellen – Punkt auf dem längsten Stück": 1035,
      "Ortsangabe statt Querstraße": 164,
      "auf der A 555 gefunden (Quelle: A 562)": 5,
      "auf der A 555 gefunden (Quelle: A 565)": 2,
@@ -649,6 +649,831 @@
      "p90": 19.6
     }
    }
+  },
+  "butzbach": {
+   "label": "Butzbach",
+   "start": {
+    "lon": 8.71,
+    "lat": 50.43,
+    "zoom": 11.0
+   },
+   "kontrollen": 1380,
+   "messstellen": 237,
+   "zeitraum": [
+    "2015-01-15",
+    "2026-09-28"
+   ],
+   "jahre": [
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026
+   ],
+   "stufen": null,
+   "hat_dauer": true,
+   "hat_fahrverbote": false,
+   "hat_tempo": false,
+   "anteil_alle_gezaehlt": 0.986,
+   "quelle": {
+    "label": "Geschwindigkeitsmessungen im Ordnungsbehördenbezirk Butzbach",
+    "bereitsteller": "Stadt Butzbach",
+    "kurz": "Stadt Butzbach",
+    "titel": "Geschwindigkeitsmessungen – Monatstabellen des gemeinsamen Ordnungsbehördenbezirks Butzbach/Münzenberg/Rockenberg/Wölfersheim (PDF)",
+    "herkunft_url": "https://stadt-butzbach.de/themen/geschwindigkeitsmessungen/",
+    "lizenz": null,
+    "lizenz_hinweis": "ohne Lizenzangabe",
+    "hinweis": "Gemessen hat der gemeinsame Ordnungsbehördenbezirk der Städte Butzbach und Münzenberg und der Gemeinden Rockenberg und Wölfersheim. Je Messung Tag, Beginn und Ende, gemessene Fahrzeuge, Verwarnungen und Bußgelder (zusammen die Überschreitungen); das Tempolimit nennen die Tabellen nicht. Veröffentlicht sind die Monate seit Januar 2015, nicht lückenlos. Die Messstelle steht als Ortsteil und Straße, oft ohne Hausnummer – verortet wird nur in diesem Ortsteil und seiner Kommune, sonst bleibt die Kontrolle ohne Lage.",
+    "datensaetze": [
+     {
+      "titel": "Geschwindigkeitsmessungen im September 2026",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-september-2026/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im August 2026",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-august-2026/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im Juli 2026",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-juli-2026/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im Juni 2026",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-juni-2026/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im Mai 2026",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-mai-2026/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im April 2026",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-april-2026/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im März 2026",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-maerz-2026-2/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im Februar 2026",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-februar-2026/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im Januar 2026",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-januar-2026/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im Dezember 2025",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-dezember-2025/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im November 2025",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-november-2025/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im Oktober 2025",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-oktober-2025/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im September 2025",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-september-2025/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im August 2025",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-august-2025/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im Juli 2025",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-juli-2025/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im Juni 2025",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-juni-2025/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im Mai 2025",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-mai-2025/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im April 2025",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-april-2025/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im März 2025",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-maerz-2025/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im Februar 2025",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-februar-2025/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im Januar 2025",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-januar-2025/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im Dezember 2024",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-dezember-2024/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im November 2024",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-november-2024/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im Oktober 2024",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-oktober-2024/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im September 2024",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-september-2024/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im August 2024",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-august-2024/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im Juli 2024",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-juli-2024/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im Juni 2024",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-juni-2024/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im Mai 2024",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-mai-2024/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im April 2024",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-april-2024/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im März 2024",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-maerz-2024/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im Februar 2024",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-februar-2024/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im Januar 2024",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-januar-2024/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im November 2023",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-november-2023/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im Dezember 2023",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-dezember-2023/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im Juli 2023",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-juli-2023/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im Juni 2023",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-juni-2023/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im Mai 2023",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-mai-2023/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im April 2023",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-april-2023/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im Februar 2023",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-februar-2023/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im Januar 2023",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-januar-2023/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im Dezember 2022",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-dezember-2022/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im November 2022",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-november-2022/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im Oktober 2022",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-oktober-2022/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im September 2022",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-september-2022/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im August 2022",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-august-2022/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im Juli 2022",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-juli-2022/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im Juni 2022",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-juni-2022/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im Mai 2022",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-mai-2022/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im April 2022",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-april-2022/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im März 2022",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-maerz-2022/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im Februar 2022",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-februar-2022/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im Januar 2022",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-januar-2022/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im Dezember 2021",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-dezember-2021/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im November 2021",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-november-2021/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im Oktober 2021",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-oktober-2021/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im September 2021",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-september-2021/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im August 2021",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-august-2021/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im Juli 2021",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-juli-2021/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im Juni 2021",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-juni-2021/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im Mai 2021",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-mai-2021/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im April 2021",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-april-2021/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im Februar 2021",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-februar-2021/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im Dezember 2020",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-dezember-2020/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im November 2020",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-november-2020/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im Oktober 2020",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-oktober-2020/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im September 2020",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-september-2020/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im August 2020",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-august-2020/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im Februar 2020",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-februar-2020/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im März 2020",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-maerz-2020/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im November 2019",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-november-2019/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im Dezember 2019",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-dezember-2019/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im Oktober 2019",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-oktober-2019/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im September 2019",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-september-2019/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im Juli 2019",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-juli-2019/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im Juni 2019",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-juni-2019/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im Mai 2019",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-mai-2019/",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen im August 2019",
+      "url": "https://stadt-butzbach.de/buerger-service/geschwindigkeitsmessungen-im-august-2019/",
+      "lizenz": null
+     },
+     {
+      "titel": "sb_oa-messung-1512",
+      "url": "https://stadt-butzbach.de/wp-content/uploads/Geschwindigkeitsmessungen-Dezember-2018.pdf",
+      "lizenz": null
+     },
+     {
+      "titel": "sb_oa-messung-1511.pdf",
+      "url": "https://stadt-butzbach.de/wp-content/uploads/Geschwindigkeitsmessungen-November-2018.pdf",
+      "lizenz": null
+     },
+     {
+      "titel": "sb_oa-messung-1510.pdf",
+      "url": "https://stadt-butzbach.de/wp-content/uploads/Geschwindigkeitsmessungen-Oktober-2018.pdf",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen – 2018 – September",
+      "url": "https://stadt-butzbach.de/wp-content/uploads/Geschwindigkeitsmessungen-2018-August-1.pdf",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen-2018-August",
+      "url": "https://stadt-butzbach.de/wp-content/uploads/Geschwindigkeitsmessungen-2018-August.pdf",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitsmessungen-2018-Juni",
+      "url": "https://stadt-butzbach.de/wp-content/uploads/Geschwindigkeitsmessungen-2018-Juni.pdf",
+      "lizenz": null
+     },
+     {
+      "titel": "sb_oa-messung-1511.pdf",
+      "url": "https://stadt-butzbach.de/wp-content/uploads/sb_oa-messung-1511.pdf.pdf",
+      "lizenz": null
+     },
+     {
+      "titel": "sb_oa-messung-1510.pdf",
+      "url": "https://stadt-butzbach.de/wp-content/uploads/sb_oa-messung-1510.pdf.pdf",
+      "lizenz": null
+     },
+     {
+      "titel": "sb_oa-messung-1509",
+      "url": "https://stadt-butzbach.de/wp-content/uploads/sb_oa-messung-1509-2.pdf",
+      "lizenz": null
+     },
+     {
+      "titel": "sb_oa-messung-1503",
+      "url": "https://stadt-butzbach.de/wp-content/uploads/sb_oa-messung-1503-1.pdf",
+      "lizenz": null
+     },
+     {
+      "titel": "sb_oa-messung-1502",
+      "url": "https://stadt-butzbach.de/wp-content/uploads/sb_oa-messung-1502-1.pdf",
+      "lizenz": null
+     },
+     {
+      "titel": "sb_oa-messung-1512",
+      "url": "https://stadt-butzbach.de/wp-content/uploads/sb_oa-messung-1512-1.pdf",
+      "lizenz": null
+     },
+     {
+      "titel": "sb_oa-messung-1511",
+      "url": "https://stadt-butzbach.de/wp-content/uploads/sb_oa-messung-1511-1.pdf",
+      "lizenz": null
+     },
+     {
+      "titel": "sb_oa-messung-1510",
+      "url": "https://stadt-butzbach.de/wp-content/uploads/sb_oa-messung-1510-1.pdf",
+      "lizenz": null
+     },
+     {
+      "titel": "sb_oa-messung-1509",
+      "url": "https://stadt-butzbach.de/wp-content/uploads/sb_oa-messung-1509-1.pdf",
+      "lizenz": null
+     },
+     {
+      "titel": "sb_oa-messung-1509",
+      "url": "https://stadt-butzbach.de/wp-content/uploads/sb_oa-messung-1509.pdf",
+      "lizenz": null
+     },
+     {
+      "titel": "sb_oa-messung-1708",
+      "url": "https://stadt-butzbach.de/wp-content/uploads/sb_oa-messung-1708.pdf",
+      "lizenz": null
+     },
+     {
+      "titel": "sb_oa-messung-1707",
+      "url": "https://stadt-butzbach.de/wp-content/uploads/sb_oa-messung-1707.pdf",
+      "lizenz": null
+     },
+     {
+      "titel": "sb_oa-messung-1706",
+      "url": "https://stadt-butzbach.de/wp-content/uploads/sb_oa-messung-1706.pdf",
+      "lizenz": null
+     },
+     {
+      "titel": "sb_oa-messung-1705",
+      "url": "https://stadt-butzbach.de/wp-content/uploads/sb_oa-messung-1705.pdf",
+      "lizenz": null
+     },
+     {
+      "titel": "sb_oa-messung-1704",
+      "url": "https://stadt-butzbach.de/wp-content/uploads/sb_oa-messung-1704.pdf",
+      "lizenz": null
+     },
+     {
+      "titel": "sb_oa-messung-1703",
+      "url": "https://stadt-butzbach.de/wp-content/uploads/sb_oa-messung-1703.pdf",
+      "lizenz": null
+     },
+     {
+      "titel": "sb_oa-messung-1701",
+      "url": "https://stadt-butzbach.de/wp-content/uploads/sb_oa-messung-1701.pdf",
+      "lizenz": null
+     },
+     {
+      "titel": "sb_oa-messung-1612",
+      "url": "https://stadt-butzbach.de/wp-content/uploads/sb_oa-messung-1612.pdf",
+      "lizenz": null
+     },
+     {
+      "titel": "sb_oa-messung-1611",
+      "url": "https://stadt-butzbach.de/wp-content/uploads/sb_oa-messung-1611.pdf",
+      "lizenz": null
+     },
+     {
+      "titel": "sb_oa-messung-1610",
+      "url": "https://stadt-butzbach.de/wp-content/uploads/sb_oa-messung-1610.pdf",
+      "lizenz": null
+     },
+     {
+      "titel": "sb_oa-messung-1609",
+      "url": "https://stadt-butzbach.de/wp-content/uploads/sb_oa-messung-1609.pdf",
+      "lizenz": null
+     },
+     {
+      "titel": "sb_oa-messung-1608",
+      "url": "https://stadt-butzbach.de/wp-content/uploads/sb_oa-messung-1608.pdf",
+      "lizenz": null
+     },
+     {
+      "titel": "sb_oa-messung-1607",
+      "url": "https://stadt-butzbach.de/wp-content/uploads/sb_oa-messung-1607.pdf",
+      "lizenz": null
+     },
+     {
+      "titel": "sb_oa-messung-1604",
+      "url": "https://stadt-butzbach.de/wp-content/uploads/sb_oa-messung-1604-1.pdf",
+      "lizenz": null
+     },
+     {
+      "titel": "sb_oa-messung-1606",
+      "url": "https://stadt-butzbach.de/wp-content/uploads/sb_oa-messung-1606.pdf",
+      "lizenz": null
+     },
+     {
+      "titel": "sb_oa-messung-1605",
+      "url": "https://stadt-butzbach.de/wp-content/uploads/sb_oa-messung-1605.pdf",
+      "lizenz": null
+     },
+     {
+      "titel": "sb_oa-messung-1604",
+      "url": "https://stadt-butzbach.de/wp-content/uploads/sb_oa-messung-1604.pdf",
+      "lizenz": null
+     },
+     {
+      "titel": "sb_oa-messung-1603",
+      "url": "https://stadt-butzbach.de/wp-content/uploads/sb_oa-messung-1603.pdf",
+      "lizenz": null
+     },
+     {
+      "titel": "sb_oa-messung-1602",
+      "url": "https://stadt-butzbach.de/wp-content/uploads/sb_oa-messung-1602.pdf",
+      "lizenz": null
+     },
+     {
+      "titel": "sb_oa-messung-1601",
+      "url": "https://stadt-butzbach.de/wp-content/uploads/sb_oa-messung-1601.pdf",
+      "lizenz": null
+     },
+     {
+      "titel": "sb_oa-messung-1510",
+      "url": "https://stadt-butzbach.de/wp-content/uploads/sb_oa-messung-1510.pdf",
+      "lizenz": null
+     },
+     {
+      "titel": "sb_oa-messung-1511",
+      "url": "https://stadt-butzbach.de/wp-content/uploads/sb_oa-messung-1511.pdf",
+      "lizenz": null
+     },
+     {
+      "titel": "sb_oa-messung-1512",
+      "url": "https://stadt-butzbach.de/wp-content/uploads/sb_oa-messung-1512.pdf",
+      "lizenz": null
+     },
+     {
+      "titel": "sb_oa-messung-1502",
+      "url": "https://stadt-butzbach.de/wp-content/uploads/sb_oa-messung-1502.pdf",
+      "lizenz": null
+     },
+     {
+      "titel": "sb_oa-messung-1501",
+      "url": "https://stadt-butzbach.de/wp-content/uploads/sb_oa-messung-1501.pdf",
+      "lizenz": null
+     },
+     {
+      "titel": "sb_oa-messung-1503",
+      "url": "https://stadt-butzbach.de/wp-content/uploads/sb_oa-messung-1503.pdf",
+      "lizenz": null
+     }
+    ],
+    "dateien": 111
+   },
+   "verortung": {
+    "kontrollen": 1380,
+    "verortet": 1369,
+    "je_methode": {
+     "hausnummer": 306,
+     "abschnitt": 0,
+     "kreuzung": 256,
+     "anschlussstelle": 0,
+     "strasse": 807
+    },
+    "ohne_lage": 11,
+    "je_gebiet": {
+     "bezirk": 1347,
+     "kommune": 20,
+     "stadt": 2
+    },
+    "hinweise": {
+     "Ortsangabe statt Querstraße": 58,
+     "Ortsangabe von Hand zugeordnet (config/orte.yaml)": 12
+    },
+    "adresse_zur_achse_m": {
+     "median": 18.0,
+     "p90": 56.8
+    }
+   }
+  },
+  "weiterstadt": {
+   "label": "Weiterstadt",
+   "start": {
+    "lon": 8.595,
+    "lat": 49.917,
+    "zoom": 12.3
+   },
+   "kontrollen": 173,
+   "messstellen": 38,
+   "zeitraum": [
+    "2025-01-02",
+    "2026-07-27"
+   ],
+   "jahre": [
+    2025,
+    2026
+   ],
+   "stufen": null,
+   "hat_dauer": false,
+   "hat_fahrverbote": false,
+   "hat_tempo": true,
+   "anteil_alle_gezaehlt": 1.0,
+   "quelle": {
+    "label": "Mobile Geschwindigkeitskontrollen in Weiterstadt",
+    "bereitsteller": "Stadt Weiterstadt",
+    "kurz": "Stadt Weiterstadt",
+    "titel": "Geschwindigkeitskontrollen – Monatstabellen der Kommunalen Bußgeldstelle (PDF)",
+    "herkunft_url": "https://www.weiterstadt.de/wirtschaft-umwelt-verkehr/umwelt-verkehr/geschwindigkeitsmessungen/index.php",
+    "lizenz": null,
+    "lizenz_hinweis": "ohne Lizenzangabe",
+    "hinweis": "Gemessen hat die Kommunale Bußgeldstelle der Stadt, mobil – die festen Anlagen stehen nicht in den Tabellen. Je Messung Tag, Ort mit Fahrtrichtung, Tempolimit, durchfahrene Fahrzeuge und davon zu schnelle; Uhrzeit und Dauer fehlen. Veröffentlicht sind die Monate seit Januar 2025.",
+    "datensaetze": [
+     {
+      "titel": "Geschwindigkeitskontrollen Januar 2025",
+      "url": "https://www.weiterstadt.de/wirtschaft-umwelt-verkehr/umwelt-verkehr/geschwindigkeitsmessungen/index.php",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitskontrollen Februar 2025",
+      "url": "https://www.weiterstadt.de/wirtschaft-umwelt-verkehr/umwelt-verkehr/geschwindigkeitsmessungen/index.php",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitskontrollen März 2025",
+      "url": "https://www.weiterstadt.de/wirtschaft-umwelt-verkehr/umwelt-verkehr/geschwindigkeitsmessungen/index.php",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitskontrollen April 2025",
+      "url": "https://www.weiterstadt.de/wirtschaft-umwelt-verkehr/umwelt-verkehr/geschwindigkeitsmessungen/index.php",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitskontrollen Mai 2025",
+      "url": "https://www.weiterstadt.de/wirtschaft-umwelt-verkehr/umwelt-verkehr/geschwindigkeitsmessungen/index.php",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitskontrollen Juni 2025",
+      "url": "https://www.weiterstadt.de/wirtschaft-umwelt-verkehr/umwelt-verkehr/geschwindigkeitsmessungen/index.php",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitskontrollen Juli 2025",
+      "url": "https://www.weiterstadt.de/wirtschaft-umwelt-verkehr/umwelt-verkehr/geschwindigkeitsmessungen/index.php",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitskontrollen August 2025",
+      "url": "https://www.weiterstadt.de/wirtschaft-umwelt-verkehr/umwelt-verkehr/geschwindigkeitsmessungen/index.php",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitskontrollen September 2025",
+      "url": "https://www.weiterstadt.de/wirtschaft-umwelt-verkehr/umwelt-verkehr/geschwindigkeitsmessungen/index.php",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitskontrollen Oktober 2025",
+      "url": "https://www.weiterstadt.de/wirtschaft-umwelt-verkehr/umwelt-verkehr/geschwindigkeitsmessungen/index.php",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitskontrollen November 2025",
+      "url": "https://www.weiterstadt.de/wirtschaft-umwelt-verkehr/umwelt-verkehr/geschwindigkeitsmessungen/index.php",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitskontrollen Dezember 2025",
+      "url": "https://www.weiterstadt.de/wirtschaft-umwelt-verkehr/umwelt-verkehr/geschwindigkeitsmessungen/index.php",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitskontrollen Januar 2026",
+      "url": "https://www.weiterstadt.de/wirtschaft-umwelt-verkehr/umwelt-verkehr/geschwindigkeitsmessungen/index.php",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitskontrollen Februar 2026",
+      "url": "https://www.weiterstadt.de/wirtschaft-umwelt-verkehr/umwelt-verkehr/geschwindigkeitsmessungen/index.php",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitskontrollen März 2026",
+      "url": "https://www.weiterstadt.de/wirtschaft-umwelt-verkehr/umwelt-verkehr/geschwindigkeitsmessungen/index.php",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitskontrollen April 2026",
+      "url": "https://www.weiterstadt.de/wirtschaft-umwelt-verkehr/umwelt-verkehr/geschwindigkeitsmessungen/index.php",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitskontrollen Mai 2026",
+      "url": "https://www.weiterstadt.de/wirtschaft-umwelt-verkehr/umwelt-verkehr/geschwindigkeitsmessungen/index.php",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitskontrollen Juni 2026",
+      "url": "https://www.weiterstadt.de/wirtschaft-umwelt-verkehr/umwelt-verkehr/geschwindigkeitsmessungen/index.php",
+      "lizenz": null
+     },
+     {
+      "titel": "Geschwindigkeitskontrollen Juli 2026",
+      "url": "https://www.weiterstadt.de/wirtschaft-umwelt-verkehr/umwelt-verkehr/geschwindigkeitsmessungen/index.php",
+      "lizenz": null
+     }
+    ],
+    "dateien": 19
+   },
+   "verortung": {
+    "kontrollen": 173,
+    "verortet": 173,
+    "je_methode": {
+     "hausnummer": 33,
+     "abschnitt": 0,
+     "kreuzung": 54,
+     "anschlussstelle": 0,
+     "strasse": 86
+    },
+    "ohne_lage": 0,
+    "je_gebiet": {
+     "stadt": 173
+    },
+    "hinweise": {
+     "Ortsangabe von Hand zugeordnet (config/orte.yaml)": 22,
+     "Straße liegt an mehreren Stellen – Punkt auf dem längsten Stück": 2
+    },
+    "adresse_zur_achse_m": {
+     "median": 15.5,
+     "p90": 20.8
+    }
+   }
   }
  },
  "osm": {
@@ -667,5 +1492,5 @@
   "anschlussstelle",
   "strasse"
  ],
- "messstellen_naechste_id": 12372
+ "messstellen_naechste_id": 12661
 }

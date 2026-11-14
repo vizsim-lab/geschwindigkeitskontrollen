@@ -3,8 +3,9 @@
 Karte der Geschwindigkeitskontrollen in Berlin (Polizei Berlin, 2017 bis August 2020), Aachen
 (Stadt Aachen, Open Data seit 2020), Köln (Stadt Köln, Open Data 2017–2025) und Bonn (Bundesstadt
 Bonn, Open Data 2016–2024) – beide aus Einzelverstößen der mobilen Überwachung –, Schonungen
-(Monatsberichte, PDF/Word) und Oberderdingen (Quartalstabellen, PDF), jede Kontrolle über OSM
-verortet – dazu die Ebene „Datenlage je Stadt“ (wo es solche Daten sonst gibt).
+(Monatsberichte, PDF/Word), Oberderdingen (Quartalstabellen, PDF), Butzbach (Ordnungsbehördenbezirk
+mit Münzenberg, Rockenberg, Wölfersheim) und Weiterstadt (beide Monatstabellen, PDF), jede
+Kontrolle über OSM verortet – dazu die Ebene „Datenlage je Stadt“ (wo es solche Daten sonst gibt).
 Überblick: `README.md`, Pipeline und Datenfluss: `pipeline/README.md`. Diese Datei = die Regeln,
 die in jeder Session gelten.
 
@@ -70,6 +71,6 @@ die in jeder Session gelten.
   Kartendaten selbst – keine festen Messstellen oder Pixel.
 - **Ohne Netz entwickeln:** Workflow „Entwicklungsauszug“ (auch per Push auf
   `dev/auszug-anfordern`) legt OSM-Tabellen, die Berliner PDF-Anlagen und die Rohdateien von
-  Aachen, Köln, Bonn, Schonungen und Oberderdingen auf `dev/auszug` (große CSV
+  Aachen, Köln, Bonn, Schonungen, Oberderdingen, Butzbach und Weiterstadt auf `dev/auszug` (große CSV
   gzip-komprimiert); `git fetch origin dev/auszug` und nach `pipeline/data/` kopieren (siehe
   `pipeline/README.md`).

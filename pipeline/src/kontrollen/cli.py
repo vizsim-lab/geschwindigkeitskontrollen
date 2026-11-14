@@ -206,7 +206,11 @@ def netz_und_gebiete(s: str, paths=None) -> tuple[geocode.Netz, geocode.Gebiete]
     ortsnamen = (load_yaml("orte.yaml", p) or {}).get(s) or {}
     netz = geocode.Netz.aus_auszug(a, cfg["crs_m"], ortsnamen)
     gebiete = geocode.Gebiete.aus_auszug(
-        a, cfg["crs_m"], {**cfg["osm"], "bbox": cfg["bbox"]}, cfg["osm"].get("bezirk_ebene")
+        a,
+        cfg["crs_m"],
+        {**cfg["osm"], "bbox": cfg["bbox"]},
+        cfg["osm"].get("bezirk_ebene"),
+        streng=bool(cfg["osm"].get("bezirk_streng")),
     )
     return netz, gebiete
 

@@ -1,16 +1,18 @@
 ![Status: Beta](https://img.shields.io/badge/Status-Beta-4338ca)
 ![License: AGPL-3.0-or-later](https://img.shields.io/badge/License-AGPL--3.0--or--later-blue)
 
-# Geschwindigkeitskontrollen (Berlin, Aachen, Köln, Bonn, Schonungen, Oberderdingen)
+# Geschwindigkeitskontrollen (Berlin, Aachen, Köln, Bonn, Schonungen, Oberderdingen, Butzbach, Weiterstadt)
 
 Wo wurde wie oft kontrolliert – und wie viele waren zu schnell? Die Karte zeigt **33.401
 temporäre Geschwindigkeitskontrollen der Polizei Berlin (Januar 2017 bis August 2020)**,
 **3.467 Kontrollen der Stadt Aachen (Juni 2020 bis September 2026)**, **44.633 mobile
 Kontrollen der Stadt Köln (2017 bis 2025)**, **34.128 mobile Kontrollen der Bundesstadt Bonn
-(2016 bis 2024)** sowie **123 Kontrollen in der Gemeinde Schonungen (2020 bis 2026)** und **150
-in der Stadt Oberderdingen (2024 bis 2026)**, jede an ihrer Messstelle. Die Ebene **„Datenlage je
-Stadt“** zeigt für 20 weitere Städte und Kreise, ob es solche Daten gibt – veröffentlicht, auf
-Anfrage herausgegeben, nur als Summen oder abgelehnt –, mit einem Anfragetext für FragDenStaat.
+(2016 bis 2024)** sowie **123 Kontrollen in der Gemeinde Schonungen (2020 bis 2026)**, **150
+in der Stadt Oberderdingen (2024 bis 2026)**, **1.380 im Ordnungsbehördenbezirk Butzbach
+(Butzbach, Münzenberg, Rockenberg, Wölfersheim; 2015 bis 2026)** und **173 in der Stadt
+Weiterstadt (2025 bis 2026)**, jede an ihrer Messstelle. Die Ebene **„Datenlage je Stadt“** zeigt
+für 33 weitere Städte und Kreise, ob es solche Daten gibt – veröffentlicht, auf Anfrage
+herausgegeben, nur als Summen oder abgelehnt –, mit einem Anfragetext für FragDenStaat.
 
 **Karte: <https://vizsim-lab.github.io/geschwindigkeitskontrollen/>** · Daten als
 [CSV](pipeline/data/karte/kontrollen.csv)
@@ -26,12 +28,12 @@ Verortung folgt dem Muster von
 ## Was die Karte zeigt
 
 Jeder Kreis ist eine **Messstelle** – Kontrollen an derselben Stelle derselben Straße
-(Berlin: 9.246, Aachen: 166, Köln: 1.368, Bonn: 1.517, Schonungen: 31, Oberderdingen: 44). Die
-Farbe zeigt wahlweise
+(Berlin: 9.246, Aachen: 166, Köln: 1.368, Bonn: 1.531, Schonungen: 31, Oberderdingen: 44,
+Butzbach: 237, Weiterstadt: 38). Die Farbe zeigt wahlweise
 
 - **Anteil zu schnell** – Überschreitungen je gemessenem Fahrzeug (Berlin, Aachen, Schonungen,
-  Oberderdingen),
-- **je Stunde** – Überschreitungen je Stunde Messdauer (Berlin, Schonungen),
+  Oberderdingen, Butzbach, Weiterstadt),
+- **je Stunde** – Überschreitungen je Stunde Messdauer (Berlin, Schonungen, Butzbach),
 - **je Kontrolle** – Überschreitungen geteilt durch die Zahl der Kontrollen (überall),
 - **Fahrverbote** (nur Berlin) oder die Zahl der **Kontrollen**;
 
@@ -59,14 +61,20 @@ Wichtig für die Einordnung:
   Monatsberichte der kommunalen Verkehrsüberwachung (mit Beginn und Ende, nicht lückenlos),
   Oberderdingen Quartalstabellen des Landratsamts (gefunden: 1/2024, 4/2025, 1/2026; ohne
   Uhrzeit). Zählt das Gerät in Oberderdingen beide Richtungen zusammen, ist das eine Kontrolle.
+- **Butzbach und Weiterstadt** (Hessen) ebenso, als Monatstabellen: Butzbach für den
+  gemeinsamen Ordnungsbehördenbezirk mit Münzenberg, Rockenberg und Wölfersheim (seit 2015,
+  nicht lückenlos; mit Beginn und Ende, ohne Tempolimit), Weiterstadt seit Januar 2025 (mit
+  Tempolimit, ohne Uhrzeit, nur die mobilen Kontrollen).
 - **Kontrollen sind keine Stichprobe.** Kontrolliert wird, wo die Behörden es für nötig halten;
   eine hohe Quote heißt nicht, dass dort mehr gerast wird als anderswo.
 
 ## Verortung
 
 Gesucht wird im OSM-Abzug von Geofabrik, in Berlin im genannten Bezirk (die Angabe ist oft
-abgeschnitten und wird über den Anfang gelesen), in Köln im genannten Stadtteil, sonst in der
-ganzen Stadt oder Gemeinde, von genau nach grob:
+abgeschnitten und wird über den Anfang gelesen), in Köln im genannten Stadtteil, in Butzbach im
+genannten Ortsteil und seiner Kommune – nicht in den Nachbardörfern, die oft gleichnamige
+Straßen haben –, sonst in der ganzen Stadt oder Gemeinde. Bundes-, Landes- und Kreisstraßen
+findet die Suche auch über ihre Nummer („B 42“, „L 3113“). Von genau nach grob:
 
 - **Hausnummer** – die OSM-Adresse auf der Straßenachse,
 - **Abschnitt** – Mitte zwischen den Kreuzungen mit den beiden Querstraßen (nur Berlin nennt sie),
@@ -79,14 +87,17 @@ ganzen Stadt oder Gemeinde, von genau nach grob:
 | Berlin | 33.401 | 74,2 % | 11,7 % | 10,8 % | 2,6 % | 0,5 % | 0,3 % |
 | Aachen | 3.467 | – | – | – | – | 100 % | – |
 | Köln | 44.633 | 67,9 % | – | 1,2 % | – | 30,4 % | 0,5 % |
-| Bonn | 34.128 | 49,3 % | – | 4,7 % | 0,5 % | 31,9 % | 13,6 % |
+| Bonn | 34.128 | 49,3 % | – | 4,9 % | 0,5 % | 32,8 % | 12,5 % |
 | Schonungen | 123 | 37,4 % | – | 27,6 % | – | 33,3 % | 1,6 % |
 | Oberderdingen | 150 | 74,7 % | – | 7,3 % | – | 18,0 % | – |
+| Butzbach | 1.380 | 22,2 % | – | 18,6 % | – | 58,5 % | 0,8 % |
+| Weiterstadt | 173 | 19,1 % | – | 31,2 % | – | 49,7 % | – |
 
 In Köln bleibt es bei „nur Straße“ vor allem dort, wo die Stadt statt einer Hausnummer eine
 Laterne nennt („Laterne 85-77“) – Laternennummern gibt es in OSM nicht. In Bonn steht an der
-Autobahn meist nur der Kilometer („A 555; km 018,000“) – das sind 3.959 der 4.657 Kontrollen
-ohne Lage.
+Autobahn meist nur der Kilometer („A 555; km 018,000“) – das sind 3.959 der 4.251 Kontrollen
+ohne Lage. Butzbach und Weiterstadt nennen oft nur die Straße und einen Ort an ihr („Höhe BHS“,
+„Höhe Feuerwehr“, „Bahnbrücke Riedbahn“).
 
 **Gegenprobe** (GPS gibt es nicht): Wo Hausnummer *und* Querstraßen vorliegen – 23.459
 Kontrollen in Berlin –, liegt der Hausnummer-Punkt bei 92,7 % höchstens 50 m neben dem Abschnitt
@@ -140,6 +151,11 @@ uv run pytest && uv run ruff check
   Landratsamt“ (Quartalstabellen [1/2024](https://oberderdingen.de/resources/ecics_3985.pdf),
   [4/2025](https://www.oberderdingen.de/resources/ecics_4317.pdf),
   [1/2026](https://www.oberderdingen.de/resources/ecics_4342.pdf)), ohne Lizenzangabe.
+- **Butzbach:** Stadt Butzbach, [Geschwindigkeitsmessungen](https://stadt-butzbach.de/themen/geschwindigkeitsmessungen/)
+  – Monatstabellen des gemeinsamen Ordnungsbehördenbezirks Butzbach/Münzenberg/Rockenberg/
+  Wölfersheim (PDF; Beiträge und Mediathek der Stadt), ohne Lizenzangabe.
+- **Weiterstadt:** Stadt Weiterstadt, [Geschwindigkeitsmessungen](https://www.weiterstadt.de/wirtschaft-umwelt-verkehr/umwelt-verkehr/geschwindigkeitsmessungen/index.php)
+  – Monatstabellen der Kommunalen Bußgeldstelle (PDF), ohne Lizenzangabe.
 - **Datenlage je Stadt:** Recherche mit Belegen je Eintrag in
   [`pipeline/config/sources.yaml`](pipeline/config/sources.yaml), Übersicht in
   [`docs/DATENLAGE.md`](docs/DATENLAGE.md); keine Rechtsberatung.
