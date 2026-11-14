@@ -14,7 +14,7 @@ permissions:
 jobs:
   erkunden:
     runs-on: ubuntu-24.04
-    timeout-minutes: 30
+    timeout-minutes: 35
     steps:
       - uses: actions/checkout@v7
       - name: Seiten und Dateien laden
@@ -25,6 +25,7 @@ jobs:
           from pathlib import Path
 
           aus = Path("erkunden"); aus.mkdir()
+          T0 = time.monotonic()
           UA = {"User-Agent": "vizsim-geschwindigkeitskontrollen (+https://github.com/vizsim-lab/geschwindigkeitskontrollen)"}
           log = []
 
@@ -43,15 +44,26 @@ jobs:
                       self.links.append([self._a, " ".join("".join(self._t).split())])
                       self._a = None
 
-          def hole(url, max_bytes=40_000_000):
-              time.sleep(0.7)
+          def hole(url, max_bytes=25_000_000, pause=0.7):
+              time.sleep(pause)
+              start = time.monotonic()
               try:
-                  r = urllib.request.urlopen(urllib.request.Request(url, headers=UA), timeout=90)
-                  daten = r.read(max_bytes)
-                  log.append(f"{r.status} {r.headers.get('content-type')} {len(daten)} {url}")
+                  r = urllib.request.urlopen(urllib.request.Request(url, headers=UA), timeout=30)
+                  teile, n = [], 0
+                  while n < max_bytes and time.monotonic() - start < 120:
+                      b = r.read(1 << 16)
+                      if not b:
+                          break
+                      teile.append(b)
+                      n += len(b)
+                  daten = b"".join(teile)
+                  z = f"{r.status} {r.headers.get('content-type')} {len(daten)} {time.monotonic() - start:.1f}s {url}"
+                  log.append(z)
+                  print(z, flush=True)
                   return daten, r.headers.get("content-type") or "", r.geturl()
               except Exception as e:
                   log.append(f"FEHLER {url}: {e}")
+                  print(f"FEHLER {url}: {e}", flush=True)
                   return None, "", url
 
           def slug(url, endung=""):
@@ -76,6 +88,7 @@ jobs:
                   blaettern=r"/themen/geschwindigkeitsmessungen/page/\d+/?$",
                   folge=r"stadt-butzbach\.de/(?![^?#]*attachment)[^?#]*geschwindigkeitsmessung[^?#]*/$",
                   dateien=r"(?i)stadt-butzbach\.de/wp-content/uploads/.*\.(pdf|docx?|xlsx?)(\?|$)",
+                  laden=r"(?i)messung|geschwind|radar|verkehrs",
                   api=[
                       "https://stadt-butzbach.de/wp-json/wp/v2/media?search=messung&per_page=100",
                       "https://stadt-butzbach.de/wp-json/wp/v2/media?search=sb_oa&per_page=100",
@@ -86,6 +99,7 @@ jobs:
               "weiterstadt": dict(
                   start=["https://www.weiterstadt.de/wirtschaft-umwelt-verkehr/umwelt-verkehr/geschwindigkeitsmessungen/index.php"],
                   dateien=r"(?i)\.pdf(\?|$)",
+                  laden=r"(?i)statistik|messung|geschwind",
               ),
               "naumburg": dict(
                   start=["https://www.naumburg.eu/stadt-buergerservice/service/nachrichtenarchiv/2023-1-quartal-bis-4-quartal/geschwindigkeitsmessung-in-naumburg/"],
@@ -95,6 +109,7 @@ jobs:
               "gudensberg": dict(
                   start=["https://www.gudensberg.de/rathaus-und-buergerservice/aktuelles/neuigkeiten/2024/oktober/geschwindigkeitsmessung/"],
                   dateien=r"(?i)\.pdf(\?|$)",
+                  laden=r"(?i)messung|geschwind",
               ),
               "habichtswald": dict(
                   start=["https://www.habichtswald.de/pressemitteilungen/2026/geschwindigkeitsmessungen-horstweg/"],
@@ -104,6 +119,7 @@ jobs:
                   start=["https://www.biebertal.de/infos-tipps/weitere-tipps-infos/geschwindigkeitsmessungen/geschwindigkeitsmessungen.html"],
                   folge_text=r"(?i)geschwindigkeitsmessung|messungen",
                   dateien=r"(?i)\.(pdf|xlsx?)(\?|$)",
+                  laden=r"(?i)messung|geschwind|radar",
                   max=6,
               ),
               "koenigstein": dict(start=["https://www.koenigstein.de/rathaus-politik/sicherheit-ordnung/geschwindigkeitsmessungen/"], dateien=r"(?i)messung.*\.pdf(\?|$)"),
@@ -133,7 +149,7 @@ jobs:
                   if daten is not None:
                       (ordner / slug(u, ".json")).write_bytes(daten)
               warte, gesehen, dateien, alle_links = list(a["start"]), set(), {}, {}
-              while warte and len(gesehen) < a.get("max", 20):
+              while warte and len(gesehen) < a.get("max", 20) and time.monotonic() - T0 < 18 * 60:
                   url = warte.pop(0)
                   if url in gesehen:
                       continue
@@ -155,12 +171,30 @@ jobs:
               (ordner / "links.json").write_text(json.dumps(alle_links, ensure_ascii=False, indent=1))
               (ordner / "dateien.json").write_text(json.dumps(dateien, ensure_ascii=False, indent=1))
               for u in sorted(dateien):
+                  if a.get("laden") and not re.search(a["laden"], u):
+                      continue
+                  if time.monotonic() - T0 > 22 * 60:
+                      log.append(f"ZEIT um, nicht geladen: {u}")
+                      continue
                   daten, typ, _ = hole(u)
                   if daten is not None:
                       (ordner / slug(u)).write_bytes(daten)
+              (aus / "uebersicht.txt").write_text("\n".join(log) + "\n")
+          orte = aus / "nominatim"
+          orte.mkdir()
+          for g in ["Niedernhausen", "Biebertal", "Königstein im Taunus", "Rodenbach (Main-Kinzig-Kreis)",
+                    "Schlitz", "Kirchhain", "Limburg an der Lahn", "Darmstadt", "Kaufungen", "Solms",
+                    "Mühltal", "Naumburg (Hessen)", "Gudensberg", "Habichtswald", "Butzbach", "Weiterstadt",
+                    "Münzenberg", "Rockenberg", "Wölfersheim", "Erzhausen"]:
+              q = urllib.parse.urlencode({"q": f"{g}, Hessen", "format": "jsonv2", "limit": 3,
+                                          "featureType": "settlement", "addressdetails": 1})
+              daten, typ, _ = hole("https://nominatim.openstreetmap.org/search?" + q, pause=1.2)
+              if daten is not None:
+                  (orte / (re.sub(r"\W+", "_", g) + ".json")).write_bytes(daten)
           (aus / "uebersicht.txt").write_text("\n".join(log) + "\n")
-          print("\n".join(log))
+          print("fertig", len(log), flush=True)
       - name: Auf dev/erkunden legen
+        if: always()
         run: |
           du -sh erkunden/*
           git config user.name "github-actions[bot]"
