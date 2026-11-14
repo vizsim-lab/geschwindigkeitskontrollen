@@ -21,8 +21,15 @@ deren Umgebung (+`NACHSUCHE` m), dann in der ganzen Stadt. Die erste genaue Antw
 1–4) gewinnt; „nur die Straße“ gilt erst, wenn keine Stufe mehr findet – und stadtweit nur,
 wenn die Straße nicht an mehreren Orten liegt.
 
+Streng (`bezirk_streng`, Dörfer mehrerer Kommunen – dort haben die Nachbarorte oft gleichnamige
+Straßen): nur im genannten Ortsteil, dann in seiner Kommune, beides nicht über die Kommune
+hinaus (+`RAND` m); keine Umgebung, nicht die ganze Stadt. Lag die Straße schon im Ortsteil,
+zählt ein Treffer in der Kommune nur auf demselben Straßenzug; dort gilt „nur die Straße“ nicht,
+wenn sie an mehreren Orten liegt oder die genannte Querstraße nicht passt.
+
 Ortsnamen der Polizei, die so nicht in OSM stehen ("TRH" = Tunnel Rudower Höhe), übersetzt
-config/orte.yaml – die Verortung bekommt dann einen Hinweis.
+config/orte.yaml – die Verortung bekommt dann einen Hinweis. Bundes-, Landes- und Kreisstraßen
+findet die Suche auch über ihre Nummer („B 42“, OSM `ref`), wie einen alten Namen.
 
 Metrisch im `crs_m` der Stadt (Berlin EPSG:25833, Aachen EPSG:25832), Ausgabe EPSG:4326.
 """
@@ -62,8 +69,13 @@ UEBERLEITUNG_MAX = 800  # m: so nah kommen sich zwei Autobahnen an ihrem Dreieck
 LUECKE = 250  # m: Teile einer Straße mit größerer Lücke liegen an verschiedenen Orten
 PRAEFIX_MIN = 12  # Zeichen: kürzere abgeschnittene Namen nicht über den Anfang suchen
 FUZZY = 0.9  # Mindestähnlichkeit für Tippfehler, nur innerhalb des Suchgebiets
+GEMEINSAM_MAX = 100  # m: Straße und Straßennummer mit so viel gemeinsamem Weg sind eine Straße
+RAND = 50  # m: streng – so weit über die eigene Kommune hinaus (Straßen auf ihrer Grenze)
 
 METHODEN = ("hausnummer", "abschnitt", "kreuzung", "anschlussstelle", "strasse")
+# Bundes-, Landes- und Kreisstraßen gehen auch über ihre Nummer (OSM `ref`): „B 42“, „L 3113“,
+# „K 165“ – oft ohne Namen außerorts. Autobahnen haben ihre eigene Suche (`autobahn`).
+STRASSENNUMMER = re.compile(r"^[BLK] ?\d{1,4}[a-z]?$")
 HINWEIS_AUSSERHALB = "Hausnummer liegt außerhalb des Abschnitts"
 HINWEIS_EINE = "nur eine der Querstraßen gefunden"
 HINWEIS_ORT = "Ortsangabe statt Querstraße"
@@ -89,6 +101,7 @@ class Netz:
     adressen: dict[str, dict[str, list[Point]]]  # Straßenschlüssel -> Hausnummer -> Punkte
     orte: list[tuple[str, str, str, Point]]  # (Schlüssel, Name, Art, Punkt)
     ortsnamen: dict[str, str] = field(default_factory=dict)  # Schlüssel Polizei -> OSM-Name
+    nummern: dict[str, str] = field(default_factory=dict)  # „b42“ -> „B 42“ (Wege in alias_geom)
     _baum: tuple | None = field(default=None, repr=False)
     _cache: dict = field(default_factory=dict, repr=False)
 
@@ -104,6 +117,8 @@ class Netz:
         alias_ziel: dict[str, str] = {}
         alias_geom: dict[str, list] = defaultdict(list)
         autobahn: dict[str, list] = defaultdict(list)
+        nummern: dict[str, list] = defaultdict(list)  # „b42“ -> Wege mit ref „B 42“
+        nummer_anzeige: dict[str, str] = {}
         for row in s.itertuples(index=False):
             g = row.geometry
             name = row.name if isinstance(row.name, str) else None
@@ -116,6 +131,15 @@ class Netz:
                         kfz[k].append(g)
                         if isinstance(row.maxspeed, str):
                             speeds[k][row.maxspeed] += 1
+            if row.highway in KFZ and isinstance(row.ref, str):
+                for r in row.ref.split(";"):
+                    r = " ".join(r.split())
+                    if STRASSENNUMMER.match(r):
+                        nk = namen.schluessel(r)
+                        nummern[nk].append(g)
+                        nummer_anzeige.setdefault(nk, r)
+                        if isinstance(row.maxspeed, str):
+                            speeds[nk][row.maxspeed] += 1
             for spalte in ("old_name", "alt_name", "official_name", "bridge_name", "tunnel_name"):
                 wert = getattr(row, spalte, None)
                 if not isinstance(wert, str):
@@ -132,7 +156,19 @@ class Netz:
                     nr = namen.autobahn(r.strip())
                     if nr:
                         autobahn[nr[0]].append(g)
+        # Straßennummern („B 42“, „L 3113“) wie andere Namen. Trägt ein Weg die Nummer als Namen
+        # (ein Stück der B 455 bei Friedberg mit name=„B 455“), gehören beide zusammen.
+        for k, v in nummern.items():
+            if k in geom:
+                geom[k] += v
+                kfz[k] += v
         einig = {k: shapely.union_all(v) for k, v in geom.items()}
+        alias_einig = {k: shapely.union_all(v) for k, v in alias_geom.items() if k not in einig}
+        nummern_einig = {
+            k: shapely.union_all(v)
+            for k, v in nummern.items()
+            if k not in einig and k not in alias_einig
+        }
         netz = cls(
             crs_m=crs_m,
             geom=einig,
@@ -140,11 +176,12 @@ class Netz:
             anzeige={k: max(v, key=v.get) for k, v in anzeige.items()},
             maxspeed={k: max(v, key=v.get) for k, v in speeds.items()},
             alias={k: z for k, z in alias_ziel.items() if k not in einig},
-            alias_geom={k: shapely.union_all(v) for k, v in alias_geom.items() if k not in einig},
+            alias_geom={**alias_einig, **nummern_einig},
             autobahn={k: shapely.union_all(v) for k, v in autobahn.items()},
             adressen={},
             orte=[],
             ortsnamen={namen.schluessel(k): v for k, v in (ortsnamen or {}).items()},
+            nummern={k: nummer_anzeige[k] for k in nummern if k in einig or k in nummern_einig},
         )
         netz._lade_adressen(a.adressen.to_crs(crs_m))
         kn = a.knoten.to_crs(crs_m)
@@ -222,7 +259,7 @@ class Netz:
         if k in self.anzeige:
             return self.anzeige[k]
         ziel = self.alias.get(k)
-        return self.anzeige.get(ziel, k) if ziel else k
+        return self.anzeige.get(ziel, k) if ziel else self.nummern.get(k, k)
 
     def adress_punkte(self, k: str, hnr: str) -> list[Point]:
         out = list(self.adressen.get(k, {}).get(hnr, []))
@@ -265,6 +302,13 @@ def treffpunkte(a: shapely.Geometry, b: shapely.Geometry) -> list[Point]:
         p, q = nearest_points(a, b)
         pts = [Point((p.x + q.x) / 2, (p.y + q.y) / 2)]
     return buendel(pts)
+
+
+def gemeinsam(a: shapely.Geometry, b: shapely.Geometry) -> float:
+    """Länge des Stücks, das zwei Straßen gemeinsam haben (m) – 0, wenn sie sich nur kreuzen."""
+    if a.is_empty or b.is_empty:
+        return 0.0
+    return float(sum(x.length for x in _linien(a.intersection(b))))
 
 
 def buendel(pts: list[Point], radius: float = BUENDEL) -> list[Point]:
@@ -333,11 +377,13 @@ def mehrfach(g: shapely.Geometry) -> bool:
 
 
 class Stufe:
-    """Ein Suchgebiet: `flaeche` für die Hauptstraße, `weit` für Querstraßen und Orte."""
+    """Ein Suchgebiet: `flaeche` für die Hauptstraße, `weit` für Querstraßen und Orte.
+    `eindeutig`: „nur die Straße“ gilt hier nur, wenn sie nicht an mehreren Orten liegt."""
 
-    def __init__(self, flaeche: shapely.Geometry, art: str):
+    def __init__(self, flaeche: shapely.Geometry, art: str, eindeutig: bool = False):
         self.flaeche = flaeche
         self.art = art
+        self.eindeutig = eindeutig
         self.weit = flaeche.buffer(QUER_PUFFER)
         shapely.prepare(self.flaeche)
         shapely.prepare(self.weit)
@@ -348,23 +394,61 @@ class Gebiete:
     stadt: shapely.Geometry  # Stadtgrenze + PUFFER_GEBIET
     grenze: shapely.Geometry  # die Stadtgrenze als Linie ("… u. Stadtgrenze")
     bezirke: dict[str, shapely.Geometry]  # Name -> Fläche (ohne Puffer)
+    kommunen: dict[str, shapely.Geometry] = field(default_factory=dict)  # Bezirk -> seine Kommune
+    streng: bool = False  # nur im genannten Ortsteil und seiner Kommune (siehe oben)
+    stadtflaeche: shapely.Geometry | None = None  # die Stadt ohne Puffer
     _stufen: dict = field(default_factory=dict, repr=False)
 
     @classmethod
-    def aus_auszug(cls, a: Auszug, crs_m: str, cfg: dict, bezirk_ebene: str | None) -> Gebiete:
+    def aus_auszug(
+        cls,
+        a: Auszug,
+        crs_m: str,
+        cfg: dict,
+        bezirk_ebene: str | list[str] | None,
+        streng: bool = False,
+    ) -> Gebiete:
         g = a.gebiete.to_crs(crs_m)
         sg = cfg["stadtgrenze"]
         ebenen = [str(x) for x in sg["admin_level"]]
-        kand = g[(g["name"] == sg["name"]) & g["admin_level"].astype(str).isin(ebenen)]
-        if kand.empty:
+        # ein Name oder mehrere (Ordnungsbehördenbezirk aus vier Kommunen): je Name die kleinste
+        # Fläche dieses Namens, zusammen die „Stadt“
+        namen_ = sg["name"] if isinstance(sg["name"], list) else [sg["name"]]
+        teile = []
+        for n in namen_:
+            kand = g[(g["name"] == n) & g["admin_level"].astype(str).isin(ebenen)]
+            if not kand.empty:
+                teile.append(min(kand.geometry, key=lambda x: x.area))
+        if not teile:
             stadt = shapely.union_all(g.geometry.values) if len(g) else shapely.box(*cfg["bbox"])
         else:
-            stadt = min(kand.geometry, key=lambda x: x.area)
-        bezirke = {}
+            stadt = shapely.union_all(teile)
+        # Bezirke auf einer oder mehreren Ebenen (Butzbach: Stadtteile auf 9, die Ortsteile von
+        # Rockenberg und Wölfersheim auf 10); derselbe Name zweimal -> die kleinere Fläche
+        bezirke: dict[str, shapely.Geometry] = {}
         if bezirk_ebene:
-            for row in g[g["admin_level"].astype(str) == bezirk_ebene].itertuples(index=False):
-                bezirke[row.name] = row.geometry
-        return cls(stadt=stadt.buffer(PUFFER_GEBIET), grenze=stadt.boundary, bezirke=bezirke)
+            ebenen_b = [
+                str(x) for x in (bezirk_ebene if isinstance(bezirk_ebene, list) else [bezirk_ebene])
+            ]
+            for row in g[g["admin_level"].astype(str).isin(ebenen_b)].itertuples(index=False):
+                alt = bezirke.get(row.name)
+                if alt is None or row.geometry.area < alt.area:
+                    bezirke[row.name] = row.geometry
+        # die Kommune (Teil der Stadtgrenze), in der ein Bezirk liegt
+        kommunen = {}
+        for n, f in bezirke.items():
+            for t in teile:
+                if f.area > 0 and f.intersection(t).area >= 0.9 * f.area:
+                    kommunen[n] = t
+                    break
+        return cls(
+            stadt=stadt.buffer(PUFFER_GEBIET),
+            grenze=stadt.boundary,
+            bezirke=bezirke,
+            kommunen=kommunen,
+            streng=streng,
+            stadtflaeche=stadt,
+        )
 
     def bezirke_aus(self, teile: list[str]) -> list[str]:
         """Abgeschnittene Bezirksnamen über den Anfang: "Charlottenburg-Wilmersd" -> ganzer Name.
@@ -383,16 +467,32 @@ class Gebiete:
         return out
 
     def stufen(self, teile: tuple[str, ...]) -> list[Stufe]:
-        """Suchgebiete von eng nach weit: genannte Bezirke, deren Umgebung, die Stadt."""
+        """Suchgebiete von eng nach weit: genannte Bezirke, deren Umgebung, die Stadt. Streng:
+        der genannte Ortsteil, seine Kommune – sonst nichts (ohne Ortsangabe: die Stadt)."""
         if teile in self._stufen:
             return self._stufen[teile]
         out: list[Stufe] = []
         bez = self.bezirke_aus(list(teile))
-        if bez:
+        if bez and not self.streng:
             flaeche = shapely.union_all([self.bezirke[b] for b in bez])
             out.append(Stufe(flaeche.buffer(PUFFER_GEBIET), "bezirk"))
             out.append(Stufe(flaeche.buffer(NACHSUCHE), "umgebung"))
-        out.append(Stufe(self.stadt, "stadt"))
+        elif bez:
+            # streng: nur in der eigenen Kommune – der Ortsteil reicht mit seinem Puffer sonst in
+            # die Nachbargemeinde (Nieder-Weisel bis an die Butzbacher Straße in Weiperfelden)
+            eng = shapely.union_all([self.bezirke[b] for b in bez]).buffer(PUFFER_GEBIET)
+            kom = [self.kommunen[b] for b in bez if b in self.kommunen]
+            eigene = shapely.union_all(kom).buffer(RAND) if kom else None
+            out.append(Stufe(eng if eigene is None else eng.intersection(eigene), "bezirk"))
+            if eigene is not None:
+                out.append(Stufe(eigene, "kommune", eindeutig=True))
+        if not bez:
+            stadt = self.stadt
+            if self.streng and self.stadtflaeche is not None:
+                stadt = self.stadtflaeche.buffer(RAND)
+            out.append(Stufe(stadt, "stadt", eindeutig=True))
+        elif not self.streng:
+            out.append(Stufe(self.stadt, "stadt", eindeutig=True))
         self._stufen[teile] = out
         return out
 
@@ -411,6 +511,7 @@ class Ergebnis:
     abstand_abschnitt_m: float | None = None  # Hausnummer-Punkt -> Abschnitt A–B
     hinweis: str | None = None
     maxspeed: str | None = None
+    schluessel: str | None = None  # die Hauptstraße im Netz (nicht in der Ausgabe)
 
     @property
     def rang(self) -> int:
@@ -455,7 +556,10 @@ def anfrage(row) -> Anfrage:
 def verorte(a: Anfrage, netz: Netz, gebiete: Gebiete) -> Ergebnis | None:
     """Stufe für Stufe; die erste genaue Antwort gewinnt, sonst die beste gefundene."""
     beste: Ergebnis | None = None
-    for st in gebiete.stufen(a.bezirke):
+    erste: tuple[str | None, shapely.Geometry] | None = None  # streng: Straße der engsten Stufe
+    # Autobahnen sucht `_autobahn` nur stadtweit
+    stufen = gebiete.stufen(() if a.autobahn and gebiete.streng else a.bezirke)
+    for st in stufen:
         if a.autobahn:
             e = _autobahn(a, netz, st, gebiete.grenze)
         else:
@@ -463,6 +567,13 @@ def verorte(a: Anfrage, netz: Netz, gebiete: Gebiete) -> Ergebnis | None:
             e = _strasse(a, netz, st, gebiete.grenze, mehrfach_ok=not gebiete.bezirke)
         if e is None:
             continue
+        if gebiete.streng and e.schluessel:
+            if st.art == "kommune" and e.rang == 3 and (a.quer1 or a.quer2):
+                continue  # die genannte Querstraße passt nicht: wohl eine andere gleichen Namens
+            if erste is None:
+                erste = (e.schluessel, netz.strasse(e.schluessel, st.flaeche, nur_kfz=True))
+            elif not _derselbe_zug(e, erste, netz, st):
+                continue  # eine gleichnamige Straße in einem anderen Ortsteil der Kommune
         if e.rang <= 1:
             return e
         if beste is None or e.rang < beste.rang:
@@ -474,16 +585,33 @@ def _strasse(
     a: Anfrage, netz: Netz, st: Stufe, grenze, mehrfach_ok: bool = False
 ) -> Ergebnis | None:
     k = netz.finde(a.strasse, st.flaeche)
-    if k:
-        return _an_strasse(a, k, netz, st, grenze, mehrfach_ok)
-    zu = netz.ortsname(a.strasse) if a.strasse else None  # "Tiergartentunnel"
-    k = netz.finde(zu, st.flaeche) if zu else None
-    if not k:
-        return None
-    e = _an_strasse(a, k, netz, st, grenze, mehrfach_ok)
-    if e is not None and e.hinweis is None:
-        e.hinweis = HINWEIS_ZUORDNUNG
+    e = _an_strasse(a, k, netz, st, grenze, mehrfach_ok) if k else None
+    if e is None:
+        # config/orte.yaml ("Tiergartentunnel") – auch, wenn es den Namen nur anderswo gibt
+        zu = netz.ortsname(a.strasse) if a.strasse else None
+        k = netz.finde(zu, st.flaeche) if zu else None
+        if not k:
+            return None
+        e = _an_strasse(a, k, netz, st, grenze, mehrfach_ok)
+        if e is not None and e.hinweis is None:
+            e.hinweis = HINWEIS_ZUORDNUNG
+    if e is not None:
+        e.schluessel = k
     return e
+
+
+def _derselbe_zug(e: Ergebnis, erste: tuple[str | None, shapely.Geometry], netz: Netz, st) -> bool:
+    """Liegt der Treffer auf demselben Straßenzug wie die Straße der engeren Stufe (die B 3 läuft
+    von der Kernstadt weiter nach Nieder-Weisel) – nicht auf einer gleichnamigen Straße in einem
+    anderen Ortsteil? Zusammenhängend wie in `mehrfach` (Lücken bis 2 * `LUECKE` m)."""
+    k, stueck = erste
+    if e.schluessel != k or stueck.is_empty:
+        return False
+    zuege = netz.strasse(k, st.flaeche, nur_kfz=True).buffer(LUECKE)
+    for z in getattr(zuege, "geoms", [zuege]):
+        if z.distance(e.punkt) <= 1:
+            return z.intersects(stueck)
+    return False
 
 
 def _an_strasse(a: Anfrage, k: str, netz: Netz, st: Stufe, grenze, mehrfach_ok: bool):
@@ -536,7 +664,7 @@ def _an_strasse(a: Anfrage, k: str, netz: Netz, st: Stufe, grenze, mehrfach_ok: 
     # 5. nur die Straße – stadtweit nur, wenn sie nicht an mehreren Orten liegt (Aachen nennt
     # keine Bezirke: dort der Punkt auf dem längsten Stück, die Karte zeigt alle Stücke)
     hinweis = None
-    if art == "stadt" and mehrfach(gx):
+    if st.eindeutig and mehrfach(gx):
         if not mehrfach_ok:
             return None
         hinweis = HINWEIS_MEHRFACH
@@ -555,7 +683,12 @@ def _quer(
     n = zu or n
     q = netz.finde(n, weit)
     if q and q != k:
-        pts = treffpunkte(gx, netz.strasse(q, weit, nur_kfz=False))
+        g = netz.strasse(q, weit, nur_kfz=False)
+        if (q in netz.nummern or k in netz.nummern) and gemeinsam(gx, g) > GEMEINSAM_MAX:
+            # die Nummer der Hauptstraße selbst („Kirchhainer Damm zw. B96 u. Pasinger Str.“ –
+            # der Kirchhainer Damm ist die B 96): keine Kreuzung
+            return [], None
+        pts = treffpunkte(gx, g)
         if pts:
             return pts, hinweis
     ab = namen.autobahn(n)

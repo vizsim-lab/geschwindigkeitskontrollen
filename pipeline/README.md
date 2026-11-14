@@ -1,7 +1,7 @@
 # kontrollen – Pipeline
 
-uv-Paket, das aus den Rohdaten (Berlin, Aachen, Köln, Bonn, Schonungen, Oberderdingen) und den
-OSM-Abzügen die Kartendaten baut. Alle Befehle aus `pipeline/` heraus:
+uv-Paket, das aus den Rohdaten (Berlin, Aachen, Köln, Bonn, Schonungen, Oberderdingen, Butzbach,
+Weiterstadt) und den OSM-Abzügen die Kartendaten baut. Alle Befehle aus `pipeline/` heraus:
 
 ```bash
 uv sync
@@ -26,10 +26,12 @@ sources.yaml ─ fetch ─> data/raw/berlin/anlage{1..4}_<jahr>.pdf         (Fra
                         data/raw/aachen_alt/geschw_aachen_juni2020.html  (Juni 2020, alte Karte)
                         data/raw/{koeln,bonn}/*.csv(.gz)                 (Listen: config/<stadt>_ressourcen.json)
                         data/raw/{schonungen,oberderdingen}/*.pdf|*.docx
+                        data/raw/{butzbach,weiterstadt}/*.pdf            (Listen: config/<stadt>_ressourcen.json)
                         data/raw/osm/*.osm.pbf                           (Geofabrik, je Stadt in sources.yaml)
 osm      -> data/interim/osm/{strassen,adressen,knoten,gebiete}_<stadt>.parquet
 build    -> data/interim/kontrollen.parquet   berlin_pdf.py, berlin.py, aachen.py, koeln.py, bonn.py,
-                                              schonungen.py, oberderdingen.py -> schema.py
+                                              schonungen.py, oberderdingen.py, butzbach.py,
+                                              weiterstadt.py -> schema.py
             data/interim/build_bericht.json   je Datei: Zeilen, Übersprungenes, Nachträge
 geocode  -> data/geokodierung.csv             je Kontrolle: lon, lat, Methode, Suchgebiet,
             data/geokodierung_validierung.json OSM-Straße, Abschnitt (WKT), Abstände, Hinweis
@@ -129,7 +131,7 @@ einmal dekodierte. `koeln.py`:
 - Id = Tag und Kürzel (`K2019-01-01-0101`).
 
 Adressen in Freitext liest `adressen.py` (aus `koeln.py` herausgelöst, genutzt von Köln, Bonn,
-Schonungen und Oberderdingen): Die Straße endet an Komma, Zusatz („Höhe“, „ggü.“, „unterhalb“,
+Schonungen, Oberderdingen, Butzbach und Weiterstadt): Die Straße endet an Komma, Zusatz („Höhe“, „ggü.“, „unterhalb“,
 „Haus Nr.“, „Laterne“ …), Zahl oder einem großgeschriebenen Wort nach „Str.“; Hausnummer gleich
 nach den Zusätzen, sonst nach „Haus“, „Hs.“, „Nr.“ (auch „Nr.: 100“).
 
@@ -147,9 +149,8 @@ als Mac-Roman gespeichert (`tabellen.kodierung` erkennt „Stra§e“), in manch
 - Tatort: `Bonn, <Straße> Höhe Haus-Nr. 15 Fahrtrichtung <Ziel>`, auch `Bonn - Mehlem, …`,
   `Bonn Beuel, …`, `53179, Bonn, …`; zwei Straßen mit Komma oder „/“ sind eine Kreuzung,
   „Höhe Überführung B“ die Kreuzung mit B, „BAB A 562 / B“ eine Autobahn mit Ort. An der
-  Autobahn steht meist nur der Kilometer (`A 555; km 018,000`) – ohne Lage, ebenso Landes- und
-  Kreisstraßen ohne Namen („L 16 Höhe Auf der Rötschen“: OSM kennt die Nummer, die Verortung
-  sucht nur Namen).
+  Autobahn steht meist nur der Kilometer (`A 555; km 018,000`) – ohne Lage. Landes- und
+  Kreisstraßen ohne Namen („L 16 Höhe Auf der Rötschen“) findet die Verortung über ihre Nummer.
 - Id = Tag und die ersten 8 Zeichen des SHA-1 des Tatorts (`N2023-05-02-1a2b3c4d`).
 
 **Schonungen** (Landkreis Schweinfurt). Monatsberichte des Zweckverbands Kommunale
@@ -172,6 +173,35 @@ Beanstandungen addiert. Bei mehrtägigen Messungen steht mitunter an jedem Tag d
 (vermutlich ein Tagesschnitt). Id = Tag und Messstelle (`O2026-01-15-3f2a1b`, eine zweite
 gleiche Zeile `…-2`).
 
+**Butzbach** (Wetteraukreis). Der gemeinsame Ordnungsbehördenbezirk der Städte Butzbach und
+Münzenberg und der Gemeinden Rockenberg und Wölfersheim misst; die Stadt Butzbach stellt je Monat
+einen Beitrag mit der Tabelle als PDF auf ihre Seite, ältere Tabellen (seit 2015) stehen nur noch
+in ihrer Mediathek, oft mit dem Titel „hier“. `kataloge: art: wordpress` fragt dafür Beiträge
+(`wp-json/wp/v2/posts`, die PDFs aus dem Text des Beitrags) und Mediathek; `datei_muster` nimmt
+eine Datei auch dann, wenn ihr Titel nicht passt. Die Dateinamen sagen nichts über den Monat
+(„sb_oa-messung-1502-1.pdf“ enthält den Februar 2020) – es gilt das Datum in der Tabelle.
+`butzbach.py`: eine Zeile = eine Kontrolle mit allen Fahrzeugen, Beginn und Dauer (auch über
+Mitternacht); Überschreitungen = Verwarnungen + Bußgelder, fehlt eine der beiden („-“), zählt
+sie 0, wenn der Anteil in „Verstöße in %“ dann stimmt – sonst leer, ebenso bei „CD war nicht
+auswertbar“. Kein Tempolimit. Tippfehler im Jahr („03.02.20206“, „05.02.2014“ zwischen Zeilen vom
+Februar 2015) gelten als das Jahr der übrigen Zeilen dieses Monats; derselbe Monat zweimal
+hochgeladen zählt einmal. Die Messstelle („Butzbach/Griedel, L3134 ggü Rockenberger Str.“,
+„Nieder - Weisel / Zum Bahnhof“) nennt Kommune und Ortsteil – samt Schreibfehlern
+(„Butzabch“, „Opperhofen“, „Trais Mzb.“) –, dann Straße oder Straßennummer, Hausnummer,
+Querstraße oder Ort („/ BHS“, „/ Kiga Löwenherz“). `bezirk_roh` ist der Ortsteil mit seinem
+Namen in OSM (Trais-Münzenberg = „Treis“), ohne Ortsteil die Kommune. Id = Tag, Beginn und
+Messstelle (`U2026-04-01-0645-3f2a`).
+
+**Weiterstadt** (Landkreis Darmstadt-Dieburg). Monatstabellen der Kommunalen Bußgeldstelle seit
+Januar 2025 („Statistik_GemOBB_<Monat>_<Jahr>.pdf“), verlinkt auf einer Seite der Stadt,
+abgelegt in wechselnden Ordnern – `kataloge: art: seite` nimmt die Links dieser Seite
+(`dateien`: Muster der Dateien, `titel`: vor den Linktext). `weiterstadt.py`: eine Zeile = eine
+Kontrolle mit allen Fahrzeugen und Tempolimit, ohne Uhrzeit. Messstelle: Straße oder
+Straßennummer („B42, Höhe Vor den Löserbecken, FR Darmstadt“, „Darmstädter Landstraße HH Nr. 55
+FR L3113“), Hausnummer („HH Nr.“, „Höhe Nr.“) oder „Höhe …“ (Querstraße oder Ort), zuletzt die
+Fahrtrichtung („FR“). Id = Tag und Messstelle (`W2025-03-12-3f2a1b`, eine zweite gleiche Zeile
+`…-2`).
+
 ## Datenlage
 
 `datenlage` in `config/sources.yaml`: je Stadt ein Eintrag mit Stand (`in_karte`, `offen`,
@@ -190,10 +220,25 @@ Vergleichsform bringen (`namen.schluessel`: klein, Umlaute ausgeschrieben, nur B
 Ziffern, „Str.“ = „Straße“, „Prof“ = „Professor“), alte Namen über `old_name`/`alt_name`,
 Brücken und Tunnel über `bridge:name`/`tunnel:name`; abgeschnittene Namen über den Anfang
 (ab 12 Zeichen) und Tippfehler (Ähnlichkeit ≥ 0,9) nur im Suchgebiet und nur eindeutig.
+Bundes-, Landes- und Kreisstraßen auch über ihre Nummer (OSM `ref`: „B 42“, „L 3113“; trägt ein
+Weg die Nummer als Namen, gehören beide zusammen). Ist eine Querangabe die Nummer der
+Hauptstraße selbst („Kirchhainer Damm zw. B96 u. …“ – mehr als 100 m gemeinsamer Weg), ist sie
+keine Kreuzung.
 
 Suchgebiete (`Gebiete.stufen`): die genannten Bezirke (+300 m), deren Umgebung (+2 km), die
 Stadt. Die erste genaue Antwort gewinnt; Näherungen (nur eine Querstraße, Ort statt Querstraße)
-und „nur Straße“ gelten erst, wenn keine Stufe Genaueres findet. Je Kontrolle:
+und „nur Straße“ gelten erst, wenn keine Stufe Genaueres findet. Die „Stadt“ kann aus mehreren
+Kommunen bestehen (`stadtgrenze.name` als Liste, Butzbach), Bezirke aus mehreren Ebenen
+(`bezirk_ebene` als Liste; derselbe Name zweimal: die kleinere Fläche, der Kernort).
+
+**Streng** (`bezirk_streng`, Butzbach): Nachbardörfer haben oft gleichnamige Straßen
+(Rosenstraße in Oppershofen und im benachbarten Steinfurth, Butzbacher Straße in Nieder-Weisel
+und in Weiperfelden). Dort sucht die Verortung nur im genannten Ortsteil und dann in seiner
+Kommune, beides nicht über die Kommune hinaus (+50 m) – ohne Umgebung, ohne die übrigen
+Kommunen; steht die Straße dort nicht, bleibt die Kontrolle ohne Lage. Lag die Straße schon im
+Ortsteil, zählt ein genauerer Treffer in der Kommune nur auf demselben Straßenzug (die B 3 läuft
+von der Kernstadt weiter nach Nieder-Weisel), und „nur Straße“ gilt in der Kommune nicht, wenn
+sie an mehreren Orten liegt oder die genannte Querstraße nicht passt. Je Kontrolle:
 
 1. **hausnummer** — OSM-Adresse (Knoten oder Gebäudemitte) mit dieser Hausnummer an der
    Hauptstraße, höchstens 200 m von deren Achse, auf die Achse gelegt. Gibt es die Nummer
@@ -211,7 +256,8 @@ und „nur Straße“ gelten erst, wenn keine Stufe Genaueres findet. Je Kontrol
    „A 100“).
 5. **strasse** — nur der Name: Mitte des längsten Stücks; die ganze Straße geht als Linie mit.
    Stadtweit nur, wenn die Straße nicht an mehreren Orten liegt – außer dort, wo die
-   Verortung keine Bezirke kennt (Aachen, Bonn, Schonungen, Oberderdingen): dann mit Hinweis.
+   Verortung keine Bezirke kennt (Aachen, Bonn, Schonungen, Oberderdingen, Weiterstadt): dann
+   mit Hinweis.
 
 **Gegenprobe** (`validiere`): Wo Hausnummer und Querstraßen vorliegen, misst die Pipeline den
 Abstand des Hausnummer-Punkts zum Abschnitt – Stand 9. November 2026 (Geofabrik-Abzug dieses Tages):
@@ -227,7 +273,8 @@ und einzelne Abkürzungen.
 Wer keinen Zugang zu Geofabrik, FragDenStaat und den Portalen der Städte hat (etwa in einer
 Sandbox), startet den Workflow „Entwicklungsauszug“ (oder pusht auf `dev/auszug-anfordern`). Er
 legt die kompakten OSM-Tabellen, die Berliner PDF-Anlagen und die Rohdateien von Aachen, Köln,
-Bonn, Schonungen und Oberderdingen (große CSV gzip-komprimiert) samt den neu erfragten Listen
+Bonn, Schonungen, Oberderdingen, Butzbach und Weiterstadt (große CSV gzip-komprimiert) samt den
+neu erfragten Listen
 `config/*_ressourcen.json` auf den Branch `dev/auszug`:
 
 ```bash
@@ -246,9 +293,10 @@ nicht antworten) – sonst fehlen Dateien, die der Server gerade abgewiesen hat.
   zeigt die neuen Dateien in `config/aachen_ressourcen.json`.
 - **Neue Stadt:** Eintrag unter `staedte` in `sources.yaml`: Quelle, OSM-Abzug, `bbox`,
   `crs_m`, `stadtgrenze`; Dateien aus Katalogen (`kataloge` mit
-  `art: ckan | dkan | wordpress | liste`, `suche`, `titel_muster`, `stadt_muster`,
-  `ressourcen`), Leser nach dem Muster von `bonn.py` oder `oberderdingen.py`, Eintrag in
-  `cli.LESER`; die Karte nimmt die Stadt aus dem Manifest (Knopf, Hinweise, Methode). Dazu den
-  Eintrag in `datenlage` auf `stand: in_karte` mit `stadt:` umstellen.
-- **Neue Monate oder Quartale:** Köln, Bonn und Schonungen über „Kataloge neu fragen“;
-  Oberderdingen von Hand in die Liste in `sources.yaml`.
+  `art: ckan | dkan | wordpress | seite | liste`, `suche`, `titel_muster`, `datei_muster`,
+  `stadt_muster`, `ressourcen`), Leser nach dem Muster von `bonn.py`, `oberderdingen.py` oder
+  `butzbach.py`, Eintrag in `cli.LESER`; die Karte nimmt die Stadt aus dem Manifest (Knopf,
+  Hinweise, Methode). Dazu den Eintrag in `datenlage` auf `stand: in_karte` mit `stadt:`
+  umstellen und die Stadt in den Workflows `auszug.yml` und `daten.yml` ergänzen.
+- **Neue Monate oder Quartale:** Köln, Bonn, Schonungen, Butzbach und Weiterstadt über
+  „Kataloge neu fragen“; Oberderdingen von Hand in die Liste in `sources.yaml`.

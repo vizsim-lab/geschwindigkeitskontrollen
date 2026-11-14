@@ -44,3 +44,29 @@ schonungen:
   "Marktst. Hauptstr.": "Marktsteinacher Hauptstraße"      # Marktsteinach, St 2266
   "Marktstein. Hauptstraße": "Marktsteinacher Hauptstraße" # dasselbe (auch „Marktstein. Hauptstr.“)
   "Marktst. Straße": "Marktsteinacher Straße"              # Waldsachsen, SW 24
+
+butzbach:
+  # Tippfehler in den Monatstabellen; gesucht wird weiter im genannten Orts- oder Stadtteil
+  "J.-F.-Kennedey-Str.": "John-F.-Kennedy-Straße"  # Kernstadt, die einzige Kennedy-Straße dort
+  # Ebersgöns: Zahlendreher – eine K 636 gibt es dort nicht, die K 363 (so auch an anderer Stelle
+  # der Tabellen) kreuzt in Ebersgöns „Zum Weißen Stein“ („Ebersgöns, K636 - Ecke Zum Weißen Stein“)
+  "K 636": "K 363"
+  # Nieder-Weisel, am Kinderheim („Hausener Str. / Kinderheim“, ebenso „Am Waldhof / Kinderheim“):
+  # die befahrbare Straße dort heißt in OSM „Hausener Weg“; die Hausener Straße in Hoch-Weisel
+  # liegt gut 2 km entfernt
+  "Hausener Str.": "Hausener Weg"
+
+weiterstadt:
+  # Abkürzungen und Beschreibungen in den Monatstabellen; Weiterstadt hat nur eine Rudolf-Diesel-
+  # und eine Darmstädter Landstraße
+  "R.-Diesel-Straße": "Rudolf-Diesel-Straße"       # auch „R.-Diesel-Str.“
+  "Darmst.- Landstraße": "Darmstädter Landstraße"
+  # die B 42 und die L 3113 kreuzen in Weiterstadt nur die A 5 (Anschlussstelle Weiterstadt, an der
+  # B 42; die A 67 bleibt über 1 km entfernt) – „SO“, „NW“, „SW“ nennen das Viertel der Anschlussstelle
+  "BAB": "A 5"                                     # „BAB Anschlußstelle NW“ usw.
+  "BAB5 Anschlußstelle NW": "A 5"
+  "BAB5 Anschlußstelle SO": "A 5"
+  "BAB5 Anschlussstelle SW": "A 5"
+  "Autobahnbrücke": "A 5"                          # „L3113 Höhe Autobahnbrücke“
+  # die Justizvollzugsanstalt liegt an der Straße Vor den Löserbecken („Höhe Vor den Löserbecken JVA“)
+  "JVA": "Vor den Löserbecken"

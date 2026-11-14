@@ -16,7 +16,7 @@ on:
   workflow_dispatch:
     inputs:
       aachen_neu:
-        description: "Kataloge neu fragen (neue Monate in Aachen und Schonungen, neue Jahre in Köln und Bonn)"
+        description: "Kataloge neu fragen (neue Monate in Aachen, Schonungen, Butzbach und Weiterstadt, neue Jahre in Köln und Bonn)"
         type: boolean
         default: true
 
@@ -42,7 +42,7 @@ jobs:
           cache-dependency-glob: pipeline/uv.lock
       - run: uv sync --locked
       - run: uv run pytest -q
-      - name: Rohdaten laden (Berlin, Aachen, Köln, Bonn, Schonungen, Oberderdingen, OSM-Abzüge Geofabrik)
+      - name: Rohdaten laden (Berlin, Aachen, Köln, Bonn, Schonungen, Oberderdingen, Butzbach, Weiterstadt, OSM-Abzüge Geofabrik)
         run: uv run kontrollen fetch --osm ${{ inputs.aachen_neu && '--neu' || '' }}
       - name: OSM auslesen (Straßen, Adressen, Orte, Gebiete)
         run: uv run kontrollen osm
